@@ -1,0 +1,246 @@
+{
+  "document_id": "ibm_bit_ordering",
+  "titulo": "Bit-ordering in the Qiskit SDK",
+  "fonte": "https://quantum.cloud.ibm.com/docs/en/qiskit/bit-ordering",
+  "url_solicitada": "https://quantum.cloud.ibm.com/docs/en/guides/bit-ordering",
+  "secoes": [
+    {
+      "titulo": "Introdução",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "The code on this page was developed using the following requirements.\nWe recommend using these versions or newer. qiskit[all]~=2.6.1"
+        }
+      ]
+    },
+    {
+      "titulo": "2. Bit-ordering in the Qiskit SDK",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "If you have a set of n n n bits (or qubits), you'll usually label each bit 0 → n − 1 0\n\\rightarrow n-1 0 → n − 1 . Different softwares and resources must choose how they order\nthese bits both in computer memory and when displayed on-screen."
+        }
+      ]
+    },
+    {
+      "titulo": "3. Qiskit conventions",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "Here's how the Qiskit SDK orders bits in different scenarios."
+        }
+      ]
+    },
+    {
+      "titulo": "4. Primitives",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "By default, Qiskit follows the little-endian bit ordering convention. However, the default for BitArray is big (endian), which causes some differences in primitive output, depending on whether the primitive changes this setting. For example, the IBM® Quantum Compute Service Sampler and Estimator primitives return big-endian results, but Executor returns little-endian results."
+        }
+      ]
+    },
+    {
+      "titulo": "5. Quantum circuits",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "The QuantumCircuit class stores its qubits in a list\n( QuantumCircuit.qubits ). The index of a qubit in this list defines the\nqubit's label."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "from qiskit import QuantumCircuit, QuantumRegister\nfrom qiskit.circuit import Qubit\n\nqc = QuantumCircuit(2)\nqc.qubits[0]  # qubit \"0\"\n\nQubit(QuantumRegister(2, \"q\"), 0)"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Output:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "<Qubit register=(2, \"q\"), index=0>\n"
+        }
+      ]
+    },
+    {
+      "titulo": "6. Circuit diagrams",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "On a circuit diagram, qubit 0 0 0 is the topmost qubit, and qubit n − 1 n-1 n − 1 the\nbottommost qubit. You can change this with the reverse_bits argument of QuantumCircuit.draw (see Change ordering in\nQiskit )."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "qc.x(1)\nqc.draw()"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Output:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "          \nq_0: ─────\n     ┌───┐\nq_1: ┤ X ├\n     └───┘\n"
+        }
+      ]
+    },
+    {
+      "titulo": "7. Integers",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "When interpreting bits as a number, bit 0 0 0 is the least significant bit, and\nbit n − 1 n-1 n − 1 the most significant. This is helpful when coding because each bit has\nthe value 2 label 2^\\text{label} 2 label (label being the qubit's index in QuantumCircuit.qubits ). For example, the following circuit execution ends\nwith bit 0 0 0 being 0 , and bit 1 1 1 being 1 . This is interpreted as the\ndecimal integer 2 (measured with probability 1.0 )."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "from qiskit.primitives import StatevectorSampler as Sampler\n\nqc.measure_all()\n\njob = Sampler().run([qc])\nresult = job.result()\nprint(f\" > Counts: {result[0].data.meas.get_counts()}\")"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Output:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": " > Counts: {'10': 1024}\n"
+        }
+      ]
+    },
+    {
+      "titulo": "8. Strings",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "When displaying or interpreting a list of bits (or qubits) as a string, bit n − 1 n-1 n − 1 is the leftmost bit, and bit 0 0 0 is the rightmost bit. This is because we\nusually write numbers with the most significant digit on the left, and in\nQiskit, bit n − 1 n-1 n − 1 is interpreted as the most significant bit."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "For example, the following cell defines a Statevector from a string of\nsingle-qubit states. In this case, qubit 0 0 0 is in state ∣ + ⟩ |+\\rangle ∣ + ⟩ , and\nqubit 1 1 1 in state ∣ 0 ⟩ |0\\rangle ∣0 ⟩ ."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "from qiskit.quantum_info import Statevector\n\nsv = Statevector.from_label(\"0+\")\nsv.probabilities_dict()"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Output:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "{np.str_('00'): np.float64(0.4999999999999999),\n np.str_('01'): np.float64(0.4999999999999999)}\n"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "This occasionally causes confusion when interpreting a string of bits, as you\nmight expect the leftmost bit to be bit 0 0 0 , whereas it usually represents bit n − 1 n-1 n − 1 ."
+        }
+      ]
+    },
+    {
+      "titulo": "9. Statevector matrices",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "When representing a statevector as a list of complex numbers (amplitudes),\nQiskit orders these amplitudes such that the amplitude at index x x x represents\nthe computational basis state ∣ x ⟩ |x\\rangle ∣ x ⟩ ."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "print(sv[1])  # amplitude of state |01>\nprint(sv[2])  # amplitude of state |10>"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Output:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "(0.7071067811865475+0j)\n0j\n"
+        }
+      ]
+    },
+    {
+      "titulo": "10. Gates",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "Each gate in Qiskit can interpret a list of qubits in its own way, but\ncontrolled gates usually follow the convention (control, target) ."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "For example, the following cell adds a controlled-X gate where qubit 0 0 0 is\nthe control and qubit 1 1 1 is the target."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "from qiskit import QuantumCircuit\n\nqc = QuantumCircuit(2)\nqc.cx(0, 1)\nqc.draw()"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Output:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "          \nq_0: ──■──\n     ┌─┴─┐\nq_1: ┤ X ├\n     └───┘\n"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Following all the previously mentioned conventions in Qiskit, this CX-gate\nperforms the transformation ∣ 01 ⟩ ↔ ∣ 11 ⟩ |01\\rangle \\leftrightarrow |11\\rangle ∣01 ⟩ ↔ ∣11 ⟩ , so has the\nfollowing matrix."
+        }
+      ]
+    },
+    {
+      "titulo": "11. Change ordering in Qiskit",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "To draw a circuit with qubits in reversed order (that is, qubit 0 0 0 at the\nbottom), use the reverse_bits argument. This only affects the generated\ndiagram and does not affect the circuit; the X-gate still acts on qubit 0 0 0 ."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "from qiskit import QuantumCircuit\n\nqc = QuantumCircuit(2)\nqc.x(0)\nqc.draw(reverse_bits=True)"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Output:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "          \nq_1: ─────\n     ┌───┐\nq_0: ┤ X ├\n     └───┘\n"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "You can use the reverse_bits method to return a new circuit with the\nqubits' labels reversed (this does not mutate the original circuit)."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "qc.reverse_bits().draw()"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Output:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "          \nq_0: ─────\n     ┌───┐\nq_1: ┤ X ├\n     └───┘\n"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Note that in this new circuit, the X-gate acts on qubit 1 1 1 ."
+        }
+      ]
+    },
+    {
+      "titulo": "12. Next steps",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "See an example of using circuits in the Grover's Algorithm tutorial."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Explore the QuantumCircuit API reference."
+        }
+      ]
+    }
+  ],
+  "versao_documentacao": "guia online; conferir requisitos na página",
+  "versao_alvo_qiskit": "2.6",
+  "coletado_em": "2026-11-13T23:44:15.415902+00:00",
+  "hash": "78a6d0641482d26271b0cfa183fbd2fdacc33463bb409f7a183f1f786574c6b7",
+  "chunks": 44,
+  "indexed": true
+}

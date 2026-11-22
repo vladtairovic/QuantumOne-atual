@@ -1,0 +1,342 @@
+{
+  "document_id": "ibm_construct_circuits",
+  "titulo": "Construct circuits",
+  "fonte": "https://quantum.cloud.ibm.com/docs/en/qiskit/construct-circuits",
+  "url_solicitada": "https://quantum.cloud.ibm.com/docs/en/guides/construct-circuits",
+  "secoes": [
+    {
+      "titulo": "1. Construct circuits",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "The code on this page was developed using the following requirements.\nWe recommend using these versions or newer. qiskit[all]~=2.6.1"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "This page takes a closer look at the QuantumCircuit class in the Qiskit SDK, including some more advanced methods you can use to create quantum circuits."
+        }
+      ]
+    },
+    {
+      "titulo": "2. What is a quantum circuit?",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "A simple quantum circuit is a collection of qubits and a list of instructions that act on those qubits. To demonstrate, the following cell creates a new circuit with two new qubits, then displays the circuit's qubits attribute, which is a list of Qubits in order from the least significant bit q 0 q_0 q 0 ​ to the most significant bit q n q_n q n ​ ."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "from qiskit import QuantumCircuit\n\nqc = QuantumCircuit(2)\nqc.qubits"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Output:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "[<Qubit register=(2, \"q\"), index=0>, <Qubit register=(2, \"q\"), index=1>]\n"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Multiple QuantumRegister and ClassicalRegister objects can be combined to create a circuit. Every QuantumRegister and ClassicalRegister can also be named."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "from qiskit.circuit import QuantumRegister, ClassicalRegister\n\nqr1 = QuantumRegister(2, \"qreg1\")  # Create a QuantumRegister with 2 qubits\nqr2 = QuantumRegister(1, \"qreg2\")  # Create a QuantumRegister with 1 qubit\ncr1 = ClassicalRegister(3, \"creg1\")  # Create a ClassicalRegister with 3 cbits\n\ncombined_circ = QuantumCircuit(\n    qr1, qr2, cr1\n)  # Create a quantum circuit with 2 QuantumRegisters and 1 ClassicalRegister\ncombined_circ.qubits"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Output:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "[<Qubit register=(2, \"qreg1\"), index=0>,\n <Qubit register=(2, \"qreg1\"), index=1>,\n <Qubit register=(1, \"qreg2\"), index=0>]\n"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "You can find a qubit's index and register by using the circuit's find_bit method and its attributes."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "desired_qubit = qr2[0]  # Qubit 0 of register 'qreg2'\n\nprint(\"Index:\", combined_circ.find_bit(desired_qubit).index)\nprint(\"Register:\", combined_circ.find_bit(desired_qubit).registers)"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Output:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Index: 2\nRegister: [(QuantumRegister(1, 'qreg2'), 0)]\n"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Adding an instruction to the circuit appends the instruction to the circuit's data attribute. The following cell output shows data is a list of CircuitInstruction objects, each of which has an operation attribute, and a qubits attribute."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "qc.x(0)  # Add X-gate to qubit 0\nqc.data"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Output:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "[CircuitInstruction(operation=Instruction(name='x', num_qubits=1, num_clbits=0, params=[]), qubits=(<Qubit register=(2, \"q\"), index=0>,), clbits=())]\n"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "The easiest way to view this information is through the draw method, which returns a visualization of a circuit. See Visualize circuits for different ways of displaying quantum circuits."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "qc.draw(\"mpl\")"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Output:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Circuit instruction objects can contain \"definition\" circuits that describe the instruction in terms of more fundamental instructions. For example, the X-gate is defined as a specific case of the U3-gate , a more general single-qubit gate."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "# Draw definition circuit of 0th instruction in `qc`\nqc.data[0].operation.definition.draw(\"mpl\")"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Output:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Instructions and circuits are similar in that they both describe operations on bits and qubits, but they have different purposes:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Instructions are treated as fixed, and their methods will usually return new instructions (without mutating the original object)."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Circuits are designed to be built over many lines of code, and QuantumCircuit methods often mutate the existing object."
+        }
+      ]
+    },
+    {
+      "titulo": "3. What is circuit depth?",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "The depth() of a quantum circuit is a measure of the number of “layers” of quantum gates, executed in parallel, it takes to complete the computation defined by the circuit. Because quantum gates take time to implement, the depth of a circuit roughly corresponds to the amount of time it takes the quantum computer to execute the circuit. Thus, the depth of a circuit is one important quantity used to measure if a quantum circuit can be run on a device."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "The rest of this page illustrates how to manipulate quantum circuits."
+        }
+      ]
+    },
+    {
+      "titulo": "4. Build circuits",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "Methods such as QuantumCircuit.h and QuantumCircuit.cx add specific instructions to circuits. To add instructions to a circuit more generally, use the append method. This takes an instruction and a list of qubits to apply the instruction to. See the Circuit Library API documentation for a list of supported instructions."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "from qiskit.circuit.library import HGate\n\nqc = QuantumCircuit(1)\nqc.append(\n    HGate(),  # New HGate instruction\n    [0],  # Apply to qubit 0\n)\nqc.draw(\"mpl\")"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Output:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "To combine two circuits, use the compose method. This accepts another QuantumCircuit and an optional list of qubit mappings."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "The compose method returns a new circuit and does not mutate either circuit it acts on. To mutate the circuit on which you're calling the compose method, use the argument inplace=True ."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "qc_a = QuantumCircuit(4)\nqc_a.x(0)\n\nqc_b = QuantumCircuit(2, name=\"qc_b\")\nqc_b.y(0)\nqc_b.z(1)\n\n# keep qubits (0, 1) of qc_a with same index.\n# compose qubits (0,1) of qc_b to qubits (1, 3), respectively, of new composite circuit\ncombined = qc_a.compose(qc_b, qubits=[1, 3])\ncombined.draw(\"mpl\")"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Output:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "You might also want to compile circuits into instructions to keep your circuits organized. You can convert a circuit to an instruction by using the to_instruction method, then append this to another circuit as you would any other instruction. The circuit drawn in the following cell is functionally equivalent to the circuit drawn in the previous cell."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "inst = qc_b.to_instruction()\nqc_a.append(inst, [1, 3])\nqc_a.draw(\"mpl\")"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Output:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "If your circuit is unitary, you can convert it to a Gate by using the to_gate method. Gate objects are specific types of instructions that have some extra features, such as the control method, which adds a quantum control."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "gate = qc_b.to_gate().control()\nqc_a.append(gate, [0, 1, 3])\nqc_a.draw(\"mpl\")"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Output:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "To see what's going on, you can use the decompose method to expand each instruction into its definition."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "The decompose method returns a new circuit and does not mutate the circuit it acts on."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "qc_a.decompose().draw(\"mpl\")"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Output:"
+        }
+      ]
+    },
+    {
+      "titulo": "5. Measure qubits",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "Measurements are used to sample the states of individual qubits and transfer the results to a classical register. Note that if you are submitting circuits to a Sampler primitive, measurements are required. However, circuits submitted to an Estimator primitive must not contain measurements."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Qubits can be measured using three methods: measure , measure_all and measure_active . To learn how to visualize measured results, see the Visualize results page."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "QuantumCircuit.measure : measures each qubit in the first argument onto the classical bit given as the second argument. This method allows full control over where the measurement result is stored."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "QuantumCircuit.measure_all : takes no argument and can be used for quantum circuits without pre-defined classical bits. It creates classical wires and stores measurement results in order. For example, measurement of  qubit q i q_i q i ​ is stored in cbit m e a s i meas_i m e a s i ​ ). It also adds a barrier before the measurement."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "QuantumCircuit.measure_active : similar to measure_all , but measures only qubits that have operations."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "qc1 = QuantumCircuit(2, 2)\nqc1.measure(0, 1)\nqc1.draw(\"mpl\", cregbundle=False)"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Output:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "qc2 = QuantumCircuit(2)\nqc2.measure_all()\nqc2.draw(\"mpl\", cregbundle=False)"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Output:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "qc3 = QuantumCircuit(2)\nqc3.x(1)\nqc3.measure_active()\nqc3.draw(\"mpl\", cregbundle=False)"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Output:"
+        }
+      ]
+    },
+    {
+      "titulo": "6. Parameterized circuits",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "Many near-term quantum algorithms involve executing many variations of a quantum circuit. Since constructing and optimizing large circuits can be computationally expensive, Qiskit supports parameterized circuits. These circuits have undefined parameters, and their values do not need to be defined until just before executing the circuit. This lets you move circuit construction and optimization out of the main program loop.  The following cell creates and displays a parameterized circuit."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "from qiskit.transpiler import generate_preset_pass_manager\nfrom qiskit.circuit import Parameter\n\nangle = Parameter(\"angle\")  # undefined number\n\n# Create and optimize circuit once\nqc = QuantumCircuit(1)\nqc.rx(angle, 0)\nqc = generate_preset_pass_manager(\n    optimization_level=3, basis_gates=[\"u\", \"cx\"]\n).run(qc)\n\nqc.draw(\"mpl\")"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Output:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "The following cell creates many variations of this circuit and displays one of the variations."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "circuits = []\nfor value in range(100):\n    circuits.append(qc.assign_parameters({angle: value}))\n\ncircuits[0].draw(\"mpl\")"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Output:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "You can find a list of a circuit's undefined parameters in its parameters attribute."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "qc.parameters"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Output:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "ParameterView([Parameter(angle)])\n"
+        }
+      ]
+    },
+    {
+      "titulo": "7. Change a parameter's name",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "By default, parameter names for a parameterized circuit are prefixed by x - for example, x[0] . You can change the names after they are defined, as shown in the following example."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "from qiskit.circuit.library import z_feature_map\nfrom qiskit.circuit import ParameterVector\n\n# Define a parameterized circuit with default names\n# For example, x[0]\ncircuit = z_feature_map(2)\n\n# Set new parameter names\n# They will now be prefixed by `hi` instead\n# For example, hi[0]\ntraining_params = ParameterVector(\"hi\", 2)\n\n# Assign parameter names to the quantum circuit\ncircuit = circuit.assign_parameters(parameters=training_params)"
+        }
+      ]
+    },
+    {
+      "titulo": "8. Next steps",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "To learn about near-term quantum algorithms, take the Variational algorithm design course."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "See an example of circuits being used in the Grover's Algorithm tutorial."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Work with simple circuits using IBM Quantum® Composer ."
+        }
+      ]
+    }
+  ],
+  "versao_documentacao": "guia online; conferir requisitos na página",
+  "versao_alvo_qiskit": "2.6",
+  "coletado_em": "2026-11-13T23:44:07.743825+00:00",
+  "hash": "461c43f5c40009070ddb8680e35ed5c6fb44c71358553e7c7f31b3148935f0e4",
+  "chunks": 77,
+  "indexed": true
+}

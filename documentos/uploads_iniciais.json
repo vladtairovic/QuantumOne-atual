@@ -1,0 +1,42 @@
+[
+  {
+    "id": "upload_15d95bbaca7fab5e525d119727022625c6946753cbebca055160ed0480fdae04_chunk_0",
+    "texto": "Documento enviado\n\nMaterial sintético para demonstrar a API.\nQiskit é o tema deste exemplo. A validação e a otimização reais de circuitos pertencem à equipe responsável por Qiskit.\nEste arquivo não é documentação oficial nem evidência de desempenho.",
+    "metadados": {
+      "fragmentado": false,
+      "modelo_embeddings": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
+      "tokens": 59,
+      "secao": "Documento enviado",
+      "coletado_em": "2026-11-02T21:52:16.097392+00:00",
+      "versao_documentacao": "arquivo enviado pelo usuário",
+      "titulo": "documento.txt",
+      "filename": "documento.txt",
+      "indice": 0,
+      "versao_alvo_qiskit": "não definida",
+      "estrategia_chunks": "secoes_tokens_v2",
+      "tipo_bloco": "paragrafo",
+      "document_id": "upload_15d95bbaca7fab5e525d119727022625c6946753cbebca055160ed0480fdae04",
+      "fonte": "documento.txt"
+    }
+  },
+  {
+    "id": "upload_7b40f2965d348bc0d5b337a87ffe236b1d12a5224008d91bdb8b6e35c5425c06_chunk_0",
+    "texto": "Documento enviado\n\nO circuito de teste GrowUp utiliza portas Hadamard para preparar superposicao.",
+    "metadados": {
+      "fragmentado": false,
+      "document_id": "upload_7b40f2965d348bc0d5b337a87ffe236b1d12a5224008d91bdb8b6e35c5425c06",
+      "secao": "Documento enviado",
+      "estrategia_chunks": "secoes_tokens_v2",
+      "coletado_em": "2026-11-11T21:15:35.485953+00:00",
+      "indice": 0,
+      "modelo_embeddings": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
+      "versao_alvo_qiskit": "não definida",
+      "tokens": 23,
+      "filename": "validacao-front.txt",
+      "tipo_bloco": "paragrafo",
+      "titulo": "validacao-front.txt",
+      "versao_documentacao": "arquivo enviado pelo usuário",
+      "fonte": "validacao-front.txt"
+    }
+  }
+]

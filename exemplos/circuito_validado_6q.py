@@ -1,0 +1,23 @@
+# Exemplo derivado da entrada de diagnóstico; veja docs/diagnostico-entradas.md.
+from qiskit import QuantumCircuit
+
+qc = QuantumCircuit(6, 6)
+qc.h(0)
+qc.h(1)
+qc.x(2)
+qc.y(3)
+qc.z(4)
+qc.cx(0, 1)
+qc.cx(1, 2)
+qc.cz(2, 3)
+qc.swap(3, 4)
+qc.rx(1.57, 0)
+qc.rz(3.14, 2)
+qc.barrier()
+qc.h(3)
+qc.cx(3, 5)
+qc.measure(0, 0)
+qc.measure(1, 1)
+qc.measure(2, 2)
+qc.measure(3, 3)
+qc.measure(4, 4)

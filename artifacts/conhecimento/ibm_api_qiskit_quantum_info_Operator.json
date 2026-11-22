@@ -1,0 +1,924 @@
+{
+  "document_id": "ibm_api_qiskit_quantum_info_Operator",
+  "titulo": "Operator",
+  "fonte": "https://quantum.cloud.ibm.com/docs/en/api/qiskit/qiskit.quantum_info.Operator",
+  "url_solicitada": "https://quantum.cloud.ibm.com/docs/en/api/qiskit/2.6/qiskit.quantum_info.Operator",
+  "secoes": [
+    {
+      "titulo": "1. Operator",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "class qiskit.quantum_info.Operator(data, input_dims=None, output_dims=None)"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Bases: LinearOp"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Matrix operator class"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "This represents a matrix operator M M M that will evolve() a Statevector ∣ ψ ⟩ |\\psi\\rangle ∣ ψ ⟩ by matrix-vector multiplication"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "and will evolve() a DensityMatrix ρ \\rho ρ by left and right multiplication"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "For example, the following operator M = X M = X M = X applied to the zero state ∣ ψ ⟩ = ∣ 0 ⟩ ( ρ = ∣ 0 ⟩ ⟨ 0 ∣ ) |\\psi\\rangle=|0\\rangle (\\rho = |0\\rangle\\langle 0|) ∣ ψ ⟩ = ∣0 ⟩ ( ρ = ∣0 ⟩ ⟨ 0∣ ) changes it to the one state ∣ ψ ⟩ = ∣ 1 ⟩ ( ρ = ∣ 1 ⟩ ⟨ 1 ∣ ) |\\psi\\rangle=|1\\rangle (\\rho = |1\\rangle\\langle 1|) ∣ ψ ⟩ = ∣1 ⟩ ( ρ = ∣1 ⟩ ⟨ 1∣ ) :"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": ">>> import numpy as np\n>>> from qiskit.quantum_info import Operator\n>>> op = Operator(np.array([[0.0, 1.0], [1.0, 0.0]]))  # Represents Pauli X operator"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": ">>> from qiskit.quantum_info import Statevector\n>>> sv = Statevector(np.array([1.0, 0.0]))\n>>> sv.evolve(op)\nStatevector([0.+0.j, 1.+0.j],\n            dims=(2,))"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": ">>> from qiskit.quantum_info import DensityMatrix\n>>> dm = DensityMatrix(np.array([[1.0, 0.0], [0.0, 0.0]]))\n>>> dm.evolve(op)\nDensityMatrix([[0.+0.j, 0.+0.j],\n            [0.+0.j, 1.+0.j]],\n            dims=(2,))"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Initialize an operator object."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Parameters"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "data ( QuantumCircuit | Operation | BaseOperator | np.ndarray ) – data to initialize operator."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "input_dims ( tuple | None ) – the input subsystem dimensions."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "output_dims ( tuple | None ) – the output subsystem dimensions."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Raises"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "QiskitError – if input data cannot be initialized as an operator."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Additional Information:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "If the input or output dimensions are None, they will be automatically determined from the input data. If the input data is a Numpy array of shape (2**N, 2**N) qubit systems will be used. If the input operator is not an N-qubit operator, it will assign a single subsystem with dimension specified by the shape of the input. Note that two operators initialized via this method are only considered equivalent if they match up to their canonical qubit order (or: permutation). See Operator.from_circuit() to specify a different qubit permutation."
+        }
+      ]
+    },
+    {
+      "titulo": "3. atol",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "Default value: 1e-08"
+        }
+      ]
+    },
+    {
+      "titulo": "4. data",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "The underlying Numpy array."
+        }
+      ]
+    },
+    {
+      "titulo": "5. dim",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "Return tuple (input_shape, output_shape)."
+        }
+      ]
+    },
+    {
+      "titulo": "6. num_qubits",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "Return the number of qubits if a N-qubit operator or None otherwise."
+        }
+      ]
+    },
+    {
+      "titulo": "7. qargs",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "Return the qargs for the operator."
+        }
+      ]
+    },
+    {
+      "titulo": "8. rtol",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "Default value: 1e-05"
+        }
+      ]
+    },
+    {
+      "titulo": "9. settings",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "Return operator settings."
+        }
+      ]
+    },
+    {
+      "titulo": "11. adjoint",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "adjoint()"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return the adjoint of the Operator."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return type"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Self"
+        }
+      ]
+    },
+    {
+      "titulo": "12. apply_permutation",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "apply_permutation(perm, front=False)"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Modifies operator’s data by composing it with a permutation."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Parameters"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "perm ( list ) – permutation pattern, describing which qubits occupy the positions 0, 1, 2, etc. after applying the permutation."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "front ( bool ) – When set to True the permutation is applied before the operator, when set to False the permutation is applied after the operator."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Returns"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "The modified operator."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return type"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Operator"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Raises"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "QiskitError – if the size of the permutation pattern does not match the dimensions of the operator."
+        }
+      ]
+    },
+    {
+      "titulo": "13. compose",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "compose(other, qargs=None, front=False)"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return the operator composition with another Operator."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Parameters"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "other ( Operator ) – a Operator object."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "qargs ( list or None ) – a list of subsystem positions to apply other on. If None apply on all subsystems (default: None)."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "front ( bool ) – If True compose using right operator multiplication, instead of left multiplication [default: False]."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Returns"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "The composed Operator."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return type"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Operator"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Raises"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "QiskitError – if other cannot be converted to an operator, or has incompatible dimensions for specified subsystems."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Composition ( & ) by default is defined as left matrix multiplication for matrix operators, while @ (equivalent to dot() ) is defined as right matrix multiplication. That is that A & B == A.compose(B) is equivalent to B @ A == B.dot(A) when A and B are of the same type."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Setting the front=True kwarg changes this to right matrix multiplication and is equivalent to the dot() method A.dot(B) == A.compose(B, front=True) ."
+        }
+      ]
+    },
+    {
+      "titulo": "14. conjugate",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "conjugate()"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return the complex conjugate of the Operator."
+        }
+      ]
+    },
+    {
+      "titulo": "15. copy",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "copy()"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Make a deep copy of current operator."
+        }
+      ]
+    },
+    {
+      "titulo": "16. dot",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "dot(other, qargs=None)"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return the right multiplied operator self * other."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Parameters"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "other ( Operator ) – an operator object."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "qargs ( list or None ) – a list of subsystem positions to apply other on. If None apply on all subsystems (default: None)."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Returns"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "The right matrix multiplied Operator."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return type"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Operator"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "The dot product can be obtained using the @ binary operator. Hence a.dot(b) is equivalent to a @ b ."
+        }
+      ]
+    },
+    {
+      "titulo": "17. draw",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "draw(output=None, **drawer_args)"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return a visualization of the Operator."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "repr : String of the state’s __repr__ ."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "text : ASCII TextMatrix that can be printed in the console."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "latex : An IPython Latex object for displaying in Jupyter Notebooks."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "latex_source : Raw, uncompiled ASCII source to generate array using LaTeX."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Using this method with \"latex\" or \"latex_source\" output modes relies on SymPy internally which is inherently unsafe as SymPy heavily relies on Python’s eval() function. This method is not safe to use with untrusted input."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Parameters"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "output ( str ) – Select the output method to use for drawing the state. Valid choices are repr, text, latex, latex_source, Default is repr."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "drawer_args – Arguments to be passed directly to the relevant drawing function or constructor (TextMatrix(), array_to_latex()). See the relevant function under qiskit.visualization for that function’s documentation."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Returns"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Drawing of the Operator."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return type"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "str or TextMatrix or IPython.display.Latex"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Raises"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "ValueError – when an invalid output method is selected."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "MissingOptionalLibrary – If SymPy isn’t installed and 'latex' or 'latex_source' is selected for output ."
+        }
+      ]
+    },
+    {
+      "titulo": "18. equiv",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "equiv(other, rtol=None, atol=None)"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return True if operators are equivalent up to global phase."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Parameters"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "other ( Operator ) – an operator object."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "rtol ( float ) – relative tolerance value for comparison."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "atol ( float ) – absolute tolerance value for comparison."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Returns"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "True if operators are equivalent up to global phase."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return type"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "bool"
+        }
+      ]
+    },
+    {
+      "titulo": "19. expand",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "expand(other)"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return the reverse-order tensor product with another Operator."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Parameters"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "other ( Operator ) – a Operator object."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Returns"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "the tensor product b ⊗ a b \\otimes a b ⊗ a , where a a a"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "is the current Operator, and b b b is the other Operator."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return type"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Operator"
+        }
+      ]
+    },
+    {
+      "titulo": "20. from_circuit",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "classmethod from_circuit(circuit, ignore_set_layout=False, layout=None, final_layout=None)"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Create a new Operator object from a QuantumCircuit"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "While a QuantumCircuit object can be passed directly as data to the class constructor this provides no options on how the circuit is used to create an Operator . This constructor method lets you control how the Operator is created so it can be adjusted for a particular use case."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "By default this constructor method will permute the qubits based on a configured initial layout (i.e. after it was transpiled). It also provides an option to manually provide a Layout object directly."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Parameters"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "circuit ( QuantumCircuit ) – The QuantumCircuit to create an Operator object from."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "ignore_set_layout ( bool ) – When set to True if the input circuit has a layout set it will be ignored"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "layout ( Layout ) – If specified this kwarg can be used to specify a particular layout to use to permute the qubits in the created Operator . If this is specified it will be used instead of a layout contained in the circuit input. If specified the virtual bits in the Layout must be present in the circuit input."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "final_layout ( Layout ) – If specified this kwarg can be used to represent the output permutation caused by swap insertions during the routing stage of the transpiler."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Returns"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "An operator representing the input circuit"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return type"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Operator"
+        }
+      ]
+    },
+    {
+      "titulo": "21. from_label",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "classmethod from_label(label)"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return a tensor product of single-qubit operators."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Parameters"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "label ( string ) – single-qubit operator string."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Returns"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "The N-qubit operator."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return type"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Operator"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Raises"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "QiskitError – if the label contains invalid characters, or the length of the label is larger than an explicitly specified num_qubits."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Additional Information:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "The labels correspond to the single-qubit matrices: ‘I’: [[1, 0], [0, 1]] ‘X’: [[0, 1], [1, 0]] ‘Y’: [[0, -1j], [1j, 0]] ‘Z’: [[1, 0], [0, -1]] ‘H’: [[1, 1], [1, -1]] / sqrt(2) ‘S’: [[1, 0], [0 , 1j]] ‘T’: [[1, 0], [0, (1+1j) / sqrt(2)]] ‘0’: [[1, 0], [0, 0]] ‘1’: [[0, 0], [0, 1]] ‘+’: [[0.5, 0.5], [0.5 , 0.5]] ‘-’: [[0.5, -0.5], [-0.5 , 0.5]] ‘r’: [[0.5, -0.5j], [0.5j , 0.5]] ‘l’: [[0.5, 0.5j], [-0.5j , 0.5]]"
+        }
+      ]
+    },
+    {
+      "titulo": "22. input_dims",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "input_dims(qargs=None)"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return tuple of input dimension for specified subsystems."
+        }
+      ]
+    },
+    {
+      "titulo": "23. is_unitary",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "is_unitary(atol=None, rtol=None)"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return True if operator is a unitary matrix."
+        }
+      ]
+    },
+    {
+      "titulo": "24. output_dims",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "output_dims(qargs=None)"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return tuple of output dimension for specified subsystems."
+        }
+      ]
+    },
+    {
+      "titulo": "25. power",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "power(n, branch_cut_rotation=3.141592653589793e-12, assume_unitary=False)"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return the matrix power of the operator."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Non-integer powers of operators with an eigenvalue whose complex phase is π \\pi π have a branch cut in the complex plane, which makes the calculation of the principal root around this cut subject to precision / differences in BLAS implementation. For example, the square root of Pauli Y can return the π / 2 \\pi/2 π /2 or − π / 2 -\\pi/2 − π /2 Y rotation depending on whether the -1 eigenvalue is found as complex(-1, tiny) or complex(-1, -tiny) . Such eigenvalues are really common in quantum information, so this function first phase-rotates the input matrix to shift the branch cut to a far less common point. The underlying numerical precision issues around the branch-cut point remain, if an operator has an eigenvalue close to this phase. The magnitude of this rotation can be controlled with the branch_cut_rotation parameter."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "The choice of branch_cut_rotation affects the principal root that is found. For example, the square root of ZGate will be calculated as either SGate or SdgGate depending on which way the rotation is done:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "from qiskit.circuit import library\nfrom qiskit.quantum_info import Operator\n\nz_op = Operator(library.ZGate())\nassert z_op.power(0.5, branch_cut_rotation=1e-3) == Operator(library.SGate())\nassert z_op.power(0.5, branch_cut_rotation=-1e-3) == Operator(library.SdgGate())"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Parameters"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "n ( float ) – the power to raise the matrix to."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "branch_cut_rotation ( float ) – The rotation angle to apply to the branch cut in the complex plane. This shifts the branch cut away from the common point of − 1 -1 − 1 , but can cause a different root to be selected as the principal root. The rotation is anticlockwise, following the standard convention for complex phase."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "assume_unitary ( bool ) – if True , the operator is assumed to be unitary. In this case, for fractional powers we employ a faster implementation based on Schur’s decomposition."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Returns"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "the resulting operator O ** n ."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return type"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Operator"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Raises"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "QiskitError – if the input and output dimensions of the operator are not equal."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "It is only safe to set the argument assume_unitary to True when the operator is unitary (or, more generally, normal). Otherwise, the function will return an incorrect output."
+        }
+      ]
+    },
+    {
+      "titulo": "26. reshape",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "reshape(input_dims=None, output_dims=None, num_qubits=None)"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return a shallow copy with reshaped input and output subsystem dimensions."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Parameters"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "input_dims ( None or tuple ) – new subsystem input dimensions. If None the original input dims will be preserved [Default: None]."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "output_dims ( None or tuple ) – new subsystem output dimensions. If None the original output dims will be preserved [Default: None]."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "num_qubits ( None or int ) – reshape to an N-qubit operator [Default: None]."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Returns"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "returns self with reshaped input and output dimensions."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return type"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "BaseOperator"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Raises"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "QiskitError – if combined size of all subsystem input dimension or subsystem output dimensions is not constant."
+        }
+      ]
+    },
+    {
+      "titulo": "27. reverse_qargs",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "reverse_qargs()"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return an Operator with reversed subsystem ordering."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "For a tensor product operator this is equivalent to reversing the order of tensor product subsystems. For an operator A = A n − 1 ⊗ . . . ⊗ A 0 A = A_{n-1} \\otimes ... \\otimes A_0 A = A n − 1 ​ ⊗ ... ⊗ A 0 ​ the returned operator will be A 0 ⊗ . . . ⊗ A n − 1 A_0 \\otimes ... \\otimes A_{n-1} A 0 ​ ⊗ ... ⊗ A n − 1 ​ ."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Returns"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "the operator with reversed subsystem order."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return type"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Operator"
+        }
+      ]
+    },
+    {
+      "titulo": "28. tensor",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "tensor(other)"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return the tensor product with another Operator."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Parameters"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "other ( Operator ) – a Operator object."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Returns"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "the tensor product a ⊗ b a \\otimes b a ⊗ b , where a a a"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "is the current Operator, and b b b is the other Operator."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return type"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Operator"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "The tensor product can be obtained using the ^ binary operator. Hence a.tensor(b) is equivalent to a ^ b ."
+        }
+      ]
+    },
+    {
+      "titulo": "29. to_instruction",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "to_instruction()"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Convert to a UnitaryGate instruction."
+        }
+      ]
+    },
+    {
+      "titulo": "30. to_matrix",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "to_matrix()"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Convert operator to NumPy matrix."
+        }
+      ]
+    },
+    {
+      "titulo": "31. to_operator",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "to_operator()"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Convert operator to matrix operator class"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return type"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Operator"
+        }
+      ]
+    },
+    {
+      "titulo": "32. transpose",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "transpose()"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return the transpose of the Operator."
+        }
+      ]
+    }
+  ],
+  "versao_documentacao": "Referência solicitada Qiskit 2.6; conferir versão efetiva na página após redirecionamento IBM.",
+  "versao_alvo_qiskit": "2.6",
+  "coletado_em": "2026-11-13T23:46:00.111496+00:00",
+  "hash": "f0e9d9acf432b331adc9eaf0b621433bfca0bd8515176f82f63ac393b3c41ad9",
+  "chunks": 198,
+  "indexed": true
+}

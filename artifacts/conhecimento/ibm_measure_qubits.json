@@ -1,0 +1,145 @@
+{
+  "document_id": "ibm_measure_qubits",
+  "titulo": "Measure qubits",
+  "fonte": "https://quantum.cloud.ibm.com/docs/en/qiskit/measure-qubits",
+  "url_solicitada": "https://quantum.cloud.ibm.com/docs/en/guides/measure-qubits",
+  "secoes": [
+    {
+      "titulo": "1. Measure qubits",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "The code on this page was developed using the following requirements.\nWe recommend using these versions or newer. qiskit[all]~=2.6.1"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "To get information about a qubit's state, you can measure it onto a classical bit . In Qiskit, measurements are performed in the computational basis, that is, the single-qubit Pauli- Z Z Z basis. Therefore, a measurement yields 0 or 1, depending on the overlap with the Pauli- Z Z Z eigenstates ∣ 0 ⟩ |0\\rangle ∣0 ⟩ and ∣ 1 ⟩ |1\\rangle ∣1 ⟩ :"
+        }
+      ]
+    },
+    {
+      "titulo": "2. Apply a measurement to a circuit",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "There are several ways to apply measurements to a circuit:"
+        }
+      ]
+    },
+    {
+      "titulo": "3. QuantumCircuit.measure method",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "Use the measure method to measure a QuantumCircuit ."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Examples:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "from qiskit import QuantumCircuit\n\nqc = QuantumCircuit(5, 5)\nqc.x(0)\nqc.x(1)\nqc.x(4)\nqc.measure(\n    range(5), range(5)\n)  #  Measures all qubits into the corresponding clbit."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Output:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "<qiskit.circuit.instructionset.InstructionSet at 0x7f2cb8446b60>\n"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "from qiskit import QuantumCircuit\n\nqc = QuantumCircuit(3, 1)\nqc.x([0, 2])\nqc.measure(1, 0)  # Measure qubit 1 into the classical bit 0."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Output:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "<qiskit.circuit.instructionset.InstructionSet at 0x7f2cb8446a70>\n"
+        }
+      ]
+    },
+    {
+      "titulo": "4. Measure class",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "The Qiskit Measure class measures the specified qubits."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "from qiskit.circuit import Measure\n\nqc = QuantumCircuit(3, 1)\nqc.x([0, 1])\nqc.append(Measure(), [0], [0])  # measure qubit 0 into clbit 0"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Output:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "<qiskit.circuit.instructionset.InstructionSet at 0x7f2cb8447670>\n"
+        }
+      ]
+    },
+    {
+      "titulo": "5. QuantumCircuit.measure_all method",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "To measure all qubits into the corresponding classical bits, use the measure_all method. By default, this method adds new classical bits in a ClassicalRegister to store these measurements."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "from qiskit import QuantumCircuit\n\nqc = QuantumCircuit(3, 1)\nqc.x([0, 2])\nqc.measure_all()  # Measure all qubits."
+        }
+      ]
+    },
+    {
+      "titulo": "6. QuantumCircuit.measure_active method",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "To measure all qubits that are not idle, use the measure_active method. This method creates a new ClassicalRegister with a size equal to the number of non-idle qubits being measured."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "from qiskit import QuantumCircuit\n\nqc = QuantumCircuit(3, 1)\nqc.x([0, 2])\nqc.measure_active()  # Measure qubits that are not idle, that is, qubits 0 and 2."
+        }
+      ]
+    },
+    {
+      "titulo": "7. Next steps",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "Measure class"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "measure_all method"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "measure_active method"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "random_circuit method"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Mid-circuit measurements (Available only when using IBM Quantum® Compute Service.)"
+        }
+      ]
+    }
+  ],
+  "versao_documentacao": "guia online; conferir requisitos na página",
+  "versao_alvo_qiskit": "2.6",
+  "coletado_em": "2026-11-13T23:44:18.919536+00:00",
+  "hash": "d6b6c766c1fb114be50cf400673926ad1fbea93f852dc76867c9370b85f4f5e0",
+  "chunks": 25,
+  "indexed": true
+}

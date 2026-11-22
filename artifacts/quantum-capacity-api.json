@@ -1,0 +1,298 @@
+{
+  "base_url": "http://127.0.0.1:8000",
+  "limits": {
+    "max_circuit_lines": 2500,
+    "max_qubits": 32,
+    "max_classical_bits": 256,
+    "max_circuit_gates": 10000,
+    "max_circuit_depth": 10000,
+    "max_code_size_bytes": 524288,
+    "optimization_timeout_seconds": 60.0,
+    "max_concurrent_optimizations": 1,
+    "worker_memory_mb": 1536,
+    "max_python_steps": 200000,
+    "max_equivalence_qubits": 8,
+    "max_equivalence_operations": 1000,
+    "max_request_bytes": 3162112
+  },
+  "cases": [
+    {
+      "case": "qasm-50-lines",
+      "status": 200,
+      "http_seconds": 1.603,
+      "original": {
+        "qubits": 20,
+        "total_operacoes": 47,
+        "instrucoes": 47,
+        "bits_classicos": 0,
+        "operacoes_dois_qubits": 0,
+        "profundidade": 3,
+        "tipos_operacoes": {
+          "rz": 47
+        }
+      },
+      "proposal": {
+        "qubits": 20,
+        "total_operacoes": 20,
+        "instrucoes": 20,
+        "bits_classicos": 0,
+        "operacoes_dois_qubits": 0,
+        "profundidade": 1,
+        "tipos_operacoes": {
+          "rz": 20
+        }
+      },
+      "worker_seconds": 0.08638337699994736
+    },
+    {
+      "case": "qasm-500-lines",
+      "status": 200,
+      "http_seconds": 1.352,
+      "original": {
+        "qubits": 20,
+        "total_operacoes": 497,
+        "instrucoes": 497,
+        "bits_classicos": 0,
+        "operacoes_dois_qubits": 0,
+        "profundidade": 25,
+        "tipos_operacoes": {
+          "rz": 497
+        }
+      },
+      "proposal": {
+        "qubits": 20,
+        "total_operacoes": 20,
+        "instrucoes": 20,
+        "bits_classicos": 0,
+        "operacoes_dois_qubits": 0,
+        "profundidade": 1,
+        "tipos_operacoes": {
+          "rz": 20
+        }
+      },
+      "worker_seconds": 0.12582816899976024
+    },
+    {
+      "case": "qasm-2000-lines",
+      "status": 200,
+      "http_seconds": 1.501,
+      "original": {
+        "qubits": 20,
+        "total_operacoes": 1997,
+        "instrucoes": 1997,
+        "bits_classicos": 0,
+        "operacoes_dois_qubits": 0,
+        "profundidade": 100,
+        "tipos_operacoes": {
+          "rz": 1997
+        }
+      },
+      "proposal": {
+        "qubits": 20,
+        "total_operacoes": 20,
+        "instrucoes": 20,
+        "bits_classicos": 0,
+        "operacoes_dois_qubits": 0,
+        "profundidade": 1,
+        "tipos_operacoes": {
+          "rz": 20
+        }
+      },
+      "worker_seconds": 0.235818174999622
+    },
+    {
+      "case": "qasm-5000-operations",
+      "status": 200,
+      "http_seconds": 1.476,
+      "original": {
+        "qubits": 20,
+        "total_operacoes": 5000,
+        "instrucoes": 5000,
+        "bits_classicos": 0,
+        "operacoes_dois_qubits": 0,
+        "profundidade": 250,
+        "tipos_operacoes": {
+          "h": 5000
+        }
+      },
+      "proposal": {
+        "qubits": 20,
+        "total_operacoes": 0,
+        "instrucoes": 0,
+        "bits_classicos": 0,
+        "operacoes_dois_qubits": 0,
+        "profundidade": 0,
+        "tipos_operacoes": {}
+      },
+      "worker_seconds": 0.21371669700056373
+    },
+    {
+      "case": "python-50-lines",
+      "status": 200,
+      "http_seconds": 1.534,
+      "original": {
+        "qubits": 20,
+        "total_operacoes": 47,
+        "instrucoes": 47,
+        "bits_classicos": 0,
+        "operacoes_dois_qubits": 0,
+        "profundidade": 3,
+        "tipos_operacoes": {
+          "rz": 47
+        }
+      },
+      "proposal": {
+        "qubits": 20,
+        "total_operacoes": 20,
+        "instrucoes": 20,
+        "bits_classicos": 0,
+        "operacoes_dois_qubits": 0,
+        "profundidade": 1,
+        "tipos_operacoes": {
+          "rz": 20
+        }
+      },
+      "worker_seconds": 0.16739536699969904
+    },
+    {
+      "case": "python-500-lines",
+      "status": 200,
+      "http_seconds": 1.3,
+      "original": {
+        "qubits": 20,
+        "total_operacoes": 497,
+        "instrucoes": 497,
+        "bits_classicos": 0,
+        "operacoes_dois_qubits": 0,
+        "profundidade": 25,
+        "tipos_operacoes": {
+          "rz": 497
+        }
+      },
+      "proposal": {
+        "qubits": 20,
+        "total_operacoes": 20,
+        "instrucoes": 20,
+        "bits_classicos": 0,
+        "operacoes_dois_qubits": 0,
+        "profundidade": 1,
+        "tipos_operacoes": {
+          "rz": 20
+        }
+      },
+      "worker_seconds": 0.11777795599937235
+    },
+    {
+      "case": "python-2000-lines",
+      "status": 200,
+      "http_seconds": 1.594,
+      "original": {
+        "qubits": 20,
+        "total_operacoes": 1997,
+        "instrucoes": 1997,
+        "bits_classicos": 0,
+        "operacoes_dois_qubits": 0,
+        "profundidade": 100,
+        "tipos_operacoes": {
+          "rz": 1997
+        }
+      },
+      "proposal": {
+        "qubits": 20,
+        "total_operacoes": 20,
+        "instrucoes": 20,
+        "bits_classicos": 0,
+        "operacoes_dois_qubits": 0,
+        "profundidade": 1,
+        "tipos_operacoes": {
+          "rz": 20
+        }
+      },
+      "worker_seconds": 0.30242388199985726
+    },
+    {
+      "case": "python-5000-operations",
+      "status": 200,
+      "http_seconds": 1.39,
+      "original": {
+        "qubits": 20,
+        "total_operacoes": 5000,
+        "instrucoes": 5000,
+        "bits_classicos": 0,
+        "operacoes_dois_qubits": 0,
+        "profundidade": 250,
+        "tipos_operacoes": {
+          "h": 5000
+        }
+      },
+      "proposal": {
+        "qubits": 20,
+        "total_operacoes": 0,
+        "instrucoes": 0,
+        "bits_classicos": 0,
+        "operacoes_dois_qubits": 0,
+        "profundidade": 0,
+        "tipos_operacoes": {}
+      },
+      "worker_seconds": 0.1779615499999636
+    },
+    {
+      "case": "legacy-qasm-2000-lines",
+      "status": 200,
+      "http_seconds": 1.349,
+      "original": {
+        "qubits": 20,
+        "total_operacoes": 1997,
+        "instrucoes": 1997,
+        "bits_classicos": 0,
+        "operacoes_dois_qubits": 0,
+        "profundidade": 100,
+        "tipos_operacoes": {
+          "rz": 1997
+        }
+      },
+      "proposal": {
+        "qubits": 20,
+        "total_operacoes": 20,
+        "instrucoes": 20,
+        "bits_classicos": 0,
+        "operacoes_dois_qubits": 0,
+        "profundidade": 1,
+        "tipos_operacoes": {
+          "rz": 20
+        }
+      },
+      "worker_seconds": 0.15229433100012102
+    },
+    {
+      "case": "line-limit",
+      "status": 413,
+      "http_seconds": 0.037,
+      "code": "CIRCUIT_LIMIT_EXCEEDED"
+    },
+    {
+      "case": "invalid-qasm",
+      "status": 422,
+      "http_seconds": 1.198,
+      "code": "INVALID_CIRCUIT"
+    },
+    {
+      "case": "unsafe-python",
+      "status": 422,
+      "http_seconds": 1.176,
+      "code": "UNSUPPORTED_PYTHON"
+    },
+    {
+      "case": "invalid-shape",
+      "status": 422,
+      "http_seconds": 0.07,
+      "code": "INVALID_REQUEST"
+    },
+    {
+      "case": "invalid-json",
+      "status": 400,
+      "http_seconds": 0.033,
+      "code": "INVALID_JSON"
+    }
+  ]
+}

@@ -1,0 +1,266 @@
+{
+  "document_id": "ibm_classical_feedforward_and_control_flow",
+  "titulo": "Classical feedforward and control flow (dynamic circuits)",
+  "fonte": "https://quantum.cloud.ibm.com/docs/en/qiskit/classical-feedforward-and-control-flow",
+  "url_solicitada": "https://quantum.cloud.ibm.com/docs/en/guides/classical-feedforward-and-control-flow",
+  "secoes": [
+    {
+      "titulo": "1. Classical feedforward and control flow (dynamic circuits)",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "The code on this page was developed using the following requirements.\nWe recommend using these versions or newer. qiskit[all]~=2.6.1"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Dynamic circuits are powerful tools with which you can measure qubits in the middle of a quantum circuit execution and then perform classical logic operations within the circuit, based on the outcome of those mid-circuit measurements.  This process is also known as classical feedforward . While these are early days of understanding how best to take advantage of dynamic circuits, the quantum research community has already identified a number of use cases, such as the following:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Efficient quantum state preparation, such as GHZ state , W-state (for more information about W-state, also refer to \"State preparation by shallow circuits using feed forward\" ), and a broad class of matrix product states"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Efficient long-range entanglement between qubits on the same chip by using shallow circuits"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Efficient sampling of IQP-like circuits"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Qiskit supports four control flow constructs for classical feedforward, each implemented as a method on QuantumCircuit . The constructs and their corresponding methods are:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "If statement - QuantumCircuit.if_test"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Switch statement - QuantumCircuit.switch"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "For loop - QuantumCircuit.for_loop"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "While loop - QuantumCircuit.while_loop"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Each of these methods returns a context manager and is typically used in a with statement. The remainder of this guide explains each of these constructs and how to use them."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "There are some limitations of classical feedforward and control flow operations on quantum hardware that might impact your program. For more information, see Execute dynamic circuits ."
+        }
+      ]
+    },
+    {
+      "titulo": "2. if statement",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "The if statement is used to conditionally perform operations based on the value of a classical bit or register."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "In the example below, we apply a Hadamard gate to a qubit and measure it. If the result is 1, then we apply an X gate on the qubit, which has the effect of flipping it back to the 0 state. We then measure the qubit again. The resulting measurement outcome should be 0 with 100% probability."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "from\nqiskit\n.\ncircuit\nimport\nQuantumCircuit\n,\nQuantumRegister\n,\nClassicalRegister\nqubits\n=\nQuantumRegister\n(\n1\n)\nclbits\n=\nClassicalRegister\n(\n1\n)\ncircuit\n=\nQuantumCircuit\n(qubits, clbits)\n(q0\n,\n)\n=\nqubits\n(c0\n,\n)\n=\nclbits\ncircuit\n.\nh\n(q0)\ncircuit\n.\nmeasure\n(q0, c0)\nwith\ncircuit\n.\nif_test\n((c0,\n1\n)):\ncircuit\n.\nx\n(q0)\ncircuit\n.\nmeasure\n(q0, c0)\ncircuit\n.\ndraw\n(\n\"mpl\"\n)\n# example output counts: {'0': 1024}"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Output:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "The with statement can be given an assignment target which is itself a context manager that can be stored and subsequently used to create an else block, which is executed whenever the contents of the if block are not executed."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "In the example below, we initialize registers with two qubits and two classical bits. We apply a Hadamard gate to the first qubit and measure it. If the result is 1, then we apply a Hadamard gate on the second qubit; otherwise, we apply an X gate on the second qubit. Finally, we measure the second qubit as well."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "qubits\n=\nQuantumRegister\n(\n2\n)\nclbits\n=\nClassicalRegister\n(\n2\n)\ncircuit\n=\nQuantumCircuit\n(qubits, clbits)\n(q0\n,\nq1)\n=\nqubits\n(c0\n,\nc1)\n=\nclbits\ncircuit\n.\nh\n(q0)\ncircuit\n.\nmeasure\n(q0, c0)\nwith\ncircuit\n.\nif_test\n((c0,\n1\n))\nas\nelse_\n:\ncircuit\n.\nh\n(q1)\nwith\nelse_\n:\ncircuit\n.\nx\n(q1)\ncircuit\n.\nmeasure\n(q1, c1)\ncircuit\n.\ndraw\n(\n\"mpl\"\n)\n# example output counts: {'01': 260, '11': 272, '10': 492}"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Output:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "In addition to conditioning on a single classical bit, it's also possible to condition on the value of a classical register composed of multiple bits."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "In the example below, we apply Hadamard gates to two qubits and measure them. If the result is 01 , that is, the first qubit is 1 and the second qubit is 0, then we apply an X gate to a third qubit. Finally, we measure the third qubit. Note that for clarity, we chose to specify the state of the third classical bit, which is 0, in the if condition. In the circuit drawing, the condition is indicated by the circles on the classical bits being conditioned on. A solid circle indicates conditioning on 1, while an outlined circle indicates conditioning on 0."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "qubits\n=\nQuantumRegister\n(\n3\n)\nclbits\n=\nClassicalRegister\n(\n3\n)\ncircuit\n=\nQuantumCircuit\n(qubits, clbits)\n(q0\n,\nq1\n,\nq2)\n=\nqubits\n(c0\n,\nc1\n,\nc2)\n=\nclbits\ncircuit\n.\nh\n([q0, q1])\ncircuit\n.\nmeasure\n(q0, c0)\ncircuit\n.\nmeasure\n(q1, c1)\nwith\ncircuit\n.\nif_test\n((clbits,\n0b\n001\n)):\ncircuit\n.\nx\n(q2)\ncircuit\n.\nmeasure\n(q2, c2)\ncircuit\n.\ndraw\n(\n\"mpl\"\n)\n# example output counts: {'101': 269, '011': 260, '000': 252, '010': 243}"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Output:"
+        }
+      ]
+    },
+    {
+      "titulo": "3. Switch statement",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "The switch statement is used to select actions based on the value of a classical bit or register. It is similar to an if statement, but you can specify more cases for the branching logic. The example below applies a Hadamard gate to a qubit and measures it. If the result is 0, apply an X gate on the qubit, and if the result is 1, apply a Z gate. The resulting measurement outcome should be 1 with 100% probability."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "qubits\n=\nQuantumRegister\n(\n1\n)\nclbits\n=\nClassicalRegister\n(\n1\n)\ncircuit\n=\nQuantumCircuit\n(qubits, clbits)\n(q0\n,\n)\n=\nqubits\n(c0\n,\n)\n=\nclbits\ncircuit\n.\nh\n(q0)\ncircuit\n.\nmeasure\n(q0, c0)\nwith\ncircuit\n.\nswitch\n(c0)\nas\ncase\n:\nwith\ncase\n(\n0\n):\ncircuit\n.\nx\n(q0)\nwith\ncase\n(\n1\n):\ncircuit\n.\nz\n(q0)\ncircuit\n.\nmeasure\n(q0, c0)\ncircuit\n.\ndraw\n(\n\"mpl\"\n)\n# example output counts: {'1': 1024}"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Output:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Because the example above used a single classical bit, there were only two possible cases, so you could have achieved the same result using an if-else statement. The switch case is mainly useful when branching on the value of a classical register composed of multiple bits. The following example shows how to construct a default case, which is executed if none of the preceding cases are. Note that in a switch statement, only one of the blocks are ever executed. There is no fallthrough."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "The example below applies Hadamard gates to two qubits and measures them. If the result is either 00 or 11, apply a Z gate to the third qubit. If the result is 01, apply a Y gate. If none of the preceding cases matched, apply an X gate. Finally, measure the third qubit."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "qubits\n=\nQuantumRegister\n(\n3\n)\nclbits\n=\nClassicalRegister\n(\n3\n)\ncircuit\n=\nQuantumCircuit\n(qubits, clbits)\n(q0\n,\nq1\n,\nq2)\n=\nqubits\n(c0\n,\nc1\n,\nc2)\n=\nclbits\ncircuit\n.\nh\n([q0, q1])\ncircuit\n.\nmeasure\n(q0, c0)\ncircuit\n.\nmeasure\n(q1, c1)\nwith\ncircuit\n.\nswitch\n(clbits)\nas\ncase\n:\nwith\ncase\n(\n0b\n000\n,\n0b\n011\n):\ncircuit\n.\nz\n(q2)\nwith\ncase\n(\n0b\n001\n):\ncircuit\n.\ny\n(q2)\nwith\ncase\n(case.DEFAULT):\ncircuit\n.\nx\n(q2)\ncircuit\n.\nmeasure\n(q2, c2)\ncircuit\n.\ndraw\n(\n\"mpl\"\n)\n# example output counts: {'101': 267, '110': 249, '011': 265, '000': 243}"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Output:"
+        }
+      ]
+    },
+    {
+      "titulo": "4. For loop",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "A for loop is used to iterate over a sequence of classical values and perform some operations during each iteration."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "The following example uses a for loop to apply 5 X gates to a qubit and then measures it. Because it performs an odd number of X gates, the overall effect is to flip the qubit from the 0 state to the 1 state."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "qubits\n=\nQuantumRegister\n(\n1\n)\nclbits\n=\nClassicalRegister\n(\n1\n)\ncircuit\n=\nQuantumCircuit\n(qubits, clbits)\n(q0\n,\n)\n=\nqubits\n(c0\n,\n)\n=\nclbits\nwith\ncircuit\n.\nfor_loop\n(\nrange\n(\n5\n))\nas\n_\n:\ncircuit\n.\nx\n(q0)\ncircuit\n.\nmeasure\n(q0, c0)\ncircuit\n.\ndraw\n(\n\"mpl\"\n)\n# example output counts: {'1': 1024}"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Output:"
+        }
+      ]
+    },
+    {
+      "titulo": "5. While loop",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "A while loop is used to repeat instructions while some condition is satisfied."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "The example below applies Hadamard gates to two qubits and measures them. Then it creates a while loop that repeats this procedure while the measurement outcome is 11. As a result, the final measurement should never be 11, with the remaining possibilities appearing with approximately equal frequency."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "qubits\n=\nQuantumRegister\n(\n2\n)\nclbits\n=\nClassicalRegister\n(\n2\n)\ncircuit\n=\nQuantumCircuit\n(qubits, clbits)\nq0\n,\nq1\n=\nqubits\nc0\n,\nc1\n=\nclbits\ncircuit\n.\nh\n([q0, q1])\ncircuit\n.\nmeasure\n(q0, c0)\ncircuit\n.\nmeasure\n(q1, c1)\nwith\ncircuit\n.\nwhile_loop\n((clbits,\n0b\n11\n)):\ncircuit\n.\nh\n([q0, q1])\ncircuit\n.\nmeasure\n(q0, c0)\ncircuit\n.\nmeasure\n(q1, c1)\ncircuit\n.\ndraw\n(\n\"mpl\"\n)\n# example output counts: {'01': 334, '10': 368, '00': 322}"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Output:"
+        }
+      ]
+    },
+    {
+      "titulo": "6. Classical expressions",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "The Qiskit classical expression module qiskit.circuit.classical contains an exploratory representation of runtime operations on classical values during circuit execution."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "The following example shows that you can use the calculation of the parity to create an n-qubit GHZ state using dynamic circuits. First, generate n / 2 n/2 n /2 Bell pairs on adjacent qubits. Then, glue these pairs together using a layer of CNOT gates in between pairs. You then measure the target qubit of all prior CNOT gates and reset each measured qubit to the state ∣ 0 ⟩ \\vert 0 \\rangle ∣0 ⟩ . You apply X X X to every unmeasured site for which the parity of all preceding bits is odd. Finally, CNOT gates are applied to the measured qubits to re-establish the entanglement lost in the measurement."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "In the parity calculation, the first element of the constructed expression involves lifting the Python object mr[0] to a Value node ( lift is used to turn arbitrary objects into classical expressions). This is not necessary for mr[1] and the possible following classical register, as they are inputs to expr.bit_xor , and any necessary lifting is done automatically in these cases. Such expressions can be built up in loops and other constructs."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "from\nqiskit\nimport\nQuantumCircuit\n,\nQuantumRegister\n,\nClassicalRegister\nfrom\nqiskit\n.\ncircuit\n.\nclassical\nimport\nexpr\nnum_qubits\n=\n8\nif\nnum_qubits\n%\n2\nor\nnum_qubits\n<\n4\n:\nraise\nValueError\n(\n\"num_qubits must be an even integer ≥ 4\"\n)\nmeas_qubits\n=\nlist\n(\nrange\n(\n2\n, num_qubits,\n2\n))\n# qubits to measure and reset\nqr\n=\nQuantumRegister\n(num_qubits,\n\"qr\"\n)\nmr\n=\nClassicalRegister\n(\nlen\n(meas_qubits),\n\"m\"\n)\nqc\n=\nQuantumCircuit\n(qr, mr)\n# Create local Bell pairs\nqc\n.\nreset\n(qr)\nqc\n.\nh\n(qr[::\n2\n])\nfor\nctrl\nin\nrange\n(\n0\n, num_qubits,\n2\n):\nqc\n.\ncx\n(qr[ctrl], qr[ctrl\n+\n1\n])\n# Glue neighboring pairs\nfor\nctrl\nin\nrange\n(\n1\n, num_qubits\n-\n1\n,\n2\n):\nqc\n.\ncx\n(qr[ctrl], qr[ctrl\n+\n1\n])\n# Measure boundary qubits between pairs,reset to 0\nfor\nk\n,\nq\nin\nenumerate\n(meas_qubits):\nqc\n.\nmeasure\n(qr[q], mr[k])\nqc\n.\nreset\n(qr[q])\n# Parity-conditioned X corrections\n# Each non-measured qubit gets flipped iff the parity (XOR) of all\n# preceding measurement bits is 1\nfor\ntgt\nin\nrange\n(num_qubits):\nif\ntgt\nin\nmeas_qubits\n:\n# skip measured qubits\ncontinue\n# all measurement registers whose physical qubit index < tgt\nleft_bits\n=\n[k\nfor\nk\n,\nq\nin\nenumerate\n(meas_qubits)\nif\nq\n<\ntgt]\nif\nnot\nleft_bits\n:\n# skip if list empty\ncontinue\n# build XOR-parity expression\nparity\n=\nexpr\n.\nlift\n(\nmr[left_bits[\n0\n]]\n)\n# lift the first bit to Value so it will be treated like a boolean.\nfor\nk\nin\nleft_bits\n[\n1\n:]:\nparity\n=\nexpr\n.\nbit_xor\n(\nmr[k], parity\n)\n# calculate parity with all other bits\nwith\nqc\n.\nif_test\n(parity):\n# Add X if parity is 1\nqc\n.\nx\n(qr[tgt])\n# Re-entangle measured qubits\nfor\nctrl\nin\nrange\n(\n1\n, num_qubits\n-\n1\n,\n2\n):\nqc\n.\ncx\n(qr[ctrl], qr[ctrl\n+\n1\n])"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "qc\n.\ndraw\n(output\n=\n\"mpl\"\n, style\n=\n\"iqp\"\n, idle_wires\n=\nFalse\n, fold\n=-\n1\n)"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Output:"
+        }
+      ]
+    },
+    {
+      "titulo": "7. Store",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "You can use the store instruction to save the result of a classical expression, if that expression will be used repeatedly. Operations are automatically parallelized, making your code significantly more efficient at runtime."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "For example, it is more natural and more efficient at runtime to write B [ 0 ] ⊕ B [ 1 ] ⊕ B [ 2 ] … B[0] \\oplus B[1] \\oplus B[2] \\ldots B [ 0 ] ⊕ B [ 1 ] ⊕ B [ 2 ] … , where B = ¬ A B = \\neg A B = ¬ A , than ( ¬ A [ 0 ] ) ⊕ ( ¬ A [ 1 ] ) ⊕ ( ¬ A [ 2 ] ) … (\\neg A[0]) \\oplus (\\neg A[1]) \\oplus (\\neg A[2]) \\ldots ( ¬ A [ 0 ]) ⊕ ( ¬ A [ 1 ]) ⊕ ( ¬ A [ 2 ]) … .  The former computes the negation in a single parallel step before the XOR chain, instead of evaluating each negation sequentially inside the expression."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Full example:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "from\nqiskit\n.\ncircuit\nimport\nQuantumCircuit\n,\nQuantumRegister\n,\nClassicalRegister\nfrom\nqiskit\n.\ncircuit\n.\nclassical\nimport\nexpr\nqregs\n=\nQuantumRegister\n(\n4\n,\n\"q\"\n)\ncreg\n=\nClassicalRegister\n(\n3\n,\n\"c\"\n)\n# temp is a plain ClassicalRegister used as the store target\ntemp\n=\nClassicalRegister\n(\n3\n,\n\"temp\"\n)\nqc\n=\nQuantumCircuit\n(qregs, creg, temp)\nqc\n.\nh\n([\n0\n,\n1\n,\n2\n])\nqc\n.\nmeasure\n([\n0\n,\n1\n,\n2\n], creg)\n# Store bit-NOT of the full 3-bit register into temp\nqc\n.\nstore\n(temp, expr.\nbit_not\n(creg))\n# Compute parity of temp using bit-indexed XOR\nparity\n=\nexpr\n.\nbit_xor\n(\nexpr.\nbit_xor\n(expr.\nindex\n(temp,\n0\n), expr.\nindex\n(temp,\n1\n)),\nexpr.\nindex\n(temp,\n2\n),\n)\n# Flip q3 if parity of ~creg is 1\nwith\nqc\n.\nif_test\n(parity):\nqc\n.\nx\n(\n3\n)\nqc\n.\nmeasure\n([\n0\n,\n1\n,\n2\n], creg)\nqc\n.\ndraw\n(\n\"mpl\"\n)"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Output:"
+        }
+      ]
+    },
+    {
+      "titulo": "8. Next steps",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "Learn how to implement accurate dynamic decoupling by using stretch ."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Use circuit schedule visualization to debug and optimize your dynamic circuits."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Execute dynamic circuits ."
+        }
+      ]
+    }
+  ],
+  "versao_documentacao": "guia online; conferir requisitos na página",
+  "versao_alvo_qiskit": "2.6",
+  "coletado_em": "2026-11-13T17:06:13.812038+00:00",
+  "hash": "7000744649928c5a48afce894b7e08a754e05318baa6e444444e97a582ea89f5",
+  "chunks": 78,
+  "indexed": true
+}

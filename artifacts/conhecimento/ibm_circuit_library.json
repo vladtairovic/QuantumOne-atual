@@ -1,0 +1,262 @@
+{
+  "document_id": "ibm_circuit_library",
+  "titulo": "Circuit library",
+  "fonte": "https://quantum.cloud.ibm.com/docs/en/qiskit/circuit-library",
+  "url_solicitada": "https://quantum.cloud.ibm.com/docs/en/guides/circuit-library",
+  "secoes": [
+    {
+      "titulo": "1. Circuit library",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "The code on this page was developed using the following requirements.\nWe recommend using these versions or newer. qiskit[all]~=2.6.1"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "The Qiskit SDK includes a library of popular circuits to use as building blocks in your own programs. Using pre-defined circuits saves time researching, writing code, and debugging. The library includes popular circuits in quantum computing, circuits that are difficult to simulate classically, and circuits useful for quantum hardware benchmarking."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "This page lists the different circuit categories the library provides. For a full list of circuits, see the circuit library API documentation ."
+        }
+      ]
+    },
+    {
+      "titulo": "2. Standard gates",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "The circuit library also includes standard quantum gates. Some are more fundamental gates (such as the UGate ), and others are multi-qubit gates that usually need building from single- and two-qubit gates. To add imported gates to your circuit, use the append method; the first argument is the gate, and the next argument is a list of qubits to apply the gate to."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "For example, the following code cell creates a circuit with a Hadamard gate and a multi-controlled-X gate."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "from qiskit import QuantumCircuit\nfrom qiskit.circuit.library import HGate, MCXGate\n\nmcx_gate = MCXGate(3)\nhadamard_gate = HGate()\n\nqc = QuantumCircuit(4)\nqc.append(hadamard_gate, [0])\nqc.append(mcx_gate, [0, 1, 2, 3])\nqc.draw(\"mpl\")"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Output:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "See Standard gates in the circuit library API documentation."
+        }
+      ]
+    },
+    {
+      "titulo": "3. N-local circuits",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "These circuits alternate layers of single-qubit rotation gates with layers of multi-qubit entangling gates."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "This family of circuits is popular in variational quantum algorithms because they can produce a wide range of quantum states. Variational algorithms adjust the gate parameters to find states that have certain properties (such as states that represent a good solution to an optimization problem). For this purpose, many circuits in the library are parameterized , which means you can define them without fixed values."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "The following code cell imports a n_local circuit, in which the entangling gates are two-qubit gates. This circuit interleaves blocks of parameterized single-qubit gates, followed by entangling blocks of two-qubit gates. The following code creates a three-qubit circuit, with single-qubit RX-gates and two-qubit CZ-gates."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "from qiskit.circuit.library import n_local\n\ntwo_local = n_local(3, \"rx\", \"cz\")\ntwo_local.draw(\"mpl\")"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Output:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "You can get a list-like object of the circuit's parameters from the parameters attribute."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "two_local.parameters"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Output:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "ParameterView([ParameterVectorElement(θ[0]), ParameterVectorElement(θ[1]), ParameterVectorElement(θ[2]), ParameterVectorElement(θ[3]), ParameterVectorElement(θ[4]), ParameterVectorElement(θ[5]), ParameterVectorElement(θ[6]), ParameterVectorElement(θ[7]), ParameterVectorElement(θ[8]), ParameterVectorElement(θ[9]), ParameterVectorElement(θ[10]), ParameterVectorElement(θ[11])])\n"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "You can also use this to assign these parameters to real values using a dictionary of the form { Parameter: number } . To demonstrate, the following code cell assigns each parameter in the circuit to 0 ."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "bound_circuit = two_local.assign_parameters(\n    {p: 0 for p in two_local.parameters}\n)\nbound_circuit.decompose().draw(\"mpl\")"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Output:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "For more information, see N-local gates in the circuit library API documentation or take the Variational algorithm design course in IBM Quantum® Learning."
+        }
+      ]
+    },
+    {
+      "titulo": "4. Data-encoding circuits",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "These parameterized circuits encode data onto quantum states for processing by quantum machine learning algorithms. Some circuits supported by Qiskit are:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Amplitude encoding, which encodes each number into the amplitude of a basis state. This can store 2 n 2^n 2 n numbers in a single state, but can be costly to implement."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Basis encoding, which encodes an integer k k k by preparing the corresponding basis state ∣ k ⟩ |k\\rangle ∣ k ⟩ ."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Angle encoding, which sets each number in the data as a rotation angle in a parameterized circuit."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "The best approach depends upon the specifics of your application. On current quantum computers, however, we often use angle-encoding circuits such as the zz_feature_map ."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "from qiskit.circuit.library import zz_feature_map\n\nfeatures = [0.2, 0.4, 0.8]\nfeature_map = zz_feature_map(feature_dimension=len(features))\n\nencoded = feature_map.assign_parameters(features)\nencoded.draw(\"mpl\")"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Output:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "See Data encoding circuits in the circuit library API documentation."
+        }
+      ]
+    },
+    {
+      "titulo": "5. Time-evolution circuits",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "These circuits simulate a quantum state evolving in time. Use time-evolution circuits to investigate physical effects such as heat transfer or phase transitions in a system. Time-evolution circuits are also a fundamental building block of chemistry wave functions (such as unitary coupled-cluster trial states) and of the QAOA algorithm we use for optimization problems."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "from qiskit.circuit.library import PauliEvolutionGate\nfrom qiskit.circuit import QuantumCircuit\nfrom qiskit.quantum_info import SparsePauliOp\n\n\n# Prepare an initial state with a Hadamard on the middle qubit\nstate = QuantumCircuit(3)\nstate.h(1)\n\nhamiltonian = SparsePauliOp([\"ZZI\", \"IZZ\"])\nevolution = PauliEvolutionGate(hamiltonian, time=1)\n\n# Evolve state by appending the evolution gate\nstate.compose(evolution, inplace=True)\n\nstate.draw(\"mpl\")"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Output:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Read the PauliEvolutionGate API documentation ."
+        }
+      ]
+    },
+    {
+      "titulo": "6. Benchmarking and complexity-theory circuits",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "Benchmarking circuits give us a sense of how well our hardware is actually working, and complexity-theory circuits help us understand how difficult the problems we want to solve are."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "For example, the \"quantum volume\" benchmark measures how accurately a quantum computer executes a type of random quantum circuit. The score of the quantum computer increases with the size of the circuit it can reliably run. This takes into account all aspects of the computer, including qubit count, instruction fidelity, qubit connectivity, and the software stack transpiling and post-processing results. Read more about quantum volume in the original quantum volume paper ."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "The following code shows an example of a quantum volume circuit built in Qiskit that runs on four qubits (the unitary blocks are randomized two-qubit gates)."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "from qiskit.circuit.library import quantum_volume\n\nquantum_volume(4).draw(\"mpl\")"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Output:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "The circuit library also includes circuits believed to be hard to simulate classically, such as instantaneous quantum polynomial (iqp) circuits. These circuits sandwich certain diagonal gates (in the computational basis) between blocks of Hadamard gates."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Other circuits include grover_operator for use in Grover's algorithm, and the fourier_checking circuit for the Fourier checking problem. See these circuits in Particular quantum circuits in the circuit library API documentation."
+        }
+      ]
+    },
+    {
+      "titulo": "7. Arithmetic circuits",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "Arithmetic operations are classical functions, such as adding integers and bit-wise operations. These may be useful with algorithms such as amplitude estimation for finance applications, and in algorithms like the HHL algorithm, which solves linear systems of equations."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "As an example, let’s try adding two three-bit numbers using a \"ripple-carry\" circuit to perform in-place addition ( FullAdderGate ). This adder adds two numbers (we'll call them \"A\" and \"B\") and writes the result to the register that held B. In the following example, A=2 and B=3."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "from qiskit.circuit.library import FullAdderGate\nfrom qiskit import QuantumCircuit, QuantumRegister, ClassicalRegister\n\nadder = FullAdderGate(3)  # Adder of 3-bit numbers\n\n# Create the number A=2\nreg_a = QuantumRegister(3, \"a\")\nnumber_a = QuantumCircuit(reg_a)\nnumber_a.initialize(2)  # Number 2; |010>\n\n# Create the number B=3\nreg_b = QuantumRegister(3, \"b\")\nnumber_b = QuantumCircuit(reg_b)\nnumber_b.initialize(3)  # Number 3; |011>\n\n# Create a circuit to hold everything, including a classical register for\n# the result\nqregs = [\n    QuantumRegister(1, \"cin\"),\n    QuantumRegister(3, \"a\"),\n    QuantumRegister(3, \"b\"),\n    QuantumRegister(1, \"cout\"),\n]\nreg_result = ClassicalRegister(3)\ncircuit = QuantumCircuit(*qregs, reg_result)\n\n# Compose number initializers with the adder. Adder stores the result to\n# register B, so we'll measure those qubits.\ncircuit = (\n    circuit.compose(number_a, qubits=reg_a)\n    .compose(number_b, qubits=reg_b)\n    .compose(adder)\n)\ncircuit.measure(reg_b, reg_result)\ncircuit.draw(\"mpl\")"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Output:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Simulating the circuit shows that it outputs 5 for all 1024 shots (i.e. is measured with probability 1.0 )."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "from qiskit.primitives import StatevectorSampler\n\nresult = StatevectorSampler().run([circuit]).result()\n\nprint(f\"Count data:\\n {result[0].data.c0.get_int_counts()}\")"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Output:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Count data:\n {5: 1024}\n"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "See Arithmetic in the circuit library API documentation."
+        }
+      ]
+    },
+    {
+      "titulo": "8. Next steps",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "Learn advanced methods for creating circuits in the Construct circuits topic."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "See an example of circuits being used in the Grover's Algorithm tutorial."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Review the circuit library API reference."
+        }
+      ]
+    }
+  ],
+  "versao_documentacao": "guia online; conferir requisitos na página",
+  "versao_alvo_qiskit": "2.6",
+  "coletado_em": "2026-11-13T23:43:52.950301+00:00",
+  "hash": "b701b36822e33a16c2e4ca8e06f359dbb5f81e1099757e7b3f85d17f7c48df5c",
+  "chunks": 59,
+  "indexed": true
+}

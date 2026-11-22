@@ -1,0 +1,272 @@
+{
+  "document_id": "ibm_visualize_circuits",
+  "titulo": "Visualize circuits",
+  "fonte": "https://quantum.cloud.ibm.com/docs/en/qiskit/visualize-circuits",
+  "url_solicitada": "https://quantum.cloud.ibm.com/docs/en/guides/visualize-circuits",
+  "secoes": [
+    {
+      "titulo": "1. Visualize circuits",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "The code on this page was developed using the following requirements.\nWe recommend using these versions or newer. qiskit[all]~=2.6.1"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "It's often useful to see the circuits you're creating. Use the following options to display Qiskit circuits."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "from\nqiskit\nimport\nQuantumCircuit"
+        }
+      ]
+    },
+    {
+      "titulo": "2. Draw a quantum circuit",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "The QuantumCircuit class supports drawing circuits through the draw() method, or by printing the circuit object. By default, both render an ASCII art version of the circuit diagram."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Note that print returns None but has the side effect of printing the diagram, whereas QuantumCircuit.draw returns the diagram with no side effects. Since Jupyter notebooks display the output of the last line of each cell, they appear to have the same effect."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "# Build a quantum circuit\ncircuit\n=\nQuantumCircuit\n(\n3\n,\n3\n)\ncircuit\n.\nx\n(\n1\n)\ncircuit\n.\nh\n(\nrange\n(\n3\n))\ncircuit\n.\ncx\n(\n0\n,\n1\n)\ncircuit\n.\nmeasure\n(\nrange\n(\n3\n),\nrange\n(\n3\n))\n;"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "print\n(circuit)"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Output:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "┌───┐          ┌─┐   \nq_0: ┤ H ├───────■──┤M├───\n     ├───┤┌───┐┌─┴─┐└╥┘┌─┐\nq_1: ┤ X ├┤ H ├┤ X ├─╫─┤M├\n     ├───┤└┬─┬┘└───┘ ║ └╥┘\nq_2: ┤ H ├─┤M├───────╫──╫─\n     └───┘ └╥┘       ║  ║ \nc: 3/═══════╩════════╩══╩═\n            2        0  1"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "circuit\n.\ndraw\n()"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Output:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "┌───┐          ┌─┐   \nq_0: ┤ H ├───────■──┤M├───\n     ├───┤┌───┐┌─┴─┐└╥┘┌─┐\nq_1: ┤ X ├┤ H ├┤ X ├─╫─┤M├\n     ├───┤└┬─┬┘└───┘ ║ └╥┘\nq_2: ┤ H ├─┤M├───────╫──╫─\n     └───┘ └╥┘       ║  ║ \nc: 3/═══════╩════════╩══╩═\n            2        0  1"
+        }
+      ]
+    },
+    {
+      "titulo": "3. Alternative renderers",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "A text output is useful for quickly seeing the output while developing a circuit, but it doesn't provide the most flexibility. There are two alternative output renderers for the quantum circuit. One uses Matplotlib and the other uses LaTeX . The LaTeX renderer requires the qcircuit package . Select these renderers by setting the \"output\" argument to the strings mpl and latex ."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "OSX users can get the required LaTeX packages through the mactex package ."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "# Matplotlib drawing\ncircuit\n.\ndraw\n(output\n=\n\"mpl\"\n)"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Output:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "# Latex drawing\ncircuit\n.\ndraw\n(output\n=\n\"latex\"\n)"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Output:"
+        }
+      ]
+    },
+    {
+      "titulo": "4. Save output",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "Drawing a large-scale circuit inline in a Jupyter notebook can be slow or unreadable.\nYou can save the diagram directly to a file, then open it in an image viewer and zoom in as needed."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "# Save as an image using the Matplotlib drawer\ncircuit\n.\ndraw\n(output\n=\n\"mpl\"\n, filename\n=\n\"circuit-mpl.jpeg\"\n)"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Output:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "# Or save a LaTeX rendering\ncircuit\n.\ndraw\n(output\n=\n\"latex\"\n, filename\n=\n\"circuit-latex.pdf\"\n)"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Output:"
+        }
+      ]
+    },
+    {
+      "titulo": "5. Control circuit drawings",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "By default, the draw() method returns the rendered image as an object and does not output anything. The exact class returned depends on the output specified: 'text' (the default) returns a TextDrawer object, 'mpl' returns a matplotlib.Figure object, and latex returns a PIL.Image object. Jupyter notebooks understand these return types and render them properly, but when running outside of Jupyter, images will not display automatically."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "The draw() method has optional arguments to display or save the output. When specified, the filename kwarg takes a path to which it saves the rendered output. Alternatively, if you're using the mpl or latex outputs, you can use the interactive kwarg to open the image in a new window (this will not always work from within a notebook)."
+        }
+      ]
+    },
+    {
+      "titulo": "6. Customize the output",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "Depending on the output, there are also options to customize the circuit diagram."
+        }
+      ]
+    },
+    {
+      "titulo": "7. Disable plot barriers and reverse bit order",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "The first two options are shared among all three backends. They allow you to configure both the bit orders and whether or not you draw barriers. These can be set by the reverse_bits kwarg and plot_barriers kwarg, respectively. The following examples work with any output renderer; mpl is used here for brevity."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "from\nqiskit\nimport\nQuantumRegister\n,\nClassicalRegister\n# Draw a new circuit with barriers and more registers\nq_a\n=\nQuantumRegister\n(\n3\n, name\n=\n\"a\"\n)\nq_b\n=\nQuantumRegister\n(\n5\n, name\n=\n\"b\"\n)\nc_a\n=\nClassicalRegister\n(\n3\n)\nc_b\n=\nClassicalRegister\n(\n5\n)\ncircuit\n=\nQuantumCircuit\n(q_a, q_b, c_a, c_b)\ncircuit\n.\nx\n(q_a[\n1\n])\ncircuit\n.\nx\n(q_b[\n1\n])\ncircuit\n.\nx\n(q_b[\n2\n])\ncircuit\n.\nx\n(q_b[\n4\n])\ncircuit\n.\nbarrier\n()\ncircuit\n.\nh\n(q_a)\ncircuit\n.\nbarrier\n(q_a)\ncircuit\n.\nh\n(q_b)\ncircuit\n.\ncswap\n(q_b[\n0\n], q_b[\n1\n], q_b[\n2\n])\ncircuit\n.\ncswap\n(q_b[\n2\n], q_b[\n3\n], q_b[\n4\n])\ncircuit\n.\ncswap\n(q_b[\n3\n], q_b[\n4\n], q_b[\n0\n])\ncircuit\n.\nbarrier\n(q_b)\ncircuit\n.\nmeasure\n(q_a, c_a)\ncircuit\n.\nmeasure\n(q_b, c_b)\n;"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "# Draw the circuit\ncircuit\n.\ndraw\n(output\n=\n\"mpl\"\n)"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Output:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "# Draw the circuit with reversed bit order\ncircuit\n.\ndraw\n(output\n=\n\"mpl\"\n, reverse_bits\n=\nTrue\n)"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Output:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "# Draw the circuit without barriers\ncircuit\n.\ndraw\n(output\n=\n\"mpl\"\n, plot_barriers\n=\nFalse\n)"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Output:"
+        }
+      ]
+    },
+    {
+      "titulo": "8. Renderer-specific customizations",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "Some available customizing options are specific to a renderer."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "The fold argument sets a maximum width for the output. In the text renderer, this sets the length of the lines of the diagram before it is wrapped to the next line.  When using the 'mpl' renderer, this is the number of (visual) layers before folding to the next line."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "The mpl renderer has the style kwarg, which changes the colors and outlines. See the API documentation for more details."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "The scale option scales the output of the mpl and latex renderers."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "circuit\n=\nQuantumCircuit\n(\n1\n)\nfor\n_\nin\nrange\n(\n10\n):\ncircuit\n.\nh\n(\n0\n)\n# limit line length to 40 characters\ncircuit\n.\ndraw\n(output\n=\n\"text\"\n, fold\n=\n40\n)"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Output:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "┌───┐┌───┐┌───┐┌───┐┌───┐┌───┐┌───┐»\nq: ┤ H ├┤ H ├┤ H ├┤ H ├┤ H ├┤ H ├┤ H ├»\n   └───┘└───┘└───┘└───┘└───┘└───┘└───┘»\n«   ┌───┐┌───┐┌───┐\n«q: ┤ H ├┤ H ├┤ H ├\n«   └───┘└───┘└───┘"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "# Change the background color in mpl\nstyle\n=\n{\n\"backgroundcolor\"\n:\n\"lightgreen\"\n}\ncircuit\n.\ndraw\n(output\n=\n\"mpl\"\n, style\n=\nstyle)"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Output:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "# Scale the mpl output to 1/2 the normal size\ncircuit\n.\ndraw\n(output\n=\n\"mpl\"\n, scale\n=\n0.5\n)"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Output:"
+        }
+      ]
+    },
+    {
+      "titulo": "9. Standalone circuit-drawing function",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "If you have an application where you prefer to draw a circuit with a self-contained function instead of as a method of a circuit object, you can directly use the circuit_drawer() function, which is part of the public stable interface from qiskit.visualization . The function behaves identically to the circuit.draw() method, except that it takes in a circuit object as a required argument."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "from\nqiskit\n.\nvisualization\nimport\ncircuit_drawer\ncircuit_drawer\n(circuit, output\n=\n\"mpl\"\n, plot_barriers\n=\nFalse\n)"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Output:"
+        }
+      ]
+    },
+    {
+      "titulo": "10. Next steps",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "See an example of circuit visualization in the Grover's Algorithm tutorial."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Visualize simple circuits using IBM Quantum® Composer ."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Visualize circuit timing ."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Review the Qiskit visualizations API documentation ."
+        }
+      ]
+    }
+  ],
+  "versao_documentacao": "guia online; conferir requisitos na página",
+  "versao_alvo_qiskit": "2.6",
+  "coletado_em": "2026-11-13T17:05:52.134396+00:00",
+  "hash": "5f13d98e5785b0f6c8692f3f2b3d4565c6ee330ebebe76b5f2153c1a6888cda5",
+  "chunks": 59,
+  "indexed": true
+}

@@ -1,0 +1,581 @@
+{
+  "document_id": "ibm_api_qiskit_circuit_Parameter",
+  "titulo": "Parameter",
+  "fonte": "https://quantum.cloud.ibm.com/docs/en/api/qiskit/qiskit.circuit.Parameter",
+  "url_solicitada": "https://quantum.cloud.ibm.com/docs/en/api/qiskit/2.6/qiskit.circuit.Parameter",
+  "secoes": [
+    {
+      "titulo": "1. Parameter",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "class qiskit.circuit.Parameter(name, uuid=None)"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Bases: ParameterExpression"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "A compile-time symbolic parameter."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "The value of a Parameter must be entirely determined before a circuit begins execution. Typically this will mean that you should supply values for all Parameter s in a circuit using QuantumCircuit.assign_parameters() , though certain hardware vendors may allow you to give them a circuit in terms of these parameters, provided you also pass the values separately."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "This is the atom of ParameterExpression , and is itself an expression. The numeric value of a parameter need not be fixed while the circuit is being defined."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Examples"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Construct a variable-rotation X gate using circuit parameters."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "from qiskit.circuit import QuantumCircuit, Parameter\n\n# create the parameter\nphi = Parameter(\"phi\")\nqc = QuantumCircuit(1)\n\n# parameterize the rotation\nqc.rx(phi, 0)\nqc.draw(\"mpl\")\n\n# bind the parameters after circuit to create a bound circuit\nbc = qc.assign_parameters({phi: 3.14})\nbc.measure_all()\nbc.draw(\"mpl\")"
+        }
+      ]
+    },
+    {
+      "titulo": "3. name",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "Returns the name of the Parameter ."
+        }
+      ]
+    },
+    {
+      "titulo": "4. num_parameters",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "The number of unbound parameters in the expression."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "This is equivalent to len(expr.parameters) but does not involve the overhead of creating a set and counting its length."
+        }
+      ]
+    },
+    {
+      "titulo": "5. parameters",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "Get the parameters present in the expression."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Qiskit guarantees equality (via == ) of parameters retrieved from an expression with the original Parameter objects used to create this expression, but does not guarantee is comparisons to succeed."
+        }
+      ]
+    },
+    {
+      "titulo": "6. uuid",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "Returns the UUID of the Parameter ."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "In advanced use cases, this property can be passed to the Parameter constructor to produce an instance that compares equal to another instance."
+        }
+      ]
+    },
+    {
+      "titulo": "8. abs",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "abs()"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Take the absolute value of the expression."
+        }
+      ]
+    },
+    {
+      "titulo": "9. arccos",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "arccos()"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Arccosine of the expression."
+        }
+      ]
+    },
+    {
+      "titulo": "10. arcsin",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "arcsin()"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Arcsine of the expression."
+        }
+      ]
+    },
+    {
+      "titulo": "11. arctan",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "arctan()"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Arctangent of the expression."
+        }
+      ]
+    },
+    {
+      "titulo": "12. assign",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "assign(parameter, value)"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Assign one parameter to a value, which can either be numeric or another parameter expression."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Parameters"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "parameter – A parameter in this expression whose value will be updated."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "value – The new value to bind to."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Returns"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "A new expression parameterized by any parameters which were not bound by assignment."
+        }
+      ]
+    },
+    {
+      "titulo": "13. bind",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "bind(parameter_values, allow_unknown_parameters=False)"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Binds the provided set of parameters to their corresponding values."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Parameters"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "parameter_values – Mapping of Parameter instances to the numeric value to which they will be bound."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "allow_unknown_parameters – If False , raises an error if parameter_values contains Parameter s in the keys outside those present in the expression. If True , any such parameters are simply ignored."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Raises"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "CircuitError – If parameter_values contains parameters outside those in self. - If a non-numeric value is passed in parameter_values ."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "ZeroDivisionError – If binding the provided values requires division by zero."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Returns"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "A new expression parameterized by any parameters which were not bound by parameter_values ."
+        }
+      ]
+    },
+    {
+      "titulo": "14. bind_all",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "bind_all(values)"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Bind all of the parameters in self to numeric values in the dictionary, returning a numeric value."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "This is a special case of bind() which can reach higher performance. It is no problem for the values dictionary to contain parameters that are not used in this expression; the expectation is that the same bindings dictionary will be fed to other expressions as well."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "It is an error to call this method with a values dictionary that does not bind all of the values, or to call this method with non-numeric values, but this is not explicitly checked, since this method is intended for performance-sensitive use. Passing an incorrect dictionary may result in unexpected behavior."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Unlike bind() , this method will not raise an exception if non-finite floating-point values are encountered."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Parameters"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "values – mapping of parameters to numeric values."
+        }
+      ]
+    },
+    {
+      "titulo": "15. conjugate",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "conjugate()"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return the complex conjugate of the expression."
+        }
+      ]
+    },
+    {
+      "titulo": "16. cos",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "cos()"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Cosine of the expression."
+        }
+      ]
+    },
+    {
+      "titulo": "17. exp",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "exp()"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Exponentiate the expression."
+        }
+      ]
+    },
+    {
+      "titulo": "18. gradient",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "gradient(param)"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return derivative of this expression with respect to the input parameter."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Parameters"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "param – The parameter with respect to which the derivative is calculated."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Returns"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "The derivative as either a constant numeric value or a symbolic ParameterExpression ."
+        }
+      ]
+    },
+    {
+      "titulo": "19. is_real",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "is_real()"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Check whether the expression represents a real number."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Note that this will return None if there are unbound parameters, in which case it cannot be determined whether the expression is real."
+        }
+      ]
+    },
+    {
+      "titulo": "20. is_symbol",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "is_symbol()"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Check if the expression corresponds to a plain symbol."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Returns"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "True is this expression corresponds to a symbol, False otherwise."
+        }
+      ]
+    },
+    {
+      "titulo": "21. log",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "log()"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Take the natural logarithm of the expression."
+        }
+      ]
+    },
+    {
+      "titulo": "22. numeric",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "numeric(strict=True)"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Cast this expression to a numeric value."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Parameters"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "strict – If True (default) this function raises an error if there are any unbound symbols in the expression. If False , this allows casting if the expression represents a numeric value, regardless of unbound symbols. For example (0 * Parameter(\"x\")) is 0 but has the symbol x present."
+        }
+      ]
+    },
+    {
+      "titulo": "23. sign",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "sign()"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return the sign of the expression."
+        }
+      ]
+    },
+    {
+      "titulo": "24. simplify",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "simplify()"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Simplify the expression. This, for example, attempts to cancel variables in the expression."
+        }
+      ]
+    },
+    {
+      "titulo": "25. sin",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "sin()"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Sine of the expression."
+        }
+      ]
+    },
+    {
+      "titulo": "26. structurally_equal",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "structurally_equal(rhs)"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Are these two expressions exactly structurally equal?"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "This is a faster and stricter form of the standard == relationship, but does not take simplifications into account. Almost all expressions that are structurally_equal() are all == to each other, but the reverse is not true. (In the presence of nan values, structurally_equal() can sometimes return True when == compares False .)"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "This function is most useful in internal tests of the ParameterExpression logic."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Many operations on ParameterExpression do on-the-fly simplification as they are constructed, so two expressions that appear to have been constructed in different orders can still be internally structurally equal."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Parameters"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "rhs – the other object to compare."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Returns"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Whether the two objects are structurally equal expressions."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Examples"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Two expressions can simplify to each other when checking for equality, but not use the same internal structure:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "from qiskit.circuit import Parameter\n\nx, y = Parameter(\"x\"), Parameter(\"y\")\nleft = x + y + 1\nright = 1 + y + x\nassert left == right\nassert not left.structurally_equal(right)"
+        }
+      ]
+    },
+    {
+      "titulo": "27. subs",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "subs(parameter_map, allow_unknown_parameters=False)"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Returns a new expression with replacement parameters."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Parameters"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "parameter_map – Mapping from Parameter s in self to the ParameterExpression instances with which they should be replaced."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "allow_unknown_parameters – If False , raises an error if parameter_map contains Parameter s in the keys outside those present in the expression. If True , any such parameters are simply ignored."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Raises"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "CircuitError –"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "If parameter_map contains parameters outside those in self. - If the replacement parameters in parameter_map would result in a name conflict in the generated expression."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Returns"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "A new expression with the specified parameters replaced."
+        }
+      ]
+    },
+    {
+      "titulo": "28. sympify",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "sympify()"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return a SymPy equivalent of this expression."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "This is for interoperability only. Qiskit will not accept or work with raw Sympy or Symengine expressions in its parameters, because they do not contain the tracking information used in circuit-parameter binding and assignment."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "This method will pass strings from the expression to SymPy which is inherently unsafe as SymPy heavily relies on Python’s eval() function for the processing of strings. This method is not safe to use with untrusted input."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Returns"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "A SymPy equivalent of this expression."
+        }
+      ]
+    },
+    {
+      "titulo": "29. tan",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "tan()"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Tangent of the expression."
+        }
+      ]
+    }
+  ],
+  "versao_documentacao": "Referência solicitada Qiskit 2.6; conferir versão efetiva na página após redirecionamento IBM.",
+  "versao_alvo_qiskit": "2.6",
+  "coletado_em": "2026-11-13T23:45:23.318980+00:00",
+  "hash": "ab708f3c9380dcde9b35e13305ad171747ecd57d43a6f8a5a1320ac7770a9894",
+  "chunks": 109,
+  "indexed": true
+}

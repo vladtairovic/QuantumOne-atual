@@ -1,0 +1,322 @@
+{
+  "document_id": "ibm_simulate_with_qiskit_sdk_primitives",
+  "titulo": "Exact simulation with Qiskit SDK primitives",
+  "fonte": "https://quantum.cloud.ibm.com/docs/en/qiskit/simulate-with-qiskit-sdk-primitives",
+  "url_solicitada": "https://quantum.cloud.ibm.com/docs/en/guides/simulate-with-qiskit-sdk-primitives",
+  "secoes": [
+    {
+      "titulo": "1. Exact simulation with Qiskit SDK primitives",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "The code on this page was developed using the following requirements.\nWe recommend using these versions or newer. qiskit[all]~=2.6.1"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "The reference primitives in the Qiskit SDK perform local statevector simulations. These simulations do not support\nmodeling device noise, but are useful for quickly prototyping algorithms before looking into more advanced simulation\ntechniques ( using Qiskit Aer ) or running on real devices ( IBM Quantum® primitives )."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "The Estimator primitive can compute expectation values of circuits, and the Sampler primitive can sample\nfrom output distributions of circuits."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "The following sections show how to use the reference primitives to run your workflow locally."
+        }
+      ]
+    },
+    {
+      "titulo": "2. Use the reference Estimator",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "The reference implementation of EstimatorV2 in qiskit.primitives that runs on a local statevector\nsimulators is the StatevectorEstimator class. It can take circuits, observables, and parameters as inputs and returns the locally computed expectation values."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "The following code prepares the inputs that will be used in the examples that follow. The expected input type for the\nobservables is qiskit.quantum_info.SparsePauliOp . Note that\nthe circuit in the example is parametrized, but you can also run Estimator on non-parametrized circuits."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Any circuit passed to an Estimator must not include any measurements ."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "from qiskit import QuantumCircuit\nfrom qiskit.circuit import Parameter\n\n# circuit for which you want to obtain the expected value\ncircuit = QuantumCircuit(2)\ncircuit.ry(Parameter(\"theta\"), 0)\ncircuit.h(0)\ncircuit.cx(0, 1)\ncircuit.draw(\"mpl\", style=\"iqp\")"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Output:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "from qiskit.quantum_info import SparsePauliOp\nimport numpy as np\n\n# observable(s) whose expected values you want to compute\n\nobservable = SparsePauliOp([\"II\", \"XX\", \"YY\", \"ZZ\"], coeffs=[1, 1, -1, 1])\n\n# value(s) for the circuit parameter(s)\nparameter_values = [[0], [np.pi / 6], [np.pi / 2]]"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "The IBM Quantum primitives workflow requires circuits and observables to be transformed to only use instructions supported by the QPU (referred to as instruction set architecture (ISA) circuits and observables). The reference primitives still accept abstract instructions, as they rely on local statevector simulations, but transpiling the circuit might still be beneficial in terms of circuit optimization."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "# Generate a pass manager without providing a backend\nfrom qiskit.transpiler import generate_preset_pass_manager\n\npm = generate_preset_pass_manager(optimization_level=1)\nisa_circuit = pm.run(circuit)\nisa_observable = observable.apply_layout(isa_circuit.layout)"
+        }
+      ]
+    },
+    {
+      "titulo": "3. Initialize Estimator",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "Instantiate a qiskit.primitives.StatevectorEstimator ."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "from qiskit.primitives import StatevectorEstimator\n\nestimator = StatevectorEstimator()"
+        }
+      ]
+    },
+    {
+      "titulo": "4. Run and get results",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "This example only uses one circuit (of type QuantumCircuit ) and one\nobservable."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Run the estimation by calling the StatevectorEstimator.run method, which returns an instance of a PrimitiveJob object. You can get the results from the job (as a qiskit.primitives.PrimitiveResult object)\nwith the qiskit.primitives.PrimitiveJob.result method."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "job = estimator.run([(circuit, observable, parameter_values)])\nresult = job.result()\nprint(f\" > Result class: {type(result)}\")"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Output:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": " > Result class: <class 'qiskit.primitives.containers.primitive_result.PrimitiveResult'>\n"
+        }
+      ]
+    },
+    {
+      "titulo": "5. Get the expected value from the result",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "The primitives result outputs an array of PubResult objects, where each item of the array is a PubResult object that contains in its data the array of evaluations corresponding to every circuit-observable combination in the PUB."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "To retrieve the expectation values and metadata for the first (and in this case, only) circuit evaluation, we must access the evaluation data for PUB 0:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "print(f\" > Expectation value: {result[0].data.evs}\")\nprint(f\" > Metadata: {result[0].metadata}\")"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Output:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": " > Expectation value: [4.         3.73205081 2.        ]\n > Metadata: {'target_precision': 0.0, 'circuit_metadata': {}}\n"
+        }
+      ]
+    },
+    {
+      "titulo": "6. Set Estimator run options",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "By default, the reference Estimator performs an exact statevector calculation based on the quantum_info.Statevector class.\nHowever, this can be modified to introduce the effect of the sampling overhead (also known as \"shot noise\")."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Estimator accepts a precision argument that expresses the error bars that the\nprimitive implementation should target for expectation values estimates.  This is the sampling overhead and is defined exclusively in the .run() method. This  lets you fine-tune the option all the way to the PUB level."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "# Estimate expectation values for two PUBs, both with 0.05 precision.\nprecise_job = estimator.run(\n    [(circuit, observable, parameter_values)], precision=0.05\n)"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "For a full example, see the Estimator examples page."
+        }
+      ]
+    },
+    {
+      "titulo": "7. Use the reference Sampler",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "The reference implementations of SamplerV2 in qiskit.primitives is the StatevectorSampler class. It takes circuits and parameters as inputs and returns the results from sampling from the output probability distributions as a quasi-probability distribution of output states."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "The following code prepares the inputs used in the examples that follow. Note that\nthese examples run a single parametrized circuit, but you can also run Sampler\non non-parametrized circuits."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "from qiskit import QuantumCircuit\n\ncircuit = QuantumCircuit(2)\ncircuit.h(0)\ncircuit.cx(0, 1)\ncircuit.measure_all()\ncircuit.draw(\"mpl\", style=\"iqp\")"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Output:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Any quantum circuit passed to a Sampler must include measurements."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "The IBM Quantum primitives workflow requires circuits to be transformed to only use instructions supported by the QPU (referred to as ISA circuits). The reference primitives still accept abstract instructions, as they rely on local statevector simulations, but transpiling the circuit might still be beneficial in terms of circuit optimization."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "# Generate a pass manager without providing a backend\nfrom qiskit.transpiler import generate_preset_pass_manager\n\npm = generate_preset_pass_manager(optimization_level=1)\nisa_circuit = pm.run(qc)"
+        }
+      ]
+    },
+    {
+      "titulo": "8. Initialize SamplerV2",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "Instantiate qiskit.primitives.StatevectorSampler :"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "from qiskit.primitives import StatevectorSampler\n\nsampler = StatevectorSampler()"
+        }
+      ]
+    },
+    {
+      "titulo": "9. Run and get results",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "# execute 1 circuit with Sampler\njob = sampler.run([circuit])\npub_result = job.result()[0]\nprint(f\" > Result class: {type(pub_result)}\")"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Output:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": " > Result class: <class 'qiskit.primitives.containers.sampler_pub_result.SamplerPubResult'>\n"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Primitives accept multiple PUBs as inputs, and each PUB gets its own result. Therefore, you can run different circuits with various parameter/observable combinations, and retrieve the PUB results:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "from qiskit.transpiler import generate_preset_pass_manager\n\n# create two circuits\ncircuit1 = circuit.copy()\ncircuit2 = circuit.copy()\n\n# transpile circuits\npm = generate_preset_pass_manager(optimization_level=1)\nisa_circuit1 = pm.run(circuit1)\nisa_circuit2 = pm.run(circuit2)\n# execute 2 circuits using Sampler\njob = sampler.run([(isa_circuit1), (isa_circuit2)])\npub_result_1 = job.result()[0]\npub_result_2 = job.result()[1]\nprint(f\" > Result class: {type(pub_result)}\")"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Output:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": " > Result class: <class 'qiskit.primitives.containers.sampler_pub_result.SamplerPubResult'>\n"
+        }
+      ]
+    },
+    {
+      "titulo": "10. Get the probability distribution or measurement outcome",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "Measurement outcome samples are returned as bitstrings or counts . The bitstrings show the measurement outcomes, preserving the shot order in which they were measured. The Sampler result objects organize data in terms of their input circuits' classical register names, for compatibility with dynamic circuits."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "The name of the classical register defaults to \"meas\" . This name will be used later to access the measurement bitstrings."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "# Define quantum circuit with 2 qubits\ncircuit = QuantumCircuit(2)\ncircuit.h(0)\ncircuit.cx(0, 1)\ncircuit.measure_all()\ncircuit.draw()"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Output:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "        ┌───┐      ░ ┌─┐   \n   q_0: ┤ H ├──■───░─┤M├───\n        └───┘┌─┴─┐ ░ └╥┘┌─┐\n   q_1: ─────┤ X ├─░──╫─┤M├\n             └───┘ ░  ║ └╥┘\nmeas: 2/══════════════╩══╩═\n                      0  1 \n"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "# Transpile circuit\npm = generate_preset_pass_manager(optimization_level=1)\nisa_circuit = pm.run(circuit)\n# Run using Sampler\nresult = sampler.run([circuit]).result()\n# Access result data for PUB 0\ndata_pub = result[0].data\n# Access bitstring for the classical register \"meas\"\nbitstrings = data_pub.meas.get_bitstrings()\nprint(f\"The number of bitstrings is: {len(bitstrings)}\")\n# Get counts for the classical register \"meas\"\ncounts = data_pub.meas.get_counts()\nprint(f\"The counts are: {counts}\")"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Output:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "The number of bitstrings is: 1024\nThe counts are: {'11': 492, '00': 532}\n"
+        }
+      ]
+    },
+    {
+      "titulo": "11. Change run options",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "By default, the reference Sampler performs an exact statevector calculation based on the quantum_info.Statevector class.\nHowever, this can be modified to introduce the effect of the sampling overhead (also known as \"shot noise\"). To help manage this overhead, the Sampler interface accepts a shots argument that can be defined at the PUB level."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "This example assumes you have defined two circuits."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "# Sample two circuits at 128 shots each.\nsampler.run([isa_circuit1, isa_circuit2], shots=128)\n# Sample two circuits at different amounts of shots. The \"None\"s are necessary\n# as placeholders\n# for the lack of parameter values in this example.\nsampler.run([(isa_circuit1, None, 123), (isa_circuit2, None, 456)])"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Output:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "<qiskit.primitives.primitive_job.PrimitiveJob at 0x78acaf9dbe10>\n"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "For a full example, see the Sampler examples page."
+        }
+      ]
+    },
+    {
+      "titulo": "12. Next steps",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "For higher-performance simulation that can handle larger circuits, or to incorporate noise models into your simulation, see Exact and noisy simulation with Qiskit Aer primitives ."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "To learn how to use Quantum Composer for simulation, see the IBM Quantum Composer guide."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Read the Qiskit Estimator API reference."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Read the Qiskit Sampler API reference."
+        }
+      ]
+    }
+  ],
+  "versao_documentacao": "guia online; conferir requisitos na página",
+  "versao_alvo_qiskit": "2.6",
+  "coletado_em": "2026-11-13T23:44:21.556956+00:00",
+  "hash": "b2f58e8d7df66cdd389bd859d0aed25834bc4c626496ad1d467aa249123693e3",
+  "chunks": 66,
+  "indexed": true
+}

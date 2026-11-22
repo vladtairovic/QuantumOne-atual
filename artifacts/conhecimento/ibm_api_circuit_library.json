@@ -1,0 +1,2992 @@
+{
+  "document_id": "ibm_api_circuit_library",
+  "titulo": "Circuit Library",
+  "fonte": "https://quantum.cloud.ibm.com/docs/en/api/qiskit/circuit_library",
+  "url_solicitada": "https://quantum.cloud.ibm.com/docs/en/api/qiskit/2.6/circuit_library",
+  "secoes": [
+    {
+      "titulo": "1. Circuit Library",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "qiskit.circuit.library"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "The circuit library is a collection of quantum circuits that serve as algorithmic building blocks, benchmarking tools, and examples that are conjectured to be hard to simulate classically. The goal is to provide circuits that are well-defined, widely applicable, and easy to reuse across different workflows."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "The criteria for a circuit in the library are:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Well-defined"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "The circuit has a clear structure or a mathematical action, supported by a paper or reference."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Widely used and relevant"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "The circuit is a canonical or best-known choice for a well-defined task, is a standard reference or common baseline, or is historically foundational to a substantial subfield of quantum computing."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Standalone"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "The circuit is self-contained, meaning it can be generated efficiently without new external dependencies."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Elements in the circuit library are either QuantumCircuit s or Instruction s, allowing them to be easily investigated or plugged into other circuits. This enables fast prototyping and circuit design at higher levels of abstraction."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "For example:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "from qiskit.circuit import QuantumCircuit\nfrom qiskit.circuit.library import PauliEvolutionGate\nfrom qiskit.quantum_info import SparsePauliOp\n\nhamiltonian = SparsePauliOp([\"ZZI\", \"IZZ\", \"IXI\"], coeffs=[1, 1, -1])\ngate = PauliEvolutionGate(hamiltonian)\n\ncircuit = QuantumCircuit(hamiltonian.num_qubits)\ncircuit.append(gate, circuit.qubits)\n\ncircuit.draw(\"mpl\")"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "This library is organized in different sections:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Standard gates"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Standard directives"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Standard operations"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Generalized gates"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Arithmetic operations"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Basis changes"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Boolean logic"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Data encoding"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Data preparation"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Particular operations"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "N-local circuits"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Oracles"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Template circuits"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "We distinguish into different categories of operations:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Standard gates"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "These are fundamental quantum gates, a subset of which typically forms a basis gate set on a quantum computer. These are unitary operations represented as Gate . The library also provides standard compiler directives (a Barrier ) and non-unitary operations (like Measure )."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Abstract operations"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "This category includes operations that are defined by a mathematical action, but can be implemented with different decompositions. For example, a multi-controlled XGate flips the target qubit if all control qubits are ∣ 1 ⟩ |1\\rangle ∣1 ⟩ , and there are a variety of concrete circuits implementing this operation using lower-level gates. Such abstract operations are represented as Gate or Instruction . This allows building the circuit without choosing a concrete implementation of each block and, finally, let the compiler (or you as user) choose the optimal decomposition. For example:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "from qiskit.circuit.library import MCXGate\nmcx = MCXGate(4)\n\nfrom qiskit import QuantumCircuit\ncircuit = QuantumCircuit(5)\ncircuit.append(mcx, [0, 1, 4, 2, 3])\ncircuit.draw(\"mpl\")"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "For circuits with abstract operations, the circuit context is taken into account during transpilation. For example, if idle qubits are available, they can be used to obtain a shallower circuit:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "from qiskit import transpile\n\nsmall_circuit = QuantumCircuit(5)  # here we have no idle qubits\nsmall_circuit.append(mcx, [0, 1, 4, 2, 3])\nsmall_tqc = transpile(small_circuit, basis_gates=[\"u\", \"cx\"])\nprint(\"No aux:\", small_tqc.count_ops())\n\nlarge_circuit = QuantumCircuit(10)  # now we will have 5 idle qubits\nlarge_circuit.append(mcx, [0, 1, 4, 2, 3])\nlarge_tqc = transpile(large_circuit, basis_gates=[\"u\", \"cx\"])\nprint(\"With aux:\", large_tqc.count_ops())"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Which prints:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "No aux: OrderedDict([('u', 41), ('cx', 36)])\nWith aux: OrderedDict([('u', 24), ('cx', 18)])"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Structural operations"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "These operations have a unique decomposition. As the compiler does not need to reason about them on a higher level, they are implemented as functions that return a QuantumCircuit object. For example:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "from qiskit.circuit.library import real_amplitudes\n\nansatz = real_amplitudes(5, entanglement=\"pairwise\")\nansatz.draw(\"mpl\")"
+        }
+      ]
+    },
+    {
+      "titulo": "2. Standard gates",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "These operations are reversible unitary gates and they all subclass Gate . As a consequence, they all have the methods to_matrix() , power() , and control() , which we can generally only apply to unitary operations."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "For example:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "from qiskit.circuit.library import XGate\ngate = XGate()\nprint(gate.to_matrix())             # X gate\nprint(gate.power(1/2).to_matrix())  # √X gate -- see also the SXGate\nprint(gate.control(1).to_matrix())  # CX (controlled X) gate"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "[[0.+0.j 1.+0.j]\n [1.+0.j 0.+0.j]]\n[[0.5+0.5j 0.5-0.5j]\n [0.5-0.5j 0.5+0.5j]]\n[[1.+0.j 0.+0.j 0.+0.j 0.+0.j]\n [0.+0.j 0.+0.j 0.+0.j 1.+0.j]\n [0.+0.j 0.+0.j 1.+0.j 0.+0.j]\n [0.+0.j 1.+0.j 0.+0.j 0.+0.j]]"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "The function get_standard_gate_name_mapping() allows you to see the available standard gates and operations."
+        }
+      ]
+    },
+    {
+      "titulo": "3. get_standard_gate_name_mapping",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "qiskit.circuit.library.get_standard_gate_name_mapping()"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return a dictionary mapping the name of standard gates and instructions to an object for that name."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Examples"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "from qiskit.circuit.library import get_standard_gate_name_mapping\n\ngate_name_map = get_standard_gate_name_mapping()\ncx_object = gate_name_map[\"cx\"]\n\nprint(cx_object)\nprint(type(cx_object))"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Instruction(name='cx', num_qubits=2, num_clbits=0, params=[])\n_SingletonCXGate"
+        }
+      ]
+    },
+    {
+      "titulo": "4. 1-qubit standard gates",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "Column 1\nColumn 2\nHGate\n(*args[, _force_mutable])\nSingle-qubit Hadamard gate.\nIGate\n(*args[, _force_mutable])\nIdentity gate.\nPhaseGate\n(theta[, label])\nSingle-qubit rotation about the Z axis.\nRGate\n(theta, phi[, label])\nRotation\nθ\n\\theta\nθ\naround the\ncos\n⁡\n(\nϕ\n)\nx\n+\nsin\n⁡\n(\nϕ\n)\ny\n\\cos(\\phi)x + \\sin(\\phi)y\ncos\n(\nϕ\n)\nx\n+\nsin\n(\nϕ\n)\ny\naxis.\nRXGate\n(theta[, label])\nSingle-qubit rotation about the X axis.\nRYGate\n(theta[, label])\nSingle-qubit rotation about the Y axis.\nRZGate\n(phi[, label])\nSingle-qubit rotation about the Z axis.\nSGate\n(*args[, _force_mutable])\nSingle qubit S gate (\nZ\n\\sqrt{Z}\nZ\n​\n).\nSdgGate\n(*args[, _force_mutable])\nSingle qubit S-adjoint gate (\nS\n†\nS^\\dagger\nS\n†\n).\nSXGate\n(*args[, _force_mutable])\nThe single-qubit Sqrt(X) gate (\nX\n\\sqrt{X}\nX\n​\n).\nSXdgGate\n(*args[, _force_mutable])\nThe inverse single-qubit Sqrt(X) gate.\nTGate\n(*args[, _force_mutable])\nSingle qubit T gate (\nZ\n4\n\\sqrt[4]{Z}\n4\nZ\n​\n).\nTdgGate\n(*args[, _force_mutable])\nSingle qubit T-adjoint gate (\nT\n†\nT^\\dagger\nT\n†\n).\nUGate\n(theta, phi, lam[, label])\nGeneric single-qubit rotation in terms of ZYZ Euler angles.\nU1Gate\n(theta[, label])\nSingle-qubit rotation about the Z axis.\nU2Gate\n(phi, lam[, label])\nSingle-qubit rotation about the X+Z axis.\nU3Gate\n(theta, phi, lam[, label])\nGeneric single-qubit rotation gate with 3 Euler angles.\nXGate\n(*args[, _force_mutable])\nThe single-qubit Pauli-X gate (\nσ\nx\n\\sigma_x\nσ\nx\n​\n).\nYGate\n(*args[, _force_mutable])\nThe single-qubit Pauli-Y gate (\nσ\ny\n\\sigma_y\nσ\ny\n​\n).\nZGate\n(*args[, _force_mutable])\nThe single-qubit Pauli-Z gate (\nσ\nz\n\\sigma_z\nσ\nz\n​\n)."
+        }
+      ]
+    },
+    {
+      "titulo": "5. 2-qubit standard gates",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "Column 1\nColumn 2\nCHGate\n(*args[, _force_mutable])\nControlled-Hadamard gate.\nCPhaseGate\n(theta[, label, ctrl_state, ...])\nControlled-Phase gate.\nCRXGate\n(theta[, label, ctrl_state, _base_label])\nControlled-RX gate.\nCRYGate\n(theta[, label, ctrl_state, _base_label])\nControlled-RY gate.\nCRZGate\n(theta[, label, ctrl_state, _base_label])\nControlled-RZ gate.\nCSGate\n(*args[, _force_mutable])\nControlled-S gate.\nCSdgGate\n(*args[, _force_mutable])\nControlled-\nS\n†\nS^\\dagger\nS\n†\ngate.\nCSXGate\n(*args[, _force_mutable])\nControlled-√X gate.\nCUGate\n(theta, phi, lam, gamma[, label, ...])\nControlled-U gate (4-parameter two-qubit gate).\nCU1Gate\n(theta[, label, ctrl_state, _base_label])\nControlled-U1 gate.\nCU3Gate\n(theta, phi, lam[, label, ...])\nControlled-U3 gate (3-parameter two-qubit gate).\nCXGate\n(*args[, _force_mutable])\nControlled-X gate.\nCYGate\n(*args[, _force_mutable])\nControlled-Y gate.\nCZGate\n(*args[, _force_mutable])\nControlled-Z gate.\nDCXGate\n(*args[, _force_mutable])\nDouble-CX gate.\nECRGate\n(*args[, _force_mutable])\nAn echoed cross-resonance gate.\niSwapGate\n(*args[, _force_mutable])\niSWAP gate.\nRXXGate\n(theta[, label])\nA parametric 2-qubit\nX\n⊗\nX\nX \\otimes X\nX\n⊗\nX\ninteraction (rotation about XX).\nRYYGate\n(theta[, label])\nA parametric 2-qubit\nY\n⊗\nY\nY \\otimes Y\nY\n⊗\nY\ninteraction (rotation about YY).\nRZXGate\n(theta[, label])\nA parametric 2-qubit\nZ\n⊗\nX\nZ \\otimes X\nZ\n⊗\nX\ninteraction (rotation about ZX).\nRZZGate\n(theta[, label])\nA parametric 2-qubit\nZ\n⊗\nZ\nZ \\otimes Z\nZ\n⊗\nZ\ninteraction (rotation about ZZ).\nSwapGate\n(*args[, _force_mutable])\nThe SWAP gate.\nXXMinusYYGate\n(theta[, beta, label])\nXX-YY interaction gate.\nXXPlusYYGate\n(theta[, beta, label])\nXX+YY interaction gate."
+        }
+      ]
+    },
+    {
+      "titulo": "6. 3+ qubit standard gates",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "Column 1\nColumn 2\nC3SXGate\n(*args[, _force_mutable])\nThe 3-qubit controlled sqrt-X gate.\nC3XGate\n(*args[, _force_mutable])\nThe X gate controlled on 3 qubits.\nC4XGate\n(*args[, _force_mutable])\nThe 4-qubit controlled X gate.\nCCXGate\n(*args[, _force_mutable])\nCCX gate, also known as Toffoli gate.\nCCZGate\n(*args[, _force_mutable])\nCCZ gate.\nCSwapGate\n(*args[, _force_mutable])\nControlled-SWAP gate, also known as the Fredkin gate.\nRCCXGate\n(*args[, _force_mutable])\nThe simplified Toffoli gate, also referred to as Margolus gate.\nRC3XGate\n(*args[, _force_mutable])\nThe simplified 3-controlled Toffoli gate."
+        }
+      ]
+    },
+    {
+      "titulo": "7. Global standard gates",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "The following gate is global and does not take any qubit arguments."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Column 1\nColumn 2\nGlobalPhaseGate\n(phase[, label])\nThe global phase gate (\ne\ni\nθ\ne^{i\\theta}\ne\ni\nθ\n)."
+        }
+      ]
+    },
+    {
+      "titulo": "8. Standard Directives",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "Directives are operations to the quantum stack that are meant to be interpreted by the backend or the transpiler. In general, the transpiler or backend might optionally ignore them if there is no implementation for them."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Barrier"
+        }
+      ]
+    },
+    {
+      "titulo": "9. Standard Operations",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "Operations are non-reversible changes in the quantum state of the circuit."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Measure"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Reset"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "In addition to Measure , there is a generalized joint-Pauli measurement available, used as a basic operation in Pauli-based computation."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Column 1\nColumn 2\nPauliProductMeasurement\n(pauli[, label])\nPauli Product Measurement instruction."
+        }
+      ]
+    },
+    {
+      "titulo": "10. Generalized Gates",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "This module extends the standard gates with a broader collection of basic gates. This includes gates that are variadic, meaning that the number of qubits depends on the input. For example:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "from qiskit.circuit.library import DiagonalGate\n\ndiagonal = DiagonalGate([1, 1j])\nprint(diagonal.num_qubits)\n\ndiagonal = DiagonalGate([1, 1, 1, -1])\nprint(diagonal.num_qubits)"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "which prints:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "1\n2"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Column 1\nColumn 2\nDiagonalGate\n(diag)\nA generic diagonal quantum gate.\nPermutationGate\n(pattern)\nA gate that permutes qubits.\nMCMTGate\n(gate, num_ctrl_qubits, ...[, ...])\nThe multi-controlled multi-target gate, for an arbitrary singly controlled target gate.\nMCPhaseGate\n(lam, num_ctrl_qubits[, label, ...])\nMulti-controlled-Phase gate.\nMCXGate\n([num_ctrl_qubits, label, ...])\nThe general, multi-controlled X gate.\nMSGate\n(num_qubits, theta[, label])\nThe Mølmer–Sørensen gate.\nRVGate\n(v_x, v_y, v_z[, basis, label])\nRotation around arbitrary rotation axis\nv\n⃗\n\\vec{v}\nv\nwhere\n∥\nv\n⃗\n∥\n2\n\\Vert \\vec{v}\\Vert _2\n∥\nv\n∥\n2\n​\nis angle of rotation in radians.\nPauliGate\n(label)\nA multi-qubit Pauli gate.\nPauliProductRotationGate\n(pauli, angle[, label])\nA generic Pauli rotation.\nLinearFunction\n(linear[, validate_input])\nA linear reversible circuit on n qubits.\nIsometry\n(isometry, num_ancillas_zero, ...[, ...])\nDecomposition of arbitrary isometries from\nm\nm\nm\nto\nn\nn\nn\nqubits.\nUnitaryGate\n(data[, label, check_input, ...])\nClass for quantum gates specified by a unitary matrix.\nUCGate\n(gate_list[, up_to_diagonal, mux_simp])\nUniformly controlled gate (also called multiplexed gate).\nUCPauliRotGate\n(angle_list, rot_axis)\nUniformly controlled Pauli rotations.\nUCRXGate\n(angle_list)\nUniformly controlled Pauli-X rotations.\nUCRYGate\n(angle_list)\nUniformly controlled Pauli-Y rotations.\nUCRZGate\n(angle_list)\nUniformly controlled Pauli-Z rotations."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "The above objects derive Gate or Instruction , which allows the compiler to reason about them on an abstract level. We therefore suggest using these instead of the following, which derive QuantumCircuit and are eagerly constructed."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Column 1\nColumn 2\nDiagonal\n(diag)\nCircuit implementing a diagonal transformation.\nMCMT\n(gate, num_ctrl_qubits, num_target_qubits)\nThe multi-controlled multi-target gate, for an arbitrary singly controlled target gate.\nMCMTVChain\n(gate, num_ctrl_qubits, ...)\nThe MCMT implementation using the CCX V-chain.\nMCXGrayCode\n([num_ctrl_qubits, label, ...])\nImplement the multi-controlled X gate using the Gray code.\nMCXRecursive\n([num_ctrl_qubits, label, ...])\nImplement the multi-controlled X gate using recursion.\nMCXVChain\n([num_ctrl_qubits, dirty_ancillas, ...])\nImplement the multi-controlled X gate using a V-chain of CX gates.\nPermutation\n(num_qubits[, pattern, seed])\nAn n_qubit circuit that permutes qubits.\nGMS\n(num_qubits, theta)\nGlobal Mølmer–Sørensen gate.\nGR\n(num_qubits, theta, phi)\nGlobal R gate.\nGRX\n(num_qubits, theta)\nGlobal RX gate.\nGRY\n(num_qubits, theta)\nGlobal RY gate.\nGRZ\n(num_qubits, phi)\nGlobal RZ gate."
+        }
+      ]
+    },
+    {
+      "titulo": "11. Boolean Logic",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "These Gate s implement boolean logic operations, such as the logical or of a set of qubit states."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Column 1\nColumn 2\nAndGate\n(num_variable_qubits[, flags])\nA gate representing the logical AND operation on a number of qubits.\nOrGate\n(num_variable_qubits[, flags])\nA gate representing the logical OR operation on a number of qubits.\nBitwiseXorGate\n(num_qubits, amount)\nAn n-qubit gate for bitwise xor-ing the input with some integer\namount\n.\nInnerProductGate\n(num_qubits)\nA 2n-qubit Boolean function that computes the inner product of two n-qubit vectors over\nF\n2\nF_2\nF\n2\n​\n."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "The above objects derive Gate (or return this type), which allows the compiler to reason about them on an abstract level. We therefore suggest using these instead of the following which derive QuantumCircuit and are eagerly constructed."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Column 1\nColumn 2\nAND\n(num_variable_qubits[, flags, mcx_mode])\nA circuit implementing the logical AND operation on a number of qubits.\nOR\n(num_variable_qubits[, flags, mcx_mode])\nA circuit implementing the logical OR operation on a number of qubits.\nXOR\n(num_qubits[, amount, seed])\nAn n_qubit circuit for bitwise xor-ing the input with some integer\namount\n.\nInnerProduct\n(num_qubits)\nA 2n-qubit Boolean function that computes the inner product of two n-qubit vectors over\nF\n2\nF_2\nF\n2\n​\n."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "A random bitwise xor circuit can be directly generated using:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Column 1\nColumn 2\nrandom_bitwise_xor\n(num_qubits, seed)\nCreate a random BitwiseXorGate."
+        }
+      ]
+    },
+    {
+      "titulo": "12. Basis Change",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "These gates perform basis transformations of the qubit states. For example, in the case of the Quantum Fourier Transform (QFT), it transforms between the computational basis and the Fourier basis."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Column 1\nColumn 2\nQFTGate\n(num_qubits)\nQuantum Fourier Transform Gate."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "The above object derives Gate , which allows the compiler to reason about it on an abstract level. We therefore suggest using this instead of the following which derives QuantumCircuit and is eagerly constructed."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Column 1\nColumn 2\nQFT\n([num_qubits, approximation_degree, ...])\nQuantum Fourier Transform Circuit."
+        }
+      ]
+    },
+    {
+      "titulo": "13. Arithmetic",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "These gates and circuits perform classical arithmetic, such as addition or multiplication."
+        }
+      ]
+    },
+    {
+      "titulo": "14. Adders",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "Adders compute the sum of two n n n -qubit registers, that is"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "where the size t t t of the output register depends on the type of adder used."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Column 1\nColumn 2\nModularAdderGate\n(num_state_qubits[, label])\nCompute the sum modulo\n2\nn\n2^n\n2\nn\nof two\nn\nn\nn\n-sized qubit registers.\nHalfAdderGate\n(num_state_qubits[, label])\nCompute the sum of two equally-sized qubit registers, including a carry-out bit.\nFullAdderGate\n(num_state_qubits[, label])\nCompute the sum of two\nn\nn\nn\n-sized qubit registers, including carry-in and -out bits."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "The above objects derive Gate , which allows the compiler to reason about them on an abstract level. We therefore suggest using these instead of the following which derive QuantumCircuit and are eagerly constructed."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Column 1\nColumn 2\nDraperQFTAdder\n(num_state_qubits[, kind, name])\nA circuit that uses QFT to perform in-place addition on two qubit registers.\nCDKMRippleCarryAdder\n(num_state_qubits[, ...])\nA ripple-carry circuit to perform in-place addition on two qubit registers.\nVBERippleCarryAdder\n(num_state_qubits[, ...])\nThe VBE ripple carry adder [1]."
+        }
+      ]
+    },
+    {
+      "titulo": "15. Multipliers",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "Multipliers compute the product of two n n n -qubit registers, that is"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "where t t t is the number of bits used to represent the result."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Column 1\nColumn 2\nMultiplierGate\n(num_state_qubits[, ...])\nCompute the product of two equally sized qubit registers into a new register."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "The above object derives Gate , which allows the compiler to reason about it on an abstract level. We therefore suggest using this instead of the following which derive QuantumCircuit and are eagerly constructed."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Column 1\nColumn 2\nHRSCumulativeMultiplier\n(num_state_qubits[, ...])\nA multiplication circuit to store product of two input registers out-of-place.\nRGQFTMultiplier\n(num_state_qubits[, ...])\nA QFT multiplication circuit to store product of two input registers out-of-place."
+        }
+      ]
+    },
+    {
+      "titulo": "16. Amplitude Functions",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "An amplitude function approximates a function f : { 0 , . . . , 2 n − 1 } → [ 0 , 1 ] f: \\{0, ..., 2^n - 1\\} \\rightarrow [0, 1] f : { 0 , ... , 2 n − 1 } → [ 0 , 1 ] applied on the amplitudes of n n n qubits. See the class docstring for more detailed information."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Column 1\nColumn 2\nLinearAmplitudeFunctionGate\n(...[, ...])\nA circuit implementing a (piecewise) linear function on qubit amplitudes."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "The above object derives Gate , which allows the compiler to reason about it on an abstract level. We therefore suggest using this instead of the following which derives QuantumCircuit and is eagerly constructed."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Column 1\nColumn 2\nLinearAmplitudeFunction\n(num_state_qubits, ...)\nA circuit implementing a (piecewise) linear function on qubit amplitudes."
+        }
+      ]
+    },
+    {
+      "titulo": "17. Functional Pauli Rotations",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "Functional Pauli rotations implement operations of the form"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "using Pauli- Y Y Y rotations for different types of functions f f f , such as linear, polynomial, or a piecewise version of these. They are similar to the amplitude functions above, but without pre- and post-processing for the domain and image of the target function."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Column 1\nColumn 2\nLinearPauliRotationsGate\n(num_state_qubits[, ...])\nLinearly-controlled X, Y or Z rotation.\nPolynomialPauliRotationsGate\n(num_state_qubits)\nA gate implementing polynomial Pauli rotations.\nPiecewiseLinearPauliRotationsGate\n([...])\nPiecewise-linearly-controlled Pauli rotations.\nPiecewisePolynomialPauliRotationsGate\n(...[, ...])\nPiecewise-polynomially-controlled Pauli rotations.\nPiecewiseChebyshevGate\n(f_x, num_state_qubits)\nPiecewise Chebyshev approximation to an input function."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "The above objects derive Gate , which allows the compiler to reason about them on an abstract level. We therefore suggest using these instead of the following which derive QuantumCircuit and are eagerly constructed."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Column 1\nColumn 2\nFunctionalPauliRotations\n([num_state_qubits, ...])\nBase class for functional Pauli rotations.\nLinearPauliRotations\n([num_state_qubits, ...])\nLinearly-controlled X, Y or Z rotation.\nPolynomialPauliRotations\n([num_state_qubits, ...])\nA circuit implementing polynomial Pauli rotations.\nPiecewiseLinearPauliRotations\n([...])\nPiecewise-linearly-controlled Pauli rotations.\nPiecewisePolynomialPauliRotations\n([...])\nPiecewise-polynomially-controlled Pauli rotations.\nPiecewiseChebyshev\n(f_x[, degree, ...])\nPiecewise Chebyshev approximation to an input function."
+        }
+      ]
+    },
+    {
+      "titulo": "18. Other arithmetic functions",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "Here we list additional arithmetic circuits. See the individual class docstrings for more details."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Column 1\nColumn 2\nExactReciprocalGate\n(num_state_qubits, scaling)\nImplements an exact reciprocal function.\nIntegerComparatorGate\n(num_state_qubits, value)\nPerform a\n≥\n\\geq\n≥\n(or\n<\n<\n<\n) on a qubit register against a classical integer.\nQuadraticFormGate\n([num_result_qubits, ...])\nImplements a quadratic form on binary variables encoded in qubit registers.\nWeightedSumGate\n(num_state_qubits[, weights, ...])\nA gate to compute the weighted sum of qubit registers."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "The above objects derive Gate , which allows the compiler to reason about them on an abstract level. We therefore suggest using these instead of the following which derive QuantumCircuit and are eagerly constructed."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Column 1\nColumn 2\nExactReciprocal\n(num_state_qubits, scaling[, ...])\nExact reciprocal\nIntegerComparator\n([num_state_qubits, value, ...])\nInteger Comparator.\nQuadraticForm\n([num_result_qubits, ...])\nImplements a quadratic form on binary variables encoded in qubit registers.\nWeightedAdder\n([num_state_qubits, weights, name])\nA circuit to compute the weighted sum of qubit registers."
+        }
+      ]
+    },
+    {
+      "titulo": "19. Particular Quantum Circuits",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "The following gates and quantum circuits define specific operations of interest:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Column 1\nColumn 2\nfourier_checking\n(f, g)\nFourier checking circuit.\nhidden_linear_function\n(adjacency_matrix)\nCircuit to solve the hidden linear function problem.\niqp\n(interactions)\nInstantaneous quantum polynomial time (IQP) circuit.\nrandom_iqp\n(num_qubits[, seed])\nA random instantaneous quantum polynomial time (IQP) circuit.\nquantum_volume\n(num_qubits[, depth, seed])\nA quantum volume model circuit.\nphase_estimation\n(num_evaluation_qubits, unitary)\nPhase Estimation circuit.\ngrover_operator\n(oracle[, state_preparation, ...])\nConstruct the Grover operator.\nunitary_overlap\n(unitary1, unitary2[, ...])\nCircuit that returns the overlap between two unitaries\nU\n2\n†\nU\n1\nU_2^{\\dag} U_1\nU\n2\n†\n​\nU\n1\n​\n.\nGraphStateGate\n(adjacency_matrix)\nA gate representing a graph state.\nPauliEvolutionGate\n(operator[, time, label, ...])\nTime-evolution of an operator consisting of Paulis.\nHamiltonianGate\n(data, time[, label])\nClass for representing evolution by a Hamiltonian operator as a gate."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Below we provide the same operations as classes deriving QuantumCircuit . For better runtime and compiler performance, however, we suggest using above functions and gates."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Column 1\nColumn 2\nFourierChecking\n(f, g)\nFourier checking circuit.\nGraphState\n(adjacency_matrix)\nCircuit to prepare a graph state.\nHiddenLinearFunction\n(adjacency_matrix)\nCircuit to solve the hidden linear function problem.\nIQP\n(interactions)\nInstantaneous quantum polynomial (IQP) circuit.\nQuantumVolume\n(num_qubits[, depth, seed, ...])\nA quantum volume model circuit.\nPhaseEstimation\n(num_evaluation_qubits, unitary)\nPhase Estimation circuit.\nGroverOperator\n(oracle[, state_preparation, ...])\nThe Grover operator.\nUnitaryOverlap\n(unitary1, unitary2[, ...])\nCircuit that returns the overlap between two unitaries\nU\n2\n†\nU\n1\nU_2^{\\dag} U_1\nU\n2\n†\n​\nU\n1\n​\n."
+        }
+      ]
+    },
+    {
+      "titulo": "20. N-local circuits",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "The following functions return a parameterized QuantumCircuit to use as ansatz in a broad set of variational quantum algorithms."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "For example, we can build a variational circuit"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "from qiskit.circuit.library import efficient_su2\n\nnum_qubits = 4\nansatz = efficient_su2(num_qubits, entanglement=\"pairwise\")\nansatz.draw(\"mpl\")"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "and combine it with"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "from qiskit.circuit.library import zz_feature_map\n\ncircuit = zz_feature_map(num_qubits)\ncircuit.barrier()\ncircuit.compose(ansatz, inplace=True)\n\ncircuit.draw(\"mpl\")"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "to obtain a circuit for variational quantum classification."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "The following functions all construct variational circuits and are optimized for a fast construction:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Column 1\nColumn 2\nn_local\n(num_qubits, rotation_blocks, ...[, ...])\nConstruct an n-local variational circuit.\nefficient_su2\n(num_qubits[, su2_gates, ...])\nThe hardware-efficient\nS\nU\n(\n2\n)\nSU(2)\nS\nU\n(\n2\n)\n2-local circuit.\nreal_amplitudes\n(num_qubits[, entanglement, ...])\nConstruct a real-amplitudes 2-local circuit.\npauli_two_design\n(num_qubits[, reps, seed, ...])\nConstruct a Pauli 2-design ansatz.\nexcitation_preserving\n(num_qubits[, mode, ...])\nThe heuristic excitation-preserving wave function ansatz.\nqaoa_ansatz\n(cost_operator[, reps, ...])\nA generalized QAOA quantum circuit with a support of custom initial states and mixers.\nhamiltonian_variational_ansatz\n(hamiltonian)\nConstruct a Hamiltonian variational ansatz.\nevolved_operator_ansatz\n(operators[, reps, ...])\nConstruct an ansatz out of operator evolutions."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "While we suggest using the above functions, we also continue supporting the following BlueprintCircuit , which wrap the circuits into a block and allow for inplace mutations of the circuits:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Column 1\nColumn 2\nNLocal\n([num_qubits, rotation_blocks, ...])\nThe n-local circuit class.\nTwoLocal\n([num_qubits, rotation_blocks, ...])\nThe two-local circuit.\nPauliTwoDesign\n([num_qubits, reps, seed, ...])\nThe Pauli Two-Design ansatz.\nRealAmplitudes\n([num_qubits, entanglement, ...])\nThe real-amplitudes 2-local circuit.\nEfficientSU2\n([num_qubits, su2_gates, ...])\nThe hardware efficient SU(2) 2-local circuit.\nEvolvedOperatorAnsatz\n([operators, reps, ...])\nThe evolved operator ansatz.\nExcitationPreserving\n([num_qubits, mode, ...])\nThe heuristic excitation-preserving wave function ansatz.\nQAOAAnsatz\n([cost_operator, reps, ...])\nA generalized QAOA quantum circuit with a support of custom initial states and mixers."
+        }
+      ]
+    },
+    {
+      "titulo": "21. Data encoding circuits",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "The following functions return a parameterized QuantumCircuit to use as data encoding circuits in a series of variational quantum algorithms:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Column 1\nColumn 2\npauli_feature_map\n(feature_dimension[, reps, ...])\nThe Pauli expansion circuit.\nz_feature_map\n(feature_dimension[, reps, ...])\nThe first order Pauli Z-evolution circuit.\nzz_feature_map\n(feature_dimension[, reps, ...])\nSecond-order Pauli-Z evolution circuit."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "While we suggest using the above functions, we also continue supporting the following BlueprintCircuit , which wrap the circuits into a block and allow for inplace mutations of the circuits:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Column 1\nColumn 2\nPauliFeatureMap\n([feature_dimension, reps, ...])\nThe Pauli Expansion circuit.\nZFeatureMap\n(feature_dimension[, reps, ...])\nThe first order Pauli Z-evolution circuit.\nZZFeatureMap\n(feature_dimension[, reps, ...])\nSecond-order Pauli-Z evolution circuit."
+        }
+      ]
+    },
+    {
+      "titulo": "22. Data preparation circuits",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "The following operations are used for state preparation:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Column 1\nColumn 2\nStatePreparation\n(params[, num_qubits, ...])\nComplex amplitude state preparation.\nInitialize\n(params[, num_qubits, normalize])\nComplex amplitude initialization."
+        }
+      ]
+    },
+    {
+      "titulo": "23. Oracles",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "An “oracle” can refer to a variety of black-box operations on quantum states. Here, we consider oracles implementing boolean functions f : { 0 , . . . , 2 n − 1 } → { 0 , 1 } f: \\{0, ..., 2^n - 1\\} \\rightarrow \\{0, 1\\} f : { 0 , ... , 2 n − 1 } → { 0 , 1 } via phase-flips"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "or bit-flips"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "These are implemented in"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Column 1\nColumn 2\nPhaseOracleGate\n(expression[, var_order, label])\nImplements a phase oracle.\nBitFlipOracleGate\n(expression[, var_order, label])\nImplements a bit-flip oracle"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "and an important building block for Grover’s algorithm (see grover_operator() )."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "In addition to the Gate -based implementation we also support the QuantumCircuit -version of the phase flip oracle"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Column 1\nColumn 2\nPhaseOracle\n(expression[, var_order])\nPhase Oracle."
+        }
+      ]
+    },
+    {
+      "titulo": "24. Template circuits",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "Templates are functions that return circuits that compute the identity. They are used at circuit optimization where matching part of the template allows the compiler to replace the match with the inverse of the remainder from the template."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "In this example, the identity constant in a template is checked:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "from qiskit.circuit.library.templates import template_nct_4b_1\nfrom qiskit.quantum_info import Operator\nimport numpy as np\n\ntemplate = template_nct_4b_1()\n\nidentity = np.identity(2 ** len(template.qubits), dtype=complex)\ndata = Operator(template).data\nnp.allclose(data, identity)  # True, template_nct_4b_1 is the identity"
+        }
+      ]
+    },
+    {
+      "titulo": "25. NCT (Not-CNOT-Toffoli) template circuits",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "Template circuits for XGate , CXGate , and CCXGate (Toffoli) gates."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "References:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Maslov, D. and Dueck, G. W. and Miller, D. M., Techniques for the synthesis of reversible Toffoli networks, 2007 https://dx.doi.org/10.1145/1278349.1278355"
+        }
+      ]
+    },
+    {
+      "titulo": "26. template_nct_2a_1",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "qiskit.circuit.library.templates.nct.template_nct_2a_1()"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Template 2a_1:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "     ┌───┐┌───┐\nq_0: ┤ X ├┤ X ├\n     └───┘└───┘"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Returns"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "template as a quantum circuit."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return type"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "QuantumCircuit"
+        }
+      ]
+    },
+    {
+      "titulo": "27. template_nct_2a_2",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "qiskit.circuit.library.templates.nct.template_nct_2a_2()"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Template 2a_2:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "q_0: ──■────■──\n     ┌─┴─┐┌─┴─┐\nq_1: ┤ X ├┤ X ├\n     └───┘└───┘"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Returns"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "template as a quantum circuit."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return type"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "QuantumCircuit"
+        }
+      ]
+    },
+    {
+      "titulo": "28. template_nct_2a_3",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "qiskit.circuit.library.templates.nct.template_nct_2a_3()"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Template 2a_3:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "q_0: ──■────■──\n       │    │\nq_1: ──■────■──\n     ┌─┴─┐┌─┴─┐\nq_2: ┤ X ├┤ X ├\n     └───┘└───┘"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Returns"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "template as a quantum circuit."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return type"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "QuantumCircuit"
+        }
+      ]
+    },
+    {
+      "titulo": "29. template_nct_4a_1",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "qiskit.circuit.library.templates.nct.template_nct_4a_1()"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Template 4a_1:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "q_0: ───────■─────────■──\n            │         │\nq_1: ──■────┼────■────┼──\n       │    │    │    │\nq_2: ──■────■────■────■──\n       │  ┌─┴─┐  │  ┌─┴─┐\nq_3: ──┼──┤ X ├──┼──┤ X ├\n     ┌─┴─┐└───┘┌─┴─┐└───┘\nq_4: ┤ X ├─────┤ X ├─────\n     └───┘     └───┘"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Returns"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "template as a quantum circuit."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return type"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "QuantumCircuit"
+        }
+      ]
+    },
+    {
+      "titulo": "30. template_nct_4a_2",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "qiskit.circuit.library.templates.nct.template_nct_4a_2()"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Template 4a_2:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "q_0: ──■─────────■───────\n       │         │\nq_1: ──■────■────■────■──\n       │  ┌─┴─┐  │  ┌─┴─┐\nq_2: ──┼──┤ X ├──┼──┤ X ├\n     ┌─┴─┐└───┘┌─┴─┐└───┘\nq_3: ┤ X ├─────┤ X ├─────\n     └───┘     └───┘"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Returns"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "template as a quantum circuit."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return type"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "QuantumCircuit"
+        }
+      ]
+    },
+    {
+      "titulo": "31. template_nct_4a_3",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "qiskit.circuit.library.templates.nct.template_nct_4a_3()"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Template 4a_3:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "q_0: ──■────■────■────■──\n       │  ┌─┴─┐  │  ┌─┴─┐\nq_1: ──┼──┤ X ├──┼──┤ X ├\n     ┌─┴─┐└───┘┌─┴─┐└───┘\nq_2: ┤ X ├─────┤ X ├─────\n     └───┘     └───┘"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Returns"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "template as a quantum circuit."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return type"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "QuantumCircuit"
+        }
+      ]
+    },
+    {
+      "titulo": "32. template_nct_4b_1",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "qiskit.circuit.library.templates.nct.template_nct_4b_1()"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Template 4b_1:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "q_0: ───────■─────────■──\n            │         │\nq_1: ──■────┼────■────┼──\n       │    │    │    │\nq_2: ──■────■────■────■──\n     ┌─┴─┐┌─┴─┐┌─┴─┐┌─┴─┐\nq_3: ┤ X ├┤ X ├┤ X ├┤ X ├\n     └───┘└───┘└───┘└───┘"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Returns"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "template as a quantum circuit."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return type"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "QuantumCircuit"
+        }
+      ]
+    },
+    {
+      "titulo": "33. template_nct_4b_2",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "qiskit.circuit.library.templates.nct.template_nct_4b_2()"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Template 4b_2:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "q_0: ──■─────────■───────\n       │         │\nq_1: ──■────■────■────■──\n     ┌─┴─┐┌─┴─┐┌─┴─┐┌─┴─┐\nq_2: ┤ X ├┤ X ├┤ X ├┤ X ├\n     └───┘└───┘└───┘└───┘"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Returns"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "template as a quantum circuit."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return type"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "QuantumCircuit"
+        }
+      ]
+    },
+    {
+      "titulo": "34. template_nct_5a_1",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "qiskit.circuit.library.templates.nct.template_nct_5a_1()"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Template 5a_1:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "q_0: ──■────■────■────■────■──\n       │  ┌─┴─┐  │  ┌─┴─┐  │\nq_1: ──■──┤ X ├──■──┤ X ├──┼──\n     ┌─┴─┐└───┘┌─┴─┐└───┘┌─┴─┐\nq_2: ┤ X ├─────┤ X ├─────┤ X ├\n     └───┘     └───┘     └───┘"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Returns"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "template as a quantum circuit."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return type"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "QuantumCircuit"
+        }
+      ]
+    },
+    {
+      "titulo": "35. template_nct_5a_2",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "qiskit.circuit.library.templates.nct.template_nct_5a_2()"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Template 5a_2:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "q_0: ──■─────────■─────────■──\n       │  ┌───┐  │  ┌───┐  │\nq_1: ──■──┤ X ├──■──┤ X ├──┼──\n     ┌─┴─┐└───┘┌─┴─┐└───┘┌─┴─┐\nq_2: ┤ X ├─────┤ X ├─────┤ X ├\n     └───┘     └───┘     └───┘"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Returns"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "template as a quantum circuit."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return type"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "QuantumCircuit"
+        }
+      ]
+    },
+    {
+      "titulo": "36. template_nct_5a_3",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "qiskit.circuit.library.templates.nct.template_nct_5a_3()"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Template 5a_3:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "q_0: ───────■─────────■────■──\n          ┌─┴─┐     ┌─┴─┐  │\nq_1: ──■──┤ X ├──■──┤ X ├──┼──\n     ┌─┴─┐└───┘┌─┴─┐└───┘┌─┴─┐\nq_2: ┤ X ├─────┤ X ├─────┤ X ├\n     └───┘     └───┘     └───┘"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Returns"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "template as a quantum circuit."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return type"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "QuantumCircuit"
+        }
+      ]
+    },
+    {
+      "titulo": "37. template_nct_5a_4",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "qiskit.circuit.library.templates.nct.template_nct_5a_4()"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Template 5a_4:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "          ┌───┐     ┌───┐\nq_0: ──■──┤ X ├──■──┤ X ├\n     ┌─┴─┐└───┘┌─┴─┐├───┤\nq_1: ┤ X ├─────┤ X ├┤ X ├\n     └───┘     └───┘└───┘"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Returns"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "template as a quantum circuit."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return type"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "QuantumCircuit"
+        }
+      ]
+    },
+    {
+      "titulo": "38. template_nct_6a_1",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "qiskit.circuit.library.templates.nct.template_nct_6a_1()"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Template 6a_1:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "          ┌───┐     ┌───┐     ┌───┐\nq_0: ──■──┤ X ├──■──┤ X ├──■──┤ X ├\n     ┌─┴─┐└─┬─┘┌─┴─┐└─┬─┘┌─┴─┐└─┬─┘\nq_1: ┤ X ├──■──┤ X ├──■──┤ X ├──■──\n     └───┘     └───┘     └───┘"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Returns"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "template as a quantum circuit."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return type"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "QuantumCircuit"
+        }
+      ]
+    },
+    {
+      "titulo": "39. template_nct_6a_2",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "qiskit.circuit.library.templates.nct.template_nct_6a_2()"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Template 6a_2:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "q_0: ──■────■────■────■────■────■──\n       │  ┌─┴─┐  │  ┌─┴─┐  │  ┌─┴─┐\nq_1: ──■──┤ X ├──■──┤ X ├──■──┤ X ├\n     ┌─┴─┐└─┬─┘┌─┴─┐└─┬─┘┌─┴─┐└─┬─┘\nq_2: ┤ X ├──■──┤ X ├──■──┤ X ├──■──\n     └───┘     └───┘     └───┘"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Returns"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "template as a quantum circuit."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return type"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "QuantumCircuit"
+        }
+      ]
+    },
+    {
+      "titulo": "40. template_nct_6a_3",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "qiskit.circuit.library.templates.nct.template_nct_6a_3()"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Template 6a_3:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "q_0: ───────■─────────■────■────■──\n          ┌─┴─┐     ┌─┴─┐  │  ┌─┴─┐\nq_1: ──■──┤ X ├──■──┤ X ├──■──┤ X ├\n     ┌─┴─┐└─┬─┘┌─┴─┐└─┬─┘┌─┴─┐└─┬─┘\nq_2: ┤ X ├──■──┤ X ├──■──┤ X ├──■──\n     └───┘     └───┘     └───┘"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Returns"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "template as a quantum circuit."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return type"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "QuantumCircuit"
+        }
+      ]
+    },
+    {
+      "titulo": "41. template_nct_6a_4",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "qiskit.circuit.library.templates.nct.template_nct_6a_4()"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Template 6a_4:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "q_0: ───────■──────────────■───────\n          ┌─┴─┐     ┌───┐  │  ┌───┐\nq_1: ──■──┤ X ├──■──┤ X ├──■──┤ X ├\n     ┌─┴─┐└─┬─┘┌─┴─┐└─┬─┘┌─┴─┐└─┬─┘\nq_2: ┤ X ├──■──┤ X ├──■──┤ X ├──■──\n     └───┘     └───┘     └───┘"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Returns"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "template as a quantum circuit."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return type"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "QuantumCircuit"
+        }
+      ]
+    },
+    {
+      "titulo": "42. template_nct_6b_1",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "qiskit.circuit.library.templates.nct.template_nct_6b_1()"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Template 6b_1:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "q_0: ──■─────────■────■─────────■──\n       │       ┌─┴─┐  │       ┌─┴─┐\nq_1: ──■────■──┤ X ├──■────■──┤ X ├\n     ┌─┴─┐┌─┴─┐└─┬─┘┌─┴─┐┌─┴─┐└─┬─┘\nq_2: ┤ X ├┤ X ├──■──┤ X ├┤ X ├──■──\n     └───┘└───┘     └───┘└───┘"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Returns"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "template as a quantum circuit."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return type"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "QuantumCircuit"
+        }
+      ]
+    },
+    {
+      "titulo": "43. template_nct_6b_2",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "qiskit.circuit.library.templates.nct.template_nct_6b_2()"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Template 6b_2:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "q_0: ───────■────■─────────■────■──\n            │  ┌─┴─┐       │  ┌─┴─┐\nq_1: ──■────■──┤ X ├──■────■──┤ X ├\n     ┌─┴─┐┌─┴─┐└─┬─┘┌─┴─┐┌─┴─┐└─┬─┘\nq_2: ┤ X ├┤ X ├──■──┤ X ├┤ X ├──■──\n     └───┘└───┘     └───┘└───┘"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Returns"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "template as a quantum circuit."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return type"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "QuantumCircuit"
+        }
+      ]
+    },
+    {
+      "titulo": "44. template_nct_6c_1",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "qiskit.circuit.library.templates.nct.template_nct_6c_1()"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Template 6c_1:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "q_0: ──■─────────■─────────■────■──\n       │  ┌───┐  │  ┌───┐  │  ┌─┴─┐\nq_1: ──■──┤ X ├──■──┤ X ├──■──┤ X ├\n     ┌─┴─┐└─┬─┘┌─┴─┐└─┬─┘┌─┴─┐└─┬─┘\nq_2: ┤ X ├──■──┤ X ├──■──┤ X ├──■──\n     └───┘     └───┘     └───┘"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Returns"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "template as a quantum circuit."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return type"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "QuantumCircuit"
+        }
+      ]
+    },
+    {
+      "titulo": "45. template_nct_7a_1",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "qiskit.circuit.library.templates.nct.template_nct_7a_1()"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Template 7a_1:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "     ┌───┐                    ┌───┐\nq_0: ┤ X ├──■─────────■────■──┤ X ├──■──\n     └─┬─┘┌─┴─┐       │  ┌─┴─┐└─┬─┘  │\nq_1: ──■──┤ X ├──■────■──┤ X ├──■────■──\n          └───┘┌─┴─┐┌─┴─┐└───┘     ┌─┴─┐\nq_2: ──────────┤ X ├┤ X ├──────────┤ X ├\n               └───┘└───┘          └───┘"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Returns"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "template as a quantum circuit."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return type"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "QuantumCircuit"
+        }
+      ]
+    },
+    {
+      "titulo": "46. template_nct_7b_1",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "qiskit.circuit.library.templates.nct.template_nct_7b_1()"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Template 7b_1:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "     ┌───┐                    ┌───┐\nq_0: ┤ X ├──■─────────■────■──┤ X ├──■──\n     └───┘┌─┴─┐       │  ┌─┴─┐└───┘  │\nq_1: ─────┤ X ├──■────■──┤ X ├───────■──\n          └───┘┌─┴─┐┌─┴─┐└───┘     ┌─┴─┐\nq_2: ──────────┤ X ├┤ X ├──────────┤ X ├\n               └───┘└───┘          └───┘"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Returns"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "template as a quantum circuit."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return type"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "QuantumCircuit"
+        }
+      ]
+    },
+    {
+      "titulo": "47. template_nct_7c_1",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "qiskit.circuit.library.templates.nct.template_nct_7c_1()"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Template 7c_1:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "     ┌───┐                    ┌───┐\nq_0: ┤ X ├──■─────────■────■──┤ X ├──■──\n     └───┘┌─┴─┐       │  ┌─┴─┐└───┘  │\nq_1: ─────┤ X ├──■────■──┤ X ├───────■──\n          └─┬─┘┌─┴─┐┌─┴─┐└─┬─┘     ┌─┴─┐\nq_2: ───────■──┤ X ├┤ X ├──■───────┤ X ├\n               └───┘└───┘          └───┘"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Returns"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "template as a quantum circuit."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return type"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "QuantumCircuit"
+        }
+      ]
+    },
+    {
+      "titulo": "48. template_nct_7d_1",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "qiskit.circuit.library.templates.nct.template_nct_7d_1()"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Template 7d_1:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "     ┌───┐                    ┌───┐\nq_0: ┤ X ├──■─────────■────■──┤ X ├──■──\n     └─┬─┘┌─┴─┐       │  ┌─┴─┐└─┬─┘  │\nq_1: ──■──┤ X ├──■────■──┤ X ├──■────■──\n          └─┬─┘┌─┴─┐┌─┴─┐└─┬─┘     ┌─┴─┐\nq_2: ───────■──┤ X ├┤ X ├──■───────┤ X ├\n               └───┘└───┘          └───┘"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Returns"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "template as a quantum circuit."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return type"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "QuantumCircuit"
+        }
+      ]
+    },
+    {
+      "titulo": "49. template_nct_7e_1",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "qiskit.circuit.library.templates.nct.template_nct_7e_1()"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Template 7e_1:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "     ┌───┐                    ┌───┐\nq_0: ┤ X ├──■─────────■────■──┤ X ├──■──\n     └───┘┌─┴─┐       │  ┌─┴─┐└───┘  │\nq_1: ─────┤ X ├───────┼──┤ X ├───────┼──\n          └─┬─┘┌───┐┌─┴─┐└─┬─┘     ┌─┴─┐\nq_2: ───────■──┤ X ├┤ X ├──■───────┤ X ├\n               └───┘└───┘          └───┘"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Returns"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "template as a quantum circuit."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return type"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "QuantumCircuit"
+        }
+      ]
+    },
+    {
+      "titulo": "50. template_nct_9a_1",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "qiskit.circuit.library.templates.nct.template_nct_9a_1()"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Template 9a_1:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "     ┌───┐     ┌───┐          ┌───┐\nq_0: ┤ X ├──■──┤ X ├──■────■──┤ X ├──■──\n     └─┬─┘┌─┴─┐└─┬─┘┌─┴─┐┌─┴─┐└─┬─┘┌─┴─┐\nq_1: ──■──┤ X ├──■──┤ X ├┤ X ├──■──┤ X ├\n          └─┬─┘  │  ├───┤└─┬─┘┌───┐└─┬─┘\nq_2: ───────■────■──┤ X ├──■──┤ X ├──■──\n                    └───┘     └───┘"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Returns"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "template as a quantum circuit."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return type"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "QuantumCircuit"
+        }
+      ]
+    },
+    {
+      "titulo": "51. template_nct_9c_1",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "qiskit.circuit.library.templates.nct.template_nct_9c_1()"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Template 9c_1:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "     ┌───┐     ┌───┐┌───┐     ┌───┐          ┌───┐\nq_0: ┤ X ├──■──┤ X ├┤ X ├─────┤ X ├──■───────┤ X ├\n     └─┬─┘┌─┴─┐└───┘└─┬─┘┌───┐└─┬─┘┌─┴─┐┌───┐└─┬─┘\nq_1: ──■──┤ X ├───────■──┤ X ├──■──┤ X ├┤ X ├──■──\n          └───┘          └───┘     └───┘└───┘"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Returns"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "template as a quantum circuit."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return type"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "QuantumCircuit"
+        }
+      ]
+    },
+    {
+      "titulo": "52. template_nct_9c_2",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "qiskit.circuit.library.templates.nct.template_nct_9c_2()"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Template 9c_2:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "q_0: ───────■────■──────────────■────■─────────■──\n     ┌───┐  │  ┌─┴─┐┌───┐     ┌─┴─┐  │       ┌─┴─┐\nq_1: ┤ X ├──■──┤ X ├┤ X ├─────┤ X ├──■───────┤ X ├\n     └─┬─┘┌─┴─┐└───┘└─┬─┘┌───┐└─┬─┘┌─┴─┐┌───┐└─┬─┘\nq_2: ──■──┤ X ├───────■──┤ X ├──■──┤ X ├┤ X ├──■──\n          └───┘          └───┘     └───┘└───┘"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Returns"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "template as a quantum circuit."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return type"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "QuantumCircuit"
+        }
+      ]
+    },
+    {
+      "titulo": "53. template_nct_9c_3",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "qiskit.circuit.library.templates.nct.template_nct_9c_3()"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Template 9c_3:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "q_0: ───────■────────────────────────■────────────\n     ┌───┐  │  ┌───┐┌───┐     ┌───┐  │       ┌───┐\nq_1: ┤ X ├──■──┤ X ├┤ X ├─────┤ X ├──■───────┤ X ├\n     └─┬─┘┌─┴─┐└───┘└─┬─┘┌───┐└─┬─┘┌─┴─┐┌───┐└─┬─┘\nq_2: ──■──┤ X ├───────■──┤ X ├──■──┤ X ├┤ X ├──■──\n          └───┘          └───┘     └───┘└───┘"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Returns"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "template as a quantum circuit."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return type"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "QuantumCircuit"
+        }
+      ]
+    },
+    {
+      "titulo": "54. template_nct_9c_4",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "qiskit.circuit.library.templates.nct.template_nct_9c_4()"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Template 9c_4:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "q_0: ──■────■─────────■──────────────■────────────\n     ┌─┴─┐  │  ┌───┐┌─┴─┐     ┌───┐  │       ┌───┐\nq_1: ┤ X ├──■──┤ X ├┤ X ├─────┤ X ├──■───────┤ X ├\n     └─┬─┘┌─┴─┐└───┘└─┬─┘┌───┐└─┬─┘┌─┴─┐┌───┐└─┬─┘\nq_2: ──■──┤ X ├───────■──┤ X ├──■──┤ X ├┤ X ├──■──\n          └───┘          └───┘     └───┘└───┘"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Returns"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "template as a quantum circuit."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return type"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "QuantumCircuit"
+        }
+      ]
+    },
+    {
+      "titulo": "55. template_nct_9c_5",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "qiskit.circuit.library.templates.nct.template_nct_9c_5()"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Template 9c_5:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "q_0: ────────────■─────────■──────────────■───────\n     ┌───┐     ┌─┴─┐┌───┐  │  ┌───┐       │  ┌───┐\nq_1: ┤ X ├──■──┤ X ├┤ X ├──┼──┤ X ├──■────┼──┤ X ├\n     └─┬─┘┌─┴─┐└───┘└─┬─┘┌─┴─┐└─┬─┘┌─┴─┐┌─┴─┐└─┬─┘\nq_2: ──■──┤ X ├───────■──┤ X ├──■──┤ X ├┤ X ├──■──\n          └───┘          └───┘     └───┘└───┘"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Returns"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "template as a quantum circuit."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return type"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "QuantumCircuit"
+        }
+      ]
+    },
+    {
+      "titulo": "56. template_nct_9c_6",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "qiskit.circuit.library.templates.nct.template_nct_9c_6()"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Template 9c_6:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "q_0: ───────■────■─────────■─────────■────■───────\n     ┌───┐  │  ┌─┴─┐┌───┐  │  ┌───┐  │    │  ┌───┐\nq_1: ┤ X ├──■──┤ X ├┤ X ├──┼──┤ X ├──■────┼──┤ X ├\n     └─┬─┘┌─┴─┐└───┘└─┬─┘┌─┴─┐└─┬─┘┌─┴─┐┌─┴─┐└─┬─┘\nq_2: ──■──┤ X ├───────■──┤ X ├──■──┤ X ├┤ X ├──■──\n          └───┘          └───┘     └───┘└───┘"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Returns"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "template as a quantum circuit."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return type"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "QuantumCircuit"
+        }
+      ]
+    },
+    {
+      "titulo": "57. template_nct_9c_7",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "qiskit.circuit.library.templates.nct.template_nct_9c_7()"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Template 9c_7:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "q_0: ──■────■────■────■────■─────────■────■───────\n     ┌─┴─┐  │  ┌─┴─┐┌─┴─┐  │  ┌───┐  │    │  ┌───┐\nq_1: ┤ X ├──■──┤ X ├┤ X ├──┼──┤ X ├──■────┼──┤ X ├\n     └─┬─┘┌─┴─┐└───┘└─┬─┘┌─┴─┐└─┬─┘┌─┴─┐┌─┴─┐└─┬─┘\nq_2: ──■──┤ X ├───────■──┤ X ├──■──┤ X ├┤ X ├──■──\n          └───┘          └───┘     └───┘└───┘"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Returns"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "template as a quantum circuit."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return type"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "QuantumCircuit"
+        }
+      ]
+    },
+    {
+      "titulo": "58. template_nct_9c_8",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "qiskit.circuit.library.templates.nct.template_nct_9c_8()"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Template 9c_8:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "q_0: ──■─────────■────■─────────■──────────────■──\n     ┌─┴─┐     ┌─┴─┐┌─┴─┐     ┌─┴─┐          ┌─┴─┐\nq_1: ┤ X ├──■──┤ X ├┤ X ├─────┤ X ├──■───────┤ X ├\n     └─┬─┘┌─┴─┐└───┘└─┬─┘┌───┐└─┬─┘┌─┴─┐┌───┐└─┬─┘\nq_2: ──■──┤ X ├───────■──┤ X ├──■──┤ X ├┤ X ├──■──\n          └───┘          └───┘     └───┘└───┘"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Returns"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "template as a quantum circuit."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return type"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "QuantumCircuit"
+        }
+      ]
+    },
+    {
+      "titulo": "59. template_nct_9c_9",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "qiskit.circuit.library.templates.nct.template_nct_9c_9()"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Template 9c_9:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "q_0: ──■────■────■────■─────────■────■─────────■──\n     ┌─┴─┐  │  ┌─┴─┐┌─┴─┐     ┌─┴─┐  │       ┌─┴─┐\nq_1: ┤ X ├──■──┤ X ├┤ X ├─────┤ X ├──■───────┤ X ├\n     └─┬─┘┌─┴─┐└───┘└─┬─┘┌───┐└─┬─┘┌─┴─┐┌───┐└─┬─┘\nq_2: ──■──┤ X ├───────■──┤ X ├──■──┤ X ├┤ X ├──■──\n          └───┘          └───┘     └───┘└───┘"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Returns"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "template as a quantum circuit."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return type"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "QuantumCircuit"
+        }
+      ]
+    },
+    {
+      "titulo": "60. template_nct_9c_10",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "qiskit.circuit.library.templates.nct.template_nct_9c_10()"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Template 9c_10:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "q_0: ──■─────────■────■────■────■─────────■────■──\n     ┌─┴─┐     ┌─┴─┐┌─┴─┐  │  ┌─┴─┐       │  ┌─┴─┐\nq_1: ┤ X ├──■──┤ X ├┤ X ├──┼──┤ X ├──■────┼──┤ X ├\n     └─┬─┘┌─┴─┐└───┘└─┬─┘┌─┴─┐└─┬─┘┌─┴─┐┌─┴─┐└─┬─┘\nq_2: ──■──┤ X ├───────■──┤ X ├──■──┤ X ├┤ X ├──■──\n          └───┘          └───┘     └───┘└───┘"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Returns"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "template as a quantum circuit."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return type"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "QuantumCircuit"
+        }
+      ]
+    },
+    {
+      "titulo": "61. template_nct_9c_11",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "qiskit.circuit.library.templates.nct.template_nct_9c_11()"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Template 9c_11:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "q_0: ───────■────■─────────■────■────■────■────■──\n     ┌───┐  │  ┌─┴─┐┌───┐  │  ┌─┴─┐  │    │  ┌─┴─┐\nq_1: ┤ X ├──■──┤ X ├┤ X ├──┼──┤ X ├──■────┼──┤ X ├\n     └─┬─┘┌─┴─┐└───┘└─┬─┘┌─┴─┐└─┬─┘┌─┴─┐┌─┴─┐└─┬─┘\nq_2: ──■──┤ X ├───────■──┤ X ├──■──┤ X ├┤ X ├──■──\n          └───┘          └───┘     └───┘└───┘"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Returns"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "template as a quantum circuit."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return type"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "QuantumCircuit"
+        }
+      ]
+    },
+    {
+      "titulo": "62. template_nct_9c_12",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "qiskit.circuit.library.templates.nct.template_nct_9c_12()"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Template 9c_12:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "q_0: ──■────■────■────■────■────■────■────■────■──\n     ┌─┴─┐  │  ┌─┴─┐┌─┴─┐  │  ┌─┴─┐  │    │  ┌─┴─┐\nq_1: ┤ X ├──■──┤ X ├┤ X ├──┼──┤ X ├──■────┼──┤ X ├\n     └─┬─┘┌─┴─┐└───┘└─┬─┘┌─┴─┐└─┬─┘┌─┴─┐┌─┴─┐└─┬─┘\nq_2: ──■──┤ X ├───────■──┤ X ├──■──┤ X ├┤ X ├──■──\n          └───┘          └───┘     └───┘└───┘"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Returns"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "template as a quantum circuit."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return type"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "QuantumCircuit"
+        }
+      ]
+    },
+    {
+      "titulo": "63. template_nct_9d_1",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "qiskit.circuit.library.templates.nct.template_nct_9d_1()"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Template 9d_1:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "               ┌───┐          ┌───┐          ┌───┐\nq_0: ──■───────┤ X ├───────■──┤ X ├───────■──┤ X ├\n     ┌─┴─┐┌───┐└─┬─┘┌───┐┌─┴─┐└─┬─┘┌───┐┌─┴─┐└─┬─┘\nq_1: ┤ X ├┤ X ├──■──┤ X ├┤ X ├──■──┤ X ├┤ X ├──■──\n     └───┘└───┘     └───┘└───┘     └───┘└───┘"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Returns"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "template as a quantum circuit."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return type"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "QuantumCircuit"
+        }
+      ]
+    },
+    {
+      "titulo": "64. template_nct_9d_2",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "qiskit.circuit.library.templates.nct.template_nct_9d_2()"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Template 9d_2:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "q_0: ──■────■────■──────────────■──────────────■──\n       │    │  ┌─┴─┐          ┌─┴─┐          ┌─┴─┐\nq_1: ──■────┼──┤ X ├───────■──┤ X ├───────■──┤ X ├\n     ┌─┴─┐┌─┴─┐└─┬─┘┌───┐┌─┴─┐└─┬─┘┌───┐┌─┴─┐└─┬─┘\nq_2: ┤ X ├┤ X ├──■──┤ X ├┤ X ├──■──┤ X ├┤ X ├──■──\n     └───┘└───┘     └───┘└───┘     └───┘└───┘"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Returns"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "template as a quantum circuit."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return type"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "QuantumCircuit"
+        }
+      ]
+    },
+    {
+      "titulo": "65. template_nct_9d_3",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "qiskit.circuit.library.templates.nct.template_nct_9d_3()"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Template 9d_3:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "q_0: ──■────■───────────────────■─────────────────\n       │    │  ┌───┐          ┌─┴─┐          ┌───┐\nq_1: ──■────┼──┤ X ├───────■──┤ X ├───────■──┤ X ├\n     ┌─┴─┐┌─┴─┐└─┬─┘┌───┐┌─┴─┐└─┬─┘┌───┐┌─┴─┐└─┬─┘\nq_2: ┤ X ├┤ X ├──■──┤ X ├┤ X ├──■──┤ X ├┤ X ├──■──\n     └───┘└───┘     └───┘└───┘     └───┘└───┘"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Returns"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "template as a quantum circuit."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return type"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "QuantumCircuit"
+        }
+      ]
+    },
+    {
+      "titulo": "66. template_nct_9d_4",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "qiskit.circuit.library.templates.nct.template_nct_9d_4()"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Template 9d_4:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "q_0: ───────■─────────■──────────────■────────────\n            │  ┌───┐  │       ┌───┐  │       ┌───┐\nq_1: ──■────┼──┤ X ├──┼────■──┤ X ├──┼────■──┤ X ├\n     ┌─┴─┐┌─┴─┐└─┬─┘┌─┴─┐┌─┴─┐└─┬─┘┌─┴─┐┌─┴─┐└─┬─┘\nq_2: ┤ X ├┤ X ├──■──┤ X ├┤ X ├──■──┤ X ├┤ X ├──■──\n     └───┘└───┘     └───┘└───┘     └───┘└───┘"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Returns"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "template as a quantum circuit."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return type"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "QuantumCircuit"
+        }
+      ]
+    },
+    {
+      "titulo": "67. template_nct_9d_5",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "qiskit.circuit.library.templates.nct.template_nct_9d_5()"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Template 9d_5:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "q_0: ──■────■─────────■─────────■────■────────────\n       │    │  ┌───┐  │       ┌─┴─┐  │       ┌───┐\nq_1: ──■────┼──┤ X ├──┼────■──┤ X ├──┼────■──┤ X ├\n     ┌─┴─┐┌─┴─┐└─┬─┘┌─┴─┐┌─┴─┐└─┬─┘┌─┴─┐┌─┴─┐└─┬─┘\nq_2: ┤ X ├┤ X ├──■──┤ X ├┤ X ├──■──┤ X ├┤ X ├──■──\n     └───┘└───┘     └───┘└───┘     └───┘└───┘"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Returns"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "template as a quantum circuit."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return type"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "QuantumCircuit"
+        }
+      ]
+    },
+    {
+      "titulo": "68. template_nct_9d_6",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "qiskit.circuit.library.templates.nct.template_nct_9d_6()"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Template 9d_6:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "q_0: ──■────■──────────────■────■─────────■───────\n       │    │  ┌───┐       │  ┌─┴─┐       │  ┌───┐\nq_1: ──■────┼──┤ X ├───────■──┤ X ├───────■──┤ X ├\n     ┌─┴─┐┌─┴─┐└─┬─┘┌───┐┌─┴─┐└─┬─┘┌───┐┌─┴─┐└─┬─┘\nq_2: ┤ X ├┤ X ├──■──┤ X ├┤ X ├──■──┤ X ├┤ X ├──■──\n     └───┘└───┘     └───┘└───┘     └───┘└───┘"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Returns"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "template as a quantum circuit."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return type"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "QuantumCircuit"
+        }
+      ]
+    },
+    {
+      "titulo": "69. template_nct_9d_7",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "qiskit.circuit.library.templates.nct.template_nct_9d_7()"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Template 9d_7:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "q_0: ──■────■─────────■────■────■────■────■───────\n       │    │  ┌───┐  │    │  ┌─┴─┐  │    │  ┌───┐\nq_1: ──■────┼──┤ X ├──┼────■──┤ X ├──┼────■──┤ X ├\n     ┌─┴─┐┌─┴─┐└─┬─┘┌─┴─┐┌─┴─┐└─┬─┘┌─┴─┐┌─┴─┐└─┬─┘\nq_2: ┤ X ├┤ X ├──■──┤ X ├┤ X ├──■──┤ X ├┤ X ├──■──\n     └───┘└───┘     └───┘└───┘     └───┘└───┘"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Returns"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "template as a quantum circuit."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return type"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "QuantumCircuit"
+        }
+      ]
+    },
+    {
+      "titulo": "70. template_nct_9d_8",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "qiskit.circuit.library.templates.nct.template_nct_9d_8()"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Template 9d_8:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "q_0: ──■────■────■────■─────────■────■─────────■──\n       │    │  ┌─┴─┐  │       ┌─┴─┐  │       ┌─┴─┐\nq_1: ──■────┼──┤ X ├──┼────■──┤ X ├──┼────■──┤ X ├\n     ┌─┴─┐┌─┴─┐└─┬─┘┌─┴─┐┌─┴─┐└─┬─┘┌─┴─┐┌─┴─┐└─┬─┘\nq_2: ┤ X ├┤ X ├──■──┤ X ├┤ X ├──■──┤ X ├┤ X ├──■──\n     └───┘└───┘     └───┘└───┘     └───┘└───┘"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Returns"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "template as a quantum circuit."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return type"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "QuantumCircuit"
+        }
+      ]
+    },
+    {
+      "titulo": "71. template_nct_9d_9",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "qiskit.circuit.library.templates.nct.template_nct_9d_9()"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Template 9d_9:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "q_0: ──■────■────■─────────■────■─────────■────■──\n       │    │  ┌─┴─┐       │  ┌─┴─┐       │  ┌─┴─┐\nq_1: ──■────┼──┤ X ├───────■──┤ X ├───────■──┤ X ├\n     ┌─┴─┐┌─┴─┐└─┬─┘┌───┐┌─┴─┐└─┬─┘┌───┐┌─┴─┐└─┬─┘\nq_2: ┤ X ├┤ X ├──■──┤ X ├┤ X ├──■──┤ X ├┤ X ├──■──\n     └───┘└───┘     └───┘└───┘     └───┘└───┘"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Returns"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "template as a quantum circuit."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return type"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "QuantumCircuit"
+        }
+      ]
+    },
+    {
+      "titulo": "72. template_nct_9d_10",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "qiskit.circuit.library.templates.nct.template_nct_9d_10()"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Template 9d_10:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "q_0: ──■────■────■────■────■────■────■────■────■──\n       │    │  ┌─┴─┐  │    │  ┌─┴─┐  │    │  ┌─┴─┐\nq_1: ──■────┼──┤ X ├──┼────■──┤ X ├──┼────■──┤ X ├\n     ┌─┴─┐┌─┴─┐└─┬─┘┌─┴─┐┌─┴─┐└─┬─┘┌─┴─┐┌─┴─┐└─┬─┘\nq_2: ┤ X ├┤ X ├──■──┤ X ├┤ X ├──■──┤ X ├┤ X ├──■──\n     └───┘└───┘     └───┘└───┘     └───┘└───┘"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Returns"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "template as a quantum circuit."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return type"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "QuantumCircuit"
+        }
+      ]
+    },
+    {
+      "titulo": "73. Clifford template circuits",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "Template circuits over Clifford gates."
+        }
+      ]
+    },
+    {
+      "titulo": "74. clifford_2_1",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "qiskit.circuit.library.clifford_2_1()"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Clifford template 2_1:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "q_0: ─■──■─\n      │  │\nq_1: ─■──■─"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Returns"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "template as a quantum circuit."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return type"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "QuantumCircuit"
+        }
+      ]
+    },
+    {
+      "titulo": "75. clifford_2_2",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "qiskit.circuit.library.clifford_2_2()"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Clifford template 2_2:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "q_0: ──■────■──\n     ┌─┴─┐┌─┴─┐\nq_1: ┤ X ├┤ X ├\n     └───┘└───┘"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Returns"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "template as a quantum circuit."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return type"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "QuantumCircuit"
+        }
+      ]
+    },
+    {
+      "titulo": "76. clifford_2_3",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "qiskit.circuit.library.clifford_2_3()"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Clifford template 2_3:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "     ┌───┐┌───┐\nq_0: ┤ H ├┤ H ├\n     └───┘└───┘"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Returns"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "template as a quantum circuit."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return type"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "QuantumCircuit"
+        }
+      ]
+    },
+    {
+      "titulo": "77. clifford_2_4",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "qiskit.circuit.library.clifford_2_4()"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Clifford template 2_4:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "q_0: ─X──X─\n      │  │\nq_1: ─X──X─"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Returns"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "template as a quantum circuit."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return type"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "QuantumCircuit"
+        }
+      ]
+    },
+    {
+      "titulo": "78. clifford_3_1",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "qiskit.circuit.library.clifford_3_1()"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Clifford template 3_1:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "     ┌───┐┌───┐┌───┐\nq_0: ┤ S ├┤ S ├┤ Z ├\n     └───┘└───┘└───┘"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Returns"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "template as a quantum circuit."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return type"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "QuantumCircuit"
+        }
+      ]
+    },
+    {
+      "titulo": "79. clifford_4_1",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "qiskit.circuit.library.clifford_4_1()"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Clifford template 4_1:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "          ┌───┐\nq_0: ──■──┤ X ├──■───X─\n     ┌─┴─┐└─┬─┘┌─┴─┐ │\nq_1: ┤ X ├──■──┤ X ├─X─\n     └───┘     └───┘"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Returns"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "template as a quantum circuit."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return type"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "QuantumCircuit"
+        }
+      ]
+    },
+    {
+      "titulo": "80. clifford_4_2",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "qiskit.circuit.library.clifford_4_2()"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Clifford template 4_2:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "q_0: ───────■────────■─\n     ┌───┐┌─┴─┐┌───┐ │\nq_1: ┤ H ├┤ X ├┤ H ├─■─\n     └───┘└───┘└───┘"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Returns"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "template as a quantum circuit."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return type"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "QuantumCircuit"
+        }
+      ]
+    },
+    {
+      "titulo": "81. clifford_4_3",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "qiskit.circuit.library.clifford_4_3()"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Clifford template 4_3:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "     ┌───┐     ┌─────┐\nq_0: ┤ S ├──■──┤ SDG ├──■──\n     └───┘┌─┴─┐└─────┘┌─┴─┐\nq_1: ─────┤ X ├───────┤ X ├\n          └───┘       └───┘"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Returns"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "template as a quantum circuit."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return type"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "QuantumCircuit"
+        }
+      ]
+    },
+    {
+      "titulo": "82. clifford_4_4",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "qiskit.circuit.library.clifford_4_4()"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Clifford template 4_4:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "     ┌───┐   ┌─────┐\nq_0: ┤ S ├─■─┤ SDG ├─■─\n     └───┘ │ └─────┘ │\nq_1: ──────■─────────■─"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Returns"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "template as a quantum circuit."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return type"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "QuantumCircuit"
+        }
+      ]
+    },
+    {
+      "titulo": "83. clifford_5_1",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "qiskit.circuit.library.clifford_5_1()"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Clifford template 5_1:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "q_0: ──■─────────■─────────■──\n     ┌─┴─┐     ┌─┴─┐       │\nq_1: ┤ X ├──■──┤ X ├──■────┼──\n     └───┘┌─┴─┐└───┘┌─┴─┐┌─┴─┐\nq_2: ─────┤ X ├─────┤ X ├┤ X ├\n          └───┘     └───┘└───┘"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Returns"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "template as a quantum circuit."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return type"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "QuantumCircuit"
+        }
+      ]
+    },
+    {
+      "titulo": "84. clifford_6_1",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "qiskit.circuit.library.clifford_6_1()"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Clifford template 6_1:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "     ┌───┐     ┌───┐┌───┐\nq_0: ┤ H ├──■──┤ H ├┤ X ├\n     ├───┤┌─┴─┐├───┤└─┬─┘\nq_1: ┤ H ├┤ X ├┤ H ├──■──\n     └───┘└───┘└───┘"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Returns"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "template as a quantum circuit."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return type"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "QuantumCircuit"
+        }
+      ]
+    },
+    {
+      "titulo": "85. clifford_6_2",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "qiskit.circuit.library.clifford_6_2()"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Clifford template 6_2:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "     ┌───┐\nq_0: ┤ S ├──■───────────■───■─\n     ├───┤┌─┴─┐┌─────┐┌─┴─┐ │\nq_1: ┤ S ├┤ X ├┤ SDG ├┤ X ├─■─\n     └───┘└───┘└─────┘└───┘"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Returns"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "template as a quantum circuit."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return type"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "QuantumCircuit"
+        }
+      ]
+    },
+    {
+      "titulo": "86. clifford_6_3",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "qiskit.circuit.library.clifford_6_3()"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Clifford template 6_3:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "           ┌───┐     ┌───┐\nq_0: ─X──■─┤ H ├──■──┤ X ├─────\n      │  │ └───┘┌─┴─┐└─┬─┘┌───┐\nq_1: ─X──■──────┤ X ├──■──┤ H ├\n                └───┘     └───┘"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Returns"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "template as a quantum circuit."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return type"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "QuantumCircuit"
+        }
+      ]
+    },
+    {
+      "titulo": "87. clifford_6_4",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "qiskit.circuit.library.clifford_6_4()"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Clifford template 6_4:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "global phase: 7π/4\n   ┌───┐┌───┐┌───┐┌───┐┌───┐┌───┐\nq: ┤ S ├┤ H ├┤ S ├┤ H ├┤ S ├┤ H ├\n   └───┘└───┘└───┘└───┘└───┘└───┘"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Returns"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "template as a quantum circuit."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return type"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "QuantumCircuit"
+        }
+      ]
+    },
+    {
+      "titulo": "88. clifford_6_5",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "qiskit.circuit.library.clifford_6_5()"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Clifford template 6_5:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "              ┌───┐\nq_0: ─■───■───┤ S ├───■───────\n      │ ┌─┴─┐┌┴───┴┐┌─┴─┐┌───┐\nq_1: ─■─┤ X ├┤ SDG ├┤ X ├┤ S ├\n        └───┘└─────┘└───┘└───┘"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Returns"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "template as a quantum circuit."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return type"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "QuantumCircuit"
+        }
+      ]
+    },
+    {
+      "titulo": "89. clifford_8_1",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "qiskit.circuit.library.clifford_8_1()"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Clifford template 8_1:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "               ┌───┐ ┌───┐ ┌───┐┌─────┐\nq_0: ──■───────┤ X ├─┤ S ├─┤ X ├┤ SDG ├\n     ┌─┴─┐┌───┐└─┬─┘┌┴───┴┐└─┬─┘└┬───┬┘\nq_1: ┤ X ├┤ H ├──■──┤ SDG ├──■───┤ H ├─\n     └───┘└───┘     └─────┘      └───┘"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Returns"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "template as a quantum circuit."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return type"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "QuantumCircuit"
+        }
+      ]
+    },
+    {
+      "titulo": "90. clifford_8_2",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "qiskit.circuit.library.clifford_8_2()"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Clifford template 8_2:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "                     ┌───┐\nq_0: ──■─────────■───┤ S ├───■────────────\n     ┌─┴─┐┌───┐┌─┴─┐┌┴───┴┐┌─┴─┐┌───┐┌───┐\nq_1: ┤ X ├┤ H ├┤ X ├┤ SDG ├┤ X ├┤ S ├┤ H ├\n     └───┘└───┘└───┘└─────┘└───┘└───┘└───┘"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Returns"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "template as a quantum circuit."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return type"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "QuantumCircuit"
+        }
+      ]
+    },
+    {
+      "titulo": "91. clifford_8_3",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "qiskit.circuit.library.clifford_8_3()"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Clifford template 8_3:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "q_0: ─────────────────■───────────────────────■──\n     ┌───┐┌───┐┌───┐┌─┴─┐┌─────┐┌───┐┌─────┐┌─┴─┐\nq_1: ┤ S ├┤ H ├┤ S ├┤ X ├┤ SDG ├┤ H ├┤ SDG ├┤ X ├\n     └───┘└───┘└───┘└───┘└─────┘└───┘└─────┘└───┘"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Returns"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "template as a quantum circuit."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return type"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "QuantumCircuit"
+        }
+      ]
+    },
+    {
+      "titulo": "92. RZXGate template circuits",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "Template circuits with RZXGate ."
+        }
+      ]
+    },
+    {
+      "titulo": "93. rzx_yz",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "qiskit.circuit.library.rzx_yz(theta=None)"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "RZX-based template for CX - RYGate - CX."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "          ┌────────┐     ┌─────────┐┌─────────┐┌──────────┐\nq_0: ──■──┤ RY(-ϴ) ├──■──┤ RX(π/2) ├┤0        ├┤ RX(-π/2) ├\n     ┌─┴─┐└────────┘┌─┴─┐└─────────┘│  RZX(ϴ) │└──────────┘\nq_1: ┤ X ├──────────┤ X ├───────────┤1        ├────────────\n     └───┘          └───┘           └─────────┘"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Parameters"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "theta ( ParameterExpression | float | None )"
+        }
+      ]
+    },
+    {
+      "titulo": "94. rzx_xz",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "qiskit.circuit.library.rzx_xz(theta=None)"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "RZX-based template for CX - RXGate - CX."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "global phase: π\n     ┌───┐         ┌───┐┌─────────┐┌─────────┐┌─────────┐┌──────────┐»\nq_0: ┤ X ├─────────┤ X ├┤ Rz(π/2) ├┤ Rx(π/2) ├┤ Rz(π/2) ├┤0         ├»\n     └─┬─┘┌───────┐└─┬─┘└─────────┘└─────────┘└─────────┘│  Rzx(-ϴ) │»\nq_1: ──■──┤ Rx(ϴ) ├──■───────────────────────────────────┤1         ├»\n          └───────┘                                      └──────────┘»\n«     ┌─────────┐┌─────────┐┌─────────┐\n«q_0: ┤ Rz(π/2) ├┤ Rx(π/2) ├┤ Rz(π/2) ├\n«     └─────────┘└─────────┘└─────────┘\n«q_1: ─────────────────────────────────\n«"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Parameters"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "theta ( ParameterExpression | float | None )"
+        }
+      ]
+    },
+    {
+      "titulo": "95. rzx_cy",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "qiskit.circuit.library.rzx_cy(theta=None)"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "RZX-based template for CX - RYGate - CX."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "                                                       ┌──────────┐\nq_0: ──■─────────────■─────────────────────────────────┤0         ├───────────\n     ┌─┴─┐┌───────┐┌─┴─┐┌────────┐┌──────────┐┌───────┐│  RZX(-ϴ) │┌─────────┐\nq_1: ┤ X ├┤ RY(ϴ) ├┤ X ├┤ RY(-ϴ) ├┤ RZ(-π/2) ├┤ RX(ϴ) ├┤1         ├┤ RZ(π/2) ├\n     └───┘└───────┘└───┘└────────┘└──────────┘└───────┘└──────────┘└─────────┘"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Parameters"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "theta ( ParameterExpression | float | None )"
+        }
+      ]
+    },
+    {
+      "titulo": "96. rzx_zz1",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "qiskit.circuit.library.rzx_zz1(theta=None)"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "RZX-based template for CX - RZGate - CX."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "global phase: π/2\n                                                                              »\n  q_0: ──■────────────────────────────────────────────■───────────────────────»\n       ┌─┴─┐┌───────┐┌────┐┌───────┐┌────┐┌────────┐┌─┴─┐┌────────┐┌─────────┐»\n  q_1: ┤ X ├┤ Rz(ϴ) ├┤ √X ├┤ Rz(π) ├┤ √X ├┤ Rz(3π) ├┤ X ├┤ Rz(-ϴ) ├┤ Rz(π/2) ├»\n       └───┘└───────┘└────┘└───────┘└────┘└────────┘└───┘└────────┘└─────────┘»\n  «                                    ┌──────────┐                      »\n  «q_0: ───────────────────────────────┤0         ├──────────────────────»\n  «     ┌─────────┐┌─────────┐┌───────┐│  Rzx(-ϴ) │┌─────────┐┌─────────┐»\n  «q_1: ┤ Rx(π/2) ├┤ Rz(π/2) ├┤ Rx(ϴ) ├┤1         ├┤ Rz(π/2) ├┤ Rx(π/2) ├»\n  «     └─────────┘└─────────┘└───────┘└──────────┘└─────────┘└─────────┘»\n  «\n  «q_0: ───────────\n  «     ┌─────────┐\n  «q_1: ┤ Rz(π/2) ├\n  «     └─────────┘"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Parameters"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "theta ( ParameterExpression | float | None )"
+        }
+      ]
+    },
+    {
+      "titulo": "97. rzx_zz2",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "qiskit.circuit.library.rzx_zz2(theta=None)"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "RZX-based template for CX - PhaseGate - CX."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "global phase: π\n                                                                            »\n  q_0: ──■────────────■─────────────────────────────────────────────────────»\n       ┌─┴─┐┌──────┐┌─┴─┐┌───────┐┌─────────┐┌─────────┐┌─────────┐┌───────┐»\n  q_1: ┤ X ├┤ P(ϴ) ├┤ X ├┤ P(-ϴ) ├┤ Rz(π/2) ├┤ Rx(π/2) ├┤ Rz(π/2) ├┤ Rx(ϴ) ├»\n       └───┘└──────┘└───┘└───────┘└─────────┘└─────────┘└─────────┘└───────┘»\n  «     ┌──────────┐\n  «q_0: ┤0         ├─────────────────────────────────\n  «     │  Rzx(-ϴ) │┌─────────┐┌─────────┐┌─────────┐\n  «q_1: ┤1         ├┤ Rz(π/2) ├┤ Rx(π/2) ├┤ Rz(π/2) ├\n  «     └──────────┘└─────────┘└─────────┘└─────────┘"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Parameters"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "theta ( ParameterExpression | float | None )"
+        }
+      ]
+    },
+    {
+      "titulo": "98. rzx_zz3",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "qiskit.circuit.library.rzx_zz3(theta=None)"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "RZX-based template for CX - RZGate - CX."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "global phase: π\n                                                                              »\n  q_0: ──■─────────────■──────────────────────────────────────────────────────»\n       ┌─┴─┐┌───────┐┌─┴─┐┌────────┐┌─────────┐┌─────────┐┌─────────┐┌───────┐»\n  q_1: ┤ X ├┤ Rz(ϴ) ├┤ X ├┤ Rz(-ϴ) ├┤ Rz(π/2) ├┤ Rx(π/2) ├┤ Rz(π/2) ├┤ Rx(ϴ) ├»\n       └───┘└───────┘└───┘└────────┘└─────────┘└─────────┘└─────────┘└───────┘»\n  «     ┌──────────┐\n  «q_0: ┤0         ├─────────────────────────────────\n  «     │  Rzx(-ϴ) │┌─────────┐┌─────────┐┌─────────┐\n  «q_1: ┤1         ├┤ Rz(π/2) ├┤ Rx(π/2) ├┤ Rz(π/2) ├\n  «     └──────────┘└─────────┘└─────────┘└─────────┘"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Parameters"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "theta ( ParameterExpression | float | None )"
+        }
+      ]
+    }
+  ],
+  "versao_documentacao": "Referência solicitada Qiskit 2.6; conferir versão efetiva na página após redirecionamento IBM.",
+  "versao_alvo_qiskit": "2.6",
+  "coletado_em": "2026-11-13T23:45:27.461512+00:00",
+  "hash": "06ddadb861359dff837f3e7ff96f562ec801c277ec1abc75e156aaa618846c83",
+  "chunks": 752,
+  "indexed": true
+}

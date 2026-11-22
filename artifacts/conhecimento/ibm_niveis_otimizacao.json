@@ -1,0 +1,169 @@
+{
+  "document_id": "ibm_niveis_otimizacao",
+  "titulo": "Set transpiler optimization level",
+  "fonte": "https://quantum.cloud.ibm.com/docs/en/qiskit/set-optimization",
+  "url_solicitada": "https://quantum.cloud.ibm.com/docs/en/guides/set-optimization",
+  "secoes": [
+    {
+      "titulo": "1. Set transpiler optimization level",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "The code on this page was developed using the following requirements.\nWe recommend using these versions or newer. qiskit[all]~=2.6.1\nqiskit-ibm-runtime~=0.50.0"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Real quantum devices are subject to noise and gate errors, so optimizing the circuits to reduce their depth and gate count can significantly improve the results obtained from executing those circuits.\nThe generate_preset_pass_manager function has one required positional argument, optimization_level , that controls how much effort the transpiler spends on optimizing circuits. This argument can be an integer taking one of the values 0, 1, 2, or 3.\nHigher optimization levels generate more optimized circuits at the expense of longer compile times.\nThe following table explains the optimizations performed with each setting."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Optimization Level\nDescription\n0\nNo optimization: typically used for hardware characterization\nBasic translation\nLayout/Routing:\nTrivialLayout\n, where it selects the same physical qubit numbers as virtual and inserts SWAPs to make it work (using\nSabreSwap\n)\n1\nLight optimization:\nLayout/Routing: Layout is first attempted with\nTrivialLayout\n. If additional SWAPs are required, a layout with a minimum number of SWAPs is found by using\nSabreSwap\n, then it uses\nVF2LayoutPostLayout\nto try to select the best qubits in the graph.\nInverseCancellation\n1Q gate optimization\n2\nMedium optimization:\nLayout/Routing: Optimization level 1 (without trivial) + heuristic optimized with greater\nsearch depth and trials of optimization function.  Because\nTrivialLayout\nis not used, there is no attempt to use the same physical and virtual qubit numbers.\nCommutativeCancellation\n3\nHigh Optimization:\nOptimization level 2 + heuristic optimized on layout/routing further with greater effort/trials\nResynthesis of two-qubit blocks using\nCartan's KAK Decomposition\n.\nUnitarity-breaking passes:\nOptimizeSwapBeforeMeasure\n: Moves the measurements around to avoid SWAPs\nRemoveDiagonalGatesBeforeMeasure\n: Removes gates before measurements that would not effect the measurements"
+        }
+      ]
+    },
+    {
+      "titulo": "2. Optimization level in action",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "Since two-qubit gates are typically the most significant source of errors, we can approximately quantify the transpilation's \"hardware efficiency\" by counting the number of two-qubit gates in the resulting circuit.\nHere, we'll try the different optimization levels on an input circuit consisting of a random unitary followed by a SWAP gate."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "from qiskit import QuantumCircuit\nfrom qiskit.circuit.library import UnitaryGate\nfrom qiskit.quantum_info import Operator, random_unitary\n\nUU = random_unitary(4, seed=12345)\nrand_U = UnitaryGate(UU)\n\nqc = QuantumCircuit(2)\nqc.append(rand_U, range(2))\nqc.swap(0, 1)\nqc.draw(\"mpl\", style=\"iqp\")"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Output:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "The FakeSherbrooke mock backend from qiskit_ibm_runtime is used in these examples, but you can try it on any Qiskit-compatible real or fake backend.  Your results might be different."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "First, let's transpile using optimization level 0."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "from qiskit.transpiler import generate_preset_pass_manager\nfrom qiskit_ibm_runtime.fake_provider import FakeSherbrooke\n\nbackend = FakeSherbrooke()\n\npass_manager = generate_preset_pass_manager(\n    optimization_level=0, backend=backend, seed_transpiler=12345\n)\nqc_t1_exact = pass_manager.run(qc)\nqc_t1_exact.draw(\"mpl\", idle_wires=False)"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Output:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "The transpiled circuit has six of the two-qubit ECR gates."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Repeat for optimization level 1:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "from qiskit.transpiler import generate_preset_pass_manager\nfrom qiskit_ibm_runtime.fake_provider import FakeSherbrooke\n\nbackend = FakeSherbrooke()\n\npass_manager = generate_preset_pass_manager(\n    optimization_level=1, backend=backend, seed_transpiler=12345\n)\nqc_t1_exact = pass_manager.run(qc)\nqc_t1_exact.draw(\"mpl\", idle_wires=False)"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Output:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "The transpiled circuit still has six ECR gates, but the number of single-qubit gates has reduced."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Repeat for optimization level 2:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "pass_manager = generate_preset_pass_manager(\n    optimization_level=2, backend=backend, seed_transpiler=12345\n)\nqc_t2_exact = pass_manager.run(qc)\nqc_t2_exact.draw(\"mpl\", idle_wires=False)"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Output:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "This yields the same results as optimization level 1. Note that increasing the level of optimization does not always make a difference."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Repeat again, with optimization level 3:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "pass_manager = generate_preset_pass_manager(\n    optimization_level=3, backend=backend, seed_transpiler=12345\n)\nqc_t3_exact = pass_manager.run(qc)\nqc_t3_exact.draw(\"mpl\", idle_wires=False)"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Output:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Now, there are only three ECR gates. We obtain this result because at optimization level 3, Qiskit tries to re-synthesize two-qubit blocks of gates, and any two-qubit gate can be implemented using at most three ECR gates. We can get even fewer ECR gates if we set approximation_degree to a value less than 1, allowing the transpiler to make approximations that may introduce some error in the gate decomposition (see Commonly used parameters for transpilation ):"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "pass_manager = generate_preset_pass_manager(\n    optimization_level=3,\n    approximation_degree=0.99,\n    backend=backend,\n    seed_transpiler=12345,\n)\nqc_t3_approx = pass_manager.run(qc)\nqc_t3_approx.draw(\"mpl\", idle_wires=False)"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Output:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "This circuit has only two ECR gates, but it's an approximate circuit. To understand how its effect differs from the exact circuit, we can calculate the fidelity between the unitary operator this circuit implements, and the exact unitary. Before performing the computation, we first reduce the transpiled circuit, which contains 127 qubits, down to a circuit that only contains the active qubits, of which there are two."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "import numpy as np\n\n\ndef trace_to_fidelity_2q(trace: float) -> float:\n    return (4.0 + trace * trace.conjugate()) / 20.0\n\n\n# Reduce circuits down to 2 qubits so they are easy to simulate\nqc_t3_exact_small = QuantumCircuit.from_instructions(qc_t3_exact)\nqc_t3_approx_small = QuantumCircuit.from_instructions(qc_t3_approx)\n\n# Compute the fidelity\nexact_fid = trace_to_fidelity_2q(\n    np.trace(np.dot(Operator(qc_t3_exact_small).adjoint().data, UU))\n)\napprox_fid = trace_to_fidelity_2q(\n    np.trace(np.dot(Operator(qc_t3_approx_small).adjoint().data, UU))\n)\nprint(\n    f\"Synthesis fidelity\\nExact: {exact_fid:.3f}\\nApproximate: {approx_fid:.3f}\"\n)"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Output:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Synthesis fidelity\nExact: 1.000+0.000j\nApproximate: 0.992+0.000j\n"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Adjusting the optimization level can change other aspects of the circuit too, not just the number of ECR gates. For examples of how setting optimization level changes the layout, see Representing quantum computers ."
+        }
+      ]
+    },
+    {
+      "titulo": "3. Next steps",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "To learn more about the generate_preset_passmanager function, start with the Transpilation default settings and configuration options topic."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Continue learning about transpilation with the Transpiler stages topic."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Try the Compare transpiler settings guide."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Try the Build repetition codes tutorial."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "See the Transpile API documentation ."
+        }
+      ]
+    }
+  ],
+  "versao_documentacao": "guia online; conferir requisitos na página",
+  "versao_alvo_qiskit": "2.6",
+  "coletado_em": "2026-11-13T23:44:31.497851+00:00",
+  "hash": "770e26bcdbc766814bdec58a5596b0e6ad90a0ac547e1a9d3a6db60375617e6a",
+  "chunks": 46,
+  "indexed": true
+}

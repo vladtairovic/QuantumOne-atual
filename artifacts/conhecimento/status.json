@@ -1,0 +1,113 @@
+{
+  "status": "ok",
+  "started_at": "2026-11-13T23:47:54.110907+00:00",
+  "documents": [
+    {
+      "id": "ibm_circuit_library",
+      "status": "unchanged",
+      "chunks": 59
+    },
+    {
+      "id": "ibm_construct_circuits",
+      "status": "unchanged",
+      "chunks": 77
+    },
+    {
+      "id": "ibm_visualize_circuits",
+      "status": "unchanged",
+      "chunks": 58
+    },
+    {
+      "id": "ibm_bit_ordering",
+      "status": "unchanged",
+      "chunks": 44
+    },
+    {
+      "id": "ibm_measure_qubits",
+      "status": "unchanged",
+      "chunks": 25
+    },
+    {
+      "id": "ibm_simulate_with_qiskit_sdk_primitives",
+      "status": "unchanged",
+      "chunks": 66
+    },
+    {
+      "id": "ibm_intro_transpilacao",
+      "status": "unchanged",
+      "chunks": 31
+    },
+    {
+      "id": "ibm_etapas_transpilacao",
+      "status": "unchanged",
+      "chunks": 79
+    },
+    {
+      "id": "ibm_niveis_otimizacao",
+      "status": "unchanged",
+      "chunks": 46
+    },
+    {
+      "id": "ibm_transpilation_defaults",
+      "status": "unchanged",
+      "chunks": 57
+    },
+    {
+      "id": "ibm_classical_feedforward_and_control_flow",
+      "status": "unchanged",
+      "chunks": 73
+    },
+    {
+      "id": "ibm_api_circuit",
+      "status": "unchanged",
+      "chunks": 409
+    },
+    {
+      "id": "ibm_api_qiskit_circuit_QuantumCircuit",
+      "status": "unchanged",
+      "chunks": 1948
+    },
+    {
+      "id": "ibm_api_qiskit_circuit_Parameter",
+      "status": "unchanged",
+      "chunks": 109
+    },
+    {
+      "id": "ibm_api_circuit_library",
+      "status": "unchanged",
+      "chunks": 752
+    },
+    {
+      "id": "ibm_api_quantum_info",
+      "status": "unchanged",
+      "chunks": 369
+    },
+    {
+      "id": "ibm_api_qiskit_quantum_info_Statevector",
+      "status": "unchanged",
+      "chunks": 284
+    },
+    {
+      "id": "ibm_api_qiskit_quantum_info_Operator",
+      "status": "unchanged",
+      "chunks": 198
+    },
+    {
+      "id": "ibm_api_primitives",
+      "status": "unchanged",
+      "chunks": 85
+    },
+    {
+      "id": "ibm_api_qasm2",
+      "status": "unchanged",
+      "chunks": 153
+    },
+    {
+      "id": "ibm_api_qasm3",
+      "status": "unchanged",
+      "chunks": 149
+    }
+  ],
+  "finished_at": "2026-11-13T23:48:40.036815+00:00",
+  "collection_chunks": 5073
+}

@@ -1,0 +1,3247 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "GrowUp - API integrada",
+    "description": "API com ChromaDB remoto, RAG Gemini e otimização Qiskit. Gemini exige GEMINI_API_KEY.",
+    "version": "0.4.0"
+  },
+  "paths": {
+    "/health": {
+      "get": {
+        "summary": "Health",
+        "description": "Confirma que a API responde; não verifica os serviços externos.",
+        "operationId": "health_health_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Saude"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Requisição malformada",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Rota inexistente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "405": {
+            "description": "Método incorreto",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Arquivo acima do limite",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Tipo de conteúdo não aceito",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Entrada inválida",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Falha interna",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Resposta externa inválida",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Serviço externo indisponível",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "504": {
+            "description": "Tempo limite excedido",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/query": {
+      "post": {
+        "summary": "Query",
+        "description": "Consulta a base local e, opcionalmente, Google Search. Sem chave: 503 LLM_NOT_CONFIGURED. Busca web indisponível: 503 WEB_SEARCH_UNAVAILABLE.",
+        "operationId": "query_query_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Consulta"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespostaConsulta"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Requisição malformada",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Rota inexistente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "405": {
+            "description": "Método incorreto",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Arquivo acima do limite",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Tipo de conteúdo não aceito",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Entrada inválida",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Falha interna",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Resposta externa inválida",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Serviço externo indisponível",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "504": {
+            "description": "Tempo limite excedido",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/search": {
+      "post": {
+        "summary": "Search",
+        "description": "Recupera seções e fontes no ChromaDB. Resultados não garantem suficiência do contexto.",
+        "operationId": "search_search_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Busca"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespostaBusca"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Requisição malformada",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Rota inexistente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "405": {
+            "description": "Método incorreto",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Arquivo acima do limite",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Tipo de conteúdo não aceito",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Entrada inválida",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Falha interna",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Resposta externa inválida",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Serviço externo indisponível",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "504": {
+            "description": "Tempo limite excedido",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/documents": {
+      "get": {
+        "summary": "Listar Documentos",
+        "description": "Solicita ao serviço documental a lista de documentos disponíveis.",
+        "operationId": "listar_documentos_documents_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ListaDocumentos"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Requisição malformada",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Rota inexistente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "405": {
+            "description": "Método incorreto",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Arquivo acima do limite",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Tipo de conteúdo não aceito",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Entrada inválida",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Falha interna",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Resposta externa inválida",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Serviço externo indisponível",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "504": {
+            "description": "Tempo limite excedido",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Enviar Documento",
+        "description": "Valida texto UTF-8 e indexa os trechos na mesma coleção usada pela busca.",
+        "operationId": "enviar_documento_documents_post",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_enviar_documento_documents_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespostaDocumento"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Requisição malformada",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Rota inexistente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "405": {
+            "description": "Método incorreto",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Arquivo acima do limite",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Tipo de conteúdo não aceito",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Entrada inválida",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Falha interna",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Resposta externa inválida",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Serviço externo indisponível",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "504": {
+            "description": "Tempo limite excedido",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/evaluate": {
+      "post": {
+        "summary": "Avaliar",
+        "description": "Registra notas humanas e calcula média; não avalia automaticamente a IA.",
+        "operationId": "avaliar_evaluate_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Avaliacao"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespostaAvaliacao"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Requisição malformada",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Rota inexistente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "405": {
+            "description": "Método incorreto",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Arquivo acima do limite",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Tipo de conteúdo não aceito",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Entrada inválida",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Falha interna",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Resposta externa inválida",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Serviço externo indisponível",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "504": {
+            "description": "Tempo limite excedido",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/register": {
+      "post": {
+        "tags": [
+          "Conta"
+        ],
+        "summary": "Register",
+        "operationId": "register_auth_register_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Register"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "400": {
+            "description": "Requisição malformada",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Rota inexistente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "405": {
+            "description": "Método incorreto",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Arquivo acima do limite",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Tipo de conteúdo não aceito",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Entrada inválida",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Falha interna",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Resposta externa inválida",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Serviço externo indisponível",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "504": {
+            "description": "Tempo limite excedido",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "tags": [
+          "Conta"
+        ],
+        "summary": "Login",
+        "operationId": "login_auth_login_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Credentials"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "400": {
+            "description": "Requisição malformada",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Rota inexistente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "405": {
+            "description": "Método incorreto",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Arquivo acima do limite",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Tipo de conteúdo não aceito",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Entrada inválida",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Falha interna",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Resposta externa inválida",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Serviço externo indisponível",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "504": {
+            "description": "Tempo limite excedido",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/email": {
+      "post": {
+        "tags": [
+          "Conta"
+        ],
+        "summary": "Edit Email",
+        "operationId": "edit_email_auth_email_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EditEmail"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "400": {
+            "description": "Requisição malformada",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Rota inexistente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "405": {
+            "description": "Método incorreto",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Arquivo acima do limite",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Tipo de conteúdo não aceito",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Entrada inválida",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Falha interna",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Resposta externa inválida",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Serviço externo indisponível",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "504": {
+            "description": "Tempo limite excedido",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/password-reset/request": {
+      "post": {
+        "tags": [
+          "Conta"
+        ],
+        "summary": "Request Code",
+        "operationId": "request_code_auth_password_reset_request_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Address"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "400": {
+            "description": "Requisição malformada",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Rota inexistente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "405": {
+            "description": "Método incorreto",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Arquivo acima do limite",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Tipo de conteúdo não aceito",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Entrada inválida",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Falha interna",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Resposta externa inválida",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Serviço externo indisponível",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "504": {
+            "description": "Tempo limite excedido",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/password-reset/verify": {
+      "post": {
+        "tags": [
+          "Conta"
+        ],
+        "summary": "Verify",
+        "operationId": "verify_auth_password_reset_verify_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Verify"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "400": {
+            "description": "Requisição malformada",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Rota inexistente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "405": {
+            "description": "Método incorreto",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Arquivo acima do limite",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Tipo de conteúdo não aceito",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Entrada inválida",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Falha interna",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Resposta externa inválida",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Serviço externo indisponível",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "504": {
+            "description": "Tempo limite excedido",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/password-reset/confirm": {
+      "post": {
+        "tags": [
+          "Conta"
+        ],
+        "summary": "Confirm",
+        "operationId": "confirm_auth_password_reset_confirm_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Confirm"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "400": {
+            "description": "Requisição malformada",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Rota inexistente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "405": {
+            "description": "Método incorreto",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Arquivo acima do limite",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Tipo de conteúdo não aceito",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Entrada inválida",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Falha interna",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Resposta externa inválida",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Serviço externo indisponível",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "504": {
+            "description": "Tempo limite excedido",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/qiskit/limits": {
+      "get": {
+        "summary": "Limites",
+        "operationId": "limites_qiskit_limits_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "400": {
+            "description": "Requisição malformada",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Rota inexistente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "405": {
+            "description": "Método incorreto",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Arquivo acima do limite",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Tipo de conteúdo não aceito",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Entrada inválida",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Falha interna",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Resposta externa inválida",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Serviço externo indisponível",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "504": {
+            "description": "Tempo limite excedido",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/qiskit/optimize": {
+      "post": {
+        "summary": "Otimizar",
+        "description": "Analisa QASM2 ou Python restrito e transpila sem depender de LLM.",
+        "operationId": "otimizar_qiskit_optimize_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Circuito"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultadoQiskit"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErroCircuito"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Rota inexistente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "405": {
+            "description": "Método incorreto",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Request Entity Too Large",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErroCircuito"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Unsupported Media Type",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErroCircuito"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErroCircuito"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErroCircuito"
+                }
+              }
+            }
+          },
+          "499": {
+            "description": "Additional Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErroCircuito"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErroCircuito"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Bad Gateway",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErroCircuito"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Service Unavailable",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErroCircuito"
+                }
+              }
+            }
+          },
+          "504": {
+            "description": "Gateway Timeout",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErroCircuito"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/conversations": {
+      "post": {
+        "summary": "Criar Conversa",
+        "operationId": "criar_conversa_conversations_post",
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "400": {
+            "description": "Requisição malformada",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Rota inexistente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "405": {
+            "description": "Método incorreto",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Arquivo acima do limite",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Tipo de conteúdo não aceito",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Entrada inválida",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Falha interna",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Resposta externa inválida",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Serviço externo indisponível",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "504": {
+            "description": "Tempo limite excedido",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/conversations/{conversation_id}": {
+      "get": {
+        "summary": "Obter Conversa",
+        "operationId": "obter_conversa_conversations__conversation_id__get",
+        "parameters": [
+          {
+            "name": "conversation_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Conversation Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "400": {
+            "description": "Requisição malformada",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Rota inexistente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "405": {
+            "description": "Método incorreto",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Arquivo acima do limite",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Tipo de conteúdo não aceito",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Entrada inválida",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Falha interna",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Resposta externa inválida",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Serviço externo indisponível",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "504": {
+            "description": "Tempo limite excedido",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/conversations/{conversation_id}/messages": {
+      "post": {
+        "summary": "Enviar Mensagem",
+        "operationId": "enviar_mensagem_conversations__conversation_id__messages_post",
+        "parameters": [
+          {
+            "name": "conversation_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Conversation Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MensagemConversa"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "400": {
+            "description": "Requisição malformada",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Rota inexistente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "405": {
+            "description": "Método incorreto",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Arquivo acima do limite",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Tipo de conteúdo não aceito",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Entrada inválida",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Falha interna",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Resposta externa inválida",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Serviço externo indisponível",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "504": {
+            "description": "Tempo limite excedido",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Address": {
+        "properties": {
+          "email": {
+            "type": "string",
+            "maxLength": 254,
+            "pattern": "^[^\\s@<>:,;]{1,64}@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$",
+            "title": "Email"
+          }
+        },
+        "type": "object",
+        "required": [
+          "email"
+        ],
+        "title": "Address"
+      },
+      "Avaliacao": {
+        "properties": {
+          "case_id": {
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 1,
+            "title": "Case Id"
+          },
+          "evaluator": {
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 2,
+            "title": "Evaluator"
+          },
+          "ratings": {
+            "items": {
+              "$ref": "#/components/schemas/Nota"
+            },
+            "type": "array",
+            "maxItems": 5,
+            "minItems": 5,
+            "title": "Ratings"
+          },
+          "critical_failure": {
+            "type": "boolean",
+            "title": "Critical Failure",
+            "default": false
+          },
+          "critical_evidence": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 1000,
+                "minLength": 5
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Critical Evidence"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "case_id",
+          "evaluator",
+          "ratings"
+        ],
+        "title": "Avaliacao"
+      },
+      "Body_enviar_documento_documents_post": {
+        "properties": {
+          "file": {
+            "type": "string",
+            "format": "binary",
+            "title": "File"
+          }
+        },
+        "type": "object",
+        "required": [
+          "file"
+        ],
+        "title": "Body_enviar_documento_documents_post"
+      },
+      "Busca": {
+        "properties": {
+          "top_k": {
+            "type": "integer",
+            "maximum": 10,
+            "minimum": 1,
+            "title": "Top K",
+            "default": 3
+          },
+          "query": {
+            "type": "string",
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Query"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "query"
+        ],
+        "title": "Busca"
+      },
+      "Circuito": {
+        "properties": {
+          "qasm": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Qasm",
+            "description": "Entrada OpenQASM 2 legada; exclusiva com code."
+          },
+          "code": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Code",
+            "description": "Código QASM2 ou Python/Qiskit restrito."
+          },
+          "format": {
+            "type": "string",
+            "enum": [
+              "auto",
+              "qasm",
+              "python"
+            ],
+            "title": "Format",
+            "default": "auto"
+          },
+          "optimization_level": {
+            "type": "integer",
+            "maximum": 3,
+            "minimum": 0,
+            "title": "Optimization Level",
+            "default": 3
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "Circuito"
+      },
+      "Confirm": {
+        "properties": {
+          "email": {
+            "type": "string",
+            "maxLength": 254,
+            "pattern": "^[^\\s@<>:,;]{1,64}@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$",
+            "title": "Email"
+          },
+          "resetToken": {
+            "type": "string",
+            "maxLength": 128,
+            "minLength": 20,
+            "title": "Resettoken"
+          },
+          "newPassword": {
+            "type": "string",
+            "maxLength": 128,
+            "minLength": 8,
+            "format": "password",
+            "title": "Newpassword",
+            "writeOnly": true
+          }
+        },
+        "type": "object",
+        "required": [
+          "email",
+          "resetToken",
+          "newPassword"
+        ],
+        "title": "Confirm"
+      },
+      "Consulta": {
+        "properties": {
+          "web_search": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Web Search",
+            "description": "Busca Google sob demanda; null usa a configuração do servidor."
+          },
+          "top_k": {
+            "type": "integer",
+            "maximum": 10,
+            "minimum": 1,
+            "title": "Top K",
+            "default": 3
+          },
+          "input": {
+            "type": "string",
+            "maxLength": 30000,
+            "minLength": 1,
+            "title": "Input"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "input"
+        ],
+        "title": "Consulta"
+      },
+      "Credentials": {
+        "properties": {
+          "email": {
+            "type": "string",
+            "maxLength": 254,
+            "pattern": "^[^\\s@<>:,;]{1,64}@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$",
+            "title": "Email"
+          },
+          "password": {
+            "type": "string",
+            "maxLength": 128,
+            "minLength": 8,
+            "format": "password",
+            "title": "Password",
+            "writeOnly": true
+          }
+        },
+        "type": "object",
+        "required": [
+          "email",
+          "password"
+        ],
+        "title": "Credentials"
+      },
+      "DetalheErroCircuito": {
+        "properties": {
+          "code": {
+            "type": "string",
+            "title": "Code"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message"
+          },
+          "details": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Details"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "code",
+          "message",
+          "details"
+        ],
+        "title": "DetalheErroCircuito"
+      },
+      "Documento": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "filename": {
+            "type": "string",
+            "title": "Filename"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id",
+          "filename"
+        ],
+        "title": "Documento"
+      },
+      "EditEmail": {
+        "properties": {
+          "email": {
+            "type": "string",
+            "maxLength": 254,
+            "pattern": "^[^\\s@<>:,;]{1,64}@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$",
+            "title": "Email"
+          },
+          "password": {
+            "type": "string",
+            "maxLength": 128,
+            "minLength": 8,
+            "format": "password",
+            "title": "Password",
+            "writeOnly": true
+          },
+          "name": {
+            "type": "string",
+            "maxLength": 80,
+            "minLength": 2,
+            "title": "Name"
+          },
+          "newEmail": {
+            "type": "string",
+            "maxLength": 254,
+            "pattern": "^[^\\s@<>:,;]{1,64}@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$",
+            "title": "Newemail"
+          }
+        },
+        "type": "object",
+        "required": [
+          "email",
+          "password",
+          "name",
+          "newEmail"
+        ],
+        "title": "EditEmail"
+      },
+      "Erro": {
+        "properties": {
+          "request_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Request Id"
+          },
+          "code": {
+            "type": "string",
+            "title": "Code"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message"
+          },
+          "fields": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Fields"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "request_id",
+          "code",
+          "message"
+        ],
+        "title": "Erro"
+      },
+      "ErroCircuito": {
+        "properties": {
+          "request_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Request Id"
+          },
+          "code": {
+            "type": "string",
+            "title": "Code"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message"
+          },
+          "fields": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Fields"
+          },
+          "error": {
+            "$ref": "#/components/schemas/DetalheErroCircuito"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "request_id",
+          "code",
+          "message",
+          "error"
+        ],
+        "title": "ErroCircuito"
+      },
+      "Fonte": {
+        "properties": {
+          "document_id": {
+            "type": "string",
+            "title": "Document Id"
+          },
+          "chunk_id": {
+            "type": "string",
+            "title": "Chunk Id"
+          },
+          "source": {
+            "type": "string",
+            "title": "Source"
+          },
+          "content": {
+            "type": "string",
+            "title": "Content"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "document_id",
+          "chunk_id",
+          "source",
+          "content"
+        ],
+        "title": "Fonte"
+      },
+      "FonteContexto": {
+        "properties": {
+          "document_id": {
+            "type": "string",
+            "title": "Document Id"
+          },
+          "chunk_id": {
+            "type": "string",
+            "title": "Chunk Id"
+          },
+          "source": {
+            "type": "string",
+            "title": "Source"
+          },
+          "content": {
+            "type": "string",
+            "title": "Content"
+          },
+          "origin": {
+            "type": "string",
+            "enum": [
+              "local",
+              "web"
+            ],
+            "title": "Origin",
+            "default": "local"
+          },
+          "title": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Title"
+          },
+          "retrieved_at": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Retrieved At"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "document_id",
+          "chunk_id",
+          "source",
+          "content"
+        ],
+        "title": "FonteContexto"
+      },
+      "ListaDocumentos": {
+        "properties": {
+          "documents": {
+            "items": {
+              "$ref": "#/components/schemas/Documento"
+            },
+            "type": "array",
+            "title": "Documents"
+          },
+          "mode": {
+            "type": "string",
+            "enum": [
+              "demo",
+              "integrated"
+            ],
+            "title": "Mode"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "documents",
+          "mode"
+        ],
+        "title": "ListaDocumentos"
+      },
+      "MensagemConversa": {
+        "properties": {
+          "web_search": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Web Search",
+            "description": "Busca Google sob demanda; null usa a configuração do servidor."
+          },
+          "top_k": {
+            "type": "integer",
+            "maximum": 10,
+            "minimum": 1,
+            "title": "Top K",
+            "default": 3
+          },
+          "input": {
+            "type": "string",
+            "maxLength": 30000,
+            "minLength": 1,
+            "title": "Input"
+          },
+          "message_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Message Id"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "input",
+          "message_id"
+        ],
+        "title": "MensagemConversa"
+      },
+      "Nota": {
+        "properties": {
+          "criterion": {
+            "type": "string",
+            "enum": [
+              "pertinencia",
+              "coerencia",
+              "aderencia",
+              "clareza",
+              "falhas"
+            ],
+            "title": "Criterion"
+          },
+          "score": {
+            "type": "integer",
+            "maximum": 5,
+            "minimum": 0,
+            "title": "Score"
+          },
+          "evidence": {
+            "type": "string",
+            "maxLength": 1000,
+            "minLength": 5,
+            "title": "Evidence"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "criterion",
+          "score",
+          "evidence"
+        ],
+        "title": "Nota"
+      },
+      "Register": {
+        "properties": {
+          "email": {
+            "type": "string",
+            "maxLength": 254,
+            "pattern": "^[^\\s@<>:,;]{1,64}@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$",
+            "title": "Email"
+          },
+          "password": {
+            "type": "string",
+            "maxLength": 128,
+            "minLength": 8,
+            "format": "password",
+            "title": "Password",
+            "writeOnly": true
+          },
+          "name": {
+            "type": "string",
+            "maxLength": 80,
+            "minLength": 2,
+            "title": "Name"
+          }
+        },
+        "type": "object",
+        "required": [
+          "email",
+          "password",
+          "name"
+        ],
+        "title": "Register"
+      },
+      "RespostaAvaliacao": {
+        "properties": {
+          "case_id": {
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 1,
+            "title": "Case Id"
+          },
+          "evaluator": {
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 2,
+            "title": "Evaluator"
+          },
+          "ratings": {
+            "items": {
+              "$ref": "#/components/schemas/Nota"
+            },
+            "type": "array",
+            "maxItems": 5,
+            "minItems": 5,
+            "title": "Ratings"
+          },
+          "critical_failure": {
+            "type": "boolean",
+            "title": "Critical Failure",
+            "default": false
+          },
+          "critical_evidence": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 1000,
+                "minLength": 5
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Critical Evidence"
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "created_at": {
+            "type": "string",
+            "title": "Created At"
+          },
+          "rubric_version": {
+            "type": "string",
+            "const": "inicial-1.0",
+            "title": "Rubric Version",
+            "default": "inicial-1.0"
+          },
+          "mean": {
+            "type": "number",
+            "title": "Mean"
+          },
+          "approved": {
+            "type": "boolean",
+            "title": "Approved"
+          },
+          "result": {
+            "type": "string",
+            "enum": [
+              "aprovado",
+              "reprovado",
+              "revisao_obrigatoria"
+            ],
+            "title": "Result"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "case_id",
+          "evaluator",
+          "ratings",
+          "id",
+          "created_at",
+          "mean",
+          "approved",
+          "result"
+        ],
+        "title": "RespostaAvaliacao"
+      },
+      "RespostaBusca": {
+        "properties": {
+          "chunks": {
+            "items": {
+              "$ref": "#/components/schemas/Fonte"
+            },
+            "type": "array",
+            "title": "Chunks"
+          },
+          "citations": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Citations"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "ok",
+              "insufficient_context"
+            ],
+            "title": "Status"
+          },
+          "request_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Request Id"
+          },
+          "mode": {
+            "type": "string",
+            "enum": [
+              "demo",
+              "integrated"
+            ],
+            "title": "Mode"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "chunks",
+          "citations",
+          "status",
+          "request_id",
+          "mode"
+        ],
+        "title": "RespostaBusca"
+      },
+      "RespostaConsulta": {
+        "properties": {
+          "web_status": {
+            "type": "string",
+            "enum": [
+              "disabled",
+              "used",
+              "not_used"
+            ],
+            "title": "Web Status",
+            "default": "disabled"
+          },
+          "warnings": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Warnings"
+          },
+          "search_suggestions_html": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Search Suggestions Html"
+          },
+          "response": {
+            "type": "string",
+            "title": "Response"
+          },
+          "sources": {
+            "items": {
+              "$ref": "#/components/schemas/FonteContexto"
+            },
+            "type": "array",
+            "title": "Sources"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "ok",
+              "insufficient_context"
+            ],
+            "title": "Status"
+          },
+          "request_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Request Id"
+          },
+          "mode": {
+            "type": "string",
+            "enum": [
+              "demo",
+              "integrated"
+            ],
+            "title": "Mode"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "response",
+          "sources",
+          "status",
+          "request_id",
+          "mode"
+        ],
+        "title": "RespostaConsulta"
+      },
+      "RespostaDocumento": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "filename": {
+            "type": "string",
+            "title": "Filename"
+          },
+          "status": {
+            "type": "string",
+            "const": "sucesso",
+            "title": "Status",
+            "default": "sucesso"
+          },
+          "mode": {
+            "type": "string",
+            "enum": [
+              "demo",
+              "integrated"
+            ],
+            "title": "Mode"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id",
+          "filename",
+          "mode"
+        ],
+        "title": "RespostaDocumento"
+      },
+      "ResultadoQiskit": {
+        "properties": {
+          "original": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Original"
+          },
+          "proposta": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Proposta"
+          },
+          "equivalente": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Equivalente"
+          },
+          "status_verificacao": {
+            "type": "string",
+            "title": "Status Verificacao"
+          },
+          "motivo": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Motivo"
+          },
+          "diferenca_operacoes": {
+            "type": "integer",
+            "title": "Diferenca Operacoes"
+          },
+          "diferenca_profundidade": {
+            "type": "integer",
+            "title": "Diferenca Profundidade"
+          },
+          "reduziu_operacoes": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reduziu Operacoes"
+          },
+          "reduziu_profundidade": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reduziu Profundidade"
+          },
+          "circuito_otimizado_qasm": {
+            "type": "string",
+            "title": "Circuito Otimizado Qasm"
+          },
+          "formato_detectado": {
+            "type": "string",
+            "enum": [
+              "qasm",
+              "python"
+            ],
+            "title": "Formato Detectado"
+          },
+          "formato_saida": {
+            "anyOf": [
+              {
+                "type": "string",
+                "const": "qasm"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Formato Saida"
+          },
+          "entrada_sha256": {
+            "type": "string",
+            "title": "Entrada Sha256"
+          },
+          "tempo_processamento_segundos": {
+            "type": "number",
+            "title": "Tempo Processamento Segundos"
+          },
+          "nivel_otimizacao": {
+            "type": "integer",
+            "title": "Nivel Otimizacao"
+          },
+          "passes_executados": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Passes Executados"
+          },
+          "otimizacoes_aplicadas": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Otimizacoes Aplicadas"
+          },
+          "warnings": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Warnings"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "original",
+          "proposta",
+          "equivalente",
+          "status_verificacao",
+          "motivo",
+          "diferenca_operacoes",
+          "diferenca_profundidade",
+          "reduziu_operacoes",
+          "reduziu_profundidade",
+          "circuito_otimizado_qasm",
+          "formato_detectado",
+          "formato_saida",
+          "entrada_sha256",
+          "tempo_processamento_segundos",
+          "nivel_otimizacao",
+          "passes_executados",
+          "otimizacoes_aplicadas",
+          "warnings"
+        ],
+        "title": "ResultadoQiskit"
+      },
+      "Saude": {
+        "properties": {
+          "status": {
+            "type": "string",
+            "const": "ok",
+            "title": "Status",
+            "default": "ok"
+          },
+          "mode": {
+            "type": "string",
+            "enum": [
+              "demo",
+              "integrated"
+            ],
+            "title": "Mode"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "mode"
+        ],
+        "title": "Saude"
+      },
+      "Verify": {
+        "properties": {
+          "email": {
+            "type": "string",
+            "maxLength": 254,
+            "pattern": "^[^\\s@<>:,;]{1,64}@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$",
+            "title": "Email"
+          },
+          "challengeId": {
+            "type": "string",
+            "maxLength": 128,
+            "minLength": 20,
+            "title": "Challengeid"
+          },
+          "code": {
+            "type": "string",
+            "pattern": "^[0-9]{6}$",
+            "title": "Code"
+          }
+        },
+        "type": "object",
+        "required": [
+          "email",
+          "challengeId",
+          "code"
+        ],
+        "title": "Verify"
+      }
+    }
+  }
+}

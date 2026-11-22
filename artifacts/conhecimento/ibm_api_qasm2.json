@@ -1,0 +1,666 @@
+{
+  "document_id": "ibm_api_qasm2",
+  "titulo": "OpenQASM 2",
+  "fonte": "https://quantum.cloud.ibm.com/docs/en/api/qiskit/qasm2",
+  "url_solicitada": "https://quantum.cloud.ibm.com/docs/en/api/qiskit/2.6/qasm2",
+  "secoes": [
+    {
+      "titulo": "1. OpenQASM 2",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "qiskit.qasm2"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Qiskit has support for interoperation with OpenQASM 2.0 programs, both parsing into Qiskit formats and exporting back to OpenQASM 2 ."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "OpenQASM 2 is a simple language, and not suitable for general serialization of Qiskit objects. See some discussion of alternatives below , if that is what you are looking for."
+        }
+      ]
+    },
+    {
+      "titulo": "2. Parsing API",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "This module contains two public functions, both of which create a QuantumCircuit from an OpenQASM 2 program. load() takes a filename, while loads() takes the program itself as a string. Their internals are very similar, so both offer almost the same API."
+        }
+      ]
+    },
+    {
+      "titulo": "3. load",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "qiskit.qasm2.load(filename, *, include_path=('.',), include_input_directory='append', custom_instructions=(), custom_classical=(), strict=False)"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Parse an OpenQASM 2 program from a file into a QuantumCircuit . The given path should be ASCII or UTF-8 encoded, and contain the OpenQASM 2 program."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Parameters"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "filename ( str | PathLike ) – The path to the OpenQASM 2 file."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "include_path ( Iterable [ str | PathLike ] ) – order of directories to search when evaluating include statements."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "include_input_directory ( Literal ['append', 'prepend'] | None ) – Whether to add the directory of the input file to the include_path , and if so, whether to append it to search last, or prepend it to search first. Pass None to suppress adding this directory entirely."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "custom_instructions ( Iterable [ CustomInstruction ] ) – any custom constructors that should be used for specific gates or opaque instructions during circuit construction. See Specifying custom instructions for more."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "custom_classical ( Iterable [ CustomClassical ] ) – any custom classical functions that should be used during the parsing of classical expressions. See Specifying custom classical functions for more."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "strict ( bool ) – whether to run in strict mode ."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Returns"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "A circuit object representing the same OpenQASM 2 program."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return type"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "QuantumCircuit"
+        }
+      ]
+    },
+    {
+      "titulo": "4. loads",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "qiskit.qasm2.loads(string, *, include_path=('.',), custom_instructions=(), custom_classical=(), strict=False)"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Parse an OpenQASM 2 program from a string into a QuantumCircuit ."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Parameters"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "string ( str ) – The OpenQASM 2 program in a string."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "include_path ( Iterable [ str | PathLike ] ) – order of directories to search when evaluating include statements."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "custom_instructions ( Iterable [ CustomInstruction ] ) – any custom constructors that should be used for specific gates or opaque instructions during circuit construction. See Specifying custom instructions for more."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "custom_classical ( Iterable [ CustomClassical ] ) – any custom classical functions that should be used during the parsing of classical expressions. See Specifying custom classical functions for more."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "strict ( bool ) – whether to run in strict mode ."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Returns"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "A circuit object representing the same OpenQASM 2 program."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return type"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "QuantumCircuit"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Both of these loading functions also take an argument include_path , which is an iterable of directory names to use when searching for files in include statements. The directories are tried from index 0 onwards, and the first match is used. The import qelib1.inc is treated specially; it is always found before looking in the include path, and contains exactly the content of the paper describing the OpenQASM 2 language . The gates in this include file are mapped to circuit-library gate objects defined by Qiskit."
+        }
+      ]
+    },
+    {
+      "titulo": "5. Specifying custom instructions",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "You can extend the quantum components of the OpenQASM 2 language by passing an iterable of information on custom instructions as the argument custom_instructions . In files that have compatible definitions for these instructions, the given constructor will be used in place of whatever other handling qiskit.qasm2 would have done. These instructions may optionally be marked as builtin , which causes them to not require an opaque or gate declaration, but they will silently ignore a compatible declaration. Either way, it is an error to provide a custom instruction that has a different number of parameters or qubits as a defined instruction in a parsed program. Each element of the argument iterable should be a particular data class:"
+        }
+      ]
+    },
+    {
+      "titulo": "6. CustomInstruction",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "class qiskit.qasm2.CustomInstruction(name, num_params, num_qubits, constructor, builtin=False)"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Bases: object"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Information about a custom instruction that should be defined during the parse."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "The name , num_params and num_qubits fields are self-explanatory. The constructor field should be a callable object with signature *args -> Instruction , where each of the num_params args is a floating-point value. Most of the built-in Qiskit gate classes have this form."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "There is a final builtin field. This is optional, and if set true will cause the instruction to be defined and available within the parsing, even if there is no definition in any included OpenQASM 2 file."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Examples"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Instruct the importer to use Qiskit’s ECRGate and RZXGate objects to interpret gate statements that are known to have been created from those same objects during OpenQASM 2 export:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "from qiskit import qasm2\nfrom qiskit.circuit import QuantumCircuit, library\n\nqc = QuantumCircuit(2)\nqc.ecr(0, 1)\nqc.rzx(0.3, 0, 1)\nqc.rzx(0.7, 1, 0)\nqc.rzx(1.5, 0, 1)\nqc.ecr(1, 0)\n\n# This output string includes `gate ecr q0, q1 { ... }` and `gate rzx(p) q0, q1 { ... }`\n# statements, since `ecr` and `rzx` are neither built-in gates nor in ``qelib1.inc``.\ndumped = qasm2.dumps(qc)\n\n# Tell the importer how to interpret the `gate` statements, which we know are safe\n# because we controlled the input OpenQASM 2 source.\ncustom = [\n    qasm2.CustomInstruction(\"ecr\", 0, 2, library.ECRGate),\n    qasm2.CustomInstruction(\"rzx\", 1, 2, library.RZXGate),\n]\n\nloaded = qasm2.loads(dumped, custom_instructions=custom)"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Parameters"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "name ( str )"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "num_params ( int )"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "num_qubits ( int )"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "constructor ( Callable [[ Unpack [ tuple [ float , ...]]], Instruction ] )"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "builtin ( bool )"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "This can be particularly useful when trying to resolve ambiguities in the global-phase conventions of an OpenQASM 2 program. See OpenQASM 2 Phase Conventions for more details."
+        }
+      ]
+    },
+    {
+      "titulo": "7. Specifying custom classical functions",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "Similar to the quantum extensions above, you can also extend the processing done to classical expressions (arguments to gates) by passing an iterable to the argument custom_classical to either loader. This needs the name (a valid OpenQASM 2 identifier), the number num_params of parameters it takes, and a Python callable that implements the function. The Python callable must be able to accept num_params positional floating-point arguments, and must return a float or integer (which will be converted to a float). Builtin functions cannot be overridden."
+        }
+      ]
+    },
+    {
+      "titulo": "8. CustomClassical",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "class qiskit.qasm2.CustomClassical(name, num_params, callable, /)"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Bases: object"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Information about a custom classical function that should be defined in mathematical expressions."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "The given callable must be a Python function that takes num_params floats, and returns a float. The name is the identifier that refers to it in the OpenQASM 2 program. This cannot clash with any defined gates."
+        }
+      ]
+    },
+    {
+      "titulo": "9. Strict mode",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "Both of the loader functions have an optional “strict” mode. By default, this parser is a little bit more relaxed than the official specification: it allows trailing commas in parameter lists; unnecessary (empty-statement) semicolons; the OPENQASM 2.0; version statement to be omitted; and a couple of other quality-of-life improvements without emitting any errors. You can use the letter-of-the-spec mode with strict=True ."
+        }
+      ]
+    },
+    {
+      "titulo": "10. Exporting API",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "Similar to other serialization modules in Python, this module offers two public functions: dump() and dumps() , which take a QuantumCircuit and write out a representative OpenQASM 2 program to a file-like object or return a string, respectively."
+        }
+      ]
+    },
+    {
+      "titulo": "11. dump",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "qiskit.qasm2.dump(circuit, filename_or_stream, /)"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Dump a circuit as an OpenQASM 2 program to a file or stream."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Parameters"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "circuit ( QuantumCircuit ) – the QuantumCircuit to be exported."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "filename_or_stream ( PathLike | TextIOBase ) – either a path-like object (likely a str or pathlib.Path ), or an already opened text-mode stream."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Raises"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "QASM2ExportError – if the circuit cannot be represented by OpenQASM 2."
+        }
+      ]
+    },
+    {
+      "titulo": "12. dumps",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "qiskit.qasm2.dumps(circuit, /)"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Export a circuit to an OpenQASM 2 program in a string."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Parameters"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "circuit ( QuantumCircuit ) – the QuantumCircuit to be exported."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Returns"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "An OpenQASM 2 string representing the circuit."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Raises"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "QASM2ExportError – if the circuit cannot be represented by OpenQASM 2."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return type"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "str"
+        }
+      ]
+    },
+    {
+      "titulo": "13. Errors",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "This module defines a generic error type that derives from QiskitError that can be used as a catch when you care about failures emitted by the interoperation layer specifically."
+        }
+      ]
+    },
+    {
+      "titulo": "14. QASM2Error",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "exception qiskit.qasm2.QASM2Error(*message)"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Bases: QiskitError"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "A general error raised by the OpenQASM 2 interoperation layer."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Set the error message."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "In cases where the lexer or parser fails due to an invalid OpenQASM 2 file, the conversion functions will raise a more specific error with a message explaining what the failure is, and where in the file it occurred."
+        }
+      ]
+    },
+    {
+      "titulo": "15. QASM2ParseError",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "exception qiskit.qasm2.QASM2ParseError(*message)"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Bases: QASM2Error"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "An error raised because of a failure to parse an OpenQASM 2 file."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Set the error message."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "When the exporters fail to export a circuit, likely because it has structure that cannot be represented by OpenQASM 2.0, they will also emit a custom error."
+        }
+      ]
+    },
+    {
+      "titulo": "16. QASM2ExportError",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "exception qiskit.qasm2.QASM2ExportError(*message)"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Bases: QASM2Error"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "An error raised because of a failure to convert a Qiskit object to an OpenQASM 2 form."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Set the error message."
+        }
+      ]
+    },
+    {
+      "titulo": "18. Exporting examples",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "Export a simple QuantumCircuit to an OpenQASM 2 string:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "import qiskit.qasm2\nfrom qiskit.circuit import QuantumCircuit\n\nqc = QuantumCircuit(2, 2)\nqc.h(0)\nqc.cx(0, 1)\nqc.measure([0, 1], [0, 1])\nprint(qiskit.qasm2.dumps(qc))"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "OPENQASM 2.0;\ninclude \"qelib1.inc\";\nqreg q[2];\ncreg c[2];\nh q[0];\ncx q[0],q[1];\nmeasure q[0] -> c[0];\nmeasure q[1] -> c[1];"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Write out the same QuantumCircuit to a given filename:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "qiskit.qasm2.dump(qc, \"myfile.qasm\")"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Similarly, one can use general os.PathLike instances as the filename:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "import pathlib\n\nqiskit.qasm2.dump(qc, pathlib.Path.home() / \"myfile.qasm\")"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "One can also dump the text to an already-open stream:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "import io\n\nwith io.StringIO() as stream:\n    qiskit.qasm2.dump(qc, stream)"
+        }
+      ]
+    },
+    {
+      "titulo": "19. Parsing examples",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "Use loads() to import an OpenQASM 2 program in a string into a QuantumCircuit :"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "import qiskit.qasm2\nprogram = \"\"\"\n    OPENQASM 2.0;\n    include \"qelib1.inc\";\n    qreg q[2];\n    creg c[2];\n\n    h q[0];\n    cx q[0], q[1];\n\n    measure q -> c;\n\"\"\"\ncircuit = qiskit.qasm2.loads(program)\ncircuit.draw()"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "     ┌───┐     ┌─┐\nq_0: ┤ H ├──■──┤M├───\n     └───┘┌─┴─┐└╥┘┌─┐\nq_1: ─────┤ X ├─╫─┤M├\n          └───┘ ║ └╥┘\nc: 2/═══════════╩══╩═\n                0  1"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "You can achieve the same thing if the program is stored in a file by using load() instead, passing the filename as an argument:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "import qiskit.qasm2\ncircuit = qiskit.qasm2.load(\"myfile.qasm\")"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "OpenQASM 2 files can include other OpenQASM 2 files via the include statement. You can influence the search path used for finding these files with the include_path argument to both load() and loads() . By default, only the current working directory is searched."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "import qiskit.qasm2\nprogram = \"\"\"\n    include \"other.qasm\";\n    // ... and so on\n\"\"\"\ncircuit = qiskit.qasm2.loads(program, include_path=(\"/path/to/a\", \"/path/to/b\", \".\"))"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "For load() only, there is an extra argument include_input_directory , which can be used to either 'append' , 'prepend' or ignore ( None ) the directory of the loaded file in the include path. By default, this directory is appended to the search path, so it is tried last, but you can change this."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "import qiskit.qasm2\nfilenames = [\"./subdirectory/a.qasm\", \"/path/to/b.qasm\", \"~/my.qasm\"]\n# Search the directory of each file before other parts of the include path.\ncircuits = [\n    qiskit.qasm2.load(filename, include_input_directory=\"prepend\") for filename in filenames\n]\n# Override the include path, and don't search the directory of each file unless it's in the\n# absolute path list.\ncircuits = [\n    qiskit.qasm2.load(\n        filename,\n        include_path=(\"/usr/include/qasm\", \"~/qasm/include\"),\n        include_input_directory=None,\n    )\n    for filename in filenames\n]"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Sometimes you may want to influence the Gate objects that the importer emits for given named instructions. Gates that are defined by the statement include \"qelib1.inc\"; will automatically be associated with a suitable Qiskit circuit-library gate, but you can extend this:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "from qiskit.circuit import Gate\nfrom qiskit.qasm2 import loads, CustomInstruction\n\nclass MyGate(Gate):\n    def __init__(self, theta):\n        super().__init__(\"my\", 2, [theta])\n\nclass Builtin(Gate):\n    def __init__(self):\n        super().__init__(\"builtin\", 1, [])\n\nprogram = \"\"\"\n    opaque my(theta) q1, q2;\n    qreg q[2];\n    my(0.5) q[0], q[1];\n    builtin q[0];\n\"\"\"\ncustoms = [\n    CustomInstruction(name=\"my\", num_params=1, num_qubits=2, constructor=MyGate),\n    # Setting 'builtin=True' means the instruction doesn't require a declaration to be usable.\n    CustomInstruction(\"builtin\", 0, 1, Builtin, builtin=True),\n]\ncircuit = loads(program, custom_instructions=customs)"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Similarly, you can add new classical functions used during the description of arguments to gates, both in the main body of the program (which come out constant-folded) and within the bodies of defined gates (which are computed on demand). Here we provide a Python version of atan2(y, x) , which mathematically is arctan ⁡ ( y / x ) \\arctan(y/x) arctan ( y / x ) but correctly handling angle quadrants and infinities, and a custom add_one function:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "import math\nfrom qiskit.qasm2 import loads, CustomClassical\n\nprogram = \"\"\"\n    include \"qelib1.inc\";\n    qreg q[2];\n    rx(atan2(pi, 3 + add_one(0.2))) q[0];\n    cx q[0], q[1];\n\"\"\"\n\ndef add_one(x):\n    return x + 1\n\ncustoms = [\n    # `atan2` takes two parameters, and `math.atan2` implements it.\n    CustomClassical(\"atan2\", 2, math.atan2),\n    # Our `add_one` takes only one parameter.\n    CustomClassical(\"add_one\", 1, add_one),\n]\ncircuit = loads(program, custom_classical=customs)"
+        }
+      ]
+    },
+    {
+      "titulo": "20. OpenQASM 2 Phase Conventions",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "As a language, OpenQASM 2 does not have a way to specify the global phase of a complete program, nor of particular gate definitions. This means that parsers of the language may interpret particular gates with a different global phase than what you might expect. For example, the de facto standard library of OpenQASM 2 qelib1.inc contains definitions of u1 and rz as follows:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "gate u1(lambda) q {\n    U(0, 0, lambda) q;\n}\n\ngate rz(phi) a {\n    u1(phi) a;\n}"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "In other words, rz appears to be a direct alias for u1 . However, the interpretation of u1 is specified in equation (3) of the paper describing the language as"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "where the ∼ \\sim ∼ symbol denotes equivalence only up to a global phase. When parsing OpenQASM 2, we need to choose how to handle a distinction between such gates; u1 is defined in the prose to be different by a phase to rz , but the language is not designed to represent this."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Qiskit’s default position is to interpret a usage of the standard-library rz using RZGate , and a usage of u1 as using the phase-distinct U1Gate . If you wish to use the phase conventions more implied by a direct interpretation of the gate statements in the header file, you can use CustomInstruction to override how Qiskit builds the circuit."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "For the standard qelib1.inc include there is only one point of difference, and so the override needed to switch its phase convention is:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "from qiskit import qasm2\nfrom qiskit.circuit.library import PhaseGate\nfrom qiskit.quantum_info import Operator\n\nprogram = \"\"\"\n    OPENQASM 2.0;\n    include \"qelib1.inc\";\n    qreg q[1];\n    rz(pi / 2) q[0];\n\"\"\"\n\ncustom = [\n    qasm2.CustomInstruction(\"rz\", 1, 1, PhaseGate),\n]"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "This will use Qiskit’s PhaseGate class to represent the rz instruction, which is equal (including the phase) to U1Gate :"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Operator(qasm2.loads(program, custom_instructions=custom))"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Operator([[1.000000e+00+0.j, 0.000000e+00+0.j],\n          [0.000000e+00+0.j, 6.123234e-17+1.j]],\n         input_dims=(2,), output_dims=(2,))"
+        }
+      ]
+    },
+    {
+      "titulo": "21. Legacy Compatibility",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "QuantumCircuit.from_qasm_str() and from_qasm_file() used to make a few additions on top of the raw specification. Qiskit originally tried to use OpenQASM 2 as a sort of serialization format, and expanded its behavior as Qiskit expanded. The new parser under all its defaults implements the specification more strictly."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "In particular, in the legacy importers:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "the include_path is effectively: <qiskit>/qasm/libs , where <qiskit> is the root of the installed qiskit package; the current working directory."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "there are additional instructions defined in qelib1.inc : csx a, b Controlled X \\sqrt X X ​ gate, corresponding to CSXGate . cu(theta, phi, lambda, gamma) c, t The four-parameter version of a controlled- U U U , corresponding to CUGate . rxx(theta) a, b Two-qubit rotation around the X X XX X X axis, corresponding to RXXGate . rzz(theta) a, b Two-qubit rotation around the Z Z ZZ Z Z axis, corresponding to RZZGate . rccx a, b, c The double-controlled X X X gate, but with relative phase differences over the standard Toffoli gate. This should correspond to the Qiskit gate RCCXGate , but the legacy converter wouldn’t actually output this type. rc3x a, b, c, d The triple-controlled X X X gate, but with relative phase differences over the standard definition. Corresponds to RC3XGate . c3x a, b, c, d The triple-controlled X X X gate, corresponding to C3XGate . c3sqrtx a, b, c, d The triple-controlled X \\sqrt X X ​ gate, corresponding to C3SXGate . c4x a, b, c, d, e The quadruple-controlled X X X gate., corresponding to C4XGate ."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "if any opaque or gate definition was given for the name delay , they attempt to output a Delay instruction at each call. To function, this expects a definition compatible with opaque delay(t) q; , where the time t is given in units of dt . The importer will raise errors on construction if there was not exactly one parameter and one qubit, or if the parameter is not integer-valued."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "the additional scientific-calculator functions asin , acos and atan are available."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "the parsed grammar is effectively the same as the strict mode of the new importers ."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "You can emulate this behavior in load() and loads() by setting include_path appropriately (try inspecting the variable qiskit.__file__ to find the installed location), and by passing a list of CustomInstruction instances for each of the custom gates you care about. To make things easier we make three tuples available, which each contain one component of a configuration that is equivalent to Qiskit’s legacy converter behavior."
+        }
+      ]
+    },
+    {
+      "titulo": "22. qiskit.qasm2.LEGACY_CUSTOM_INSTRUCTIONS",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "A tuple containing the extra custom_instructions that Qiskit’s legacy built-in converters used if qelib1.inc is included, and there is any definition of a delay instruction. The gates in the paper version of qelib1.inc and delay all require a compatible declaration statement to be present within the OpenQASM 2 program, but Qiskit’s legacy additions are all marked as builtins since they are not actually present in any include file this parser sees."
+        }
+      ]
+    },
+    {
+      "titulo": "23. qiskit.qasm2.LEGACY_CUSTOM_CLASSICAL",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "A tuple containing the extra custom_classical functions that Qiskit’s legacy built-in converters use beyond those specified by the paper. This is the three basic inverse trigonometric functions: arcsin ⁡ \\arcsin arcsin , arccos ⁡ \\arccos arccos and arctan ⁡ \\arctan arctan ."
+        }
+      ]
+    },
+    {
+      "titulo": "24. qiskit.qasm2.LEGACY_INCLUDE_PATH",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "A tuple containing the exact include_path used by the legacy Qiskit converter."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "On all the gates defined in Qiskit’s legacy version of qelib1.inc and the delay instruction, it does not matter how the gates are actually defined and used, the legacy importer will always attempt to output its custom objects for them. This can result in errors during the circuit construction, even after a successful parse. There is no way to emulate this buggy behavior with qiskit.qasm2 ; only an include \"qelib1.inc\"; statement or the custom_instructions argument can cause built-in Qiskit instructions to be used, and the signatures of these match each other."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Circuits imported with load() and loads() with the above legacy-compatibility settings should compare equal to those created by Qiskit’s legacy importer, provided no non- qelib1.inc user gates are defined. User-defined gates are handled slightly differently in the new importer, and while they should have equivalent definition fields on inspection, this module uses a custom class to lazily load the definition when it is requested (like most Qiskit objects), rather than eagerly creating it during the parse. Qiskit’s comparison rules for gates will see these two objects as unequal, although any pass through transpile() for a particular backend should produce the same output circuits."
+        }
+      ]
+    },
+    {
+      "titulo": "25. Alternatives",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "The parser components of this module started off as a separate PyPI package: qiskit-qasm2 . This package at version 0.5.3 was vendored into Qiskit Terra 0.24. Any subsequent changes between the two packages may not necessarily be kept in sync."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "There is a newer version of the OpenQASM specification, version 3.0, which is described at https://openqasm.com . This includes far more facilities for high-level classical programming. Qiskit has some rudimentary support for OpenQASM 3 already; see qiskit.qasm3 for that."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "OpenQASM 2 is not a suitable serialization language for Qiskit’s QuantumCircuit . This module is provided for interoperability purposes, not as a general serialization format. If that is what you need, consider using qiskit.qpy instead."
+        }
+      ]
+    }
+  ],
+  "versao_documentacao": "Referência solicitada Qiskit 2.6; conferir versão efetiva na página após redirecionamento IBM.",
+  "versao_alvo_qiskit": "2.6",
+  "coletado_em": "2026-11-13T23:46:09.829973+00:00",
+  "hash": "5600759e7a114b02ee7d7c685b2200aa2e8e9c3c522da7464cbc95698b474263",
+  "chunks": 153,
+  "indexed": true
+}

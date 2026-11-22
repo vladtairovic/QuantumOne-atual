@@ -1,0 +1,1590 @@
+{
+  "document_id": "ibm_api_quantum_info",
+  "titulo": "Quantum Information",
+  "fonte": "https://quantum.cloud.ibm.com/docs/en/api/qiskit/quantum_info",
+  "url_solicitada": "https://quantum.cloud.ibm.com/docs/en/api/qiskit/2.6/quantum_info",
+  "secoes": [
+    {
+      "titulo": "1. Quantum Information",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "qiskit.quantum_info"
+        }
+      ]
+    },
+    {
+      "titulo": "2. Operators",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "Column 1\nColumn 2\nOperator\n(data[, input_dims, output_dims])\nMatrix operator class\nPauli\n([data])\nN-qubit Pauli operator.\nClifford\n(data[, validate, copy])\nAn N-qubit unitary operator from the Clifford group.\nScalarOp\n([dims, coeff])\nScalar identity operator class.\nSparseObservable\n(data, /[, num_qubits])\nAn observable over Pauli bases that stores its data in a qubit-sparse format.\nSparsePauliOp\n(data[, coeffs, ...])\nSparse N-qubit operator in a Pauli basis representation.\nPauliLindbladMap\n(data, /[, num_qubits])\nA Pauli Lindblad map stored in a qubit-sparse format.\nQubitSparsePauli\n(data, /[, num_qubits])\nA phase-less Pauli operator stored in a qubit-sparse format.\nQubitSparsePauliList\n(data, /[, num_qubits])\nA list of phase-less Pauli operators stored in a qubit-sparse format.\nPhasedQubitSparsePauli\n(data, /[, num_qubits])\nA Pauli operator stored in a qubit-sparse format.\nPhasedQubitSparsePauliList\n(data, /[, num_qubits])\nA list of Pauli operators with phases stored in a qubit-sparse format.\nCNOTDihedral\n([data, num_qubits, validate])\nAn N-qubit operator from the CNOT-Dihedral group.\nPauliList\n(data)\nList of N-qubit Pauli operators.\npauli_basis\n(num_qubits[, weight])\nReturn the ordered PauliList for the n-qubit Pauli basis.\nget_clifford_gate_names\n()\nReturns the list of Clifford gate names."
+        }
+      ]
+    },
+    {
+      "titulo": "3. States",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "Column 1\nColumn 2\nStatevector\n(data[, dims])\nStatevector class\nDensityMatrix\n(data[, dims])\nDensityMatrix class\nStabilizerState\n(data[, validate])\nStabilizerState class."
+        }
+      ]
+    },
+    {
+      "titulo": "4. Channels",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "Column 1\nColumn 2\nChoi\n(data[, input_dims, output_dims])\nChoi-matrix representation of a Quantum Channel.\nSuperOp\n(data[, input_dims, output_dims])\nSuperoperator representation of a quantum channel.\nKraus\n(data[, input_dims, output_dims])\nKraus representation of a quantum channel.\nStinespring\n(data[, input_dims, output_dims])\nStinespring representation of a quantum channel.\nChi\n(data[, input_dims, output_dims])\nPauli basis Chi-matrix representation of a quantum channel.\nPTM\n(data[, input_dims, output_dims])\nPauli Transfer Matrix (PTM) representation of a Quantum Channel."
+        }
+      ]
+    },
+    {
+      "titulo": "6. average_gate_fidelity",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "qiskit.quantum_info.average_gate_fidelity(channel, target=None, require_cp=True, require_tp=False)"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return the average gate fidelity of a noisy quantum channel."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "The average gate fidelity F ave F_{\\text{ave}} F ave ​ is given by"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "where F pro ( E , U ) F_{\\text{pro}}(\\mathcal{E}, U) F pro ​ ( E , U ) is the process_fidelity() of the input quantum channel E \\mathcal{E} E with a target unitary U U U , and d d d is the dimension of the channel ."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Parameters"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "channel ( QuantumChannel or Operator ) – noisy quantum channel."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "target ( Operator or None ) – target unitary operator. If None target is the identity operator [Default: None]."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "require_cp ( bool ) – check if input and target channels are completely-positive and if non-CP log warning containing negative eigenvalues of Choi-matrix [Default: True]."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "require_tp ( bool ) – check if input and target channels are trace-preserving and if non-TP log warning containing negative eigenvalues of partial Choi-matrix T r out [ E ] − I Tr_{\\text{out}}[\\mathcal{E}] - I T r out ​ [ E ] − I [Default: True]."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Returns"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "The average gate fidelity F ave F_{\\text{ave}} F ave ​ ."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return type"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "float"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Raises"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "QiskitError – if the channel and target do not have the same dimensions, or have different input and output dimensions."
+        }
+      ]
+    },
+    {
+      "titulo": "7. process_fidelity",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "qiskit.quantum_info.process_fidelity(channel, target=None, require_cp=True, require_tp=True)"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return the process fidelity of a noisy quantum channel."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "The process fidelity F pro ( E , F ) F_{\\text{pro}}(\\mathcal{E}, \\mathcal{F}) F pro ​ ( E , F ) between two quantum channels E , F \\mathcal{E}, \\mathcal{F} E , F is given by"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "where F F F is the state_fidelity() , ρ E = Λ E / d \\rho_{\\mathcal{E}} = \\Lambda_{\\mathcal{E}} / d ρ E ​ = Λ E ​ / d is the normalized Choi matrix for the channel E \\mathcal{E} E , and d d d is the input dimension of E \\mathcal{E} E ."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "When the target channel is unitary this is equivalent to"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "where S E , S U S_{\\mathcal{E}}, S_{U} S E ​ , S U ​ are the SuperOp matrices for the input quantum channel E \\mathcal{E} E and target unitary U U U respectively, and d d d is the input dimension of the channel."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Parameters"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "channel ( Operator or QuantumChannel ) – input quantum channel."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "target ( Operator or QuantumChannel or None ) – target quantum channel. If None target is the identity operator [Default: None]."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "require_cp ( bool ) – check if input and target channels are completely-positive and if non-CP log warning containing negative eigenvalues of Choi-matrix [Default: True]."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "require_tp ( bool ) – check if input and target channels are trace-preserving and if non-TP log warning containing negative eigenvalues of partial Choi-matrix T r out [ E ] − I Tr_{\\text{out}}[\\mathcal{E}] - I T r out ​ [ E ] − I [Default: True]."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Returns"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "The process fidelity F pro F_{\\text{pro}} F pro ​ ."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return type"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "float"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Raises"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "QiskitError – if the channel and target do not have the same dimensions."
+        }
+      ]
+    },
+    {
+      "titulo": "8. gate_error",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "qiskit.quantum_info.gate_error(channel, target=None, require_cp=True, require_tp=False)"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return the gate error of a noisy quantum channel."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "The gate error E E E is given by the average gate infidelity"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "where F ave ( E , U ) F_{\\text{ave}}(\\mathcal{E}, U) F ave ​ ( E , U ) is the average_gate_fidelity() of the input quantum channel E \\mathcal{E} E with a target unitary U U U ."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Parameters"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "channel ( QuantumChannel ) – noisy quantum channel."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "target ( Operator or None ) – target unitary operator. If None target is the identity operator [Default: None]."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "require_cp ( bool ) – check if input and target channels are completely-positive and if non-CP log warning containing negative eigenvalues of Choi-matrix [Default: True]."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "require_tp ( bool ) – check if input and target channels are trace-preserving and if non-TP log warning containing negative eigenvalues of partial Choi-matrix T r out [ E ] − I Tr_{\\text{out}}[\\mathcal{E}] - I T r out ​ [ E ] − I [Default: True]."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Returns"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "The average gate error E E E ."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return type"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "float"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Raises"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "QiskitError – if the channel and target do not have the same dimensions, or have different input and output dimensions."
+        }
+      ]
+    },
+    {
+      "titulo": "9. diamond_norm",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "qiskit.quantum_info.diamond_norm(choi, solver='SCS', **kwargs)"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return the diamond norm of the input quantum channel object."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "This function computes the completely-bounded trace-norm (often referred to as the diamond-norm) of the input quantum channel object using the semidefinite-program from reference [1]."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Parameters"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "choi ( Choi or QuantumChannel ) – a quantum channel object or Choi-matrix array."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "solver ( str ) – The solver to use."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "kwargs – optional arguments to pass to CVXPY solver."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Returns"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "The completely-bounded trace norm ∥ E ∥ ⋄ \\|\\mathcal{E}\\|_{\\diamond} ∥ E ∥ ⋄ ​ ."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return type"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "float"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Raises"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "QiskitError – if CVXPY package cannot be found."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Additional Information:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "The input to this function is typically not a CPTP quantum channel, but rather the difference between two quantum channels ∥ Δ E ∥ ⋄ \\|\\Delta\\mathcal{E}\\|_\\diamond ∥Δ E ∥ ⋄ ​ where Δ E = E 1 − E 2 \\Delta\\mathcal{E} = \\mathcal{E}_1 - \\mathcal{E}_2 Δ E = E 1 ​ − E 2 ​ ."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Reference:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "J. Watrous. “Simpler semidefinite programs for completely bounded norms”, arXiv:1207.5726 [quant-ph] (2012)."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "This function requires the optional CVXPY package to be installed. Any additional kwargs will be passed to the cvxpy.solve function. See the CVXPY documentation for information on available SDP solvers."
+        }
+      ]
+    },
+    {
+      "titulo": "10. state_fidelity",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "qiskit.quantum_info.state_fidelity(state1, state2, validate=True)"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return the state fidelity between two quantum states."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "The state fidelity F F F for density matrix input states ρ 1 , ρ 2 \\rho_1, \\rho_2 ρ 1 ​ , ρ 2 ​ is given by"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "If one of the states is a pure state this simplifies to F ( ρ 1 , ρ 2 ) = ⟨ ψ 1 ∣ ρ 2 ∣ ψ 1 ⟩ F(\\rho_1, \\rho_2) = \\langle\\psi_1|\\rho_2|\\psi_1\\rangle F ( ρ 1 ​ , ρ 2 ​ ) = ⟨ ψ 1 ​ ∣ ρ 2 ​ ∣ ψ 1 ​ ⟩ , where ρ 1 = ∣ ψ 1 ⟩ ⁣ ⟨ ψ 1 ∣ \\rho_1 = |\\psi_1\\rangle\\!\\langle\\psi_1| ρ 1 ​ = ∣ ψ 1 ​ ⟩ ⟨ ψ 1 ​ ∣ ."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Parameters"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "state1 ( Statevector or DensityMatrix ) – the first quantum state."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "state2 ( Statevector or DensityMatrix ) – the second quantum state."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "validate ( bool ) – check if the inputs are valid quantum states [Default: True]"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Returns"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "The state fidelity F ( ρ 1 , ρ 2 ) F(\\rho_1, \\rho_2) F ( ρ 1 ​ , ρ 2 ​ ) ."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return type"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "float"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Raises"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "QiskitError – if validate=True and the inputs are invalid quantum states."
+        }
+      ]
+    },
+    {
+      "titulo": "11. purity",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "qiskit.quantum_info.purity(state, validate=True)"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Calculate the purity of a quantum state."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "The purity of a density matrix ρ \\rho ρ is"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Parameters"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "state ( Statevector or DensityMatrix ) – a quantum state."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "validate ( bool ) – check if input state is valid [Default: True]"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Returns"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "the purity T r [ ρ 2 ] Tr[\\rho^2] T r [ ρ 2 ] ."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return type"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "float"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Raises"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "QiskitError – if the input isn’t a valid quantum state."
+        }
+      ]
+    },
+    {
+      "titulo": "12. concurrence",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "qiskit.quantum_info.concurrence(state)"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Calculate the concurrence of a quantum state."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "The concurrence of a bipartite Statevector ∣ ψ ⟩ |\\psi\\rangle ∣ ψ ⟩ is given by"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "where ρ 0 = T r 1 [ ∣ ψ ⟩ ⁣ ⟨ ψ ∣ ] \\rho_0 = Tr_1[|\\psi\\rangle\\!\\langle\\psi|] ρ 0 ​ = T r 1 ​ [ ∣ ψ ⟩ ⟨ ψ ∣ ] is the reduced state by taking the partial_trace() of the input state."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "For density matrices the concurrence is only defined for 2-qubit states, it is given by:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "where λ 1 ≥ λ 2 ≥ λ 3 ≥ λ 4 \\lambda _1 \\ge \\lambda _2 \\ge \\lambda _3 \\ge \\lambda _4 λ 1 ​ ≥ λ 2 ​ ≥ λ 3 ​ ≥ λ 4 ​ are the ordered eigenvalues of the matrix R = ρ ( Y ⊗ Y ) ρ ‾ ( Y ⊗ Y ) ρ R=\\sqrt{\\sqrt{\\rho }(Y\\otimes Y)\\overline{\\rho}(Y\\otimes Y)\\sqrt{\\rho}} R = ρ ​ ( Y ⊗ Y ) ρ ​ ( Y ⊗ Y ) ρ ​ ​ ."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Parameters"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "state ( Statevector or DensityMatrix ) – a 2-qubit quantum state."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Returns"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "The concurrence."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return type"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "float"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Raises"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "QiskitError – if the input state is not a valid QuantumState."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "QiskitError – if input is not a bipartite QuantumState."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "QiskitError – if density matrix input is not a 2-qubit state."
+        }
+      ]
+    },
+    {
+      "titulo": "13. entropy",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "qiskit.quantum_info.entropy(state, base=2)"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Calculate the von-Neumann entropy of a quantum state."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "The entropy S S S is given by"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Parameters"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "state ( Statevector or DensityMatrix ) – a quantum state."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "base ( int ) – the base of the logarithm [Default: 2]."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Returns"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "The von-Neumann entropy S(rho)."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return type"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "float"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Raises"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "QiskitError – if the input state is not a valid QuantumState."
+        }
+      ]
+    },
+    {
+      "titulo": "14. entanglement_of_formation",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "qiskit.quantum_info.entanglement_of_formation(state)"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Calculate the entanglement of formation of quantum state."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "The input quantum state must be either a bipartite state vector, or a 2-qubit density matrix."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Parameters"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "state ( Statevector or DensityMatrix ) – a 2-qubit quantum state."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Returns"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "The entanglement of formation."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return type"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "float"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Raises"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "QiskitError – if the input state is not a valid QuantumState."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "QiskitError – if input is not a bipartite QuantumState."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "QiskitError – if density matrix input is not a 2-qubit state."
+        }
+      ]
+    },
+    {
+      "titulo": "15. mutual_information",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "qiskit.quantum_info.mutual_information(state, base=2)"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Calculate the mutual information of a bipartite state."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "The mutual information I I I is given by:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "where ρ A = T r B [ ρ A B ] , ρ B = T r A [ ρ A B ] \\rho_A=Tr_B[\\rho_{AB}], \\rho_B=Tr_A[\\rho_{AB}] ρ A ​ = T r B ​ [ ρ A B ​ ] , ρ B ​ = T r A ​ [ ρ A B ​ ] , are the reduced density matrices of the bipartite state ρ A B \\rho_{AB} ρ A B ​ ."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Parameters"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "state ( Statevector or DensityMatrix ) – a bipartite state."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "base ( int ) – the base of the logarithm [Default: 2]."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Returns"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "The mutual information I ( ρ A B ) I(\\rho_{AB}) I ( ρ A B ​ ) ."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return type"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "float"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Raises"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "QiskitError – if the input state is not a valid QuantumState."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "QiskitError – if input is not a bipartite QuantumState."
+        }
+      ]
+    },
+    {
+      "titulo": "16. Utility Functions",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "Column 1\nColumn 2\nQuaternion\n(data)\nA class representing a Quaternion."
+        }
+      ]
+    },
+    {
+      "titulo": "17. partial_trace",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "qiskit.quantum_info.partial_trace(state, qargs)"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return reduced density matrix by tracing out part of quantum state."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "If all subsystems are traced over this returns the trace() of the input state."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Parameters"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "state ( Statevector or DensityMatrix ) – the input state."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "qargs ( list ) – The subsystems to trace over."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Returns"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "The reduced density matrix."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return type"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "DensityMatrix"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Raises"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "QiskitError – if input state is invalid."
+        }
+      ]
+    },
+    {
+      "titulo": "18. schmidt_decomposition",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "qiskit.quantum_info.schmidt_decomposition(state, qargs)"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return the Schmidt Decomposition of a pure quantum state."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "For an arbitrary bipartite state:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "its Schmidt Decomposition is given by the single-index sum over k:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "where ∣ u k ⟩ A |u_k\\rangle_A ∣ u k ​ ⟩ A ​ and ∣ v k ⟩ B |v_k\\rangle_B ∣ v k ​ ⟩ B ​ are an orthonormal set of vectors in their respective spaces A A A and B B B , and the Schmidt coefficients λ k \\lambda_k λ k ​ are positive real values."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Parameters"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "state ( Statevector or DensityMatrix ) – the input state."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "qargs ( list ) – the list of Input state positions corresponding to subsystem B B B ."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Returns"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "list of tuples (s, u, v) , where s (float) are the Schmidt coefficients λ k \\lambda_k λ k ​ , and u (Statevector), v (Statevector) are the Schmidt vectors ∣ u k ⟩ A |u_k\\rangle_A ∣ u k ​ ⟩ A ​ , ∣ u k ⟩ B |u_k\\rangle_B ∣ u k ​ ⟩ B ​ , respectively."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return type"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "list"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Raises"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "QiskitError – if Input qargs is not a list of positions of the Input state."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "QiskitError – if Input qargs is not a proper subset of Input state."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "In Qiskit, qubits are ordered using little-endian notation, with the least significant qubits having smaller indices. For example, a four-qubit system is represented as ∣ q 3 q 2 q 1 q 0 ⟩ |q_3q_2q_1q_0\\rangle ∣ q 3 ​ q 2 ​ q 1 ​ q 0 ​ ⟩ . Using this convention, setting qargs=[0] will partition the state as ∣ q 3 q 2 q 1 ⟩ A ⊗ ∣ q 0 ⟩ B |q_3q_2q_1\\rangle_A\\otimes|q_0\\rangle_B ∣ q 3 ​ q 2 ​ q 1 ​ ⟩ A ​ ⊗ ∣ q 0 ​ ⟩ B ​ . Furthermore, qubits will be organized in this notation regardless of the order they are passed. For instance, passing either qargs=[1,2] or qargs=[2,1] will result in partitioning the state as ∣ q 3 q 0 ⟩ A ⊗ ∣ q 2 q 1 ⟩ B |q_3q_0\\rangle_A\\otimes|q_2q_1\\rangle_B ∣ q 3 ​ q 0 ​ ⟩ A ​ ⊗ ∣ q 2 ​ q 1 ​ ⟩ B ​ ."
+        }
+      ]
+    },
+    {
+      "titulo": "19. shannon_entropy",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "qiskit.quantum_info.shannon_entropy(pvec, base=2)"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Compute the Shannon entropy of a probability vector."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "The shannon entropy of a probability vector p ⃗ = [ p 0 , . . . , p n − 1 ] \\vec{p} = [p_0, ..., p_{n-1}] p ​ = [ p 0 ​ , ... , p n − 1 ​ ] is defined as"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "where b b b is the log base and (default 2), and 0 log ⁡ b ( 0 ) ≡ 0 0 \\log_b(0) \\equiv 0 0 lo g b ​ ( 0 ) ≡ 0 ."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Parameters"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "pvec ( array_like ) – a probability vector."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "base ( int ) – the base of the logarithm [Default: 2]."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Returns"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "The Shannon entropy H(pvec)."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return type"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "float"
+        }
+      ]
+    },
+    {
+      "titulo": "20. commutator",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "qiskit.quantum_info.commutator(a, b)"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Compute commutator of a and b."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Parameters"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "a ( OperatorTypeT ) – Operator a."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "b ( OperatorTypeT ) – Operator b."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Returns"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "The commutator"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return type"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "OperatorTypeT"
+        }
+      ]
+    },
+    {
+      "titulo": "21. anti_commutator",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "qiskit.quantum_info.anti_commutator(a, b)"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Compute anti-commutator of a and b."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Parameters"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "a ( OperatorTypeT ) – Operator a."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "b ( OperatorTypeT ) – Operator b."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Returns"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "The anti-commutator"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return type"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "OperatorTypeT"
+        }
+      ]
+    },
+    {
+      "titulo": "22. double_commutator",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "qiskit.quantum_info.double_commutator(a, b, c, *, commutator=True)"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Compute symmetric double commutator of a, b and c."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "See also Equation (13.6.18) in [1]."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "If commutator is True, it returns"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "If commutator is False, it returns"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Parameters"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "a ( OperatorTypeT ) – Operator a."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "b ( OperatorTypeT ) – Operator b."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "c ( OperatorTypeT ) – Operator c."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "commutator ( bool ) – If True compute the double commutator, if False the double anti-commutator."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Returns"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "The double commutator"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return type"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "OperatorTypeT"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "References"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "[1]: R. McWeeny."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Methods of Molecular Quantum Mechanics. 2nd Edition, Academic Press, 1992. ISBN 0-12-486552-6."
+        }
+      ]
+    },
+    {
+      "titulo": "24. random_statevector",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "qiskit.quantum_info.random_statevector(dims, seed=None)"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Generate a random Statevector."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "The statevector is sampled from the uniform distribution. This is the measure induced by the Haar measure on unitary matrices."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Parameters"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "dims ( int or tuple ) – the dimensions of the state."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "seed ( int or np.random.Generator ) – Optional. Set a fixed seed or generator for RNG."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Returns"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "the random statevector."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return type"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Statevector"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Reference:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "K. Zyczkowski and H. Sommers (2001), “Induced measures in the space of mixed quantum states”, J. Phys. A: Math. Gen. 34 7111 ."
+        }
+      ]
+    },
+    {
+      "titulo": "25. random_density_matrix",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "qiskit.quantum_info.random_density_matrix(dims, rank=None, method='Hilbert-Schmidt', seed=None)"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Generate a random density matrix."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Parameters"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "dims ( int or tuple ) – the dimensions of the DensityMatrix."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "rank ( int or None ) – the rank of the density matrix. The default value is full-rank."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "method ( string ) – Optional. The method to use. ‘Hilbert-Schmidt’: (Default) sample from the Hilbert-Schmidt metric. ‘Bures’: sample from the Bures metric."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "seed ( int or np.random.Generator ) – Optional. Set a fixed seed or generator for RNG."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Returns"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "the random density matrix."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return type"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "DensityMatrix"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Raises"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "QiskitError – if the method is not valid."
+        }
+      ]
+    },
+    {
+      "titulo": "26. random_unitary",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "qiskit.quantum_info.random_unitary(dims, seed=None)"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return a random unitary Operator."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "The operator is sampled from the unitary Haar measure."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Parameters"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "dims ( int or tuple ) – the input dimensions of the Operator."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "seed ( int or np.random.Generator ) – Optional. Set a fixed seed or generator for RNG."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Returns"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "a unitary operator."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return type"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Operator"
+        }
+      ]
+    },
+    {
+      "titulo": "27. random_hermitian",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "qiskit.quantum_info.random_hermitian(dims, traceless=False, seed=None)"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return a random hermitian Operator."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "The operator is sampled from Gaussian Unitary Ensemble."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Parameters"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "dims ( int or tuple ) – the input dimension of the Operator."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "traceless ( bool ) – Optional. If True subtract diagonal entries to return a traceless hermitian operator (Default: False)."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "seed ( int or np.random.Generator ) – Optional. Set a fixed seed or generator for RNG."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Returns"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "a Hermitian operator."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return type"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Operator"
+        }
+      ]
+    },
+    {
+      "titulo": "28. random_pauli",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "qiskit.quantum_info.random_pauli(num_qubits, group_phase=False, seed=None)"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return a random Pauli ."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Parameters"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "num_qubits ( int ) – The number of qubits."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "group_phase ( bool ) – Optional. If True generate random phase. Otherwise the phase will be set so that the Pauli coefficient is +1 (default: False )."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "seed ( int | Generator | None ) – Optional. Set a fixed seed or generator for RNG."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Returns"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "A random Pauli."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return type"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Pauli"
+        }
+      ]
+    },
+    {
+      "titulo": "29. random_clifford",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "qiskit.quantum_info.random_clifford(num_qubits, seed=None)"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return a random Clifford operator."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "The Clifford is sampled using the method of Reference [1]."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Parameters"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "num_qubits ( int ) – The number of qubits for the Clifford."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "seed ( int | Generator | None ) – Optional. Set a fixed seed or generator for RNG."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Returns"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "A random Clifford operator."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return type"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Clifford"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "References:"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "[1] S. Bravyi and D. Maslov (2020). Hadamard-free circuits expose the structure of the Clifford group. arXiv:2003.09412"
+        }
+      ]
+    },
+    {
+      "titulo": "30. random_quantum_channel",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "qiskit.quantum_info.random_quantum_channel(input_dims=None, output_dims=None, rank=None, seed=None)"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return a random CPTP quantum channel."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "This constructs the Stinespring operator for the quantum channel by sampling a random isometry from the unitary Haar measure."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Parameters"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "input_dims ( int or tuple ) – the input dimension of the channel."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "output_dims ( int or tuple ) – the output dimension of the channel."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "rank ( int ) – Optional. The rank of the quantum channel Choi-matrix."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "seed ( int or np.random.Generator ) – Optional. Set a fixed seed or generator for RNG."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Returns"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "a quantum channel operator."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return type"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Stinespring"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Raises"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "QiskitError – if rank or dimensions are invalid."
+        }
+      ]
+    },
+    {
+      "titulo": "31. random_cnotdihedral",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "qiskit.quantum_info.random_cnotdihedral(num_qubits, seed=None)"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return a random CNOTDihedral element."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Parameters"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "num_qubits ( int ) – the number of qubits for the CNOTDihedral object."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "seed ( int or RandomState ) – Optional. Set a fixed seed or generator for RNG."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Returns"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "a random CNOTDihedral element."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return type"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "CNOTDihedral"
+        }
+      ]
+    },
+    {
+      "titulo": "32. random_pauli_list",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "qiskit.quantum_info.random_pauli_list(num_qubits, size=1, seed=None, phase=True)"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return a random PauliList ."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Parameters"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "num_qubits ( int ) – The number of qubits."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "size ( int ) – Optional. The length of the Pauli list (Default: 1)."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "seed ( int | Generator | None ) – Optional. Set a fixed seed or generator for RNG."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "phase ( bool ) – Optional. If True the Pauli phases are randomized, otherwise the phases are fixed to 0 (Default: True )."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Returns"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "A random PauliList ."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return type"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "PauliList"
+        }
+      ]
+    },
+    {
+      "titulo": "34. hellinger_distance",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "qiskit.quantum_info.hellinger_distance(dist_p, dist_q)"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Computes the Hellinger distance between two counts distributions."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Parameters"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "dist_p ( dict ) – First dict of counts."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "dist_q ( dict ) – Second dict of counts."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Returns"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Distance"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return type"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "float"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "References"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Hellinger Distance @ wikipedia"
+        }
+      ]
+    },
+    {
+      "titulo": "35. hellinger_fidelity",
+      "blocos": [
+        {
+          "tipo": "paragrafo",
+          "texto": "qiskit.quantum_info.hellinger_fidelity(dist_p, dist_q)"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Computes the Hellinger fidelity between two counts distributions."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "The fidelity is defined as ( 1 − H 2 ) 2 \\left(1-H^{2}\\right)^{2} ( 1 − H 2 ) 2 where H is the Hellinger distance. This value is bounded in the range [0, 1]."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "This is equivalent to the standard classical fidelity F ( Q , P ) = ( ∑ i p i q i ) 2 F(Q,P)=\\left(\\sum_{i}\\sqrt{p_{i}q_{i}}\\right)^{2} F ( Q , P ) = ( ∑ i ​ p i ​ q i ​ ​ ) 2 that in turn is equal to the quantum state fidelity for diagonal density matrices."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Parameters"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "dist_p ( dict ) – First dict of counts."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "dist_q ( dict ) – Second dict of counts."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Returns"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Fidelity"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Return type"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "float"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Example"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "from\nqiskit\nimport\nQuantumCircuit\nfrom\nqiskit\n.\nquantum_info\n.\nanalysis\nimport\nhellinger_fidelity\nfrom\nqiskit\n.\nproviders\n.\nbasic_provider\nimport\nBasicSimulator\nqc\n=\nQuantumCircuit\n(\n5\n,\n5\n)\nqc\n.\nh\n(\n2\n)\nqc\n.\ncx\n(\n2\n,\n1\n)\nqc\n.\ncx\n(\n2\n,\n3\n)\nqc\n.\ncx\n(\n3\n,\n4\n)\nqc\n.\ncx\n(\n1\n,\n0\n)\nqc\n.\nmeasure\n(\nrange\n(\n5\n),\nrange\n(\n5\n))\nsim\n=\nBasicSimulator\n()\nres1\n=\nsim\n.\nrun\n(qc).\nresult\n()\nres2\n=\nsim\n.\nrun\n(qc).\nresult\n()\nhellinger_fidelity\n(res1.\nget_counts\n(), res2.\nget_counts\n())"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "References"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Quantum Fidelity @ wikipedia Hellinger Distance @ wikipedia"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Column 1\nColumn 2\nZ2Symmetries\n(symmetries, sq_paulis, sq_list)\nThe $Z_2$ symmetry converter identifies symmetries from the problem hamiltonian and uses them to provide a tapered - more efficient - representation of operators as Paulis for this problem."
+        }
+      ]
+    }
+  ],
+  "versao_documentacao": "Referência solicitada Qiskit 2.6; conferir versão efetiva na página após redirecionamento IBM.",
+  "versao_alvo_qiskit": "2.6",
+  "coletado_em": "2026-11-13T17:06:47.413710+00:00",
+  "hash": "db3e4656015065ff539bfaa967462bae293f09679e626444f1345c2f936d9d50",
+  "chunks": 369,
+  "indexed": true
+}

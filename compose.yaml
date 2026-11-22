@@ -1,0 +1,128 @@
+name: growup-integrada
+
+services:
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        OPTIMIZATION_TIMEOUT_SECONDS: ${OPTIMIZATION_TIMEOUT_SECONDS:-60}
+        API_TIMEOUT_SECONDS: ${API_TIMEOUT_SECONDS:-60}
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:${FRONTEND_PORT:-3000}:3000"
+    depends_on:
+      api:
+        condition: service_healthy
+    networks: [saida]
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:3000').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+  mailpit:
+    image: axllent/mailpit:v1.27.8
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:${MAILPIT_PORT:-8025}:8025"
+    networks: [banco, saida]
+  cache:
+    image: redis:7.4-alpine
+    restart: unless-stopped
+    command: ["redis-server", "--maxmemory", "128mb", "--maxmemory-policy", "allkeys-lru", "--save", "", "--appendonly", "no"]
+    networks: [banco]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+  chroma:
+    image: chromadb/chroma:1.5.9
+    restart: unless-stopped
+    volumes:
+      - chroma_data:/data
+    networks:
+      - banco
+    # Sem porta publicada no host. A imagem oficial persiste em /data.
+
+  api:
+    build:
+      context: .
+      target: runtime
+    restart: unless-stopped
+    mem_limit: ${API_MEMORY_LIMIT:-2g}
+    cpus: ${API_CPU_LIMIT:-2}
+    pids_limit: 128
+    security_opt: [no-new-privileges:true]
+    cap_drop: [ALL]
+    depends_on:
+      cache:
+        condition: service_healthy
+      chroma:
+        condition: service_started
+    environment:
+      SMTP_HOST: ${SMTP_HOST:-mailpit}
+      SMTP_PORT: ${SMTP_PORT:-1025}
+      SMTP_STARTTLS: ${SMTP_STARTTLS:-0}
+      SMTP_FROM: ${SMTP_FROM:-quantumone@localhost}
+      SMTP_USER: ${SMTP_USER:-}
+      SMTP_PASSWORD: ${SMTP_PASSWORD:-}
+      WEB_SEARCH_ENABLED: ${WEB_SEARCH_ENABLED:-1}
+      GEMINI_WEB_MODEL: ${GEMINI_WEB_MODEL:-}
+      KNOWLEDGE_AUTO_SYNC: ${KNOWLEDGE_AUTO_SYNC:-1}
+      KNOWLEDGE_SYNC_INTERVAL_SECONDS: ${KNOWLEDGE_SYNC_INTERVAL_SECONDS:-604800}
+      KNOWLEDGE_PATH: /app/data/conhecimento
+      REDIS_URL: redis://cache:6379/0
+      CACHE_TTL_SECONDS: '3600'
+      CHROMA_HOST: chroma
+      CHROMA_PORT: "8000"
+      CHROMA_SSL: "0"
+      CHROMA_TENANT: default_tenant
+      CHROMA_DATABASE: default_database
+      CHROMA_COLLECTION: ${CHROMA_COLLECTION:-qiskit_documentacao_multilingue}
+      EMBEDDING_MODEL: ${EMBEDDING_MODEL:-sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2}
+      GROWUP_PERMITIR_DOWNLOAD: ${GROWUP_PERMITIR_DOWNLOAD:-1}
+      CHROMA_STARTUP_TIMEOUT: ${CHROMA_STARTUP_TIMEOUT:-120}
+      CHROMA_HTTP_TIMEOUT_SECONDS: ${CHROMA_HTTP_TIMEOUT_SECONDS:-30}
+      API_TIMEOUT_SECONDS: ${API_TIMEOUT_SECONDS:-60}
+      GEMINI_API_KEY: ${GEMINI_API_KEY:-}
+      GEMINI_MODEL: ${GEMINI_MODEL:-gemini-3.1-flash-lite}
+      GEMINI_TIMEOUT_SECONDS: ${GEMINI_TIMEOUT_SECONDS:-40}
+      GROWUP_MAX_CONTEXT_CHARS: ${GROWUP_MAX_CONTEXT_CHARS:-12000}
+      MAX_CIRCUIT_LINES: ${MAX_CIRCUIT_LINES:-2500}
+      MAX_QUBITS: ${MAX_QUBITS:-32}
+      MAX_CLASSICAL_BITS: ${MAX_CLASSICAL_BITS:-256}
+      MAX_CIRCUIT_GATES: ${MAX_CIRCUIT_GATES:-10000}
+      MAX_CIRCUIT_DEPTH: ${MAX_CIRCUIT_DEPTH:-10000}
+      MAX_CODE_SIZE_BYTES: ${MAX_CODE_SIZE_BYTES:-524288}
+      OPTIMIZATION_TIMEOUT_SECONDS: ${OPTIMIZATION_TIMEOUT_SECONDS:-60}
+      MAX_CONCURRENT_OPTIMIZATIONS: ${MAX_CONCURRENT_OPTIMIZATIONS:-1}
+      QISKIT_WORKER_MEMORY_MB: ${QISKIT_WORKER_MEMORY_MB:-1536}
+      MAX_PYTHON_STEPS: ${MAX_PYTHON_STEPS:-200000}
+      MAX_EQUIVALENCE_QUBITS: ${MAX_EQUIVALENCE_QUBITS:-8}
+      MAX_EQUIVALENCE_OPERATIONS: ${MAX_EQUIVALENCE_OPERATIONS:-1000}
+      RAG_MAX_DISTANCE: ${RAG_MAX_DISTANCE:-}
+      AVALIACOES_PATH: /app/data/avaliacoes.jsonl
+    ports:
+      - "127.0.0.1:${API_PORT:-8000}:8000"
+    volumes:
+      - model_cache:/home/growup/.cache/huggingface
+      - api_data:/app/data
+    networks:
+      - banco
+      - saida
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health', timeout=5)"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 600s
+
+networks:
+  banco:
+    internal: true
+  saida:
+
+volumes:
+  chroma_data:
+  model_cache:
+  api_data:
