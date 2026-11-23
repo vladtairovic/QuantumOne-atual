@@ -45,12 +45,23 @@ class Evidencia(Modelo):
     termos_sem_evidencia: list[str] = Field(default_factory=list)
     motivo: str | None = None
 
+class TentativaLLM(Modelo):
+    modelo: str
+    resultado: str = Field(description='ok, pausado, sem_tempo, tempo_esgotado_10s, http_<código>, resposta_vazia ou erro_<tipo>.')
+    segundos: float
+
+class InfoLLM(Modelo):
+    provedor: Literal['nvidia', 'gemini']
+    modelo: str | None = Field(description='Modelo que gerou a resposta; null se nenhum respondeu.')
+    tentativas: list[TentativaLLM]
+
 class ResultadoConsulta(Modelo):
     web_status: Literal['disabled'] = Field(default='disabled', description='A busca web foi removida; sempre disabled.')
     answer_mode: Literal['llm', 'local', 'none'] = Field(default='llm', description=
         'llm: gerada pelo Gemini com os trechos locais; local: extrativa, sem LLM; none: nenhuma resposta gerada.')
     interpretation: Interpretacao | None = None
     evidence: Evidencia | None = None
+    llm: InfoLLM | None = None
     warnings: list[str] = Field(default_factory=list)
     response: str
     sources: list[FonteContexto]

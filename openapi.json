@@ -2955,6 +2955,45 @@
         ],
         "title": "FonteContexto"
       },
+      "InfoLLM": {
+        "properties": {
+          "provedor": {
+            "type": "string",
+            "enum": [
+              "nvidia",
+              "gemini"
+            ],
+            "title": "Provedor"
+          },
+          "modelo": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Modelo",
+            "description": "Modelo que gerou a resposta; null se nenhum respondeu."
+          },
+          "tentativas": {
+            "items": {
+              "$ref": "#/components/schemas/TentativaLLM"
+            },
+            "type": "array",
+            "title": "Tentativas"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "provedor",
+          "modelo",
+          "tentativas"
+        ],
+        "title": "InfoLLM"
+      },
       "Interpretacao": {
         "properties": {
           "tipo_entrada": {
@@ -3428,6 +3467,16 @@
             "anyOf": [
               {
                 "$ref": "#/components/schemas/Evidencia"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "llm": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/InfoLLM"
               },
               {
                 "type": "null"
@@ -3928,6 +3977,31 @@
           "mode"
         ],
         "title": "Saude"
+      },
+      "TentativaLLM": {
+        "properties": {
+          "modelo": {
+            "type": "string",
+            "title": "Modelo"
+          },
+          "resultado": {
+            "type": "string",
+            "title": "Resultado",
+            "description": "ok, pausado, sem_tempo, tempo_esgotado_10s, http_<código>, resposta_vazia ou erro_<tipo>."
+          },
+          "segundos": {
+            "type": "number",
+            "title": "Segundos"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "modelo",
+          "resultado",
+          "segundos"
+        ],
+        "title": "TentativaLLM"
       },
       "Verify": {
         "properties": {

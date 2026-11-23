@@ -13,6 +13,7 @@ circuitos de até 30 qubits e mede a qualidade do próprio RAG.
 | RAG | busca híbrida (vetorial + BM25 + PT→EN), verificação de evidência, avaliação com métricas | [RAG.md](docs/RAG.md) |
 | Diagnóstico e motor | todos os erros de uma vez, correções validadas, perfis, verificação até 30 qubits | [MOTOR-QUANTICO.md](docs/MOTOR-QUANTICO.md) |
 | Resultados | benchmarks contra a linha de base, problemas resolvidos e limitações | [BENCHMARKS.md](docs/BENCHMARKS.md) |
+| Geração de respostas | fila de 5 modelos NVIDIA, 10 s por modelo, fallback local | [LLM.md](docs/LLM.md) |
 
 ## Iniciar e abrir
 
@@ -90,7 +91,7 @@ No Compose local, o Mailpit recebe os códigos de confirmação. [Abrir a caixa 
 
 ## Credencial e modelo
 
-A credencial fica somente no `.env` local, ignorado pelo Git e pelos builds. Nunca use chave em variáveis `NEXT_PUBLIC` ou no navegador. Copie `.env.example` para `.env`; `GEMINI_API_KEY` é **opcional**.
+A credencial fica somente no `.env` local, ignorado pelo Git e pelos builds. Nunca use chave em variáveis `NEXT_PUBLIC` ou no navegador. Copie `.env.example` para `.env`; as chaves são **opcionais**. Com `NVIDIA_API_KEY`, a resposta é redigida pela fila de modelos NVIDIA ([LLM.md](docs/LLM.md)); sem ela, pelo Gemini, se houver `GEMINI_API_KEY`.
 
 - Sem chave: `/query` responde de forma extrativa com a base local (`answer_mode: "local"`).
 - `QONE_LLM=local`: nunca chama a LLM, mesmo com chave (100% offline).

@@ -10,7 +10,7 @@ recebe somente a pergunta e os trechos locais, sem ferramenta de busca.
 import logging
 import os
 
-from . import busca_chromadb, cliente_gemini, resposta_local
+from . import busca_chromadb, cliente_gemini, cliente_llm, resposta_local
 from .contexto_gemini import preparar_contexto, MENSAGEM_SEM_CONTEXTO
 from .interpretacao import interpretar
 
@@ -21,7 +21,9 @@ AVISO_WEB_REMOVIDA = ("A busca web foi removida do QuantumOne; o pedido web_sear
 
 
 def llm_configurada():
-    return bool(os.getenv("GEMINI_API_KEY", "").strip()) and os.getenv("QONE_LLM", "auto").lower() != "local"
+    if os.getenv("QONE_LLM", "auto").lower() == "local":
+        return False
+    return cliente_llm.configurada() or bool(os.getenv("GEMINI_API_KEY", "").strip())
 
 
 def fallback_local_ativo():
@@ -73,11 +75,29 @@ def responder(pergunta, top_k=3, web_search=None, consulta=None):
         avisos.append("Parte das fontes está marcada como desatualizada para a versão atual do Qiskit; "
                       "confira a versão antes de aplicar o código.")
     fontes = [_fonte(d) for d in usados]
-    if llm_configurada():
+    if llm_configurada() and cliente_llm.configurada():
+        # Fila de prioridade NVIDIA: cada modelo tem até LLM_TIMEOUT_SECONDS para responder.
+        try:
+            gerado = cliente_llm.gerar_resposta(pergunta, contexto)
+            pulados = [t["modelo"] for t in gerado["tentativas"] if t["resultado"] != "ok"]
+            if pulados:
+                avisos.append(f"Respondido por {gerado['modelo']} após {len(pulados)} modelo(s) da fila não responderem a tempo.")
+            return {**base, "response": gerado["texto"], "sources": fontes, "status": "ok", "answer_mode": "llm",
+                    "llm": {"provedor": "nvidia", "modelo": gerado["modelo"], "tentativas": gerado["tentativas"]},
+                    "warnings": avisos}
+        except cliente_llm.FilaEsgotada as erro:
+            if not fallback_local_ativo():
+                raise
+            log.warning("Fila de LLMs esgotada: %s", [t["resultado"] for t in erro.tentativas])
+            avisos.append("Nenhum modelo da fila respondeu dentro do tempo limite. "
+                          "A resposta abaixo foi montada localmente a partir da base documental.")
+            base["llm"] = {"provedor": "nvidia", "modelo": None, "tentativas": erro.tentativas}
+    elif llm_configurada():
         try:
             texto = cliente_gemini.gerar_resposta(pergunta, contexto)
             return {**base, "response": texto, "sources": fontes, "status": "ok",
-                    "answer_mode": "llm", "warnings": avisos}
+                    "answer_mode": "llm", "llm": {"provedor": "gemini", "modelo": os.getenv("GEMINI_MODEL", "gemini-3.1-flash-lite"),
+                                                  "tentativas": []}, "warnings": avisos}
         except Exception as erro:
             if not fallback_local_ativo():
                 raise

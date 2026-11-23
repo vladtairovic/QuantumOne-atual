@@ -103,6 +103,7 @@ export type AnalysisResponse = {
   warnings: string[];
   web_status?: string;
   answer_mode?: "llm" | "local" | "none";
+  llm?: { provedor: string; modelo: string | null; tentativas: { modelo: string; resultado: string; segundos: number }[] } | null;
   diagnosis?: DiagnosisResult;
 };
 export class AnalysisError extends Error {

@@ -52,6 +52,8 @@ export type AnalysisResultRecord = {
   requestId?: string;
   /** llm: redigida pelo Gemini com trechos locais; local: extrativa, sem LLM; none: sem resposta. */
   answerMode?: "llm" | "local" | "none";
+  /** Modelo da fila que redigiu a resposta (quando answerMode = "llm"). */
+  llmModel?: string;
   engine?: {
     profile: string;
     strategy?: string;

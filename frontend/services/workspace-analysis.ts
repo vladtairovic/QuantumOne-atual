@@ -10,6 +10,7 @@ export function report(response: AnalysisResponse): AnalysisResultRecord {
     requestId: response.request_id,
     insufficient: response.status === "insufficient_context",
     answerMode: response.answer_mode,
+    llmModel: response.llm?.modelo || undefined,
     warnings: response.warnings,
     suggestions: q?.circuito_otimizado_qasm ? [{
       title: "Circuito otimizado em OpenQASM 2",

@@ -55,6 +55,7 @@ function isAnalysisResult(value: unknown): value is AnalysisResultRecord {
   if (value.requestId !== undefined && (typeof value.requestId !== "string" || value.requestId.length > 160)) return false;
   if (value.circuit !== undefined && (!isRecord(value.circuit) || !Number.isSafeInteger(value.circuit.qubits) || Number(value.circuit.qubits) < 0 || Number(value.circuit.qubits) > 4096 || !["equivalent","different","unknown"].includes(String(value.circuit.equivalence)))) return false;
   if (value.answerMode !== undefined && !["llm", "local", "none"].includes(String(value.answerMode))) return false;
+  if (value.llmModel !== undefined && (typeof value.llmModel !== "string" || value.llmModel.length > 200)) return false;
   if (value.engine !== undefined && (!isRecord(value.engine) || typeof value.engine.profile !== "string" ||
     Object.values(value.engine).some((item) => !(item === undefined || item === null || typeof item === "number" ||
       (typeof item === "string" && item.length <= 2_000) ||

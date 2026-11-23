@@ -7,6 +7,7 @@ Este documento descreve a arquitetura após a reestruturação de novembro de 20
 - [BASE-DE-CONHECIMENTO.md](BASE-DE-CONHECIMENTO.md): fontes, curadoria e atualização.
 - [MOTOR-QUANTICO.md](MOTOR-QUANTICO.md): diagnóstico, correção, otimização e verificação.
 - [BENCHMARKS.md](BENCHMARKS.md): resultados medidos, problemas resolvidos e limitações.
+- [LLM.md](LLM.md): fila de prioridade de LLMs (NVIDIA), limite de 10 s por modelo e fallback.
 
 ## Visão geral
 
@@ -96,6 +97,8 @@ Nenhuma dependência foi adicionada ao frontend.
 | Variável | Padrão | Efeito |
 |---|---|---|
 | `QONE_LLM` | `auto` | `local` nunca chama LLM |
+| `NVIDIA_API_KEY` / `NVIDIA_MODELS` | vazio | fila NVIDIA (prioridade sobre o Gemini) e ordem dos modelos |
+| `LLM_TIMEOUT_SECONDS` / `LLM_PAUSA_SEGUNDOS` / `LLM_TEMPO_TOTAL_SECONDS` | `10` / `300` / `45` | prazo por modelo, pausa após falha, teto da fila |
 | `QONE_LOCAL_FALLBACK` | `1` | `0` devolve 503 sem LLM |
 | `RAG_MODO` | `hibrido` | `vetorial` ou `lexical` |
 | `RAG_MIN_COBERTURA` | `0.34` | cobertura mínima de termos para responder |

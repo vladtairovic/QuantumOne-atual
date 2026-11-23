@@ -76,6 +76,7 @@ export default function AnalysisResultPanel({ result }: { result?: AnalysisResul
       <section className="analysis-result-section"><h3>Resumo</h3><p className="analysis-result-summary">{result.summary}</p></section>
       {result.insufficient && <FeedbackMessage tone="warning" message="A documentação recuperada foi insuficiente para fundamentar a resposta." />}
       {result.answerMode === "local" && <p className="analysis-answer-mode">Resposta extrativa da base local (sem modelo de linguagem).</p>}
+      {result.answerMode === "llm" && result.llmModel && <p className="analysis-answer-mode">Redigida por {result.llmModel} a partir da base local.</p>}
       {result.diagnosis && <section className="analysis-result-section analysis-diagnosis"><h3>Diagnóstico <span>{result.diagnosis.problems.length}</span>
         <em className={`analysis-confidence analysis-confidence-${result.diagnosis.confidence}`}>confiança {result.diagnosis.confidence}</em></h3>
         <ol className="analysis-diagnosis-list">{result.diagnosis.problems.map((p, index) => <li key={`${p.code}-${index}`}>
