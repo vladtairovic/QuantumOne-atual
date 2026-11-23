@@ -28,6 +28,18 @@ def fallback_local_ativo():
     return os.getenv("QONE_LOCAL_FALLBACK", "1") == "1"
 
 
+# Contexto que o Desktop Chat acrescenta à mensagem (código do editor e anexos).
+# Ele vai para a LLM, mas não deve diluir a busca nem a verificação de evidência.
+_MARCADORES_CONTEXTO = ("\n\nCódigo atual (", "\n\nO editor está vazio.", "\n\nArquivo: ")
+
+
+def extrair_consulta(texto):
+    """Parte da mensagem que é a pergunta do usuário (sem contexto anexado)."""
+    corte = min((texto.find(m) for m in _MARCADORES_CONTEXTO if m in texto), default=-1)
+    pergunta = texto[:corte].strip() if corte > 0 else texto.strip()
+    return pergunta or texto.strip()
+
+
 def _fonte(d):
     meta = d["metadados"]
     return {"document_id": meta["document_id"], "chunk_id": d["id"], "source": meta["fonte"],
@@ -35,12 +47,18 @@ def _fonte(d):
             "retrieved_at": meta.get("coletado_em")}
 
 
-def responder(pergunta, top_k=3, web_search=None):
+def responder(pergunta, top_k=3, web_search=None, consulta=None):
+    """``pergunta`` vai para a LLM; ``consulta`` (a mensagem do usuário) guia a busca.
+
+    Nas conversas, ``pergunta`` inclui instruções e histórico; usá-la na busca
+    diluiria os termos e faria o filtro de evidência recusar perguntas válidas.
+    """
     avisos = [AVISO_WEB_REMOVIDA] if web_search else []
-    analise = interpretar(pergunta)
+    consulta = extrair_consulta(consulta if consulta is not None else pergunta)
+    analise = interpretar(consulta)
     documentos = busca_chromadb.buscar_documentos(
-        pergunta, quantidade=top_k, biblioteca=analise["biblioteca_principal"])
-    evidencia = busca_chromadb.avaliar_evidencia(pergunta, documentos)
+        consulta, quantidade=top_k, biblioteca=analise["biblioteca_principal"])
+    evidencia = busca_chromadb.avaliar_evidencia(consulta, documentos)
     base = {"web_status": "disabled", "interpretation": analise, "evidence": evidencia}
     contexto, referencias = preparar_contexto(
         documentos, limite=int(os.getenv("GROWUP_MAX_CONTEXT_CHARS", "12000")))
@@ -67,7 +85,7 @@ def responder(pergunta, top_k=3, web_search=None):
             log.warning("LLM indisponível (%s); usando resposta local.", type(erro).__name__)
             avisos.append("O modelo de linguagem não respondeu (limite de cota, rede ou configuração). "
                           "A resposta abaixo foi montada localmente a partir da base documental.")
-    local = resposta_local.gerar(pergunta, usados)
+    local = resposta_local.gerar(consulta, usados)
     if local is None:
         return {**base, "response": MENSAGEM_SEM_CONTEXTO, "sources": fontes,
                 "status": "insufficient_context", "answer_mode": "none", "warnings": avisos}

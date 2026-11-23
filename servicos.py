@@ -76,13 +76,13 @@ class ServicosIntegrados:
             status="ok" if fontes else "insufficient_context",
         )
 
-    async def consultar(self, texto, top_k=3, web_search=None):
+    async def consultar(self, texto, top_k=3, web_search=None, consulta=None):
         from rag.pipeline_gemini import responder, llm_configurada, fallback_local_ativo
         # Sem LLM, a resposta local extrativa é o comportamento padrão.
         # QONE_LOCAL_FALLBACK=0 restaura o 503 LLM_NOT_CONFIGURED.
         if not llm_configurada() and not fallback_local_ativo():
             raise LLMNaoConfigurada()
-        return await self._executar(responder, texto, top_k, web_search)
+        return await self._executar(responder, texto, top_k, web_search, consulta)
 
     async def adicionar_documento(self, filename, content):
         def adicionar():

@@ -149,3 +149,17 @@ def test_conversa_tambem_nao_usa_web(contexto, sem_rede, monkeypatch, tmp_path):
 def test_sincronizacao_automatica_desligada_por_padrao():
     compose = (ROOT / "compose.yaml").read_text(encoding="utf-8")
     assert "KNOWLEDGE_AUTO_SYNC: ${KNOWLEDGE_AUTO_SYNC:-0}" in compose
+
+
+def test_conversa_busca_pela_mensagem_e_nao_pelo_preambulo(contexto, monkeypatch, tmp_path):
+    """Regressão: o preâmbulo da conversa e o contexto do editor diluíam a evidência."""
+    monkeypatch.setenv("CONVERSAS_PATH", str(tmp_path / "conversas.sqlite"))
+    client, _ = contexto
+    _enviar(client)
+    conversa = client.post("/conversations", json={}).json()["conversation_id"]
+    mensagem = "Como medir qubits no Qiskit?\n\nO editor está vazio."
+    r = client.post(f"/conversations/{conversa}/messages",
+                    json={"input": mensagem, "message_id": str(uuid4())})
+    assert r.status_code == 200 and r.json()["status"] == "ok", r.text
+    assert r.json()["answer_mode"] == "local"
+    assert r.json()["interpretation"]["tipo_entrada"] == "linguagem_natural"

@@ -242,7 +242,7 @@ async def enviar_mensagem(
 
     pergunta = conversas.preparar(mensagens, entrada.input)
     resultado = ResultadoConsulta.model_validate(await chamar(
-        servicos.consultar(pergunta, entrada.top_k, entrada.web_search)
+        servicos.consultar(pergunta, entrada.top_k, entrada.web_search, consulta=entrada.input)
     ))
     resposta = {
         **resultado.model_dump(mode="json"),

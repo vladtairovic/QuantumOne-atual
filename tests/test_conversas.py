@@ -9,7 +9,7 @@ def test_conversa_retomada_e_reenvio(monkeypatch, tmp_path):
     monkeypatch.setenv("CONVERSAS_PATH", str(tmp_path / "conversas.sqlite"))
     consultas = []
 
-    async def consultar(pergunta, top_k, web_search):
+    async def consultar(pergunta, top_k, web_search, consulta=None):
         consultas.append((pergunta, top_k, web_search))
         return {"response": "Sugestão de teste", "sources": [], "status": "ok"}
 
