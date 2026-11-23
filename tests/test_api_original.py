@@ -56,7 +56,7 @@ def test_upload_invalido(client,name,body,status):
 def test_avaliacao(client,values,mean,approved,label):
     r=client.post('/evaluate',json=notas(values));assert r.status_code==201
     d=r.json();assert (d['mean'],d['approved'],d['result'])==(mean,approved,label)
-    assert json.loads(main.ARQUIVO_AVALIACOES.read_text())==d
+    assert json.loads(main.ARQUIVO_AVALIACOES.read_text(encoding='utf-8'))==d
 
 def test_critica_reportada(client):
     data={**notas((5,5,5,5,5)),'critical_failure':True}
@@ -110,4 +110,4 @@ def test_openapi(client):
         '/auth/register','/auth/login','/auth/email','/auth/password-reset/request',
         '/auth/password-reset/verify','/auth/password-reset/confirm',
         '/conversations','/conversations/{conversation_id}','/conversations/{conversation_id}/messages'}
-    assert json.loads(Path('openapi.json').read_text())==schema
+    assert json.loads(Path('openapi.json').read_text(encoding='utf-8'))==schema

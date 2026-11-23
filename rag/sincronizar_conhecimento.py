@@ -32,19 +32,31 @@ def ler_status():
         return {"status": "not_started", "documents": []}
 
 
+def _travar(arquivo):
+    """Trava exclusiva não bloqueante, liberada pelo SO se o processo morrer.
+
+    Docker/Linux usa flock; Windows (desenvolvimento local) usa msvcrt.
+    """
+    try:
+        import fcntl
+    except ImportError:
+        import msvcrt
+        msvcrt.locking(arquivo.fileno(), msvcrt.LK_NBLCK, 1)
+    else:
+        fcntl.flock(arquivo, fcntl.LOCK_EX | fcntl.LOCK_NB)
+
+
 def sincronizar(reindexar=False):
     from .banco import obter_colecao
     from .configuracao import MODELO_EMBEDDINGS, MODELO_LOCK, obter_modelo, limite_tokens
     from .preparar_chunks import gerar_chunks
     from .indexar_documentos import atualizar_documento
-    # Docker Linux: flock é liberado inclusive se o processo morrer.
-    import fcntl
     destino = pasta()
     destino.mkdir(parents=True, exist_ok=True)
     with (destino / ".sync.lock").open("w") as trava:
         try:
-            fcntl.flock(trava, fcntl.LOCK_EX | fcntl.LOCK_NB)
-        except BlockingIOError:
+            _travar(trava)
+        except OSError:
             return {"status": "already_running"}
         catalogo = json.loads(CATALOGO.read_text(encoding="utf-8"))
         if len(catalogo) > 32 or len({d["document_id"] for d in catalogo}) != len(catalogo):
