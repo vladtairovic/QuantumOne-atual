@@ -4,8 +4,6 @@
 import { useState } from "react";
 
 type SettingsPanelProps = {
-  webSearch: boolean;
-  onWebSearchChange: (value: boolean) => void;
   backend: string;
   topK: string;
   onBackendChange: (value: string) => void;
@@ -13,8 +11,6 @@ type SettingsPanelProps = {
 };
 
 export default function SettingsPanel({
-  webSearch,
-  onWebSearchChange,
   backend,
   topK,
   onBackendChange,
@@ -54,10 +50,6 @@ export default function SettingsPanel({
         className="settings-content"
         hidden={!isExpanded}
       >
-        <div className="field-group">
-          <label><input type="checkbox" checked={webSearch} onChange={e=>onWebSearchChange(e.target.checked)}/> Consultar a internet</label>
-          <span className="field-help">Complementa a base local com Google Search quando necessário. Depende da cota Gemini. As fontes web não são armazenadas na base.</span>
-        </div>
         <div className="field-group">
           <label htmlFor="backend">
             Backend de destino

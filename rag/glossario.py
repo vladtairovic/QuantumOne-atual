@@ -1,0 +1,115 @@
+"""Glossário bilíngue usado na expansão de consultas.
+
+A maior parte da documentação oficial está em inglês, enquanto as perguntas
+chegam em português. A expansão adiciona equivalentes técnicos conhecidos;
+não inventa termos e não substitui a consulta original.
+Chaves e valores já estão normalizados (minúsculas, sem acentos).
+"""
+from .texto import sem_acentos
+
+GLOSSARIO = {
+    "emaranhamento": ["entanglement", "entangled", "bell", "ghz"],
+    "emaranhado": ["entangled", "entanglement"],
+    "superposicao": ["superposition", "hadamard"],
+    "interferencia": ["interference"],
+    "medicao": ["measurement", "measure"],
+    "medicoes": ["measurement", "measure"],
+    "medir": ["measure"],
+    "porta": ["gate"],
+    "portas": ["gates", "gate"],
+    "circuito": ["circuit", "quantumcircuit"],
+    "circuitos": ["circuits", "circuit"],
+    "registrador": ["register", "quantumregister", "classicalregister"],
+    "registradores": ["registers", "register"],
+    "bit": ["bit", "clbit"],
+    "bits": ["bits", "clbit"],
+    "estado": ["state", "statevector"],
+    "estados": ["states", "state"],
+    "vetor": ["vector", "statevector"],
+    "transpilacao": ["transpilation", "transpile", "transpiler"],
+    "transpilar": ["transpile", "transpilation"],
+    "transpilador": ["transpiler", "passmanager"],
+    "otimizacao": ["optimization", "optimize", "optimization_level"],
+    "otimizar": ["optimize", "optimization"],
+    "profundidade": ["depth"],
+    "roteamento": ["routing", "swap", "sabre"],
+    "mapeamento": ["layout", "mapping"],
+    "layout": ["layout", "initial_layout"],
+    "conectividade": ["connectivity", "coupling", "coupling_map", "couplingmap"],
+    "topologia": ["topology", "coupling_map"],
+    "decomposicao": ["decomposition", "decompose"],
+    "decompor": ["decompose"],
+    "sintese": ["synthesis", "unitarysynthesis"],
+    "equivalencia": ["equivalence", "equiv", "operator"],
+    "unitaria": ["unitary", "operator"],
+    "unitario": ["unitary", "operator"],
+    "ruido": ["noise", "noisemodel"],
+    "mitigacao": ["mitigation"],
+    "correcao": ["correction", "error"],
+    "erro": ["error"],
+    "erros": ["errors", "error"],
+    "simulacao": ["simulation", "simulator", "aer"],
+    "simulador": ["simulator", "aersimulator"],
+    "simular": ["simulate", "simulation"],
+    "amostragem": ["sampling", "sampler", "shots"],
+    "amostrador": ["sampler"],
+    "estimador": ["estimator"],
+    "observavel": ["observable", "sparsepauliop"],
+    "observaveis": ["observables", "observable"],
+    "parametro": ["parameter", "parametervector"],
+    "parametros": ["parameters", "parameter"],
+    "parametrizado": ["parameterized", "parametrized", "parameter"],
+    "variacional": ["variational", "ansatz"],
+    "rotacao": ["rotation", "rx", "ry", "rz"],
+    "rotacoes": ["rotations", "rotation"],
+    "fase": ["phase", "global_phase"],
+    "controlada": ["controlled", "control"],
+    "controlado": ["controlled", "control"],
+    "controle": ["control", "if_test"],
+    "condicional": ["conditional", "if_test", "classical", "feedforward"],
+    "classico": ["classical"],
+    "classica": ["classical"],
+    "hardware": ["hardware", "backend", "device"],
+    "dispositivo": ["device", "backend"],
+    "ordem": ["ordering", "order", "little", "endian"],
+    "ordenacao": ["ordering", "endian"],
+    "biblioteca": ["library", "circuit_library"],
+    "algoritmo": ["algorithm"],
+    "algoritmos": ["algorithms", "algorithm"],
+    "transformada": ["transform", "qft", "fourier"],
+    "fourier": ["fourier", "qft"],
+    "busca": ["search", "grover"],
+    "oraculo": ["oracle"],
+    "estimativa": ["estimation"],
+    "qubit": ["qubit", "qubits"],
+    "qubits": ["qubits", "qubit"],
+    "redefinir": ["reset"],
+    "barreira": ["barrier"],
+    "exportar": ["export", "dumps", "qasm"],
+    "importar": ["import", "loads"],
+    "carregar": ["load", "loads"],
+    "desenhar": ["draw", "visualize"],
+    "visualizar": ["visualize", "draw", "visualization"],
+    "histograma": ["histogram", "plot_histogram"],
+    "contagens": ["counts", "get_counts"],
+    "resultado": ["result"],
+    "executar": ["run", "execute"],
+    "execucao": ["execution", "run"],
+    "primitivas": ["primitives", "sampler", "estimator"],
+    "primitiva": ["primitive"],
+    "migracao": ["migration", "deprecated", "removed"],
+    "obsoleto": ["deprecated", "removed"],
+    "removido": ["removed", "deprecated"],
+    "versao": ["version"],
+}
+
+
+def expandir(termos: list[str]) -> list[str]:
+    """Retorna somente os termos adicionais (sem repetir os originais)."""
+    originais = set(termos)
+    extras = []
+    for termo in termos:
+        for equivalente in GLOSSARIO.get(sem_acentos(termo), ()):
+            if equivalente not in originais and equivalente not in extras:
+                extras.append(equivalente)
+    return extras

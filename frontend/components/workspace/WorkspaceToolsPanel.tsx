@@ -5,7 +5,7 @@ import { useState } from "react";
 import type { AttachmentRecord } from "../layout/conversationTypes";
 import SourceDrawer, { type SourceDetails } from "../analysis/SourceDrawer";
 
-export type WorkspaceToolId = "files" | "diff" | "terminal" | "qiskit" | "sources";
+export type WorkspaceToolId = "files" | "diff" | "qiskit" | "sources";
 
 type WorkspaceToolsPanelProps = {
   activeTool: WorkspaceToolId;
@@ -16,8 +16,6 @@ type WorkspaceToolsPanelProps = {
   diffFiles?: DiffFilePreview[];
   onApproveDiffFile?: (id: string) => void;
   onRevertDiffFile?: (id: string) => void;
-  terminalOutput?: TerminalOutput;
-  onRunCommand?: (command: string) => void;
   qiskitData?: QiskitPreviewData;
   sources?: WorkspaceSource[];
 };
@@ -28,13 +26,6 @@ export type DiffFilePreview = {
   originalLines: string[];
   proposedLines: string[];
 
-};
-
-export type TerminalOutput = {
-  status: "idle" | "running" | "success" | "error";
-  command?: string;
-  lines?: string[];
-  exitCode?: number;
 };
 
 export type QiskitPreviewData = {
@@ -76,7 +67,6 @@ export function previewGates(qasm: string) {
 const tools: { id: WorkspaceToolId; label: string; icon: string }[] = [
   { id: "files", label: "Arquivos", icon: "\u25A4" },
   { id: "diff", label: "Diff", icon: "\u00B1" },
-  { id: "terminal", label: "Terminal", icon: "\u203A_" },
   { id: "qiskit", label: "Qiskit", icon: "\u25C7" },
   { id: "sources", label: "Fontes", icon: "\u2315" },
 ];
@@ -142,23 +132,13 @@ export default function WorkspaceToolsPanel({
   diffFiles = [],
   onApproveDiffFile,
   onRevertDiffFile,
-  terminalOutput,
-  onRunCommand,
   qiskitData,
   sources = [],
 }: WorkspaceToolsPanelProps) {
   const [selectedDiffId, setSelectedDiffId] = useState<string | null>(null);
   const [selectedSource, setSelectedSource] = useState<SourceDetails | null>(null);
-  const [terminalCommand, setTerminalCommand] = useState("");
   const heading = tools.find((tool) => tool.id === activeTool)?.label ?? "Ferramenta";
   const selectedDiff = diffFiles.find((file) => file.id === selectedDiffId) ?? diffFiles[0];
-
-  function runTerminalCommand() {
-    const command = terminalCommand.trim();
-    if (!command || !onRunCommand) return;
-    onRunCommand(command);
-    setTerminalCommand("");
-  }
 
   return (
     <section className={`workspace-tool-panel workspace-tool-panel-${activeTool}`} role="tabpanel" aria-label={heading}>
@@ -237,29 +217,6 @@ export default function WorkspaceToolsPanel({
         ) : (
           <EmptyState icon={"\u00B1"} title="Nenhuma alteração nesta conversa"><p>Quando houver uma proposta, a comparação entre o original e o resultado será exibida aqui.</p></EmptyState>
         )
-      )}
-
-      {activeTool === "terminal" && (
-        <div className="terminal-preview" aria-label="Terminal do workspace">
-          <div className="terminal-preview-toolbar">
-            <span><i /> Terminal do workspace</span>
-            <span className={`terminal-status terminal-status-${terminalOutput?.status ?? "idle"}`}>{terminalOutput?.status === "running" ? "Executando" : terminalOutput?.status === "error" ? "Falha" : terminalOutput?.status === "success" ? "Concluído" : onRunCommand ? "Pronto" : "Somente leitura"}</span>
-          </div>
-          <div className="terminal-preview-body">
-            {terminalOutput?.command && <div className="terminal-output-command"><code>$ {terminalOutput.command}</code></div>}
-            {terminalOutput?.lines?.length ? (
-              <pre className="terminal-output-lines">{terminalOutput.lines.join("\n")}</pre>
-            ) : (
-              <p className="terminal-welcome">Digite ajuda para listar os comandos do workspace.</p>
-            )}
-            {terminalOutput?.exitCode !== undefined && <div className="terminal-exit-code">Processo finalizado com código {terminalOutput.exitCode}.</div>}
-            {onRunCommand && <div className="terminal-preview-prompt">
-              <span>qone</span><code>$</code>
-              <input aria-label="Comando do terminal" value={terminalCommand} onChange={(event) => setTerminalCommand(event.target.value)} onKeyDown={(event) => { if (event.key === "Enter") { event.preventDefault(); runTerminalCommand(); } }} placeholder="Digite um comando" disabled={terminalOutput?.status === "running"} />
-              <button type="button" onClick={runTerminalCommand} disabled={!terminalCommand.trim() || terminalOutput?.status === "running"}>Executar</button>
-            </div>}
-          </div>
-        </div>
       )}
 
       {activeTool === "qiskit" && (

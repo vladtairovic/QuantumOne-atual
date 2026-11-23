@@ -2,7 +2,7 @@
   "openapi": "3.1.0",
   "info": {
     "title": "GrowUp - API integrada",
-    "description": "API com ChromaDB remoto, RAG Gemini e otimização Qiskit. Gemini exige GEMINI_API_KEY.",
+    "description": "API do QuantumOne: RAG híbrido local (ChromaDB + BM25), resposta por Gemini opcional ou extrativa local, diagnóstico de entradas e otimização Qiskit verificada. Sem busca web.",
     "version": "0.4.0"
   },
   "paths": {
@@ -128,7 +128,7 @@
     "/query": {
       "post": {
         "summary": "Query",
-        "description": "Consulta a base local e, opcionalmente, Google Search. Sem chave: 503 LLM_NOT_CONFIGURED. Busca web indisponível: 503 WEB_SEARCH_UNAVAILABLE.",
+        "description": "Consulta somente a base local (RAG híbrido). Com GEMINI_API_KEY, o Gemini redige a resposta a partir\ndos trechos; sem chave, ou se o Gemini falhar, a resposta é extrativa local (answer_mode=local).\nNenhuma busca web é executada.",
         "operationId": "query_query_post",
         "requestBody": {
           "content": {
@@ -1734,26 +1734,6 @@
               }
             }
           },
-          "429": {
-            "description": "Too Many Requests",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErroCircuito"
-                }
-              }
-            }
-          },
-          "499": {
-            "description": "Additional Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErroCircuito"
-                }
-              }
-            }
-          },
           "500": {
             "description": "Internal Server Error",
             "content": {
@@ -1786,6 +1766,26 @@
           },
           "504": {
             "description": "Gateway Timeout",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErroCircuito"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErroCircuito"
+                }
+              }
+            }
+          },
+          "499": {
+            "description": "Additional Response",
             "content": {
               "application/json": {
                 "schema": {
@@ -2266,8 +2266,8 @@
         "properties": {
           "top_k": {
             "type": "integer",
-            "maximum": 10,
-            "minimum": 1,
+            "maximum": 10.0,
+            "minimum": 1.0,
             "title": "Top K",
             "default": 3
           },
@@ -2323,8 +2323,8 @@
           },
           "optimization_level": {
             "type": "integer",
-            "maximum": 3,
-            "minimum": 0,
+            "maximum": 3.0,
+            "minimum": 0.0,
             "title": "Optimization Level",
             "default": 3
           }
@@ -2376,12 +2376,12 @@
               }
             ],
             "title": "Web Search",
-            "description": "Busca Google sob demanda; null usa a configuração do servidor."
+            "description": "Obsoleto: a busca web foi removida. Aceito por compatibilidade e sempre ignorado."
           },
           "top_k": {
             "type": "integer",
-            "maximum": 10,
-            "minimum": 1,
+            "maximum": 10.0,
+            "minimum": 1.0,
             "title": "Top K",
             "default": 3
           },
@@ -2573,6 +2573,43 @@
         ],
         "title": "ErroCircuito"
       },
+      "Evidencia": {
+        "properties": {
+          "suficiente": {
+            "type": "boolean",
+            "title": "Suficiente"
+          },
+          "cobertura": {
+            "type": "number",
+            "title": "Cobertura"
+          },
+          "termos_sem_evidencia": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Termos Sem Evidencia"
+          },
+          "motivo": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Motivo"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "suficiente",
+          "cobertura"
+        ],
+        "title": "Evidencia"
+      },
       "Fonte": {
         "properties": {
           "document_id": {
@@ -2622,10 +2659,7 @@
           },
           "origin": {
             "type": "string",
-            "enum": [
-              "local",
-              "web"
-            ],
+            "const": "local",
             "title": "Origin",
             "default": "local"
           },
@@ -2661,6 +2695,89 @@
           "content"
         ],
         "title": "FonteContexto"
+      },
+      "Interpretacao": {
+        "properties": {
+          "tipo_entrada": {
+            "type": "string",
+            "title": "Tipo Entrada"
+          },
+          "componentes": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Componentes"
+          },
+          "versao_openqasm": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Versao Openqasm"
+          },
+          "bibliotecas": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Bibliotecas"
+          },
+          "biblioteca_principal": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Biblioteca Principal"
+          },
+          "intencao": {
+            "type": "string",
+            "title": "Intencao"
+          },
+          "intencoes_secundarias": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Intencoes Secundarias"
+          },
+          "complexidade": {
+            "type": "string",
+            "enum": [
+              "basica",
+              "intermediaria",
+              "avancada"
+            ],
+            "title": "Complexidade"
+          },
+          "hipoteses": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Hipoteses"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "tipo_entrada",
+          "componentes",
+          "bibliotecas",
+          "intencao",
+          "intencoes_secundarias",
+          "complexidade",
+          "hipoteses"
+        ],
+        "title": "Interpretacao"
       },
       "ListaDocumentos": {
         "properties": {
@@ -2700,12 +2817,12 @@
               }
             ],
             "title": "Web Search",
-            "description": "Busca Google sob demanda; null usa a configuração do servidor."
+            "description": "Obsoleto: a busca web foi removida. Aceito por compatibilidade e sempre ignorado."
           },
           "top_k": {
             "type": "integer",
-            "maximum": 10,
-            "minimum": 1,
+            "maximum": 10.0,
+            "minimum": 1.0,
             "title": "Top K",
             "default": 3
           },
@@ -2744,8 +2861,8 @@
           },
           "score": {
             "type": "integer",
-            "maximum": 5,
-            "minimum": 0,
+            "maximum": 5.0,
+            "minimum": 0.0,
             "title": "Score"
           },
           "evidence": {
@@ -2936,13 +3053,41 @@
         "properties": {
           "web_status": {
             "type": "string",
-            "enum": [
-              "disabled",
-              "used",
-              "not_used"
-            ],
+            "const": "disabled",
             "title": "Web Status",
+            "description": "A busca web foi removida; sempre disabled.",
             "default": "disabled"
+          },
+          "answer_mode": {
+            "type": "string",
+            "enum": [
+              "llm",
+              "local",
+              "none"
+            ],
+            "title": "Answer Mode",
+            "description": "llm: gerada pelo Gemini com os trechos locais; local: extrativa, sem LLM; none: nenhuma resposta gerada.",
+            "default": "llm"
+          },
+          "interpretation": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Interpretacao"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "evidence": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Evidencia"
+              },
+              {
+                "type": "null"
+              }
+            ]
           },
           "warnings": {
             "items": {
@@ -2950,17 +3095,6 @@
             },
             "type": "array",
             "title": "Warnings"
-          },
-          "search_suggestions_html": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Search Suggestions Html"
           },
           "response": {
             "type": "string",

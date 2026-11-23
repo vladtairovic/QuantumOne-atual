@@ -60,6 +60,8 @@ def _gravar_documento(colecao, document_id, chunks, vetores):
     obsoletos = sorted(antigos - atuais)
     if obsoletos:
         colecao.delete(ids=obsoletos)
+    from .busca_chromadb import invalidar_indice_lexical
+    invalidar_indice_lexical()
     finais = set(colecao.get(where={"document_id": document_id})["ids"])
     if finais != atuais:
         raise RuntimeError(f"Falha na verificação de {document_id}.")

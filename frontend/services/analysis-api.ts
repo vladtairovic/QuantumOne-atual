@@ -5,14 +5,13 @@ export type AnalysisRequest = {
   format?: CodeFormat;
   backend: string;
   top_k?: number;
-  web_search?: boolean;
 };
 export type Source = {
   document_id: string;
   chunk_id: string;
   source: string;
   content: string;
-  origin?: "local" | "web";
+  origin?: "local";
   title?: string;
   retrieved_at?: string;
 };
@@ -136,7 +135,7 @@ export async function sendTurn(
   conversationId: string,
   input: string,
   messageId: string,
-  settings: { top_k: number; web_search: boolean },
+  settings: { top_k: number },
   signal: AbortSignal,
 ): Promise<AnalysisResponse> {
   const { data, id } = await post<

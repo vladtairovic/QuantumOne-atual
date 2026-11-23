@@ -46,7 +46,8 @@ ERROS = {n: {'model': Erro, 'description': descricao} for n, descricao in {
     503:'Serviço externo indisponível', 504:'Tempo limite excedido'}.items()}
 app = FastAPI(title='GrowUp - API integrada', version='0.4.0', responses=ERROS,
     lifespan=lifespan,
-    description='API com ChromaDB remoto, RAG Gemini e otimização Qiskit. Gemini exige GEMINI_API_KEY.')
+    description='API do QuantumOne: RAG híbrido local (ChromaDB + BM25), resposta por Gemini opcional ou extrativa local, '
+                'diagnóstico de entradas e otimização Qiskit verificada. Sem busca web.')
 app.openapi_version = '3.1.0'
 
 def erro(request, status, code, message, fields=None):
@@ -107,17 +108,10 @@ async def erro_http(request, exc):
 async def servico_indisponivel(request, exc):
     return erro(request,exc.status,'SERVICE_ERROR','O serviço externo não conseguiu atender à solicitação.')
 
-from rag.busca_web import BuscaWebIndisponivel
-
-@app.exception_handler(BuscaWebIndisponivel)
-async def web_indisponivel(request, exc):
-    return erro(request,503,'WEB_SEARCH_UNAVAILABLE',
-                'A busca web não pôde ser concluída. Confira cota, faturamento e suporte ao Google Search no modelo Gemini. Você pode desativar a busca web e tentar somente a base local.')
-
 @app.exception_handler(LLMNaoConfigurada)
 async def llm_ausente(request, exc):
     return erro(request,503,'LLM_NOT_CONFIGURED',
-                'A LLM ainda não foi configurada. Use POST /search para recuperar trechos e fontes; nenhuma resposta de IA foi gerada.')
+                'A LLM ainda não foi configurada e a resposta local está desativada (QONE_LOCAL_FALLBACK=0). Use POST /search para recuperar trechos e fontes; nenhuma resposta de IA foi gerada.')
 
 @app.exception_handler(DocumentoInvalido)
 async def documento_invalido(request, exc):
@@ -142,7 +136,9 @@ async def health():
 
 @app.post('/query', response_model=RespostaConsulta)
 async def query(entrada: Consulta, request: Request):
-    """Consulta a base local e, opcionalmente, Google Search. Sem chave: 503 LLM_NOT_CONFIGURED. Busca web indisponível: 503 WEB_SEARCH_UNAVAILABLE."""
+    """Consulta somente a base local (RAG híbrido). Com GEMINI_API_KEY, o Gemini redige a resposta a partir
+    dos trechos; sem chave, ou se o Gemini falhar, a resposta é extrativa local (answer_mode=local).
+    Nenhuma busca web é executada."""
     if entrada.web_search is None:
         chamada = servicos.consultar(entrada.input) if entrada.top_k == 3 else servicos.consultar(entrada.input, entrada.top_k)
     else:

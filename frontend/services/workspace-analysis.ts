@@ -65,7 +65,7 @@ export function diagnostic(error: unknown) {
 export type TurnAttempt = { messageId: string; remoteId?: string };
 
 export async function analyze(input: {
-  code: string; format: CodeFormat; question: string; topK: number; webSearch: boolean;
+  code: string; format: CodeFormat; question: string; topK: number;
   attachments: AttachmentRecord[]; remoteId?: string;
 }, signal: AbortSignal, attempt: TurnAttempt) {
   const { code, format, question, attachments } = input;
@@ -87,15 +87,7 @@ export async function analyze(input: {
       attempt.remoteId = remoteId;
       const text = prompt + documents + (code ? circuitContext(code, format, result?.quantum) : "");
       const messageId = attempt.messageId;
-      const settings = { top_k: input.topK, web_search: input.webSearch };
-      let chat;
-      try {
-        chat = await sendTurn(remoteId, text, messageId, settings, signal);
-      } catch (error) {
-        if (!(error instanceof AnalysisError) || error.code !== "WEB_SEARCH_UNAVAILABLE" || !input.webSearch) throw error;
-        chat = await sendTurn(remoteId, text, messageId, { ...settings, web_search: false }, signal);
-        chat.warnings = [...(chat.warnings || []), "A busca na web ficou indisponível. Esta resposta usou apenas a documentação local."];
-      }
+      const chat = await sendTurn(remoteId, text, messageId, { top_k: input.topK }, signal);
       result = { ...chat, quantum: result?.quantum, warnings: [...(result?.warnings || []), ...(chat.warnings || [])] };
     } catch (error) {
       if (!result || signal.aborted) throw error;

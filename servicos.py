@@ -8,7 +8,6 @@ from contratos import Documento, Fonte, ResultadoBusca
 from rag import busca_chromadb, documentos
 from rag.banco import obter_cliente, obter_colecao, ColecaoIncompativel
 from rag.configuracao import criar_embeddings
-from rag.busca_web import BuscaWebIndisponivel
 
 logger = logging.getLogger(__name__)
 
@@ -50,7 +49,7 @@ class ServicosIntegrados:
     async def _executar(self, funcao, *args):
         try:
             return await asyncio.to_thread(funcao, *args)
-        except (DocumentoInvalido, BuscaWebIndisponivel):
+        except DocumentoInvalido:
             raise
         except (KeyError, TypeError, ColecaoIncompativel) as erro:
             logger.error("Dados do serviço fora do contrato: %s", type(erro).__name__)
@@ -74,9 +73,11 @@ class ServicosIntegrados:
         )
 
     async def consultar(self, texto, top_k=3, web_search=None):
-        if not os.getenv("GEMINI_API_KEY", "").strip():
+        from rag.pipeline_gemini import responder, llm_configurada, fallback_local_ativo
+        # Sem LLM, a resposta local extrativa é o comportamento padrão.
+        # QONE_LOCAL_FALLBACK=0 restaura o 503 LLM_NOT_CONFIGURED.
+        if not llm_configurada() and not fallback_local_ativo():
             raise LLMNaoConfigurada()
-        from rag.pipeline_gemini import responder
         return await self._executar(responder, texto, top_k, web_search)
 
     async def adicionar_documento(self, filename, content):

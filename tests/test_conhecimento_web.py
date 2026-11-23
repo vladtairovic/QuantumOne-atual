@@ -3,25 +3,8 @@ from types import SimpleNamespace as NS
 from unittest.mock import Mock
 import httpx
 import pytest
-from rag import busca_web, coleta_web, pipeline_gemini, sincronizar_conhecimento as sync, configuracao, banco
+from rag import coleta_web, pipeline_gemini, sincronizar_conhecimento as sync, configuracao, banco
 from tests.test_integracao import contexto, TokenizerTeste
-
-
-def test_grounding_cita_somente_fontes_com_evidencia():
-    r = NS(text="Medição altera o estado.", candidates=[NS(grounding_metadata=NS(
-        grounding_chunks=[NS(web=NS(uri="https://example.org/doc",title="Documento")), NS(web=NS(uri="javascript:alert(1)",title="ruim"))],
-        grounding_supports=[NS(segment=NS(text="Medição altera o estado."),grounding_chunk_indices=[0,1,500])],
-        search_entry_point=NS(rendered_content="<p>Pesquisar</p>")))])
-    result = busca_web.extrair_resposta(r)
-    assert result["web_status"] == "used"
-    assert len(result["sources"]) == 1
-    assert result["response"].endswith("[Web 1]")
-    assert result["sources"][0]["origin"] == "web"
-    assert result["search_suggestions_html"] == "<p>Pesquisar</p>"
-
-
-def test_grounding_sem_metadata():
-    assert busca_web.extrair_resposta(NS(text="sem fontes", candidates=[]))["web_status"] == "not_used"
 
 
 @pytest.mark.parametrize("url", [
@@ -53,38 +36,6 @@ def test_extracao_remove_navegacao_e_scripts():
     assert titulo=="Circuitos"
     assert "menu" not in json.dumps(secoes) and "segredo" not in json.dumps(secoes)
     assert any("h(0)" in b["texto"] for s in secoes for b in s["blocos"])
-
-
-def test_web_sem_base_local_e_desativacao(contexto, monkeypatch):
-    client, colecao=contexto
-    monkeypatch.setenv("GEMINI_API_KEY","teste")
-    web=Mock(return_value={"response":"Evidência [Web 1]", "sources":[{
-        "document_id":"web_1","chunk_id":"web_1","source":"https://example.org",
-        "content":"Afirmação vinculada","origin":"web"}],"web_status":"used","search_suggestions_html":None})
-    monkeypatch.setattr(busca_web,"pesquisar",web)
-    r=client.post("/query",json={"input":"Circuitos?","web_search":True})
-    assert r.status_code==200 and r.json()["web_status"]=="used"
-    assert colecao.count()==0
-    r=client.post("/query",json={"input":"Circuitos?","web_search":False})
-    assert r.json()["status"]=="insufficient_context"
-    assert web.call_count==1
-
-
-def test_web_indisponivel_explicita_sem_segredos(contexto, monkeypatch):
-    client,_=contexto
-    monkeypatch.setenv("GEMINI_API_KEY","teste")
-    monkeypatch.setattr(busca_web,"pesquisar",Mock(side_effect=RuntimeError("chave-privada")))
-    r=client.post("/query",json={"input":"Circuitos?","web_search":True})
-    assert r.status_code==503 and r.json()["code"]=="WEB_SEARCH_UNAVAILABLE"
-    assert "chave-privada" not in r.text
-
-
-def test_web_sem_evidencia_nao_fabrica_resposta(contexto,monkeypatch):
-    client,_=contexto
-    monkeypatch.setenv("GEMINI_API_KEY","teste")
-    monkeypatch.setattr(busca_web,"pesquisar",lambda *a:dict(response="Palpite",sources=[],web_status="not_used"))
-    r=client.post("/query",json={"input":"Circuitos?","web_search":True}).json()
-    assert r["status"]=="insufficient_context" and r["response"]!="Palpite"
 
 
 def test_sync_incremental_falha_preserva_e_reconstrucao_offline(contexto,monkeypatch,tmp_path):

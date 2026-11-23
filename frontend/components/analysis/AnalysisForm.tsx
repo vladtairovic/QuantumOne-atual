@@ -6,7 +6,6 @@ import Image from "next/image";
 
 import { analyze, diagnostic, readLegacyHistory, type TurnAttempt } from "../../services/workspace-analysis";
 import { getCircuitLimits } from "../../services/analysis-api";
-import type { TerminalOutput } from "../workspace/WorkspaceToolsPanel";
 import AnalysisResultPanel from "./AnalysisResultPanel";
 import AppFrame from "../layout/AppFrame";
 import type { AttachmentRecord, ConversationRecord, EditorFileRecord, EditorLanguage, ProjectRecord } from "../layout/conversationTypes";
@@ -121,8 +120,6 @@ export default function AnalysisForm() {
   } | null>(null);
 
   const [busy, setBusy] = useState(false);
-  const [webSearch, setWebSearch] = useState(true);
-  const [terminal, setTerminal] = useState<TerminalOutput>({ status: "idle" });
   const pending = useRef<AbortController | null>(null);
   const lastAttempt = useRef<(TurnAttempt & { key: string }) | null>(null);
   useEffect(() => () => pending.current?.abort(), []);
@@ -465,7 +462,6 @@ export default function AnalysisForm() {
 
   function handleSelectConversation(id: string) {
     cancelPending();
-    setTerminal({ status: "idle" });
     const conversation = conversations.find((item) => item.id === id);
     if (!conversation) return;
     setActiveConversationId(id);
@@ -576,7 +572,6 @@ export default function AnalysisForm() {
 
   function handleClear() {
     cancelPending();
-    setTerminal({ status: "idle" });
     setActiveConversationId(null);
     setQasmCode("");
     setPythonCode("");
@@ -639,7 +634,7 @@ export default function AnalysisForm() {
     const id = selected?.id ?? crypto.randomUUID();
     const savedCodeFiles = codeFiles.map((file) => ({ ...file, isDirty: false }));
     const controller = new AbortController();
-    const key = JSON.stringify([activeConversationId, activeLanguageCode, activeLanguage, question, topK, webSearch, attachments]);
+    const key = JSON.stringify([activeConversationId, activeLanguageCode, activeLanguage, question, topK, attachments]);
     if (lastAttempt.current?.key !== key) lastAttempt.current = { key, messageId: crypto.randomUUID() };
     const attempt = lastAttempt.current;
     pending.current = controller;
@@ -647,7 +642,7 @@ export default function AnalysisForm() {
     try {
       const response = await analyze({
         code: activeLanguageCode, format: activeLanguage, question: question.trim(), topK: Number(topK),
-        attachments, webSearch, remoteId: selected?.remoteId,
+        attachments, remoteId: selected?.remoteId,
       }, controller.signal, attempt);
       if (controller.signal.aborted) return;
       lastAttempt.current = null;
@@ -752,7 +747,7 @@ export default function AnalysisForm() {
                 <label>Fontes por consulta <select value={topK} onChange={event => setTopK(event.target.value)}>
                   {[3,5,8,10].map(n => <option key={n}>{n}</option>)}
                 </select></label>
-                <label><input type="checkbox" checked={webSearch} onChange={event => setWebSearch(event.target.checked)} /> Buscar também na web</label>
+                <span className="composer-local-note" title="Respostas usam somente a base de conhecimento local; nenhuma busca web é feita.">Somente base local</span>
               </div>
               <WorkspaceToolTabs activeTool={activeTool} onSelect={setActiveTool} />
               {activeTool && (
@@ -779,21 +774,6 @@ export default function AnalysisForm() {
                   }}
                   sources={result?.sources.map((source, index) => ({ ...source, id: String(index), origin: source.origin || "local",
                     category: "RAG", type: "Documento", excerpt: source.excerpt || "", relationship: "Trecho recuperado para esta resposta." }))}
-                  terminalOutput={terminal}
-                  onRunCommand={async command => {
-                    setTerminal({ command, status: "running" });
-                    try {
-                      let lines: string[];
-                      switch (command.trim().toLowerCase()) {
-                        case "help": case "ajuda": lines = ["arquivos — listar o workspace", "limites — consultar a API", "metricas — exibir o resultado Qiskit"]; break;
-                        case "arquivos": lines = [...codeFiles, ...attachments].map(file => file.name); break;
-                        case "limites": lines = [JSON.stringify(await getCircuitLimits(AbortSignal.timeout(30000)), null, 2)]; break;
-                        case "metricas": lines = [result?.metrics ? JSON.stringify(result.metrics, null, 2) : "Analise um circuito para obter métricas."]; break;
-                        default: throw new Error("Comando desconhecido. Digite ajuda.");
-                      }
-                      setTerminal({ command, status: "success", lines, exitCode: 0 });
-                    } catch (error) { setTerminal({ command, status: "error", lines: [diagnostic(error)], exitCode: 1 }); }
-                  }}
                 />
               )}
 

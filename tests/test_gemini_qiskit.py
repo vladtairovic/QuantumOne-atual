@@ -35,6 +35,11 @@ def test_falha_llm_nao_expoe_credencial(contexto, monkeypatch):
     client.post("/documents", files={"file": ("guia.txt", b"Qiskit transpila circuitos.")})
     monkeypatch.setattr(cliente_gemini, "gerar_resposta", Mock(side_effect=RuntimeError("segredo-privado")))
     r = client.post("/query", json={"input": "Qiskit?"})
+    # Padrão: falha da LLM vira resposta local, sem expor a mensagem do provedor.
+    assert r.status_code == 200 and r.json()["answer_mode"] == "local"
+    assert "segredo-privado" not in r.text
+    monkeypatch.setenv("QONE_LOCAL_FALLBACK", "0")
+    r = client.post("/query", json={"input": "Qiskit?"})
     assert r.status_code == 503 and "segredo-privado" not in r.text
 
 def test_cliente_gemini_fecha_e_aplica_timeout(monkeypatch):

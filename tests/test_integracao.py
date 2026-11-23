@@ -116,8 +116,10 @@ def test_base_vazia_e_corte_opcional(contexto, monkeypatch):
     assert resultado["status"] == "insufficient_context"
 
 
-def test_query_informa_llm_ausente(contexto):
+def test_query_informa_llm_ausente(contexto, monkeypatch):
     client, _ = contexto
+    # Sem LLM, o padrão é a resposta local; o 503 permanece disponível por configuração.
+    monkeypatch.setenv("QONE_LOCAL_FALLBACK", "0")
     resposta = client.post("/query", json={"input": "Otimize este circuito"})
     assert resposta.status_code == 503
     assert resposta.json()["code"] == "LLM_NOT_CONFIGURED"

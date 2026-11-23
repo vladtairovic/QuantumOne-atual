@@ -66,9 +66,12 @@ services:
       SMTP_FROM: ${SMTP_FROM:-quantumone@localhost}
       SMTP_USER: ${SMTP_USER:-}
       SMTP_PASSWORD: ${SMTP_PASSWORD:-}
-      WEB_SEARCH_ENABLED: ${WEB_SEARCH_ENABLED:-1}
-      GEMINI_WEB_MODEL: ${GEMINI_WEB_MODEL:-}
-      KNOWLEDGE_AUTO_SYNC: ${KNOWLEDGE_AUTO_SYNC:-1}
+      # Coleta de documentação é administrativa (manual ou em lote); desligada nas consultas.
+      KNOWLEDGE_AUTO_SYNC: ${KNOWLEDGE_AUTO_SYNC:-0}
+      QONE_LLM: ${QONE_LLM:-auto}
+      QONE_LOCAL_FALLBACK: ${QONE_LOCAL_FALLBACK:-1}
+      RAG_MODO: ${RAG_MODO:-hibrido}
+      RAG_MIN_COBERTURA: ${RAG_MIN_COBERTURA:-0.34}
       KNOWLEDGE_SYNC_INTERVAL_SECONDS: ${KNOWLEDGE_SYNC_INTERVAL_SECONDS:-604800}
       KNOWLEDGE_PATH: /app/data/conhecimento
       REDIS_URL: redis://cache:6379/0
