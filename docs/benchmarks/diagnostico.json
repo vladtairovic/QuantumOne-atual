@@ -1,0 +1,599 @@
+{
+  "gerado_em": "2026-11-23T18:22:06.808633+00:00",
+  "resumo": {
+    "casos": 39,
+    "danificados": 34,
+    "validos": 5,
+    "taxa_deteccao": 1.0,
+    "casos_com_todos_os_erros_detectados": 34,
+    "precisao": 1.0,
+    "taxa_correcao_validada": 0.9722,
+    "falsos_positivos_em_validos": 0,
+    "tempo_medio_ms": 1.07
+  },
+  "casos": [
+    {
+      "id": "q_indice",
+      "esperados": [
+        "INDEX_OUT_OF_RANGE"
+      ],
+      "reportados": [
+        "INDEX_OUT_OF_RANGE"
+      ],
+      "detectados": 1,
+      "total_esperado": 1,
+      "falsos_positivos": 0,
+      "correcao_validada": true,
+      "confianca_global": "baixa",
+      "tempo_s": 0.0115
+    },
+    {
+      "id": "q_registrador",
+      "esperados": [
+        "UNDECLARED_REGISTER"
+      ],
+      "reportados": [
+        "UNDECLARED_REGISTER"
+      ],
+      "detectados": 1,
+      "total_esperado": 1,
+      "falsos_positivos": 0,
+      "correcao_validada": true,
+      "confianca_global": "baixa",
+      "tempo_s": 0.0005
+    },
+    {
+      "id": "q_duplicado",
+      "esperados": [
+        "DUPLICATE_QUBIT"
+      ],
+      "reportados": [
+        "DUPLICATE_QUBIT"
+      ],
+      "detectados": 1,
+      "total_esperado": 1,
+      "falsos_positivos": 0,
+      "correcao_validada": true,
+      "confianca_global": "baixa",
+      "tempo_s": 0.0004
+    },
+    {
+      "id": "q_angulo",
+      "esperados": [
+        "WRONG_PARAMETER_COUNT"
+      ],
+      "reportados": [
+        "WRONG_PARAMETER_COUNT"
+      ],
+      "detectados": 1,
+      "total_esperado": 1,
+      "falsos_positivos": 0,
+      "correcao_validada": true,
+      "confianca_global": "baixa",
+      "tempo_s": 0.0007
+    },
+    {
+      "id": "q_angulo_invalido",
+      "esperados": [
+        "INVALID_PARAMETER"
+      ],
+      "reportados": [
+        "INVALID_PARAMETER"
+      ],
+      "detectados": 1,
+      "total_esperado": 1,
+      "falsos_positivos": 0,
+      "correcao_validada": true,
+      "confianca_global": "baixa",
+      "tempo_s": 0.0006
+    },
+    {
+      "id": "q_aridade",
+      "esperados": [
+        "WRONG_QUBIT_COUNT"
+      ],
+      "reportados": [
+        "WRONG_QUBIT_COUNT"
+      ],
+      "detectados": 1,
+      "total_esperado": 1,
+      "falsos_positivos": 0,
+      "correcao_validada": true,
+      "confianca_global": "baixa",
+      "tempo_s": 0.0004
+    },
+    {
+      "id": "q_porta",
+      "esperados": [
+        "UNKNOWN_GATE"
+      ],
+      "reportados": [
+        "UNKNOWN_GATE"
+      ],
+      "detectados": 1,
+      "total_esperado": 1,
+      "falsos_positivos": 0,
+      "correcao_validada": true,
+      "confianca_global": "baixa",
+      "tempo_s": 0.0005
+    },
+    {
+      "id": "q_sinonimo",
+      "esperados": [
+        "UNKNOWN_GATE"
+      ],
+      "reportados": [
+        "UNKNOWN_GATE"
+      ],
+      "detectados": 1,
+      "total_esperado": 1,
+      "falsos_positivos": 0,
+      "correcao_validada": true,
+      "confianca_global": "alta",
+      "tempo_s": 0.0005
+    },
+    {
+      "id": "q_ponto_virgula",
+      "esperados": [
+        "MISSING_SEMICOLON"
+      ],
+      "reportados": [
+        "MISSING_SEMICOLON"
+      ],
+      "detectados": 1,
+      "total_esperado": 1,
+      "falsos_positivos": 0,
+      "correcao_validada": true,
+      "confianca_global": "alta",
+      "tempo_s": 0.0005
+    },
+    {
+      "id": "q_cabecalho",
+      "esperados": [
+        "MISSING_HEADER"
+      ],
+      "reportados": [
+        "MISSING_HEADER"
+      ],
+      "detectados": 1,
+      "total_esperado": 1,
+      "falsos_positivos": 0,
+      "correcao_validada": true,
+      "confianca_global": "alta",
+      "tempo_s": 0.0005
+    },
+    {
+      "id": "q_include",
+      "esperados": [
+        "MISSING_INCLUDE"
+      ],
+      "reportados": [
+        "MISSING_INCLUDE"
+      ],
+      "detectados": 1,
+      "total_esperado": 1,
+      "falsos_positivos": 0,
+      "correcao_validada": true,
+      "confianca_global": "alta",
+      "tempo_s": 0.0004
+    },
+    {
+      "id": "q_medicao_tamanho",
+      "esperados": [
+        "MEASURE_SIZE_MISMATCH"
+      ],
+      "reportados": [
+        "MEASURE_SIZE_MISMATCH"
+      ],
+      "detectados": 1,
+      "total_esperado": 1,
+      "falsos_positivos": 0,
+      "correcao_validada": true,
+      "confianca_global": "media",
+      "tempo_s": 0.0006
+    },
+    {
+      "id": "q_medicao_indice",
+      "esperados": [
+        "INDEX_OUT_OF_RANGE"
+      ],
+      "reportados": [
+        "INDEX_OUT_OF_RANGE"
+      ],
+      "detectados": 1,
+      "total_esperado": 1,
+      "falsos_positivos": 0,
+      "correcao_validada": true,
+      "confianca_global": "baixa",
+      "tempo_s": 0.0004
+    },
+    {
+      "id": "q_ordem",
+      "esperados": [
+        "USED_BEFORE_DECLARATION"
+      ],
+      "reportados": [
+        "USED_BEFORE_DECLARATION"
+      ],
+      "detectados": 1,
+      "total_esperado": 1,
+      "falsos_positivos": 0,
+      "correcao_validada": true,
+      "confianca_global": "alta",
+      "tempo_s": 0.0007
+    },
+    {
+      "id": "q_qasm3_em_2",
+      "esperados": [
+        "QASM3_SYNTAX"
+      ],
+      "reportados": [
+        "QASM3_SYNTAX"
+      ],
+      "detectados": 1,
+      "total_esperado": 1,
+      "falsos_positivos": 0,
+      "correcao_validada": true,
+      "confianca_global": "alta",
+      "tempo_s": 0.0009
+    },
+    {
+      "id": "q_qasm3",
+      "esperados": [
+        "QASM3_CONVERTIDO"
+      ],
+      "reportados": [
+        "QASM3_CONVERTIDO"
+      ],
+      "detectados": 1,
+      "total_esperado": 1,
+      "falsos_positivos": 0,
+      "correcao_validada": true,
+      "confianca_global": "alta",
+      "tempo_s": 0.0009
+    },
+    {
+      "id": "q_multiplos",
+      "esperados": [
+        "INDEX_OUT_OF_RANGE",
+        "DUPLICATE_QUBIT",
+        "WRONG_PARAMETER_COUNT",
+        "UNKNOWN_GATE",
+        "MISSING_SEMICOLON",
+        "INDEX_OUT_OF_RANGE"
+      ],
+      "reportados": [
+        "DUPLICATE_QUBIT",
+        "INDEX_OUT_OF_RANGE",
+        "INDEX_OUT_OF_RANGE",
+        "MISSING_SEMICOLON",
+        "UNKNOWN_GATE",
+        "WRONG_PARAMETER_COUNT"
+      ],
+      "detectados": 6,
+      "total_esperado": 6,
+      "falsos_positivos": 0,
+      "correcao_validada": true,
+      "confianca_global": "baixa",
+      "tempo_s": 0.001
+    },
+    {
+      "id": "q_include_externo",
+      "esperados": [
+        "INVALID_INCLUDE"
+      ],
+      "reportados": [
+        "INVALID_INCLUDE"
+      ],
+      "detectados": 1,
+      "total_esperado": 1,
+      "falsos_positivos": 0,
+      "correcao_validada": true,
+      "confianca_global": "media",
+      "tempo_s": 0.0005
+    },
+    {
+      "id": "p_indice",
+      "esperados": [
+        "INDEX_OUT_OF_RANGE"
+      ],
+      "reportados": [
+        "INDEX_OUT_OF_RANGE"
+      ],
+      "detectados": 1,
+      "total_esperado": 1,
+      "falsos_positivos": 0,
+      "correcao_validada": true,
+      "confianca_global": "baixa",
+      "tempo_s": 0.0046
+    },
+    {
+      "id": "p_duplicado",
+      "esperados": [
+        "DUPLICATE_QUBIT"
+      ],
+      "reportados": [
+        "DUPLICATE_QUBIT"
+      ],
+      "detectados": 1,
+      "total_esperado": 1,
+      "falsos_positivos": 0,
+      "correcao_validada": true,
+      "confianca_global": "baixa",
+      "tempo_s": 0.0005
+    },
+    {
+      "id": "p_cnot",
+      "esperados": [
+        "REMOVED_METHOD"
+      ],
+      "reportados": [
+        "REMOVED_METHOD"
+      ],
+      "detectados": 1,
+      "total_esperado": 1,
+      "falsos_positivos": 0,
+      "correcao_validada": true,
+      "confianca_global": "alta",
+      "tempo_s": 0.0006
+    },
+    {
+      "id": "p_u3",
+      "esperados": [
+        "REMOVED_METHOD"
+      ],
+      "reportados": [
+        "REMOVED_METHOD"
+      ],
+      "detectados": 1,
+      "total_esperado": 1,
+      "falsos_positivos": 0,
+      "correcao_validada": true,
+      "confianca_global": "alta",
+      "tempo_s": 0.0007
+    },
+    {
+      "id": "p_import",
+      "esperados": [
+        "MISSING_IMPORT"
+      ],
+      "reportados": [
+        "MISSING_IMPORT"
+      ],
+      "detectados": 1,
+      "total_esperado": 1,
+      "falsos_positivos": 0,
+      "correcao_validada": true,
+      "confianca_global": "alta",
+      "tempo_s": 0.0006
+    },
+    {
+      "id": "p_execute",
+      "esperados": [
+        "REMOVED_API"
+      ],
+      "reportados": [
+        "REMOVED_API"
+      ],
+      "detectados": 1,
+      "total_esperado": 1,
+      "falsos_positivos": 0,
+      "correcao_validada": true,
+      "confianca_global": "alta",
+      "tempo_s": 0.001
+    },
+    {
+      "id": "p_aer",
+      "esperados": [
+        "REMOVED_API",
+        "REMOVED_API"
+      ],
+      "reportados": [
+        "REMOVED_API",
+        "REMOVED_API"
+      ],
+      "detectados": 2,
+      "total_esperado": 2,
+      "falsos_positivos": 0,
+      "correcao_validada": false,
+      "confianca_global": "alta",
+      "tempo_s": 0.0006
+    },
+    {
+      "id": "p_c_if",
+      "esperados": [
+        "REMOVED_API"
+      ],
+      "reportados": [
+        "REMOVED_API"
+      ],
+      "detectados": 1,
+      "total_esperado": 1,
+      "falsos_positivos": 0,
+      "correcao_validada": true,
+      "confianca_global": "alta",
+      "tempo_s": 0.0013
+    },
+    {
+      "id": "p_medicao_sem_bits",
+      "esperados": [
+        "MEASURE_WITHOUT_CLBITS"
+      ],
+      "reportados": [
+        "MEASURE_WITHOUT_CLBITS"
+      ],
+      "detectados": 1,
+      "total_esperado": 1,
+      "falsos_positivos": 0,
+      "correcao_validada": true,
+      "confianca_global": "media",
+      "tempo_s": 0.0007
+    },
+    {
+      "id": "p_argumentos",
+      "esperados": [
+        "WRONG_ARGUMENT_COUNT"
+      ],
+      "reportados": [
+        "WRONG_ARGUMENT_COUNT"
+      ],
+      "detectados": 1,
+      "total_esperado": 1,
+      "falsos_positivos": 0,
+      "correcao_validada": true,
+      "confianca_global": "baixa",
+      "tempo_s": 0.0005
+    },
+    {
+      "id": "p_metodo",
+      "esperados": [
+        "UNKNOWN_METHOD"
+      ],
+      "reportados": [
+        "UNKNOWN_METHOD"
+      ],
+      "detectados": 1,
+      "total_esperado": 1,
+      "falsos_positivos": 0,
+      "correcao_validada": true,
+      "confianca_global": "baixa",
+      "tempo_s": 0.0006
+    },
+    {
+      "id": "p_sintaxe",
+      "esperados": [
+        "SYNTAX_ERROR"
+      ],
+      "reportados": [
+        "SYNTAX_ERROR"
+      ],
+      "detectados": 1,
+      "total_esperado": 1,
+      "falsos_positivos": 0,
+      "correcao_validada": true,
+      "confianca_global": "media",
+      "tempo_s": 0.0014
+    },
+    {
+      "id": "p_multiplos",
+      "esperados": [
+        "MISSING_IMPORT",
+        "REMOVED_METHOD",
+        "INDEX_OUT_OF_RANGE",
+        "DUPLICATE_QUBIT"
+      ],
+      "reportados": [
+        "DUPLICATE_QUBIT",
+        "INDEX_OUT_OF_RANGE",
+        "MISSING_IMPORT",
+        "REMOVED_METHOD"
+      ],
+      "detectados": 4,
+      "total_esperado": 4,
+      "falsos_positivos": 0,
+      "correcao_validada": true,
+      "confianca_global": "baixa",
+      "tempo_s": 0.0013
+    },
+    {
+      "id": "t_execute",
+      "esperados": [
+        "REMOVED_API"
+      ],
+      "reportados": [
+        "REMOVED_API"
+      ],
+      "detectados": 1,
+      "total_esperado": 1,
+      "falsos_positivos": 0,
+      "correcao_validada": null,
+      "confianca_global": "alta",
+      "tempo_s": 0.0007
+    },
+    {
+      "id": "t_aer",
+      "esperados": [
+        "MISSING_PACKAGE"
+      ],
+      "reportados": [
+        "MISSING_PACKAGE"
+      ],
+      "detectados": 1,
+      "total_esperado": 1,
+      "falsos_positivos": 0,
+      "correcao_validada": null,
+      "confianca_global": "alta",
+      "tempo_s": 0.0001
+    },
+    {
+      "id": "t_atributo",
+      "esperados": [
+        "REMOVED_METHOD"
+      ],
+      "reportados": [
+        "REMOVED_METHOD"
+      ],
+      "detectados": 1,
+      "total_esperado": 1,
+      "falsos_positivos": 0,
+      "correcao_validada": null,
+      "confianca_global": "alta",
+      "tempo_s": 0.0003
+    },
+    {
+      "id": "v_qasm",
+      "esperados": [],
+      "reportados": [],
+      "detectados": 0,
+      "total_esperado": 0,
+      "falsos_positivos": 0,
+      "correcao_validada": true,
+      "confianca_global": "alta",
+      "tempo_s": 0.0007
+    },
+    {
+      "id": "v_gate",
+      "esperados": [],
+      "reportados": [],
+      "detectados": 0,
+      "total_esperado": 0,
+      "falsos_positivos": 0,
+      "correcao_validada": true,
+      "confianca_global": "alta",
+      "tempo_s": 0.0009
+    },
+    {
+      "id": "v_if",
+      "esperados": [],
+      "reportados": [],
+      "detectados": 0,
+      "total_esperado": 0,
+      "falsos_positivos": 0,
+      "correcao_validada": true,
+      "confianca_global": "alta",
+      "tempo_s": 0.0008
+    },
+    {
+      "id": "v_python",
+      "esperados": [],
+      "reportados": [],
+      "detectados": 0,
+      "total_esperado": 0,
+      "falsos_positivos": 0,
+      "correcao_validada": true,
+      "confianca_global": "alta",
+      "tempo_s": 0.0011
+    },
+    {
+      "id": "v_registradores",
+      "esperados": [],
+      "reportados": [],
+      "detectados": 0,
+      "total_esperado": 0,
+      "falsos_positivos": 0,
+      "correcao_validada": true,
+      "confianca_global": "alta",
+      "tempo_s": 0.0012
+    }
+  ]
+}

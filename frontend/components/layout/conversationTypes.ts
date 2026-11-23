@@ -50,6 +50,31 @@ export type AnalysisResultRecord = {
   };
   warnings?: string[];
   requestId?: string;
+  /** llm: redigida pelo Gemini com trechos locais; local: extrativa, sem LLM; none: sem resposta. */
+  answerMode?: "llm" | "local" | "none";
+  engine?: {
+    profile: string;
+    strategy?: string;
+    verificationMethod?: string;
+    guarantee?: string;
+    cxBefore?: number;
+    cxAfter?: number;
+    twoQubitBefore?: number;
+    twoQubitAfter?: number;
+    memoryBytes?: number;
+    simulationMethod?: string;
+    simulationReason?: string;
+    tradeoffs?: string[];
+  };
+  diagnosis?: {
+    language?: string | null;
+    confidence: string;
+    problems: { code: string; line?: number | null; message: string; cause?: string | null; fix: string;
+      alternatives: string[]; confidence: string }[];
+    correctedCode?: string | null;
+    valid?: boolean;
+    limitations: string[];
+  };
 };
 
 export type ConversationRecord = {

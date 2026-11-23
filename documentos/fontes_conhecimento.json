@@ -2,106 +2,4186 @@
   {
     "document_id": "ibm_circuit_library",
     "url": "https://quantum.cloud.ibm.com/docs/en/guides/circuit-library",
-    "versao": "guia online; conferir requisitos na página"
+    "versao": "guia online; conferir requisitos na página",
+    "biblioteca": "qiskit",
+    "temas": [
+      "circuitos",
+      "biblioteca"
+    ],
+    "nivel": "intermediario",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
   },
   {
     "document_id": "ibm_construct_circuits",
     "url": "https://quantum.cloud.ibm.com/docs/en/guides/construct-circuits",
-    "versao": "guia online; conferir requisitos na página"
+    "versao": "guia online; conferir requisitos na página",
+    "biblioteca": "qiskit",
+    "temas": [
+      "circuitos",
+      "qiskit"
+    ],
+    "nivel": "basico",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
   },
   {
     "document_id": "ibm_visualize_circuits",
     "url": "https://quantum.cloud.ibm.com/docs/en/guides/visualize-circuits",
-    "versao": "guia online; conferir requisitos na página"
+    "versao": "guia online; conferir requisitos na página",
+    "biblioteca": "qiskit",
+    "temas": [
+      "circuitos",
+      "visualizacao"
+    ],
+    "nivel": "basico",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
   },
   {
     "document_id": "ibm_bit_ordering",
     "url": "https://quantum.cloud.ibm.com/docs/en/guides/bit-ordering",
-    "versao": "guia online; conferir requisitos na página"
+    "versao": "guia online; conferir requisitos na página",
+    "biblioteca": "qiskit",
+    "temas": [
+      "fundamentos",
+      "medicao",
+      "ordem_de_bits"
+    ],
+    "nivel": "basico",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
   },
   {
     "document_id": "ibm_measure_qubits",
     "url": "https://quantum.cloud.ibm.com/docs/en/guides/measure-qubits",
-    "versao": "guia online; conferir requisitos na página"
+    "versao": "guia online; conferir requisitos na página",
+    "biblioteca": "qiskit",
+    "temas": [
+      "medicao"
+    ],
+    "nivel": "basico",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
   },
   {
     "document_id": "ibm_simulate_with_qiskit_sdk_primitives",
     "url": "https://quantum.cloud.ibm.com/docs/en/guides/simulate-with-qiskit-sdk-primitives",
-    "versao": "guia online; conferir requisitos na página"
+    "versao": "guia online; conferir requisitos na página",
+    "biblioteca": "qiskit",
+    "temas": [
+      "simulacao",
+      "primitivas"
+    ],
+    "nivel": "intermediario",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
   },
   {
     "document_id": "ibm_intro_transpilacao",
     "url": "https://quantum.cloud.ibm.com/docs/en/guides/transpile",
-    "versao": "guia online; conferir requisitos na página"
+    "versao": "guia online; conferir requisitos na página",
+    "biblioteca": "qiskit",
+    "temas": [
+      "transpilacao"
+    ],
+    "nivel": "intermediario",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
   },
   {
     "document_id": "ibm_etapas_transpilacao",
     "url": "https://quantum.cloud.ibm.com/docs/en/guides/transpiler-stages",
-    "versao": "guia online; conferir requisitos na página"
+    "versao": "guia online; conferir requisitos na página",
+    "biblioteca": "qiskit",
+    "temas": [
+      "transpilacao",
+      "roteamento",
+      "otimizacao"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
   },
   {
     "document_id": "ibm_niveis_otimizacao",
     "url": "https://quantum.cloud.ibm.com/docs/en/guides/set-optimization",
-    "versao": "guia online; conferir requisitos na página"
+    "versao": "guia online; conferir requisitos na página",
+    "biblioteca": "qiskit",
+    "temas": [
+      "transpilacao",
+      "otimizacao"
+    ],
+    "nivel": "intermediario",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
   },
   {
     "document_id": "ibm_transpilation_defaults",
     "url": "https://quantum.cloud.ibm.com/docs/en/guides/defaults-and-configuration-options",
-    "versao": "guia online; conferir requisitos na página"
+    "versao": "guia online; conferir requisitos na página",
+    "biblioteca": "qiskit",
+    "temas": [
+      "transpilacao"
+    ],
+    "nivel": "intermediario",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
   },
   {
     "document_id": "ibm_classical_feedforward_and_control_flow",
     "url": "https://quantum.cloud.ibm.com/docs/en/guides/classical-feedforward-and-control-flow",
-    "versao": "guia online; conferir requisitos na página"
+    "versao": "guia online; conferir requisitos na página",
+    "biblioteca": "qiskit",
+    "temas": [
+      "controle_classico",
+      "circuitos_dinamicos"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_guia_install_qiskit",
+    "url": "https://quantum.cloud.ibm.com/docs/en/guides/install-qiskit",
+    "versao": "guia online; conferir requisitos na página",
+    "biblioteca": "qiskit",
+    "temas": [
+      "instalacao"
+    ],
+    "nivel": "basico",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_guia_synthesize_unitary_operators",
+    "url": "https://quantum.cloud.ibm.com/docs/en/guides/synthesize-unitary-operators",
+    "versao": "guia online; conferir requisitos na página",
+    "biblioteca": "qiskit",
+    "temas": [
+      "sintese",
+      "unitarias"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_guia_operators_overview",
+    "url": "https://quantum.cloud.ibm.com/docs/en/guides/operators-overview",
+    "versao": "guia online; conferir requisitos na página",
+    "biblioteca": "qiskit",
+    "temas": [
+      "operadores",
+      "quantum_info"
+    ],
+    "nivel": "intermediario",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_guia_specify_observables_pauli",
+    "url": "https://quantum.cloud.ibm.com/docs/en/guides/specify-observables-pauli",
+    "versao": "guia online; conferir requisitos na página",
+    "biblioteca": "qiskit",
+    "temas": [
+      "observaveis",
+      "pauli"
+    ],
+    "nivel": "intermediario",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_guia_operator_class",
+    "url": "https://quantum.cloud.ibm.com/docs/en/guides/operator-class",
+    "versao": "guia online; conferir requisitos na página",
+    "biblioteca": "qiskit",
+    "temas": [
+      "operadores",
+      "quantum_info"
+    ],
+    "nivel": "intermediario",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_guia_intro_to_patterns",
+    "url": "https://quantum.cloud.ibm.com/docs/en/guides/intro-to-patterns",
+    "versao": "guia online; conferir requisitos na página",
+    "biblioteca": "qiskit",
+    "temas": [
+      "fluxo_de_trabalho"
+    ],
+    "nivel": "basico",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_guia_map_problem_to_circuits",
+    "url": "https://quantum.cloud.ibm.com/docs/en/guides/map-problem-to-circuits",
+    "versao": "guia online; conferir requisitos na página",
+    "biblioteca": "qiskit",
+    "temas": [
+      "fluxo_de_trabalho",
+      "circuitos"
+    ],
+    "nivel": "intermediario",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_guia_transpile_with_pass_managers",
+    "url": "https://quantum.cloud.ibm.com/docs/en/guides/transpile-with-pass-managers",
+    "versao": "guia online; conferir requisitos na página",
+    "biblioteca": "qiskit",
+    "temas": [
+      "transpilacao",
+      "passmanager"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_guia_custom_transpiler_pass",
+    "url": "https://quantum.cloud.ibm.com/docs/en/guides/custom-transpiler-pass",
+    "versao": "guia online; conferir requisitos na página",
+    "biblioteca": "qiskit",
+    "temas": [
+      "transpilacao",
+      "passmanager"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_guia_create_transpiler_plugin",
+    "url": "https://quantum.cloud.ibm.com/docs/en/guides/create-transpiler-plugin",
+    "versao": "guia online; conferir requisitos na página",
+    "biblioteca": "qiskit",
+    "temas": [
+      "transpilacao",
+      "plugins"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_guia_transpiler_plugins",
+    "url": "https://quantum.cloud.ibm.com/docs/en/guides/transpiler-plugins",
+    "versao": "guia online; conferir requisitos na página",
+    "biblioteca": "qiskit",
+    "temas": [
+      "transpilacao",
+      "plugins"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_guia_dynamical_decoupling_pass_manager",
+    "url": "https://quantum.cloud.ibm.com/docs/en/guides/dynamical-decoupling-pass-manager",
+    "versao": "guia online; conferir requisitos na página",
+    "biblioteca": "qiskit",
+    "temas": [
+      "transpilacao",
+      "mitigacao"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_guia_represent_quantum_computers",
+    "url": "https://quantum.cloud.ibm.com/docs/en/guides/represent-quantum-computers",
+    "versao": "guia online; conferir requisitos na página",
+    "biblioteca": "qiskit",
+    "temas": [
+      "hardware",
+      "target"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_guia_custom_backend",
+    "url": "https://quantum.cloud.ibm.com/docs/en/guides/custom-backend",
+    "versao": "guia online; conferir requisitos na página",
+    "biblioteca": "qiskit",
+    "temas": [
+      "hardware",
+      "target"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_guia_common_parameters",
+    "url": "https://quantum.cloud.ibm.com/docs/en/guides/common-parameters",
+    "versao": "guia online; conferir requisitos na página",
+    "biblioteca": "qiskit",
+    "temas": [
+      "transpilacao"
+    ],
+    "nivel": "intermediario",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_guia_primitives",
+    "url": "https://quantum.cloud.ibm.com/docs/en/guides/primitives",
+    "versao": "guia online; conferir requisitos na página",
+    "biblioteca": "qiskit",
+    "temas": [
+      "primitivas"
+    ],
+    "nivel": "intermediario",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_guia_primitive_input_output",
+    "url": "https://quantum.cloud.ibm.com/docs/en/guides/primitive-input-output",
+    "versao": "guia online; conferir requisitos na página",
+    "biblioteca": "qiskit",
+    "temas": [
+      "primitivas"
+    ],
+    "nivel": "intermediario",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_guia_simulate_with_qiskit_aer",
+    "url": "https://quantum.cloud.ibm.com/docs/en/guides/simulate-with-qiskit-aer",
+    "versao": "guia online; conferir requisitos na página",
+    "biblioteca": "qiskit",
+    "temas": [
+      "simulacao",
+      "aer"
+    ],
+    "nivel": "intermediario",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_guia_local_testing_mode",
+    "url": "https://quantum.cloud.ibm.com/docs/en/guides/local-testing-mode",
+    "versao": "guia online; conferir requisitos na página",
+    "biblioteca": "qiskit",
+    "temas": [
+      "simulacao",
+      "runtime"
+    ],
+    "nivel": "intermediario",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_guia_simulate_stabilizer_circuits",
+    "url": "https://quantum.cloud.ibm.com/docs/en/guides/simulate-stabilizer-circuits",
+    "versao": "guia online; conferir requisitos na página",
+    "biblioteca": "qiskit",
+    "temas": [
+      "simulacao",
+      "estabilizadores",
+      "clifford"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_guia_build_noise_models",
+    "url": "https://quantum.cloud.ibm.com/docs/en/guides/build-noise-models",
+    "versao": "guia online; conferir requisitos na página",
+    "biblioteca": "qiskit",
+    "temas": [
+      "ruido",
+      "simulacao"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_guia_plot_quantum_states",
+    "url": "https://quantum.cloud.ibm.com/docs/en/guides/plot-quantum-states",
+    "versao": "guia online; conferir requisitos na página",
+    "biblioteca": "qiskit",
+    "temas": [
+      "visualizacao",
+      "estados"
+    ],
+    "nivel": "basico",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_guia_save_circuits",
+    "url": "https://quantum.cloud.ibm.com/docs/en/guides/save-circuits",
+    "versao": "guia online; conferir requisitos na página",
+    "biblioteca": "qiskit",
+    "temas": [
+      "circuitos",
+      "serializacao"
+    ],
+    "nivel": "basico",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_guia_interoperate_qiskit_qasm2",
+    "url": "https://quantum.cloud.ibm.com/docs/en/guides/interoperate-qiskit-qasm2",
+    "versao": "guia online; conferir requisitos na página",
+    "biblioteca": "qiskit",
+    "temas": [
+      "openqasm2",
+      "interoperabilidade"
+    ],
+    "nivel": "intermediario",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_guia_interoperate_qiskit_qasm3",
+    "url": "https://quantum.cloud.ibm.com/docs/en/guides/interoperate-qiskit-qasm3",
+    "versao": "guia online; conferir requisitos na página",
+    "biblioteca": "qiskit",
+    "temas": [
+      "openqasm3",
+      "interoperabilidade"
+    ],
+    "nivel": "intermediario",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_guia_introduction_to_qasm",
+    "url": "https://quantum.cloud.ibm.com/docs/en/guides/introduction-to-qasm",
+    "versao": "guia online; conferir requisitos na página",
+    "biblioteca": "qiskit",
+    "temas": [
+      "openqasm"
+    ],
+    "nivel": "basico",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_guia_error_mitigation_and_suppression_techniques",
+    "url": "https://quantum.cloud.ibm.com/docs/en/guides/error-mitigation-and-suppression-techniques",
+    "versao": "guia online; conferir requisitos na página",
+    "biblioteca": "qiskit",
+    "temas": [
+      "mitigacao",
+      "ruido"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_guia_configure_error_mitigation",
+    "url": "https://quantum.cloud.ibm.com/docs/en/guides/configure-error-mitigation",
+    "versao": "guia online; conferir requisitos na página",
+    "biblioteca": "qiskit",
+    "temas": [
+      "mitigacao"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_guia_configure_error_suppression",
+    "url": "https://quantum.cloud.ibm.com/docs/en/guides/configure-error-suppression",
+    "versao": "guia online; conferir requisitos na página",
+    "biblioteca": "qiskit",
+    "temas": [
+      "mitigacao",
+      "supressao"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_guia_noise_learning",
+    "url": "https://quantum.cloud.ibm.com/docs/en/guides/noise-learning",
+    "versao": "guia online; conferir requisitos na página",
+    "biblioteca": "qiskit",
+    "temas": [
+      "ruido",
+      "mitigacao"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_guia_debugging_tools",
+    "url": "https://quantum.cloud.ibm.com/docs/en/guides/debugging-tools",
+    "versao": "guia online; conferir requisitos na página",
+    "biblioteca": "qiskit",
+    "temas": [
+      "depuracao"
+    ],
+    "nivel": "intermediario",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_guia_qiskit_transpiler_service",
+    "url": "https://quantum.cloud.ibm.com/docs/en/guides/qiskit-transpiler-service",
+    "versao": "guia online; conferir requisitos na página",
+    "biblioteca": "qiskit",
+    "temas": [
+      "transpilacao",
+      "servico"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_guia_ai_transpiler_passes",
+    "url": "https://quantum.cloud.ibm.com/docs/en/guides/ai-transpiler-passes",
+    "versao": "guia online; conferir requisitos na página",
+    "biblioteca": "qiskit",
+    "temas": [
+      "transpilacao",
+      "roteamento"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_guia_execution_modes",
+    "url": "https://quantum.cloud.ibm.com/docs/en/guides/execution-modes",
+    "versao": "guia online; conferir requisitos na página",
+    "biblioteca": "qiskit",
+    "temas": [
+      "runtime",
+      "execucao"
+    ],
+    "nivel": "intermediario",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_guia_monitor_job",
+    "url": "https://quantum.cloud.ibm.com/docs/en/guides/monitor-job",
+    "versao": "guia online; conferir requisitos na página",
+    "biblioteca": "qiskit",
+    "temas": [
+      "runtime",
+      "execucao"
+    ],
+    "nivel": "basico",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_guia_estimate_job_run_time",
+    "url": "https://quantum.cloud.ibm.com/docs/en/guides/estimate-job-run-time",
+    "versao": "guia online; conferir requisitos na página",
+    "biblioteca": "qiskit",
+    "temas": [
+      "runtime",
+      "execucao"
+    ],
+    "nivel": "intermediario",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_guia_pulse",
+    "url": "https://quantum.cloud.ibm.com/docs/en/guides/pulse",
+    "versao": "guia online; conferir requisitos na página",
+    "biblioteca": "qiskit",
+    "temas": [
+      "hardware"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_guia_dynamic_circuits_considerations",
+    "url": "https://quantum.cloud.ibm.com/docs/en/guides/dynamic-circuits-considerations",
+    "versao": "guia online; conferir requisitos na página",
+    "biblioteca": "qiskit",
+    "temas": [
+      "circuitos_dinamicos"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_guia_qiskit_addons_utils",
+    "url": "https://quantum.cloud.ibm.com/docs/en/guides/qiskit-addons-utils",
+    "versao": "guia online; conferir requisitos na página",
+    "biblioteca": "qiskit",
+    "temas": [
+      "addons"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_guia_qiskit_addons_cutting",
+    "url": "https://quantum.cloud.ibm.com/docs/en/guides/qiskit-addons-cutting",
+    "versao": "guia online; conferir requisitos na página",
+    "biblioteca": "qiskit",
+    "temas": [
+      "addons",
+      "corte_de_circuitos"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_guia_qiskit_addons_mpf",
+    "url": "https://quantum.cloud.ibm.com/docs/en/guides/qiskit-addons-mpf",
+    "versao": "guia online; conferir requisitos na página",
+    "biblioteca": "qiskit",
+    "temas": [
+      "addons",
+      "simulacao_hamiltoniana"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_guia_qiskit_addons_obp",
+    "url": "https://quantum.cloud.ibm.com/docs/en/guides/qiskit-addons-obp",
+    "versao": "guia online; conferir requisitos na página",
+    "biblioteca": "qiskit",
+    "temas": [
+      "addons",
+      "propagacao_de_operadores"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_guia_qiskit_addons_sqd",
+    "url": "https://quantum.cloud.ibm.com/docs/en/guides/qiskit-addons-sqd",
+    "versao": "guia online; conferir requisitos na página",
+    "biblioteca": "qiskit",
+    "temas": [
+      "addons",
+      "quimica_quantica"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_guia_qiskit_addons_aqc",
+    "url": "https://quantum.cloud.ibm.com/docs/en/guides/qiskit-addons-aqc",
+    "versao": "guia online; conferir requisitos na página",
+    "biblioteca": "qiskit",
+    "temas": [
+      "addons",
+      "compilacao_aproximada"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_guia_qiskit_code_assistant",
+    "url": "https://quantum.cloud.ibm.com/docs/en/guides/qiskit-code-assistant",
+    "versao": "guia online; conferir requisitos na página",
+    "biblioteca": "qiskit",
+    "temas": [
+      "ferramentas"
+    ],
+    "nivel": "basico",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_guia_algorithmiq_tem",
+    "url": "https://quantum.cloud.ibm.com/docs/en/guides/algorithmiq-tem",
+    "versao": "guia online; conferir requisitos na página",
+    "biblioteca": "qiskit",
+    "temas": [
+      "mitigacao",
+      "funcoes"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_guia_functions",
+    "url": "https://quantum.cloud.ibm.com/docs/en/guides/functions",
+    "versao": "guia online; conferir requisitos na página",
+    "biblioteca": "qiskit",
+    "temas": [
+      "funcoes"
+    ],
+    "nivel": "intermediario",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_guia_latest_updates",
+    "url": "https://quantum.cloud.ibm.com/docs/en/guides/latest-updates",
+    "versao": "guia online; conferir requisitos na página",
+    "biblioteca": "qiskit",
+    "temas": [
+      "atualizacoes"
+    ],
+    "nivel": "basico",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
   },
   {
     "document_id": "ibm_api_circuit",
     "url": "https://quantum.cloud.ibm.com/docs/en/api/qiskit/2.6/circuit",
-    "versao": "Referência solicitada Qiskit 2.6; conferir versão efetiva na página após redirecionamento IBM."
+    "versao": "API Qiskit SDK 2.6",
+    "biblioteca": "qiskit",
+    "temas": [
+      "circuitos"
+    ],
+    "nivel": "intermediario",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
   },
   {
     "document_id": "ibm_api_qiskit_circuit_QuantumCircuit",
     "url": "https://quantum.cloud.ibm.com/docs/en/api/qiskit/2.6/qiskit.circuit.QuantumCircuit",
-    "versao": "Referência solicitada Qiskit 2.6; conferir versão efetiva na página após redirecionamento IBM."
+    "versao": "API Qiskit SDK 2.6",
+    "biblioteca": "qiskit",
+    "temas": [
+      "circuitos"
+    ],
+    "nivel": "intermediario",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
   },
   {
     "document_id": "ibm_api_qiskit_circuit_Parameter",
     "url": "https://quantum.cloud.ibm.com/docs/en/api/qiskit/2.6/qiskit.circuit.Parameter",
-    "versao": "Referência solicitada Qiskit 2.6; conferir versão efetiva na página após redirecionamento IBM."
+    "versao": "API Qiskit SDK 2.6",
+    "biblioteca": "qiskit",
+    "temas": [
+      "circuitos_parametrizados"
+    ],
+    "nivel": "intermediario",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_api_qiskit_circuit_parametervector",
+    "url": "https://quantum.cloud.ibm.com/docs/en/api/qiskit/2.6/qiskit.circuit.ParameterVector",
+    "versao": "API Qiskit SDK 2.6",
+    "biblioteca": "qiskit",
+    "temas": [
+      "circuitos_parametrizados"
+    ],
+    "nivel": "intermediario",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_api_qiskit_circuit_instruction",
+    "url": "https://quantum.cloud.ibm.com/docs/en/api/qiskit/2.6/qiskit.circuit.Instruction",
+    "versao": "API Qiskit SDK 2.6",
+    "biblioteca": "qiskit",
+    "temas": [
+      "circuitos"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_api_qiskit_circuit_gate",
+    "url": "https://quantum.cloud.ibm.com/docs/en/api/qiskit/2.6/qiskit.circuit.Gate",
+    "versao": "API Qiskit SDK 2.6",
+    "biblioteca": "qiskit",
+    "temas": [
+      "circuitos",
+      "portas"
+    ],
+    "nivel": "intermediario",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_api_qiskit_circuit_controlledgate",
+    "url": "https://quantum.cloud.ibm.com/docs/en/api/qiskit/2.6/qiskit.circuit.ControlledGate",
+    "versao": "API Qiskit SDK 2.6",
+    "biblioteca": "qiskit",
+    "temas": [
+      "circuitos",
+      "portas"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_api_qiskit_circuit_ifelseop",
+    "url": "https://quantum.cloud.ibm.com/docs/en/api/qiskit/2.6/qiskit.circuit.IfElseOp",
+    "versao": "API Qiskit SDK 2.6",
+    "biblioteca": "qiskit",
+    "temas": [
+      "controle_classico"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
   },
   {
     "document_id": "ibm_api_circuit_library",
     "url": "https://quantum.cloud.ibm.com/docs/en/api/qiskit/2.6/circuit_library",
-    "versao": "Referência solicitada Qiskit 2.6; conferir versão efetiva na página após redirecionamento IBM."
+    "versao": "API Qiskit SDK 2.6",
+    "biblioteca": "qiskit",
+    "temas": [
+      "biblioteca",
+      "portas"
+    ],
+    "nivel": "intermediario",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_api_circuit_classical",
+    "url": "https://quantum.cloud.ibm.com/docs/en/api/qiskit/2.6/circuit_classical",
+    "versao": "API Qiskit SDK 2.6",
+    "biblioteca": "qiskit",
+    "temas": [
+      "controle_classico"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_api_qiskit_circuit_library_qft",
+    "url": "https://quantum.cloud.ibm.com/docs/en/api/qiskit/2.6/qiskit.circuit.library.QFT",
+    "versao": "API Qiskit SDK 2.6",
+    "biblioteca": "qiskit",
+    "temas": [
+      "algoritmos",
+      "qft"
+    ],
+    "nivel": "intermediario",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_api_qiskit_circuit_library_qftgate",
+    "url": "https://quantum.cloud.ibm.com/docs/en/api/qiskit/2.6/qiskit.circuit.library.QFTGate",
+    "versao": "API Qiskit SDK 2.6",
+    "biblioteca": "qiskit",
+    "temas": [
+      "algoritmos",
+      "qft"
+    ],
+    "nivel": "intermediario",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_api_qiskit_circuit_library_groveroperator",
+    "url": "https://quantum.cloud.ibm.com/docs/en/api/qiskit/2.6/qiskit.circuit.library.GroverOperator",
+    "versao": "API Qiskit SDK 2.6",
+    "biblioteca": "qiskit",
+    "temas": [
+      "algoritmos",
+      "grover"
+    ],
+    "nivel": "intermediario",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_api_qiskit_circuit_library_phaseestimation",
+    "url": "https://quantum.cloud.ibm.com/docs/en/api/qiskit/2.6/qiskit.circuit.library.PhaseEstimation",
+    "versao": "API Qiskit SDK 2.6",
+    "biblioteca": "qiskit",
+    "temas": [
+      "algoritmos",
+      "estimativa_de_fase"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_api_qiskit_circuit_library_n_local",
+    "url": "https://quantum.cloud.ibm.com/docs/en/api/qiskit/2.6/qiskit.circuit.library.n_local",
+    "versao": "API Qiskit SDK 2.6",
+    "biblioteca": "qiskit",
+    "temas": [
+      "variacional",
+      "ansatz"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_api_qiskit_circuit_library_efficient_su2",
+    "url": "https://quantum.cloud.ibm.com/docs/en/api/qiskit/2.6/qiskit.circuit.library.efficient_su2",
+    "versao": "API Qiskit SDK 2.6",
+    "biblioteca": "qiskit",
+    "temas": [
+      "variacional",
+      "ansatz"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_api_qiskit_circuit_library_real_amplitudes",
+    "url": "https://quantum.cloud.ibm.com/docs/en/api/qiskit/2.6/qiskit.circuit.library.real_amplitudes",
+    "versao": "API Qiskit SDK 2.6",
+    "biblioteca": "qiskit",
+    "temas": [
+      "variacional",
+      "ansatz"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_api_qiskit_circuit_library_qaoaansatz",
+    "url": "https://quantum.cloud.ibm.com/docs/en/api/qiskit/2.6/qiskit.circuit.library.QAOAAnsatz",
+    "versao": "API Qiskit SDK 2.6",
+    "biblioteca": "qiskit",
+    "temas": [
+      "qaoa",
+      "variacional"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_api_qiskit_circuit_library_unitarygate",
+    "url": "https://quantum.cloud.ibm.com/docs/en/api/qiskit/2.6/qiskit.circuit.library.UnitaryGate",
+    "versao": "API Qiskit SDK 2.6",
+    "biblioteca": "qiskit",
+    "temas": [
+      "unitarias",
+      "portas"
+    ],
+    "nivel": "intermediario",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_api_qiskit_circuit_library_hgate",
+    "url": "https://quantum.cloud.ibm.com/docs/en/api/qiskit/2.6/qiskit.circuit.library.HGate",
+    "versao": "API Qiskit SDK 2.6",
+    "biblioteca": "qiskit",
+    "temas": [
+      "portas"
+    ],
+    "nivel": "basico",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_api_qiskit_circuit_library_cxgate",
+    "url": "https://quantum.cloud.ibm.com/docs/en/api/qiskit/2.6/qiskit.circuit.library.CXGate",
+    "versao": "API Qiskit SDK 2.6",
+    "biblioteca": "qiskit",
+    "temas": [
+      "portas"
+    ],
+    "nivel": "basico",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_api_qiskit_circuit_library_rzgate",
+    "url": "https://quantum.cloud.ibm.com/docs/en/api/qiskit/2.6/qiskit.circuit.library.RZGate",
+    "versao": "API Qiskit SDK 2.6",
+    "biblioteca": "qiskit",
+    "temas": [
+      "portas",
+      "rotacoes"
+    ],
+    "nivel": "basico",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_api_qiskit_circuit_library_ugate",
+    "url": "https://quantum.cloud.ibm.com/docs/en/api/qiskit/2.6/qiskit.circuit.library.UGate",
+    "versao": "API Qiskit SDK 2.6",
+    "biblioteca": "qiskit",
+    "temas": [
+      "portas",
+      "rotacoes"
+    ],
+    "nivel": "intermediario",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_api_qiskit_circuit_library_swapgate",
+    "url": "https://quantum.cloud.ibm.com/docs/en/api/qiskit/2.6/qiskit.circuit.library.SwapGate",
+    "versao": "API Qiskit SDK 2.6",
+    "biblioteca": "qiskit",
+    "temas": [
+      "portas",
+      "roteamento"
+    ],
+    "nivel": "basico",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_api_qiskit_circuit_library_mcxgate",
+    "url": "https://quantum.cloud.ibm.com/docs/en/api/qiskit/2.6/qiskit.circuit.library.MCXGate",
+    "versao": "API Qiskit SDK 2.6",
+    "biblioteca": "qiskit",
+    "temas": [
+      "portas"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
   },
   {
     "document_id": "ibm_api_quantum_info",
     "url": "https://quantum.cloud.ibm.com/docs/en/api/qiskit/2.6/quantum_info",
-    "versao": "Referência solicitada Qiskit 2.6; conferir versão efetiva na página após redirecionamento IBM."
+    "versao": "API Qiskit SDK 2.6",
+    "biblioteca": "qiskit",
+    "temas": [
+      "quantum_info"
+    ],
+    "nivel": "intermediario",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
   },
   {
     "document_id": "ibm_api_qiskit_quantum_info_Statevector",
     "url": "https://quantum.cloud.ibm.com/docs/en/api/qiskit/2.6/qiskit.quantum_info.Statevector",
-    "versao": "Referência solicitada Qiskit 2.6; conferir versão efetiva na página após redirecionamento IBM."
+    "versao": "API Qiskit SDK 2.6",
+    "biblioteca": "qiskit",
+    "temas": [
+      "estados",
+      "simulacao"
+    ],
+    "nivel": "intermediario",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
   },
   {
     "document_id": "ibm_api_qiskit_quantum_info_Operator",
     "url": "https://quantum.cloud.ibm.com/docs/en/api/qiskit/2.6/qiskit.quantum_info.Operator",
-    "versao": "Referência solicitada Qiskit 2.6; conferir versão efetiva na página após redirecionamento IBM."
+    "versao": "API Qiskit SDK 2.6",
+    "biblioteca": "qiskit",
+    "temas": [
+      "operadores",
+      "equivalencia"
+    ],
+    "nivel": "intermediario",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
   },
   {
-    "document_id": "ibm_api_primitives",
-    "url": "https://quantum.cloud.ibm.com/docs/en/api/qiskit/2.6/primitives",
-    "versao": "Referência solicitada Qiskit 2.6; conferir versão efetiva na página após redirecionamento IBM."
+    "document_id": "ibm_api_qiskit_quantum_info_densitymatrix",
+    "url": "https://quantum.cloud.ibm.com/docs/en/api/qiskit/2.6/qiskit.quantum_info.DensityMatrix",
+    "versao": "API Qiskit SDK 2.6",
+    "biblioteca": "qiskit",
+    "temas": [
+      "estados",
+      "ruido"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_api_qiskit_quantum_info_sparsepauliop",
+    "url": "https://quantum.cloud.ibm.com/docs/en/api/qiskit/2.6/qiskit.quantum_info.SparsePauliOp",
+    "versao": "API Qiskit SDK 2.6",
+    "biblioteca": "qiskit",
+    "temas": [
+      "observaveis",
+      "pauli"
+    ],
+    "nivel": "intermediario",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_api_qiskit_quantum_info_pauli",
+    "url": "https://quantum.cloud.ibm.com/docs/en/api/qiskit/2.6/qiskit.quantum_info.Pauli",
+    "versao": "API Qiskit SDK 2.6",
+    "biblioteca": "qiskit",
+    "temas": [
+      "pauli"
+    ],
+    "nivel": "intermediario",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_api_qiskit_quantum_info_clifford",
+    "url": "https://quantum.cloud.ibm.com/docs/en/api/qiskit/2.6/qiskit.quantum_info.Clifford",
+    "versao": "API Qiskit SDK 2.6",
+    "biblioteca": "qiskit",
+    "temas": [
+      "clifford",
+      "estabilizadores"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_api_qiskit_quantum_info_stabilizerstate",
+    "url": "https://quantum.cloud.ibm.com/docs/en/api/qiskit/2.6/qiskit.quantum_info.StabilizerState",
+    "versao": "API Qiskit SDK 2.6",
+    "biblioteca": "qiskit",
+    "temas": [
+      "estabilizadores",
+      "simulacao"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_api_transpiler",
+    "url": "https://quantum.cloud.ibm.com/docs/en/api/qiskit/2.6/transpiler",
+    "versao": "API Qiskit SDK 2.6",
+    "biblioteca": "qiskit",
+    "temas": [
+      "transpilacao"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_api_transpiler_passes",
+    "url": "https://quantum.cloud.ibm.com/docs/en/api/qiskit/2.6/transpiler_passes",
+    "versao": "API Qiskit SDK 2.6",
+    "biblioteca": "qiskit",
+    "temas": [
+      "transpilacao",
+      "otimizacao"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_api_transpiler_preset",
+    "url": "https://quantum.cloud.ibm.com/docs/en/api/qiskit/2.6/transpiler_preset",
+    "versao": "API Qiskit SDK 2.6",
+    "biblioteca": "qiskit",
+    "temas": [
+      "transpilacao"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_api_qiskit_transpiler_generate_preset_pass_manager",
+    "url": "https://quantum.cloud.ibm.com/docs/en/api/qiskit/2.6/qiskit.transpiler.generate_preset_pass_manager",
+    "versao": "API Qiskit SDK 2.6",
+    "biblioteca": "qiskit",
+    "temas": [
+      "transpilacao",
+      "passmanager"
+    ],
+    "nivel": "intermediario",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_api_qiskit_transpiler_passmanager",
+    "url": "https://quantum.cloud.ibm.com/docs/en/api/qiskit/2.6/qiskit.transpiler.PassManager",
+    "versao": "API Qiskit SDK 2.6",
+    "biblioteca": "qiskit",
+    "temas": [
+      "transpilacao",
+      "passmanager"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_api_qiskit_transpiler_stagedpassmanager",
+    "url": "https://quantum.cloud.ibm.com/docs/en/api/qiskit/2.6/qiskit.transpiler.StagedPassManager",
+    "versao": "API Qiskit SDK 2.6",
+    "biblioteca": "qiskit",
+    "temas": [
+      "transpilacao",
+      "passmanager"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_api_qiskit_transpiler_couplingmap",
+    "url": "https://quantum.cloud.ibm.com/docs/en/api/qiskit/2.6/qiskit.transpiler.CouplingMap",
+    "versao": "API Qiskit SDK 2.6",
+    "biblioteca": "qiskit",
+    "temas": [
+      "hardware",
+      "roteamento"
+    ],
+    "nivel": "intermediario",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_api_qiskit_transpiler_target",
+    "url": "https://quantum.cloud.ibm.com/docs/en/api/qiskit/2.6/qiskit.transpiler.Target",
+    "versao": "API Qiskit SDK 2.6",
+    "biblioteca": "qiskit",
+    "temas": [
+      "hardware",
+      "target"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_api_qiskit_transpiler_layout",
+    "url": "https://quantum.cloud.ibm.com/docs/en/api/qiskit/2.6/qiskit.transpiler.Layout",
+    "versao": "API Qiskit SDK 2.6",
+    "biblioteca": "qiskit",
+    "temas": [
+      "layout",
+      "roteamento"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_api_qiskit_transpiler_transpilelayout",
+    "url": "https://quantum.cloud.ibm.com/docs/en/api/qiskit/2.6/qiskit.transpiler.TranspileLayout",
+    "versao": "API Qiskit SDK 2.6",
+    "biblioteca": "qiskit",
+    "temas": [
+      "layout",
+      "roteamento"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_api_qiskit_transpiler_passes_sabrelayout",
+    "url": "https://quantum.cloud.ibm.com/docs/en/api/qiskit/2.6/qiskit.transpiler.passes.SabreLayout",
+    "versao": "API Qiskit SDK 2.6",
+    "biblioteca": "qiskit",
+    "temas": [
+      "layout",
+      "roteamento"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_api_qiskit_transpiler_passes_sabreswap",
+    "url": "https://quantum.cloud.ibm.com/docs/en/api/qiskit/2.6/qiskit.transpiler.passes.SabreSwap",
+    "versao": "API Qiskit SDK 2.6",
+    "biblioteca": "qiskit",
+    "temas": [
+      "roteamento"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_api_qiskit_transpiler_passes_basistranslator",
+    "url": "https://quantum.cloud.ibm.com/docs/en/api/qiskit/2.6/qiskit.transpiler.passes.BasisTranslator",
+    "versao": "API Qiskit SDK 2.6",
+    "biblioteca": "qiskit",
+    "temas": [
+      "transpilacao",
+      "decomposicao"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_api_qiskit_transpiler_passes_optimize1qgatesdecomposition",
+    "url": "https://quantum.cloud.ibm.com/docs/en/api/qiskit/2.6/qiskit.transpiler.passes.Optimize1qGatesDecomposition",
+    "versao": "API Qiskit SDK 2.6",
+    "biblioteca": "qiskit",
+    "temas": [
+      "otimizacao"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_api_qiskit_transpiler_passes_commutativecancellation",
+    "url": "https://quantum.cloud.ibm.com/docs/en/api/qiskit/2.6/qiskit.transpiler.passes.CommutativeCancellation",
+    "versao": "API Qiskit SDK 2.6",
+    "biblioteca": "qiskit",
+    "temas": [
+      "otimizacao",
+      "comutacao"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_api_qiskit_transpiler_passes_inversecancellation",
+    "url": "https://quantum.cloud.ibm.com/docs/en/api/qiskit/2.6/qiskit.transpiler.passes.InverseCancellation",
+    "versao": "API Qiskit SDK 2.6",
+    "biblioteca": "qiskit",
+    "temas": [
+      "otimizacao"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_api_qiskit_transpiler_passes_consolidateblocks",
+    "url": "https://quantum.cloud.ibm.com/docs/en/api/qiskit/2.6/qiskit.transpiler.passes.ConsolidateBlocks",
+    "versao": "API Qiskit SDK 2.6",
+    "biblioteca": "qiskit",
+    "temas": [
+      "otimizacao",
+      "sintese"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_api_qiskit_transpiler_passes_unitarysynthesis",
+    "url": "https://quantum.cloud.ibm.com/docs/en/api/qiskit/2.6/qiskit.transpiler.passes.UnitarySynthesis",
+    "versao": "API Qiskit SDK 2.6",
+    "biblioteca": "qiskit",
+    "temas": [
+      "sintese"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_api_qiskit_transpiler_passes_removediagonalgatesbeforemeasure",
+    "url": "https://quantum.cloud.ibm.com/docs/en/api/qiskit/2.6/qiskit.transpiler.passes.RemoveDiagonalGatesBeforeMeasure",
+    "versao": "API Qiskit SDK 2.6",
+    "biblioteca": "qiskit",
+    "temas": [
+      "otimizacao",
+      "medicao"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_api_qiskit_transpiler_passes_removeresetinzerostate",
+    "url": "https://quantum.cloud.ibm.com/docs/en/api/qiskit/2.6/qiskit.transpiler.passes.RemoveResetInZeroState",
+    "versao": "API Qiskit SDK 2.6",
+    "biblioteca": "qiskit",
+    "temas": [
+      "otimizacao"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_api_qiskit_transpiler_passes_elidepermutations",
+    "url": "https://quantum.cloud.ibm.com/docs/en/api/qiskit/2.6/qiskit.transpiler.passes.ElidePermutations",
+    "versao": "API Qiskit SDK 2.6",
+    "biblioteca": "qiskit",
+    "temas": [
+      "otimizacao",
+      "roteamento"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_api_qiskit_transpiler_passes_highlevelsynthesis",
+    "url": "https://quantum.cloud.ibm.com/docs/en/api/qiskit/2.6/qiskit.transpiler.passes.HighLevelSynthesis",
+    "versao": "API Qiskit SDK 2.6",
+    "biblioteca": "qiskit",
+    "temas": [
+      "sintese"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_api_qiskit_transpiler_passes_collect2qblocks",
+    "url": "https://quantum.cloud.ibm.com/docs/en/api/qiskit/2.6/qiskit.transpiler.passes.Collect2qBlocks",
+    "versao": "API Qiskit SDK 2.6",
+    "biblioteca": "qiskit",
+    "temas": [
+      "otimizacao"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_api_qiskit_transpiler_passes_vf2layout",
+    "url": "https://quantum.cloud.ibm.com/docs/en/api/qiskit/2.6/qiskit.transpiler.passes.VF2Layout",
+    "versao": "API Qiskit SDK 2.6",
+    "biblioteca": "qiskit",
+    "temas": [
+      "layout"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_api_synthesis",
+    "url": "https://quantum.cloud.ibm.com/docs/en/api/qiskit/2.6/synthesis",
+    "versao": "API Qiskit SDK 2.6",
+    "biblioteca": "qiskit",
+    "temas": [
+      "sintese"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
   },
   {
     "document_id": "ibm_api_qasm2",
     "url": "https://quantum.cloud.ibm.com/docs/en/api/qiskit/2.6/qasm2",
-    "versao": "Referência solicitada Qiskit 2.6; conferir versão efetiva na página após redirecionamento IBM."
+    "versao": "API Qiskit SDK 2.6",
+    "biblioteca": "qiskit",
+    "temas": [
+      "openqasm2"
+    ],
+    "nivel": "intermediario",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
   },
   {
     "document_id": "ibm_api_qasm3",
     "url": "https://quantum.cloud.ibm.com/docs/en/api/qiskit/2.6/qasm3",
-    "versao": "Referência solicitada Qiskit 2.6; conferir versão efetiva na página após redirecionamento IBM."
+    "versao": "API Qiskit SDK 2.6",
+    "biblioteca": "qiskit",
+    "temas": [
+      "openqasm3"
+    ],
+    "nivel": "intermediario",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_api_primitives",
+    "url": "https://quantum.cloud.ibm.com/docs/en/api/qiskit/2.6/primitives",
+    "versao": "API Qiskit SDK 2.6",
+    "biblioteca": "qiskit",
+    "temas": [
+      "primitivas"
+    ],
+    "nivel": "intermediario",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_api_qiskit_primitives_statevectorsampler",
+    "url": "https://quantum.cloud.ibm.com/docs/en/api/qiskit/2.6/qiskit.primitives.StatevectorSampler",
+    "versao": "API Qiskit SDK 2.6",
+    "biblioteca": "qiskit",
+    "temas": [
+      "primitivas",
+      "simulacao"
+    ],
+    "nivel": "intermediario",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_api_qiskit_primitives_statevectorestimator",
+    "url": "https://quantum.cloud.ibm.com/docs/en/api/qiskit/2.6/qiskit.primitives.StatevectorEstimator",
+    "versao": "API Qiskit SDK 2.6",
+    "biblioteca": "qiskit",
+    "temas": [
+      "primitivas",
+      "simulacao"
+    ],
+    "nivel": "intermediario",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_api_providers_basic_provider",
+    "url": "https://quantum.cloud.ibm.com/docs/en/api/qiskit/2.6/providers_basic_provider",
+    "versao": "API Qiskit SDK 2.6",
+    "biblioteca": "qiskit",
+    "temas": [
+      "simulacao"
+    ],
+    "nivel": "intermediario",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_api_qiskit_providers_basic_provider_basicsimulator",
+    "url": "https://quantum.cloud.ibm.com/docs/en/api/qiskit/2.6/qiskit.providers.basic_provider.BasicSimulator",
+    "versao": "API Qiskit SDK 2.6",
+    "biblioteca": "qiskit",
+    "temas": [
+      "simulacao"
+    ],
+    "nivel": "intermediario",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_api_converters",
+    "url": "https://quantum.cloud.ibm.com/docs/en/api/qiskit/2.6/converters",
+    "versao": "API Qiskit SDK 2.6",
+    "biblioteca": "qiskit",
+    "temas": [
+      "dag",
+      "conversao"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_api_dagcircuit",
+    "url": "https://quantum.cloud.ibm.com/docs/en/api/qiskit/2.6/dagcircuit",
+    "versao": "API Qiskit SDK 2.6",
+    "biblioteca": "qiskit",
+    "temas": [
+      "dag"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_api_visualization",
+    "url": "https://quantum.cloud.ibm.com/docs/en/api/qiskit/2.6/visualization",
+    "versao": "API Qiskit SDK 2.6",
+    "biblioteca": "qiskit",
+    "temas": [
+      "visualizacao"
+    ],
+    "nivel": "basico",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_api_qiskit_visualization_plot_histogram",
+    "url": "https://quantum.cloud.ibm.com/docs/en/api/qiskit/2.6/qiskit.visualization.plot_histogram",
+    "versao": "API Qiskit SDK 2.6",
+    "biblioteca": "qiskit",
+    "temas": [
+      "visualizacao",
+      "medicao"
+    ],
+    "nivel": "basico",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_api_result",
+    "url": "https://quantum.cloud.ibm.com/docs/en/api/qiskit/2.6/result",
+    "versao": "API Qiskit SDK 2.6",
+    "biblioteca": "qiskit",
+    "temas": [
+      "resultados"
+    ],
+    "nivel": "intermediario",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_api_exceptions",
+    "url": "https://quantum.cloud.ibm.com/docs/en/api/qiskit/2.6/exceptions",
+    "versao": "API Qiskit SDK 2.6",
+    "biblioteca": "qiskit",
+    "temas": [
+      "depuracao",
+      "erros"
+    ],
+    "nivel": "intermediario",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_api_circuit_annotation",
+    "url": "https://quantum.cloud.ibm.com/docs/en/api/qiskit/2.6/circuit_annotation",
+    "versao": "API Qiskit SDK 2.6",
+    "biblioteca": "qiskit",
+    "temas": [
+      "circuitos"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_migracao_qiskit_1_0_features",
+    "url": "https://quantum.cloud.ibm.com/docs/en/migration-guides/qiskit-1.0-features",
+    "versao": "guia de migração",
+    "biblioteca": "qiskit",
+    "temas": [
+      "migracao"
+    ],
+    "nivel": "intermediario",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_migracao_qiskit_1_0_installation",
+    "url": "https://quantum.cloud.ibm.com/docs/en/migration-guides/qiskit-1.0-installation",
+    "versao": "guia de migração",
+    "biblioteca": "qiskit",
+    "temas": [
+      "migracao",
+      "instalacao"
+    ],
+    "nivel": "basico",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_migracao_qiskit_2_0",
+    "url": "https://quantum.cloud.ibm.com/docs/en/migration-guides/qiskit-2.0",
+    "versao": "guia de migração",
+    "biblioteca": "qiskit",
+    "temas": [
+      "migracao"
+    ],
+    "nivel": "intermediario",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_migracao_v2_primitives",
+    "url": "https://quantum.cloud.ibm.com/docs/en/migration-guides/v2-primitives",
+    "versao": "guia de migração",
+    "biblioteca": "qiskit",
+    "temas": [
+      "migracao",
+      "primitivas"
+    ],
+    "nivel": "intermediario",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_tutorial_hello_world",
+    "url": "https://quantum.cloud.ibm.com/docs/en/tutorials/hello-world",
+    "versao": "tutorial online",
+    "biblioteca": "qiskit",
+    "temas": [
+      "introducao",
+      "emaranhamento"
+    ],
+    "nivel": "basico",
+    "tipo_fonte": "tutorial_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_tutorial_quantum_approximate_optimization_algorithm",
+    "url": "https://quantum.cloud.ibm.com/docs/en/tutorials/quantum-approximate-optimization-algorithm",
+    "versao": "tutorial online",
+    "biblioteca": "qiskit",
+    "temas": [
+      "qaoa",
+      "otimizacao_combinatoria"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "tutorial_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_tutorial_variational_quantum_eigensolver",
+    "url": "https://quantum.cloud.ibm.com/docs/en/tutorials/variational-quantum-eigensolver",
+    "versao": "tutorial online",
+    "biblioteca": "qiskit",
+    "temas": [
+      "vqe",
+      "variacional"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "tutorial_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_tutorial_grovers_algorithm",
+    "url": "https://quantum.cloud.ibm.com/docs/en/tutorials/grovers-algorithm",
+    "versao": "tutorial online",
+    "biblioteca": "qiskit",
+    "temas": [
+      "grover",
+      "algoritmos"
+    ],
+    "nivel": "intermediario",
+    "tipo_fonte": "tutorial_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_tutorial_chsh_inequality",
+    "url": "https://quantum.cloud.ibm.com/docs/en/tutorials/chsh-inequality",
+    "versao": "tutorial online",
+    "biblioteca": "qiskit",
+    "temas": [
+      "emaranhamento",
+      "fundamentos"
+    ],
+    "nivel": "intermediario",
+    "tipo_fonte": "tutorial_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_tutorial_repetition_codes",
+    "url": "https://quantum.cloud.ibm.com/docs/en/tutorials/repetition-codes",
+    "versao": "tutorial online",
+    "biblioteca": "qiskit",
+    "temas": [
+      "correcao_de_erros"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "tutorial_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_tutorial_transpilation_optimizations_with_sabre",
+    "url": "https://quantum.cloud.ibm.com/docs/en/tutorials/transpilation-optimizations-with-sabre",
+    "versao": "tutorial online",
+    "biblioteca": "qiskit",
+    "temas": [
+      "roteamento",
+      "transpilacao"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "tutorial_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_tutorial_long_range_entanglement",
+    "url": "https://quantum.cloud.ibm.com/docs/en/tutorials/long-range-entanglement",
+    "versao": "tutorial online",
+    "biblioteca": "qiskit",
+    "temas": [
+      "circuitos_dinamicos",
+      "emaranhamento"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "tutorial_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_tutorial_quantum_phase_estimation_qctrl",
+    "url": "https://quantum.cloud.ibm.com/docs/en/tutorials/quantum-phase-estimation-qctrl",
+    "versao": "tutorial online",
+    "biblioteca": "qiskit",
+    "temas": [
+      "estimativa_de_fase"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "tutorial_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_tutorial_krylov_quantum_diagonalization",
+    "url": "https://quantum.cloud.ibm.com/docs/en/tutorials/krylov-quantum-diagonalization",
+    "versao": "tutorial online",
+    "biblioteca": "qiskit",
+    "temas": [
+      "simulacao_hamiltoniana"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "tutorial_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_tutorial_sample_based_quantum_diagonalization",
+    "url": "https://quantum.cloud.ibm.com/docs/en/tutorials/sample-based-quantum-diagonalization",
+    "versao": "tutorial online",
+    "biblioteca": "qiskit",
+    "temas": [
+      "quimica_quantica"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "tutorial_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_tutorial_advanced_techniques_for_qaoa",
+    "url": "https://quantum.cloud.ibm.com/docs/en/tutorials/advanced-techniques-for-qaoa",
+    "versao": "tutorial online",
+    "biblioteca": "qiskit",
+    "temas": [
+      "qaoa"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "tutorial_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_tutorial_real_time_benchmarking_for_qubit_selection",
+    "url": "https://quantum.cloud.ibm.com/docs/en/tutorials/real-time-benchmarking-for-qubit-selection",
+    "versao": "tutorial online",
+    "biblioteca": "qiskit",
+    "temas": [
+      "hardware"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "tutorial_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_tutorial_error_mitigation_with_qiskit_functions",
+    "url": "https://quantum.cloud.ibm.com/docs/en/tutorials/error-mitigation-with-qiskit-functions",
+    "versao": "tutorial online",
+    "biblioteca": "qiskit",
+    "temas": [
+      "mitigacao"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "tutorial_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_tutorial_compilation_methods_for_hamiltonian_simulation_circuits",
+    "url": "https://quantum.cloud.ibm.com/docs/en/tutorials/compilation-methods-for-hamiltonian-simulation-circuits",
+    "versao": "tutorial online",
+    "biblioteca": "qiskit",
+    "temas": [
+      "simulacao_hamiltoniana",
+      "transpilacao"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "tutorial_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_tutorial_approximate_quantum_compilation_for_time_evolution",
+    "url": "https://quantum.cloud.ibm.com/docs/en/tutorials/approximate-quantum-compilation-for-time-evolution",
+    "versao": "tutorial online",
+    "biblioteca": "qiskit",
+    "temas": [
+      "compilacao_aproximada"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "tutorial_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_tutorial_wire_cutting",
+    "url": "https://quantum.cloud.ibm.com/docs/en/tutorials/wire-cutting",
+    "versao": "tutorial online",
+    "biblioteca": "qiskit",
+    "temas": [
+      "corte_de_circuitos"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "tutorial_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_tutorial_operator_back_propagation",
+    "url": "https://quantum.cloud.ibm.com/docs/en/tutorials/operator-back-propagation",
+    "versao": "tutorial online",
+    "biblioteca": "qiskit",
+    "temas": [
+      "propagacao_de_operadores"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "tutorial_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_tutorial_multi_product_formula",
+    "url": "https://quantum.cloud.ibm.com/docs/en/tutorials/multi-product-formula",
+    "versao": "tutorial online",
+    "biblioteca": "qiskit",
+    "temas": [
+      "simulacao_hamiltoniana"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "tutorial_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_tutorial_quantum_kernel_training",
+    "url": "https://quantum.cloud.ibm.com/docs/en/tutorials/quantum-kernel-training",
+    "versao": "tutorial online",
+    "biblioteca": "qiskit",
+    "temas": [
+      "aprendizado_de_maquina"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "tutorial_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_tutorial_combine_error_mitigation_techniques",
+    "url": "https://quantum.cloud.ibm.com/docs/en/tutorials/combine-error-mitigation-techniques",
+    "versao": "tutorial online",
+    "biblioteca": "qiskit",
+    "temas": [
+      "mitigacao"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "tutorial_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_tutorial_nishimori_phase_transition",
+    "url": "https://quantum.cloud.ibm.com/docs/en/tutorials/nishimori-phase-transition",
+    "versao": "tutorial online",
+    "biblioteca": "qiskit",
+    "temas": [
+      "circuitos_dinamicos"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "tutorial_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_tutorial_pauli_correlation_encoding_for_qaoa",
+    "url": "https://quantum.cloud.ibm.com/docs/en/tutorials/pauli-correlation-encoding-for-qaoa",
+    "versao": "tutorial online",
+    "biblioteca": "qiskit",
+    "temas": [
+      "qaoa"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "tutorial_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_tutorial_ghz_spacetime_codes",
+    "url": "https://quantum.cloud.ibm.com/docs/en/tutorials/ghz-spacetime-codes",
+    "versao": "tutorial online",
+    "biblioteca": "qiskit",
+    "temas": [
+      "correcao_de_erros"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "tutorial_oficial",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_curso_basics_of_quantum_information_single_systems_introduction",
+    "url": "https://quantum.cloud.ibm.com/learning/en/courses/basics-of-quantum-information/single-systems/introduction",
+    "versao": "curso online IBM Quantum Learning",
+    "biblioteca": "qiskit",
+    "temas": [
+      "fundamentos",
+      "algebra_linear"
+    ],
+    "nivel": "basico",
+    "tipo_fonte": "material_educacional",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_curso_basics_of_quantum_information_single_systems_quantum_information",
+    "url": "https://quantum.cloud.ibm.com/learning/en/courses/basics-of-quantum-information/single-systems/quantum-information",
+    "versao": "curso online IBM Quantum Learning",
+    "biblioteca": "qiskit",
+    "temas": [
+      "fundamentos",
+      "estados"
+    ],
+    "nivel": "basico",
+    "tipo_fonte": "material_educacional",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_curso_basics_of_quantum_information_multiple_systems_introduction",
+    "url": "https://quantum.cloud.ibm.com/learning/en/courses/basics-of-quantum-information/multiple-systems/introduction",
+    "versao": "curso online IBM Quantum Learning",
+    "biblioteca": "qiskit",
+    "temas": [
+      "fundamentos",
+      "produto_tensorial"
+    ],
+    "nivel": "basico",
+    "tipo_fonte": "material_educacional",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_curso_basics_of_quantum_information_quantum_circuits_introduction",
+    "url": "https://quantum.cloud.ibm.com/learning/en/courses/basics-of-quantum-information/quantum-circuits/introduction",
+    "versao": "curso online IBM Quantum Learning",
+    "biblioteca": "qiskit",
+    "temas": [
+      "circuitos"
+    ],
+    "nivel": "basico",
+    "tipo_fonte": "material_educacional",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_curso_basics_of_quantum_information_entanglement_in_action_introduction",
+    "url": "https://quantum.cloud.ibm.com/learning/en/courses/basics-of-quantum-information/entanglement-in-action/introduction",
+    "versao": "curso online IBM Quantum Learning",
+    "biblioteca": "qiskit",
+    "temas": [
+      "emaranhamento",
+      "teletransporte"
+    ],
+    "nivel": "basico",
+    "tipo_fonte": "material_educacional",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_curso_fundamentals_of_quantum_algorithms_quantum_query_algorithms_introduction",
+    "url": "https://quantum.cloud.ibm.com/learning/en/courses/fundamentals-of-quantum-algorithms/quantum-query-algorithms/introduction",
+    "versao": "curso online IBM Quantum Learning",
+    "biblioteca": "qiskit",
+    "temas": [
+      "algoritmos",
+      "deutsch_jozsa"
+    ],
+    "nivel": "intermediario",
+    "tipo_fonte": "material_educacional",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_curso_fundamentals_of_quantum_algorithms_quantum_algorithmic_foundations_introduction",
+    "url": "https://quantum.cloud.ibm.com/learning/en/courses/fundamentals-of-quantum-algorithms/quantum-algorithmic-foundations/introduction",
+    "versao": "curso online IBM Quantum Learning",
+    "biblioteca": "qiskit",
+    "temas": [
+      "algoritmos",
+      "complexidade"
+    ],
+    "nivel": "intermediario",
+    "tipo_fonte": "material_educacional",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_curso_fundamentals_of_quantum_algorithms_phase_estimation_and_factoring_introduction",
+    "url": "https://quantum.cloud.ibm.com/learning/en/courses/fundamentals-of-quantum-algorithms/phase-estimation-and-factoring/introduction",
+    "versao": "curso online IBM Quantum Learning",
+    "biblioteca": "qiskit",
+    "temas": [
+      "estimativa_de_fase",
+      "shor"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "material_educacional",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_curso_fundamentals_of_quantum_algorithms_grover_algorithm_introduction",
+    "url": "https://quantum.cloud.ibm.com/learning/en/courses/fundamentals-of-quantum-algorithms/grover-algorithm/introduction",
+    "versao": "curso online IBM Quantum Learning",
+    "biblioteca": "qiskit",
+    "temas": [
+      "grover"
+    ],
+    "nivel": "intermediario",
+    "tipo_fonte": "material_educacional",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_curso_foundations_of_quantum_error_correction_correcting_quantum_errors_introduction",
+    "url": "https://quantum.cloud.ibm.com/learning/en/courses/foundations-of-quantum-error-correction/correcting-quantum-errors/introduction",
+    "versao": "curso online IBM Quantum Learning",
+    "biblioteca": "qiskit",
+    "temas": [
+      "correcao_de_erros"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "material_educacional",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_curso_foundations_of_quantum_error_correction_stabilizer_formalism_introduction",
+    "url": "https://quantum.cloud.ibm.com/learning/en/courses/foundations-of-quantum-error-correction/stabilizer-formalism/introduction",
+    "versao": "curso online IBM Quantum Learning",
+    "biblioteca": "qiskit",
+    "temas": [
+      "estabilizadores",
+      "correcao_de_erros"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "material_educacional",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_curso_foundations_of_quantum_error_correction_quantum_code_constructions_introduction",
+    "url": "https://quantum.cloud.ibm.com/learning/en/courses/foundations-of-quantum-error-correction/quantum-code-constructions/introduction",
+    "versao": "curso online IBM Quantum Learning",
+    "biblioteca": "qiskit",
+    "temas": [
+      "correcao_de_erros",
+      "surface_code"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "material_educacional",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_curso_general_formulation_of_quantum_information_density_matrices_introduction",
+    "url": "https://quantum.cloud.ibm.com/learning/en/courses/general-formulation-of-quantum-information/density-matrices/introduction",
+    "versao": "curso online IBM Quantum Learning",
+    "biblioteca": "qiskit",
+    "temas": [
+      "estados",
+      "matriz_densidade"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "material_educacional",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_curso_general_formulation_of_quantum_information_quantum_channels_introduction",
+    "url": "https://quantum.cloud.ibm.com/learning/en/courses/general-formulation-of-quantum-information/quantum-channels/introduction",
+    "versao": "curso online IBM Quantum Learning",
+    "biblioteca": "qiskit",
+    "temas": [
+      "ruido",
+      "canais"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "material_educacional",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_curso_quantum_computing_in_practice_introduction",
+    "url": "https://quantum.cloud.ibm.com/learning/en/courses/quantum-computing-in-practice/introduction",
+    "versao": "curso online IBM Quantum Learning",
+    "biblioteca": "qiskit",
+    "temas": [
+      "pratica",
+      "hardware"
+    ],
+    "nivel": "intermediario",
+    "tipo_fonte": "material_educacional",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_curso_utility_scale_quantum_computing_introduction",
+    "url": "https://quantum.cloud.ibm.com/learning/en/courses/utility-scale-quantum-computing/introduction",
+    "versao": "curso online IBM Quantum Learning",
+    "biblioteca": "qiskit",
+    "temas": [
+      "pratica",
+      "hardware"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "material_educacional",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_curso_quantum_diagonalization_algorithms_introduction",
+    "url": "https://quantum.cloud.ibm.com/learning/en/courses/quantum-diagonalization-algorithms/introduction",
+    "versao": "curso online IBM Quantum Learning",
+    "biblioteca": "qiskit",
+    "temas": [
+      "simulacao_hamiltoniana"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "material_educacional",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "ibm_curso_quantum_machine_learning_introduction",
+    "url": "https://quantum.cloud.ibm.com/learning/en/courses/quantum-machine-learning/introduction",
+    "versao": "curso online IBM Quantum Learning",
+    "biblioteca": "qiskit",
+    "temas": [
+      "aprendizado_de_maquina"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "material_educacional",
+    "licenca": "IBM Quantum Documentation; conteúdo do Qiskit sob Apache-2.0, consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "aer_tutorials_1_aersimulator",
+    "url": "https://qiskit.github.io/qiskit-aer/tutorials/1_aersimulator.html",
+    "versao": "documentação estável do qiskit-aer",
+    "biblioteca": "qiskit_aer",
+    "temas": [
+      "simulacao",
+      "aer"
+    ],
+    "nivel": "intermediario",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "Apache-2.0 (repositório Qiskit/qiskit-aer)",
+    "idioma": "en"
+  },
+  {
+    "document_id": "aer_tutorials_2_device_noise_simulation",
+    "url": "https://qiskit.github.io/qiskit-aer/tutorials/2_device_noise_simulation.html",
+    "versao": "documentação estável do qiskit-aer",
+    "biblioteca": "qiskit_aer",
+    "temas": [
+      "ruido",
+      "simulacao"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "Apache-2.0 (repositório Qiskit/qiskit-aer)",
+    "idioma": "en"
+  },
+  {
+    "document_id": "aer_tutorials_3_building_noise_models",
+    "url": "https://qiskit.github.io/qiskit-aer/tutorials/3_building_noise_models.html",
+    "versao": "documentação estável do qiskit-aer",
+    "biblioteca": "qiskit_aer",
+    "temas": [
+      "ruido"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "Apache-2.0 (repositório Qiskit/qiskit-aer)",
+    "idioma": "en"
+  },
+  {
+    "document_id": "aer_tutorials_4_custom_gate_noise",
+    "url": "https://qiskit.github.io/qiskit-aer/tutorials/4_custom_gate_noise.html",
+    "versao": "documentação estável do qiskit-aer",
+    "biblioteca": "qiskit_aer",
+    "temas": [
+      "ruido"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "Apache-2.0 (repositório Qiskit/qiskit-aer)",
+    "idioma": "en"
+  },
+  {
+    "document_id": "aer_tutorials_5_noise_transformation",
+    "url": "https://qiskit.github.io/qiskit-aer/tutorials/5_noise_transformation.html",
+    "versao": "documentação estável do qiskit-aer",
+    "biblioteca": "qiskit_aer",
+    "temas": [
+      "ruido"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "Apache-2.0 (repositório Qiskit/qiskit-aer)",
+    "idioma": "en"
+  },
+  {
+    "document_id": "aer_tutorials_6_extended_stabilizer_tutorial",
+    "url": "https://qiskit.github.io/qiskit-aer/tutorials/6_extended_stabilizer_tutorial.html",
+    "versao": "documentação estável do qiskit-aer",
+    "biblioteca": "qiskit_aer",
+    "temas": [
+      "estabilizadores",
+      "simulacao"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "Apache-2.0 (repositório Qiskit/qiskit-aer)",
+    "idioma": "en"
+  },
+  {
+    "document_id": "aer_tutorials_7_matrix_product_state_method",
+    "url": "https://qiskit.github.io/qiskit-aer/tutorials/7_matrix_product_state_method.html",
+    "versao": "documentação estável do qiskit-aer",
+    "biblioteca": "qiskit_aer",
+    "temas": [
+      "mps",
+      "simulacao",
+      "redes_tensoriais"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "Apache-2.0 (repositório Qiskit/qiskit-aer)",
+    "idioma": "en"
+  },
+  {
+    "document_id": "aer_apidocs_aer_provider",
+    "url": "https://qiskit.github.io/qiskit-aer/apidocs/aer_provider.html",
+    "versao": "documentação estável do qiskit-aer",
+    "biblioteca": "qiskit_aer",
+    "temas": [
+      "simulacao",
+      "aer"
+    ],
+    "nivel": "intermediario",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "Apache-2.0 (repositório Qiskit/qiskit-aer)",
+    "idioma": "en"
+  },
+  {
+    "document_id": "aer_apidocs_aer_noise",
+    "url": "https://qiskit.github.io/qiskit-aer/apidocs/aer_noise.html",
+    "versao": "documentação estável do qiskit-aer",
+    "biblioteca": "qiskit_aer",
+    "temas": [
+      "ruido"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "Apache-2.0 (repositório Qiskit/qiskit-aer)",
+    "idioma": "en"
+  },
+  {
+    "document_id": "aer_apidocs_aer_primitives",
+    "url": "https://qiskit.github.io/qiskit-aer/apidocs/aer_primitives.html",
+    "versao": "documentação estável do qiskit-aer",
+    "biblioteca": "qiskit_aer",
+    "temas": [
+      "primitivas",
+      "aer"
+    ],
+    "nivel": "intermediario",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "Apache-2.0 (repositório Qiskit/qiskit-aer)",
+    "idioma": "en"
+  },
+  {
+    "document_id": "aer_apidocs_aer_library",
+    "url": "https://qiskit.github.io/qiskit-aer/apidocs/aer_library.html",
+    "versao": "documentação estável do qiskit-aer",
+    "biblioteca": "qiskit_aer",
+    "temas": [
+      "simulacao",
+      "aer"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "Apache-2.0 (repositório Qiskit/qiskit-aer)",
+    "idioma": "en"
+  },
+  {
+    "document_id": "aer_stubs_qiskit_aer_aersimulator",
+    "url": "https://qiskit.github.io/qiskit-aer/stubs/qiskit_aer.AerSimulator.html",
+    "versao": "documentação estável do qiskit-aer",
+    "biblioteca": "qiskit_aer",
+    "temas": [
+      "simulacao",
+      "aer",
+      "mps",
+      "estabilizadores"
+    ],
+    "nivel": "intermediario",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "Apache-2.0 (repositório Qiskit/qiskit-aer)",
+    "idioma": "en"
+  },
+  {
+    "document_id": "aer_howtos_running_gpu",
+    "url": "https://qiskit.github.io/qiskit-aer/howtos/running_gpu.html",
+    "versao": "documentação estável do qiskit-aer",
+    "biblioteca": "qiskit_aer",
+    "temas": [
+      "simulacao",
+      "gpu"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "Apache-2.0 (repositório Qiskit/qiskit-aer)",
+    "idioma": "en"
+  },
+  {
+    "document_id": "qiskit_optimization_tutorials_01_quadratic_program",
+    "url": "https://qiskit-community.github.io/qiskit-optimization/tutorials/01_quadratic_program.html",
+    "versao": "documentação do projeto comunitário",
+    "biblioteca": "qiskit",
+    "temas": [
+      "otimizacao_combinatoria"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "documentacao_comunitaria",
+    "licenca": "Apache-2.0 (projeto qiskit-community)",
+    "idioma": "en"
+  },
+  {
+    "document_id": "qiskit_optimization_tutorials_03_minimum_eigen_optimizer",
+    "url": "https://qiskit-community.github.io/qiskit-optimization/tutorials/03_minimum_eigen_optimizer.html",
+    "versao": "documentação do projeto comunitário",
+    "biblioteca": "qiskit",
+    "temas": [
+      "otimizacao_combinatoria",
+      "qaoa"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "documentacao_comunitaria",
+    "licenca": "Apache-2.0 (projeto qiskit-community)",
+    "idioma": "en"
+  },
+  {
+    "document_id": "qiskit_optimization_tutorials_06_examples_max_cut_and_tsp",
+    "url": "https://qiskit-community.github.io/qiskit-optimization/tutorials/06_examples_max_cut_and_tsp.html",
+    "versao": "documentação do projeto comunitário",
+    "biblioteca": "qiskit",
+    "temas": [
+      "otimizacao_combinatoria",
+      "qaoa"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "documentacao_comunitaria",
+    "licenca": "Apache-2.0 (projeto qiskit-community)",
+    "idioma": "en"
+  },
+  {
+    "document_id": "qiskit_optimization_index",
+    "url": "https://qiskit-community.github.io/qiskit-optimization/index.html",
+    "versao": "documentação do projeto comunitário",
+    "biblioteca": "qiskit",
+    "temas": [
+      "otimizacao_combinatoria"
+    ],
+    "nivel": "intermediario",
+    "tipo_fonte": "documentacao_comunitaria",
+    "licenca": "Apache-2.0 (projeto qiskit-community)",
+    "idioma": "en"
+  },
+  {
+    "document_id": "qiskit_algorithms_tutorials_01_algorithms_introduction",
+    "url": "https://qiskit-community.github.io/qiskit-algorithms/tutorials/01_algorithms_introduction.html",
+    "versao": "documentação do projeto comunitário",
+    "biblioteca": "qiskit",
+    "temas": [
+      "algoritmos"
+    ],
+    "nivel": "intermediario",
+    "tipo_fonte": "documentacao_comunitaria",
+    "licenca": "Apache-2.0 (projeto qiskit-community)",
+    "idioma": "en"
+  },
+  {
+    "document_id": "qiskit_algorithms_tutorials_02_vqe_advanced_options",
+    "url": "https://qiskit-community.github.io/qiskit-algorithms/tutorials/02_vqe_advanced_options.html",
+    "versao": "documentação do projeto comunitário",
+    "biblioteca": "qiskit",
+    "temas": [
+      "vqe"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "documentacao_comunitaria",
+    "licenca": "Apache-2.0 (projeto qiskit-community)",
+    "idioma": "en"
+  },
+  {
+    "document_id": "qiskit_algorithms_tutorials_05_qaoa",
+    "url": "https://qiskit-community.github.io/qiskit-algorithms/tutorials/05_qaoa.html",
+    "versao": "documentação do projeto comunitário",
+    "biblioteca": "qiskit",
+    "temas": [
+      "qaoa"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "documentacao_comunitaria",
+    "licenca": "Apache-2.0 (projeto qiskit-community)",
+    "idioma": "en"
+  },
+  {
+    "document_id": "qiskit_algorithms_tutorials_06_grover",
+    "url": "https://qiskit-community.github.io/qiskit-algorithms/tutorials/06_grover.html",
+    "versao": "documentação do projeto comunitário",
+    "biblioteca": "qiskit",
+    "temas": [
+      "grover"
+    ],
+    "nivel": "intermediario",
+    "tipo_fonte": "documentacao_comunitaria",
+    "licenca": "Apache-2.0 (projeto qiskit-community)",
+    "idioma": "en"
+  },
+  {
+    "document_id": "qiskit_nature_index",
+    "url": "https://qiskit-community.github.io/qiskit-nature/index.html",
+    "versao": "documentação do projeto comunitário",
+    "biblioteca": "qiskit",
+    "temas": [
+      "quimica_quantica"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "documentacao_comunitaria",
+    "licenca": "Apache-2.0 (projeto qiskit-community)",
+    "idioma": "en"
+  },
+  {
+    "document_id": "qiskit_dynamics_index",
+    "url": "https://qiskit-community.github.io/qiskit-dynamics/index.html",
+    "versao": "documentação do projeto comunitário",
+    "biblioteca": "qiskit",
+    "temas": [
+      "simulacao_hamiltoniana"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "documentacao_comunitaria",
+    "licenca": "Apache-2.0 (projeto qiskit-community)",
+    "idioma": "en"
+  },
+  {
+    "document_id": "openqasm_intro",
+    "url": "https://openqasm.com/intro.html",
+    "versao": "especificação OpenQASM 3",
+    "biblioteca": "openqasm",
+    "temas": [
+      "openqasm3"
+    ],
+    "nivel": "basico",
+    "tipo_fonte": "especificacao_oficial",
+    "licenca": "Apache-2.0 (openqasm/openqasm)",
+    "idioma": "en"
+  },
+  {
+    "document_id": "openqasm_language_index",
+    "url": "https://openqasm.com/language/index.html",
+    "versao": "especificação OpenQASM 3",
+    "biblioteca": "openqasm",
+    "temas": [
+      "openqasm3"
+    ],
+    "nivel": "basico",
+    "tipo_fonte": "especificacao_oficial",
+    "licenca": "Apache-2.0 (openqasm/openqasm)",
+    "idioma": "en"
+  },
+  {
+    "document_id": "openqasm_language_comments",
+    "url": "https://openqasm.com/language/comments.html",
+    "versao": "especificação OpenQASM 3",
+    "biblioteca": "openqasm",
+    "temas": [
+      "openqasm3"
+    ],
+    "nivel": "basico",
+    "tipo_fonte": "especificacao_oficial",
+    "licenca": "Apache-2.0 (openqasm/openqasm)",
+    "idioma": "en"
+  },
+  {
+    "document_id": "openqasm_language_types",
+    "url": "https://openqasm.com/language/types.html",
+    "versao": "especificação OpenQASM 3",
+    "biblioteca": "openqasm",
+    "temas": [
+      "openqasm3",
+      "tipos"
+    ],
+    "nivel": "intermediario",
+    "tipo_fonte": "especificacao_oficial",
+    "licenca": "Apache-2.0 (openqasm/openqasm)",
+    "idioma": "en"
+  },
+  {
+    "document_id": "openqasm_language_gates",
+    "url": "https://openqasm.com/language/gates.html",
+    "versao": "especificação OpenQASM 3",
+    "biblioteca": "openqasm",
+    "temas": [
+      "openqasm3",
+      "portas"
+    ],
+    "nivel": "intermediario",
+    "tipo_fonte": "especificacao_oficial",
+    "licenca": "Apache-2.0 (openqasm/openqasm)",
+    "idioma": "en"
+  },
+  {
+    "document_id": "openqasm_language_insts",
+    "url": "https://openqasm.com/language/insts.html",
+    "versao": "especificação OpenQASM 3",
+    "biblioteca": "openqasm",
+    "temas": [
+      "openqasm3",
+      "medicao"
+    ],
+    "nivel": "intermediario",
+    "tipo_fonte": "especificacao_oficial",
+    "licenca": "Apache-2.0 (openqasm/openqasm)",
+    "idioma": "en"
+  },
+  {
+    "document_id": "openqasm_language_classical",
+    "url": "https://openqasm.com/language/classical.html",
+    "versao": "especificação OpenQASM 3",
+    "biblioteca": "openqasm",
+    "temas": [
+      "openqasm3",
+      "controle_classico"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "especificacao_oficial",
+    "licenca": "Apache-2.0 (openqasm/openqasm)",
+    "idioma": "en"
+  },
+  {
+    "document_id": "openqasm_language_standard_library",
+    "url": "https://openqasm.com/language/standard_library.html",
+    "versao": "especificação OpenQASM 3",
+    "biblioteca": "openqasm",
+    "temas": [
+      "openqasm3",
+      "portas"
+    ],
+    "nivel": "intermediario",
+    "tipo_fonte": "especificacao_oficial",
+    "licenca": "Apache-2.0 (openqasm/openqasm)",
+    "idioma": "en"
+  },
+  {
+    "document_id": "openqasm_language_directives",
+    "url": "https://openqasm.com/language/directives.html",
+    "versao": "especificação OpenQASM 3",
+    "biblioteca": "openqasm",
+    "temas": [
+      "openqasm3"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "especificacao_oficial",
+    "licenca": "Apache-2.0 (openqasm/openqasm)",
+    "idioma": "en"
+  },
+  {
+    "document_id": "openqasm_language_scope",
+    "url": "https://openqasm.com/language/scope.html",
+    "versao": "especificação OpenQASM 3",
+    "biblioteca": "openqasm",
+    "temas": [
+      "openqasm3"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "especificacao_oficial",
+    "licenca": "Apache-2.0 (openqasm/openqasm)",
+    "idioma": "en"
+  },
+  {
+    "document_id": "openqasm_language_subroutines",
+    "url": "https://openqasm.com/language/subroutines.html",
+    "versao": "especificação OpenQASM 3",
+    "biblioteca": "openqasm",
+    "temas": [
+      "openqasm3"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "especificacao_oficial",
+    "licenca": "Apache-2.0 (openqasm/openqasm)",
+    "idioma": "en"
+  },
+  {
+    "document_id": "openqasm_language_delays",
+    "url": "https://openqasm.com/language/delays.html",
+    "versao": "especificação OpenQASM 3",
+    "biblioteca": "openqasm",
+    "temas": [
+      "openqasm3",
+      "temporizacao"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "especificacao_oficial",
+    "licenca": "Apache-2.0 (openqasm/openqasm)",
+    "idioma": "en"
+  },
+  {
+    "document_id": "openqasm_language_pulses",
+    "url": "https://openqasm.com/language/pulses.html",
+    "versao": "especificação OpenQASM 3",
+    "biblioteca": "openqasm",
+    "temas": [
+      "openqasm3",
+      "pulsos"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "especificacao_oficial",
+    "licenca": "Apache-2.0 (openqasm/openqasm)",
+    "idioma": "en"
+  },
+  {
+    "document_id": "openqasm_language_openpulse",
+    "url": "https://openqasm.com/language/openpulse.html",
+    "versao": "especificação OpenQASM 3",
+    "biblioteca": "openqasm",
+    "temas": [
+      "openqasm3",
+      "pulsos"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "especificacao_oficial",
+    "licenca": "Apache-2.0 (openqasm/openqasm)",
+    "idioma": "en"
+  },
+  {
+    "document_id": "openqasm_versions_3_0_language_index",
+    "url": "https://openqasm.com/versions/3.0/language/index.html",
+    "versao": "especificação OpenQASM 3",
+    "biblioteca": "openqasm",
+    "temas": [
+      "openqasm3"
+    ],
+    "nivel": "basico",
+    "tipo_fonte": "especificacao_oficial",
+    "licenca": "Apache-2.0 (openqasm/openqasm)",
+    "idioma": "en"
+  },
+  {
+    "document_id": "openqasm_release_notes",
+    "url": "https://openqasm.com/release_notes.html",
+    "versao": "especificação OpenQASM 3",
+    "biblioteca": "openqasm",
+    "temas": [
+      "openqasm3",
+      "versoes"
+    ],
+    "nivel": "basico",
+    "tipo_fonte": "especificacao_oficial",
+    "licenca": "Apache-2.0 (openqasm/openqasm)",
+    "idioma": "en"
+  },
+  {
+    "document_id": "cirq_start_basics",
+    "url": "https://quantumai.google/cirq/start/basics",
+    "versao": "documentação Cirq",
+    "biblioteca": "cirq",
+    "temas": [
+      "circuitos"
+    ],
+    "nivel": "basico",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "Apache-2.0 (quantumlib/Cirq)",
+    "idioma": "en"
+  },
+  {
+    "document_id": "cirq_build_circuits",
+    "url": "https://quantumai.google/cirq/build/circuits",
+    "versao": "documentação Cirq",
+    "biblioteca": "cirq",
+    "temas": [
+      "circuitos"
+    ],
+    "nivel": "basico",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "Apache-2.0 (quantumlib/Cirq)",
+    "idioma": "en"
+  },
+  {
+    "document_id": "cirq_build_gates",
+    "url": "https://quantumai.google/cirq/build/gates",
+    "versao": "documentação Cirq",
+    "biblioteca": "cirq",
+    "temas": [
+      "portas"
+    ],
+    "nivel": "basico",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "Apache-2.0 (quantumlib/Cirq)",
+    "idioma": "en"
+  },
+  {
+    "document_id": "cirq_build_qubits",
+    "url": "https://quantumai.google/cirq/build/qubits",
+    "versao": "documentação Cirq",
+    "biblioteca": "cirq",
+    "temas": [
+      "qubits"
+    ],
+    "nivel": "basico",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "Apache-2.0 (quantumlib/Cirq)",
+    "idioma": "en"
+  },
+  {
+    "document_id": "cirq_build_operators",
+    "url": "https://quantumai.google/cirq/build/operators",
+    "versao": "documentação Cirq",
+    "biblioteca": "cirq",
+    "temas": [
+      "operadores"
+    ],
+    "nivel": "intermediario",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "Apache-2.0 (quantumlib/Cirq)",
+    "idioma": "en"
+  },
+  {
+    "document_id": "cirq_build_custom_gates",
+    "url": "https://quantumai.google/cirq/build/custom_gates",
+    "versao": "documentação Cirq",
+    "biblioteca": "cirq",
+    "temas": [
+      "portas"
+    ],
+    "nivel": "intermediario",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "Apache-2.0 (quantumlib/Cirq)",
+    "idioma": "en"
+  },
+  {
+    "document_id": "cirq_build_protocols",
+    "url": "https://quantumai.google/cirq/build/protocols",
+    "versao": "documentação Cirq",
+    "biblioteca": "cirq",
+    "temas": [
+      "unitarias"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "Apache-2.0 (quantumlib/Cirq)",
+    "idioma": "en"
+  },
+  {
+    "document_id": "cirq_build_classical_control",
+    "url": "https://quantumai.google/cirq/build/classical_control",
+    "versao": "documentação Cirq",
+    "biblioteca": "cirq",
+    "temas": [
+      "controle_classico"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "Apache-2.0 (quantumlib/Cirq)",
+    "idioma": "en"
+  },
+  {
+    "document_id": "cirq_simulate_simulation",
+    "url": "https://quantumai.google/cirq/simulate/simulation",
+    "versao": "documentação Cirq",
+    "biblioteca": "cirq",
+    "temas": [
+      "simulacao"
+    ],
+    "nivel": "intermediario",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "Apache-2.0 (quantumlib/Cirq)",
+    "idioma": "en"
+  },
+  {
+    "document_id": "cirq_simulate_noisy_simulation",
+    "url": "https://quantumai.google/cirq/simulate/noisy_simulation",
+    "versao": "documentação Cirq",
+    "biblioteca": "cirq",
+    "temas": [
+      "ruido",
+      "simulacao"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "Apache-2.0 (quantumlib/Cirq)",
+    "idioma": "en"
+  },
+  {
+    "document_id": "cirq_transform_transformers",
+    "url": "https://quantumai.google/cirq/transform/transformers",
+    "versao": "documentação Cirq",
+    "biblioteca": "cirq",
+    "temas": [
+      "otimizacao",
+      "transpilacao"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "Apache-2.0 (quantumlib/Cirq)",
+    "idioma": "en"
+  },
+  {
+    "document_id": "cirq_transform_routing_transformer",
+    "url": "https://quantumai.google/cirq/transform/routing_transformer",
+    "versao": "documentação Cirq",
+    "biblioteca": "cirq",
+    "temas": [
+      "roteamento"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "Apache-2.0 (quantumlib/Cirq)",
+    "idioma": "en"
+  },
+  {
+    "document_id": "cirq_hardware_devices",
+    "url": "https://quantumai.google/cirq/hardware/devices",
+    "versao": "documentação Cirq",
+    "biblioteca": "cirq",
+    "temas": [
+      "hardware"
+    ],
+    "nivel": "intermediario",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "Apache-2.0 (quantumlib/Cirq)",
+    "idioma": "en"
+  },
+  {
+    "document_id": "cirq_build_interop",
+    "url": "https://quantumai.google/cirq/build/interop",
+    "versao": "documentação Cirq",
+    "biblioteca": "cirq",
+    "temas": [
+      "interoperabilidade"
+    ],
+    "nivel": "intermediario",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "Apache-2.0 (quantumlib/Cirq)",
+    "idioma": "en"
+  },
+  {
+    "document_id": "msq_concepts_the_qubit",
+    "url": "https://learn.microsoft.com/en-us/azure/quantum/concepts-the-qubit",
+    "versao": "Azure Quantum docs",
+    "biblioteca": "qsharp",
+    "temas": [
+      "fundamentos",
+      "qubits"
+    ],
+    "nivel": "basico",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "CC-BY-4.0 (Microsoft Learn), consultar termos",
+    "idioma": "en"
+  },
+  {
+    "document_id": "msq_concepts_vectors_and_matrices",
+    "url": "https://learn.microsoft.com/en-us/azure/quantum/concepts-vectors-and-matrices",
+    "versao": "Azure Quantum docs",
+    "biblioteca": "qsharp",
+    "temas": [
+      "algebra_linear"
+    ],
+    "nivel": "basico",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "CC-BY-4.0 (Microsoft Learn), consultar termos",
+    "idioma": "en"
+  },
+  {
+    "document_id": "msq_concepts_dirac_notation",
+    "url": "https://learn.microsoft.com/en-us/azure/quantum/concepts-dirac-notation",
+    "versao": "Azure Quantum docs",
+    "biblioteca": "qsharp",
+    "temas": [
+      "algebra_linear",
+      "notacao_dirac"
+    ],
+    "nivel": "basico",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "CC-BY-4.0 (Microsoft Learn), consultar termos",
+    "idioma": "en"
+  },
+  {
+    "document_id": "msq_concepts_multiple_qubits",
+    "url": "https://learn.microsoft.com/en-us/azure/quantum/concepts-multiple-qubits",
+    "versao": "Azure Quantum docs",
+    "biblioteca": "qsharp",
+    "temas": [
+      "produto_tensorial",
+      "emaranhamento"
+    ],
+    "nivel": "basico",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "CC-BY-4.0 (Microsoft Learn), consultar termos",
+    "idioma": "en"
+  },
+  {
+    "document_id": "msq_concepts_pauli_measurements",
+    "url": "https://learn.microsoft.com/en-us/azure/quantum/concepts-pauli-measurements",
+    "versao": "Azure Quantum docs",
+    "biblioteca": "qsharp",
+    "temas": [
+      "medicao",
+      "pauli"
+    ],
+    "nivel": "intermediario",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "CC-BY-4.0 (Microsoft Learn), consultar termos",
+    "idioma": "en"
+  },
+  {
+    "document_id": "msq_concepts_circuits",
+    "url": "https://learn.microsoft.com/en-us/azure/quantum/concepts-circuits",
+    "versao": "Azure Quantum docs",
+    "biblioteca": "qsharp",
+    "temas": [
+      "circuitos"
+    ],
+    "nivel": "basico",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "CC-BY-4.0 (Microsoft Learn), consultar termos",
+    "idioma": "en"
+  },
+  {
+    "document_id": "msq_concepts_entanglement",
+    "url": "https://learn.microsoft.com/en-us/azure/quantum/concepts-entanglement",
+    "versao": "Azure Quantum docs",
+    "biblioteca": "qsharp",
+    "temas": [
+      "emaranhamento"
+    ],
+    "nivel": "basico",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "CC-BY-4.0 (Microsoft Learn), consultar termos",
+    "idioma": "en"
+  },
+  {
+    "document_id": "msq_concepts_oracles",
+    "url": "https://learn.microsoft.com/en-us/azure/quantum/concepts-oracles",
+    "versao": "Azure Quantum docs",
+    "biblioteca": "qsharp",
+    "temas": [
+      "oraculos",
+      "algoritmos"
+    ],
+    "nivel": "intermediario",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "CC-BY-4.0 (Microsoft Learn), consultar termos",
+    "idioma": "en"
+  },
+  {
+    "document_id": "msq_concepts_grovers",
+    "url": "https://learn.microsoft.com/en-us/azure/quantum/concepts-grovers",
+    "versao": "Azure Quantum docs",
+    "biblioteca": "qsharp",
+    "temas": [
+      "grover"
+    ],
+    "nivel": "intermediario",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "CC-BY-4.0 (Microsoft Learn), consultar termos",
+    "idioma": "en"
+  },
+  {
+    "document_id": "msq_concepts_error_correction",
+    "url": "https://learn.microsoft.com/en-us/azure/quantum/concepts-error-correction",
+    "versao": "Azure Quantum docs",
+    "biblioteca": "qsharp",
+    "temas": [
+      "correcao_de_erros"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "CC-BY-4.0 (Microsoft Learn), consultar termos",
+    "idioma": "en"
+  },
+  {
+    "document_id": "msq_concepts_overview",
+    "url": "https://learn.microsoft.com/en-us/azure/quantum/concepts-overview",
+    "versao": "Azure Quantum docs",
+    "biblioteca": "qsharp",
+    "temas": [
+      "fundamentos"
+    ],
+    "nivel": "basico",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "CC-BY-4.0 (Microsoft Learn), consultar termos",
+    "idioma": "en"
+  },
+  {
+    "document_id": "msq_qsharp_overview",
+    "url": "https://learn.microsoft.com/en-us/azure/quantum/qsharp-overview",
+    "versao": "Azure Quantum docs",
+    "biblioteca": "qsharp",
+    "temas": [
+      "qsharp"
+    ],
+    "nivel": "basico",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "CC-BY-4.0 (Microsoft Learn), consultar termos",
+    "idioma": "en"
+  },
+  {
+    "document_id": "msq_qsharp_ways_to_work",
+    "url": "https://learn.microsoft.com/en-us/azure/quantum/qsharp-ways-to-work",
+    "versao": "Azure Quantum docs",
+    "biblioteca": "qsharp",
+    "temas": [
+      "qsharp"
+    ],
+    "nivel": "basico",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "CC-BY-4.0 (Microsoft Learn), consultar termos",
+    "idioma": "en"
+  },
+  {
+    "document_id": "msq_overview_resources_estimator",
+    "url": "https://learn.microsoft.com/en-us/azure/quantum/overview-resources-estimator",
+    "versao": "Azure Quantum docs",
+    "biblioteca": "qsharp",
+    "temas": [
+      "estimativa_de_recursos"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "CC-BY-4.0 (Microsoft Learn), consultar termos",
+    "idioma": "en"
+  },
+  {
+    "document_id": "braket_braket_constructing_circuit",
+    "url": "https://docs.aws.amazon.com/braket/latest/developerguide/braket-constructing-circuit.html",
+    "versao": "Developer Guide",
+    "biblioteca": "braket",
+    "temas": [
+      "circuitos"
+    ],
+    "nivel": "basico",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "CC-BY-SA-4.0 (AWS docs), consultar termos",
+    "idioma": "en"
+  },
+  {
+    "document_id": "braket_braket_devices",
+    "url": "https://docs.aws.amazon.com/braket/latest/developerguide/braket-devices.html",
+    "versao": "Developer Guide",
+    "biblioteca": "braket",
+    "temas": [
+      "hardware",
+      "simulacao"
+    ],
+    "nivel": "basico",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "CC-BY-SA-4.0 (AWS docs), consultar termos",
+    "idioma": "en"
+  },
+  {
+    "document_id": "braket_braket_send_to_local_simulator",
+    "url": "https://docs.aws.amazon.com/braket/latest/developerguide/braket-send-to-local-simulator.html",
+    "versao": "Developer Guide",
+    "biblioteca": "braket",
+    "temas": [
+      "simulacao"
+    ],
+    "nivel": "basico",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "CC-BY-SA-4.0 (AWS docs), consultar termos",
+    "idioma": "en"
+  },
+  {
+    "document_id": "braket_braket_submit_tasks",
+    "url": "https://docs.aws.amazon.com/braket/latest/developerguide/braket-submit-tasks.html",
+    "versao": "Developer Guide",
+    "biblioteca": "braket",
+    "temas": [
+      "execucao"
+    ],
+    "nivel": "intermediario",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "CC-BY-SA-4.0 (AWS docs), consultar termos",
+    "idioma": "en"
+  },
+  {
+    "document_id": "braket_braket_openqasm",
+    "url": "https://docs.aws.amazon.com/braket/latest/developerguide/braket-openqasm.html",
+    "versao": "Developer Guide",
+    "biblioteca": "braket",
+    "temas": [
+      "openqasm3",
+      "interoperabilidade"
+    ],
+    "nivel": "intermediario",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "CC-BY-SA-4.0 (AWS docs), consultar termos",
+    "idioma": "en"
+  },
+  {
+    "document_id": "braket_braket_openqasm_supported_features",
+    "url": "https://docs.aws.amazon.com/braket/latest/developerguide/braket-openqasm-supported-features.html",
+    "versao": "Developer Guide",
+    "biblioteca": "braket",
+    "temas": [
+      "openqasm3"
+    ],
+    "nivel": "intermediario",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "CC-BY-SA-4.0 (AWS docs), consultar termos",
+    "idioma": "en"
+  },
+  {
+    "document_id": "braket_braket_result_types",
+    "url": "https://docs.aws.amazon.com/braket/latest/developerguide/braket-result-types.html",
+    "versao": "Developer Guide",
+    "biblioteca": "braket",
+    "temas": [
+      "resultados",
+      "medicao"
+    ],
+    "nivel": "intermediario",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "CC-BY-SA-4.0 (AWS docs), consultar termos",
+    "idioma": "en"
+  },
+  {
+    "document_id": "braket_braket_error_mitigation",
+    "url": "https://docs.aws.amazon.com/braket/latest/developerguide/braket-error-mitigation.html",
+    "versao": "Developer Guide",
+    "biblioteca": "braket",
+    "temas": [
+      "mitigacao"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "CC-BY-SA-4.0 (AWS docs), consultar termos",
+    "idioma": "en"
+  },
+  {
+    "document_id": "braket_what_is_braket",
+    "url": "https://docs.aws.amazon.com/braket/latest/developerguide/what-is-braket.html",
+    "versao": "Developer Guide",
+    "biblioteca": "braket",
+    "temas": [
+      "introducao"
+    ],
+    "nivel": "basico",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "CC-BY-SA-4.0 (AWS docs), consultar termos",
+    "idioma": "en"
+  },
+  {
+    "document_id": "qutip_guide_basics",
+    "url": "https://qutip.readthedocs.io/en/latest/guide/guide-basics.html",
+    "versao": "documentação QuTiP",
+    "biblioteca": "qutip",
+    "temas": [
+      "algebra_linear",
+      "estados"
+    ],
+    "nivel": "basico",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "BSD-3-Clause (QuTiP)",
+    "idioma": "en"
+  },
+  {
+    "document_id": "qutip_guide_states",
+    "url": "https://qutip.readthedocs.io/en/latest/guide/guide-states.html",
+    "versao": "documentação QuTiP",
+    "biblioteca": "qutip",
+    "temas": [
+      "estados",
+      "matriz_densidade"
+    ],
+    "nivel": "intermediario",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "BSD-3-Clause (QuTiP)",
+    "idioma": "en"
+  },
+  {
+    "document_id": "qutip_guide_tensor",
+    "url": "https://qutip.readthedocs.io/en/latest/guide/guide-tensor.html",
+    "versao": "documentação QuTiP",
+    "biblioteca": "qutip",
+    "temas": [
+      "produto_tensorial"
+    ],
+    "nivel": "intermediario",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "BSD-3-Clause (QuTiP)",
+    "idioma": "en"
+  },
+  {
+    "document_id": "qutip_dynamics_master",
+    "url": "https://qutip.readthedocs.io/en/latest/guide/dynamics/dynamics-master.html",
+    "versao": "documentação QuTiP",
+    "biblioteca": "qutip",
+    "temas": [
+      "dinamica",
+      "ruido"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "BSD-3-Clause (QuTiP)",
+    "idioma": "en"
+  },
+  {
+    "document_id": "qutip_guide_measurement",
+    "url": "https://qutip.readthedocs.io/en/latest/guide/guide-measurement.html",
+    "versao": "documentação QuTiP",
+    "biblioteca": "qutip",
+    "temas": [
+      "medicao"
+    ],
+    "nivel": "intermediario",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "BSD-3-Clause (QuTiP)",
+    "idioma": "en"
+  },
+  {
+    "document_id": "qutip_qip_basics",
+    "url": "https://qutip-qip.readthedocs.io/en/stable/qip-basics.html",
+    "versao": "documentação QuTiP",
+    "biblioteca": "qutip",
+    "temas": [
+      "circuitos"
+    ],
+    "nivel": "intermediario",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "BSD-3-Clause (QuTiP)",
+    "idioma": "en"
+  },
+  {
+    "document_id": "qutip_qip_simulator",
+    "url": "https://qutip-qip.readthedocs.io/en/stable/qip-simulator.html",
+    "versao": "documentação QuTiP",
+    "biblioteca": "qutip",
+    "temas": [
+      "simulacao"
+    ],
+    "nivel": "intermediario",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "BSD-3-Clause (QuTiP)",
+    "idioma": "en"
+  },
+  {
+    "document_id": "qutip_qip_processor",
+    "url": "https://qutip-qip.readthedocs.io/en/stable/qip-processor.html",
+    "versao": "documentação QuTiP",
+    "biblioteca": "qutip",
+    "temas": [
+      "hardware",
+      "ruido"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "BSD-3-Clause (QuTiP)",
+    "idioma": "en"
+  },
+  {
+    "document_id": "python_library_ast",
+    "url": "https://docs.python.org/3/library/ast.html",
+    "versao": "versão estável",
+    "biblioteca": "python",
+    "temas": [
+      "python",
+      "analise_estatica"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "PSF/BSD, consultar termos",
+    "idioma": "en"
+  },
+  {
+    "document_id": "python_library_cmath",
+    "url": "https://docs.python.org/3/library/cmath.html",
+    "versao": "versão estável",
+    "biblioteca": "python",
+    "temas": [
+      "python",
+      "numeros_complexos"
+    ],
+    "nivel": "basico",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "PSF/BSD, consultar termos",
+    "idioma": "en"
+  },
+  {
+    "document_id": "python_library_math",
+    "url": "https://docs.python.org/3/library/math.html",
+    "versao": "versão estável",
+    "biblioteca": "python",
+    "temas": [
+      "python"
+    ],
+    "nivel": "basico",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "PSF/BSD, consultar termos",
+    "idioma": "en"
+  },
+  {
+    "document_id": "python_library_exceptions",
+    "url": "https://docs.python.org/3/library/exceptions.html",
+    "versao": "versão estável",
+    "biblioteca": "python",
+    "temas": [
+      "python",
+      "depuracao",
+      "erros"
+    ],
+    "nivel": "intermediario",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "PSF/BSD, consultar termos",
+    "idioma": "en"
+  },
+  {
+    "document_id": "python_tutorial_errors",
+    "url": "https://docs.python.org/3/tutorial/errors.html",
+    "versao": "versão estável",
+    "biblioteca": "python",
+    "temas": [
+      "python",
+      "depuracao",
+      "erros"
+    ],
+    "nivel": "basico",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "PSF/BSD, consultar termos",
+    "idioma": "en"
+  },
+  {
+    "document_id": "python_library_traceback",
+    "url": "https://docs.python.org/3/library/traceback.html",
+    "versao": "versão estável",
+    "biblioteca": "python",
+    "temas": [
+      "python",
+      "depuracao"
+    ],
+    "nivel": "intermediario",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "PSF/BSD, consultar termos",
+    "idioma": "en"
+  },
+  {
+    "document_id": "python_tutorial_modules",
+    "url": "https://docs.python.org/3/tutorial/modules.html",
+    "versao": "versão estável",
+    "biblioteca": "python",
+    "temas": [
+      "python",
+      "imports"
+    ],
+    "nivel": "basico",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "PSF/BSD, consultar termos",
+    "idioma": "en"
+  },
+  {
+    "document_id": "python_reference_import",
+    "url": "https://docs.python.org/3/reference/import.html",
+    "versao": "versão estável",
+    "biblioteca": "python",
+    "temas": [
+      "python",
+      "imports"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "PSF/BSD, consultar termos",
+    "idioma": "en"
+  },
+  {
+    "document_id": "numpy_reference_routines_linalg",
+    "url": "https://numpy.org/doc/stable/reference/routines.linalg.html",
+    "versao": "versão estável",
+    "biblioteca": "numpy",
+    "temas": [
+      "algebra_linear",
+      "numpy"
+    ],
+    "nivel": "intermediario",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "PSF/BSD, consultar termos",
+    "idioma": "en"
+  },
+  {
+    "document_id": "numpy_user_basics_broadcasting",
+    "url": "https://numpy.org/doc/stable/user/basics.broadcasting.html",
+    "versao": "versão estável",
+    "biblioteca": "numpy",
+    "temas": [
+      "numpy"
+    ],
+    "nivel": "intermediario",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "PSF/BSD, consultar termos",
+    "idioma": "en"
+  },
+  {
+    "document_id": "numpy_generated_numpy_kron",
+    "url": "https://numpy.org/doc/stable/reference/generated/numpy.kron.html",
+    "versao": "versão estável",
+    "biblioteca": "numpy",
+    "temas": [
+      "produto_tensorial",
+      "numpy"
+    ],
+    "nivel": "basico",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "PSF/BSD, consultar termos",
+    "idioma": "en"
+  },
+  {
+    "document_id": "numpy_generated_numpy_allclose",
+    "url": "https://numpy.org/doc/stable/reference/generated/numpy.allclose.html",
+    "versao": "versão estável",
+    "biblioteca": "numpy",
+    "temas": [
+      "numpy",
+      "equivalencia"
+    ],
+    "nivel": "basico",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "PSF/BSD, consultar termos",
+    "idioma": "en"
+  },
+  {
+    "document_id": "numpy_user_basics_types",
+    "url": "https://numpy.org/doc/stable/user/basics.types.html",
+    "versao": "versão estável",
+    "biblioteca": "numpy",
+    "temas": [
+      "numpy",
+      "numeros_complexos"
+    ],
+    "nivel": "basico",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "PSF/BSD, consultar termos",
+    "idioma": "en"
+  },
+  {
+    "document_id": "numpy_generated_numpy_linalg_eigh",
+    "url": "https://numpy.org/doc/stable/reference/generated/numpy.linalg.eigh.html",
+    "versao": "versão estável",
+    "biblioteca": "numpy",
+    "temas": [
+      "algebra_linear",
+      "numpy"
+    ],
+    "nivel": "intermediario",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "PSF/BSD, consultar termos",
+    "idioma": "en"
+  },
+  {
+    "document_id": "scipy_reference_linalg",
+    "url": "https://docs.scipy.org/doc/scipy/reference/linalg.html",
+    "versao": "versão estável",
+    "biblioteca": "scipy",
+    "temas": [
+      "algebra_linear",
+      "scipy"
+    ],
+    "nivel": "intermediario",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "PSF/BSD, consultar termos",
+    "idioma": "en"
+  },
+  {
+    "document_id": "scipy_generated_scipy_linalg_expm",
+    "url": "https://docs.scipy.org/doc/scipy/reference/generated/scipy.linalg.expm.html",
+    "versao": "versão estável",
+    "biblioteca": "scipy",
+    "temas": [
+      "algebra_linear",
+      "scipy",
+      "unitarias"
+    ],
+    "nivel": "intermediario",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "PSF/BSD, consultar termos",
+    "idioma": "en"
+  },
+  {
+    "document_id": "scipy_reference_optimize",
+    "url": "https://docs.scipy.org/doc/scipy/reference/optimize.html",
+    "versao": "versão estável",
+    "biblioteca": "scipy",
+    "temas": [
+      "otimizacao_classica",
+      "variacional"
+    ],
+    "nivel": "intermediario",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "PSF/BSD, consultar termos",
+    "idioma": "en"
+  },
+  {
+    "document_id": "scipy_generated_scipy_optimize_minimize",
+    "url": "https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.minimize.html",
+    "versao": "versão estável",
+    "biblioteca": "scipy",
+    "temas": [
+      "otimizacao_classica",
+      "variacional"
+    ],
+    "nivel": "intermediario",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "PSF/BSD, consultar termos",
+    "idioma": "en"
+  },
+  {
+    "document_id": "scipy_tutorial_optimize",
+    "url": "https://docs.scipy.org/doc/scipy/tutorial/optimize.html",
+    "versao": "versão estável",
+    "biblioteca": "scipy",
+    "temas": [
+      "otimizacao_classica"
+    ],
+    "nivel": "intermediario",
+    "tipo_fonte": "documentacao_oficial",
+    "licenca": "PSF/BSD, consultar termos",
+    "idioma": "en"
+  },
+  {
+    "document_id": "algorithm_zoo",
+    "url": "https://quantumalgorithmzoo.org/",
+    "versao": "catálogo mantido por Stephen Jordan",
+    "biblioteca": "geral",
+    "temas": [
+      "algoritmos",
+      "complexidade"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "catalogo_academico",
+    "licenca": "consultar termos do site",
+    "idioma": "en"
+  },
+  {
+    "document_id": "arxiv_1707_03429",
+    "url": "https://arxiv.org/abs/1707.03429",
+    "versao": "OpenQASM 2",
+    "biblioteca": "geral",
+    "temas": [
+      "openqasm2"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "artigo_academico",
+    "licenca": "metadados e resumo do arXiv; texto completo sob a licença do autor",
+    "idioma": "en"
+  },
+  {
+    "document_id": "arxiv_2104_14722",
+    "url": "https://arxiv.org/abs/2104.14722",
+    "versao": "OpenQASM 3",
+    "biblioteca": "geral",
+    "temas": [
+      "openqasm3"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "artigo_academico",
+    "licenca": "metadados e resumo do arXiv; texto completo sob a licença do autor",
+    "idioma": "en"
+  },
+  {
+    "document_id": "arxiv_2405_08810",
+    "url": "https://arxiv.org/abs/2405.08810",
+    "versao": "Quantum computing with Qiskit",
+    "biblioteca": "geral",
+    "temas": [
+      "qiskit",
+      "transpilacao"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "artigo_academico",
+    "licenca": "metadados e resumo do arXiv; texto completo sob a licença do autor",
+    "idioma": "en"
+  },
+  {
+    "document_id": "arxiv_1809_02573",
+    "url": "https://arxiv.org/abs/1809.02573",
+    "versao": "SABRE qubit mapping",
+    "biblioteca": "geral",
+    "temas": [
+      "roteamento",
+      "layout"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "artigo_academico",
+    "licenca": "metadados e resumo do arXiv; texto completo sob a licença do autor",
+    "idioma": "en"
+  },
+  {
+    "document_id": "arxiv_1411_4028",
+    "url": "https://arxiv.org/abs/1411.4028",
+    "versao": "QAOA",
+    "biblioteca": "geral",
+    "temas": [
+      "qaoa"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "artigo_academico",
+    "licenca": "metadados e resumo do arXiv; texto completo sob a licença do autor",
+    "idioma": "en"
+  },
+  {
+    "document_id": "arxiv_1304_3061",
+    "url": "https://arxiv.org/abs/1304.3061",
+    "versao": "VQE",
+    "biblioteca": "geral",
+    "temas": [
+      "vqe"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "artigo_academico",
+    "licenca": "metadados e resumo do arXiv; texto completo sob a licença do autor",
+    "idioma": "en"
+  },
+  {
+    "document_id": "arxiv_1801_00862",
+    "url": "https://arxiv.org/abs/1801.00862",
+    "versao": "NISQ",
+    "biblioteca": "geral",
+    "temas": [
+      "fundamentos",
+      "hardware"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "artigo_academico",
+    "licenca": "metadados e resumo do arXiv; texto completo sob a licença do autor",
+    "idioma": "en"
+  },
+  {
+    "document_id": "arxiv_quant_ph_9508027",
+    "url": "https://arxiv.org/abs/quant-ph/9508027",
+    "versao": "Shor factoring",
+    "biblioteca": "geral",
+    "temas": [
+      "shor",
+      "algoritmos"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "artigo_academico",
+    "licenca": "metadados e resumo do arXiv; texto completo sob a licença do autor",
+    "idioma": "en"
+  },
+  {
+    "document_id": "arxiv_quant_ph_9605043",
+    "url": "https://arxiv.org/abs/quant-ph/9605043",
+    "versao": "Grover search",
+    "biblioteca": "geral",
+    "temas": [
+      "grover",
+      "algoritmos"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "artigo_academico",
+    "licenca": "metadados e resumo do arXiv; texto completo sob a licença do autor",
+    "idioma": "en"
+  },
+  {
+    "document_id": "arxiv_1208_0928",
+    "url": "https://arxiv.org/abs/1208.0928",
+    "versao": "Surface codes",
+    "biblioteca": "geral",
+    "temas": [
+      "correcao_de_erros",
+      "surface_code"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "artigo_academico",
+    "licenca": "metadados e resumo do arXiv; texto completo sob a licença do autor",
+    "idioma": "en"
+  },
+  {
+    "document_id": "arxiv_quant_ph_9705052",
+    "url": "https://arxiv.org/abs/quant-ph/9705052",
+    "versao": "Stabilizer codes (Gottesman)",
+    "biblioteca": "geral",
+    "temas": [
+      "estabilizadores",
+      "correcao_de_erros"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "artigo_academico",
+    "licenca": "metadados e resumo do arXiv; texto completo sob a licença do autor",
+    "idioma": "en"
+  },
+  {
+    "document_id": "arxiv_quant_ph_0406196",
+    "url": "https://arxiv.org/abs/quant-ph/0406196",
+    "versao": "Improved simulation of stabilizer circuits",
+    "biblioteca": "geral",
+    "temas": [
+      "estabilizadores",
+      "simulacao"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "artigo_academico",
+    "licenca": "metadados e resumo do arXiv; texto completo sob a licença do autor",
+    "idioma": "en"
+  },
+  {
+    "document_id": "arxiv_quant_ph_0301063",
+    "url": "https://arxiv.org/abs/quant-ph/0301063",
+    "versao": "Slightly entangled simulation (MPS)",
+    "biblioteca": "geral",
+    "temas": [
+      "mps",
+      "simulacao"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "artigo_academico",
+    "licenca": "metadados e resumo do arXiv; texto completo sob a licença do autor",
+    "idioma": "en"
+  },
+  {
+    "document_id": "arxiv_quant_ph_9503016",
+    "url": "https://arxiv.org/abs/quant-ph/9503016",
+    "versao": "Elementary gates",
+    "biblioteca": "geral",
+    "temas": [
+      "decomposicao",
+      "portas"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "artigo_academico",
+    "licenca": "metadados e resumo do arXiv; texto completo sob a licença do autor",
+    "idioma": "en"
+  },
+  {
+    "document_id": "arxiv_quant_ph_0406176",
+    "url": "https://arxiv.org/abs/quant-ph/0406176",
+    "versao": "Synthesis of quantum logic circuits",
+    "biblioteca": "geral",
+    "temas": [
+      "sintese"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "artigo_academico",
+    "licenca": "metadados e resumo do arXiv; texto completo sob a licença do autor",
+    "idioma": "en"
+  },
+  {
+    "document_id": "arxiv_quant_ph_0308006",
+    "url": "https://arxiv.org/abs/quant-ph/0308006",
+    "versao": "Optimal two-qubit circuits",
+    "biblioteca": "geral",
+    "temas": [
+      "sintese",
+      "decomposicao"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "artigo_academico",
+    "licenca": "metadados e resumo do arXiv; texto completo sob a licença do autor",
+    "idioma": "en"
+  },
+  {
+    "document_id": "arxiv_1206_0758",
+    "url": "https://arxiv.org/abs/1206.0758",
+    "versao": "Meet-in-the-middle synthesis",
+    "biblioteca": "geral",
+    "temas": [
+      "sintese",
+      "otimizacao"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "artigo_academico",
+    "licenca": "metadados e resumo do arXiv; texto completo sob a licença do autor",
+    "idioma": "en"
+  },
+  {
+    "document_id": "arxiv_1710_07345",
+    "url": "https://arxiv.org/abs/1710.07345",
+    "versao": "Automated optimization of large circuits",
+    "biblioteca": "geral",
+    "temas": [
+      "otimizacao"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "artigo_academico",
+    "licenca": "metadados e resumo do arXiv; texto completo sob a licença do autor",
+    "idioma": "en"
+  },
+  {
+    "document_id": "arxiv_1902_03178",
+    "url": "https://arxiv.org/abs/1902.03178",
+    "versao": "ZX-calculus circuit simplification",
+    "biblioteca": "geral",
+    "temas": [
+      "zx",
+      "otimizacao"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "artigo_academico",
+    "licenca": "metadados e resumo do arXiv; texto completo sob a licença do autor",
+    "idioma": "en"
+  },
+  {
+    "document_id": "arxiv_1612_02058",
+    "url": "https://arxiv.org/abs/1612.02058",
+    "versao": "Error mitigation for short-depth circuits",
+    "biblioteca": "geral",
+    "temas": [
+      "mitigacao"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "artigo_academico",
+    "licenca": "metadados e resumo do arXiv; texto completo sob a licença do autor",
+    "idioma": "en"
+  },
+  {
+    "document_id": "arxiv_2210_00921",
+    "url": "https://arxiv.org/abs/2210.00921",
+    "versao": "Quantum error mitigation review",
+    "biblioteca": "geral",
+    "temas": [
+      "mitigacao"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "artigo_academico",
+    "licenca": "metadados e resumo do arXiv; texto completo sob a licença do autor",
+    "idioma": "en"
+  },
+  {
+    "document_id": "arxiv_1704_05018",
+    "url": "https://arxiv.org/abs/1704.05018",
+    "versao": "Hardware-efficient VQE",
+    "biblioteca": "geral",
+    "temas": [
+      "vqe",
+      "ansatz"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "artigo_academico",
+    "licenca": "metadados e resumo do arXiv; texto completo sob a licença do autor",
+    "idioma": "en"
+  },
+  {
+    "document_id": "arxiv_1803_11173",
+    "url": "https://arxiv.org/abs/1803.11173",
+    "versao": "Barren plateaus",
+    "biblioteca": "geral",
+    "temas": [
+      "variacional"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "artigo_academico",
+    "licenca": "metadados e resumo do arXiv; texto completo sob a licença do autor",
+    "idioma": "en"
+  },
+  {
+    "document_id": "arxiv_2012_09265",
+    "url": "https://arxiv.org/abs/2012.09265",
+    "versao": "Variational quantum algorithms review",
+    "biblioteca": "geral",
+    "temas": [
+      "variacional"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "artigo_academico",
+    "licenca": "metadados e resumo do arXiv; texto completo sob a licença do autor",
+    "idioma": "en"
+  },
+  {
+    "document_id": "arxiv_2101_08448",
+    "url": "https://arxiv.org/abs/2101.08448",
+    "versao": "NISQ algorithms review",
+    "biblioteca": "geral",
+    "temas": [
+      "algoritmos",
+      "variacional"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "artigo_academico",
+    "licenca": "metadados e resumo do arXiv; texto completo sob a licença do autor",
+    "idioma": "en"
+  },
+  {
+    "document_id": "arxiv_quant_ph_9511026",
+    "url": "https://arxiv.org/abs/quant-ph/9511026",
+    "versao": "Quantum measurements and the Abelian stabilizer problem (Kitaev)",
+    "biblioteca": "geral",
+    "temas": [
+      "estimativa_de_fase"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "artigo_academico",
+    "licenca": "metadados e resumo do arXiv; texto completo sob a licença do autor",
+    "idioma": "en"
+  },
+  {
+    "document_id": "arxiv_quant_ph_0410184",
+    "url": "https://arxiv.org/abs/quant-ph/0410184",
+    "versao": "Solovay-Kitaev algorithm",
+    "biblioteca": "geral",
+    "temas": [
+      "sintese",
+      "decomposicao"
+    ],
+    "nivel": "avancado",
+    "tipo_fonte": "artigo_academico",
+    "licenca": "metadados e resumo do arXiv; texto completo sob a licença do autor",
+    "idioma": "en"
   }
 ]

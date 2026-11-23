@@ -102,7 +102,7 @@ def _modo():
     return modo if modo in ("hibrido", "vetorial", "lexical") else "hibrido"
 
 
-def buscar_documentos(pergunta, quantidade=3, *, tempos=None, modo=None, biblioteca=None):
+def buscar_documentos(pergunta, quantidade=3, *, tempos=None, modo=None, biblioteca=None, reordenar=True):
     medidas = tempos if tempos is not None else {}
     medidas.clear()
     inicio_total = perf_counter()
@@ -166,7 +166,12 @@ def buscar_documentos(pergunta, quantidade=3, *, tempos=None, modo=None, bibliot
     menciona_migracao = bool({"deprecated", "removed", "migration", "migracao", "obsoleto",
                               "removido"} & set(originais + extras))
     pontuacao = {}
+    termos_consulta = set(originais + extras)
     for identificador, meta in metadados_por_id.items():
+        if not reordenar:
+            # Linha de base da avaliação: ordem vetorial pura, como antes da reestruturação.
+            pontuacao[identificador] = 1.0 / (RRF_K + rank_vetorial.get(identificador, 10 ** 6))
+            continue
         nota = 0.0
         if identificador in rank_vetorial:
             nota += 1.0 / (RRF_K + rank_vetorial[identificador])
@@ -176,6 +181,9 @@ def buscar_documentos(pergunta, quantidade=3, *, tempos=None, modo=None, bibliot
             nota *= 1.15
         if meta.get("desatualizado") and not menciona_migracao:
             nota *= 0.5
+        # Título da página ou seção nomeia o conceito pedido (ex.: "Operator", "Statevector").
+        if termos_consulta & set(tokens(f"{meta.get('titulo', '')} {meta.get('secao', '')}")):
+            nota *= float(os.getenv("RAG_BONUS_TITULO", "1.2"))
         # Identificadores de código citados literalmente na pergunta.
         if identificadores and any(i in textos_por_id.get(identificador, "") for i in identificadores):
             nota *= 1.25

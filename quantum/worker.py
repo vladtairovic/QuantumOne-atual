@@ -20,14 +20,29 @@ def resource_limits(limits):
         resource.setrlimit(resource.RLIMIT_FSIZE, (0, 0))
         resource.setrlimit(resource.RLIMIT_NOFILE, (64, 64))
 
+def _json_padrao(valor):
+    """Converte escalares numpy (bool_, int64, float64) que o Qiskit pode devolver."""
+    if hasattr(valor, "item"):
+        return valor.item()
+    if isinstance(valor, (set, tuple)):
+        return list(valor)
+    raise TypeError(f"Tipo não serializável: {type(valor).__name__}")
+
+
 def main():
     limits = get_limits()
     resource_limits(limits)
     try:
-        from .qiskit_service import processar_circuito
         entrada = json.load(sys.stdin)
-        result = processar_circuito(entrada["code"], entrada["format"], entrada["optimization_level"])
-        response = json.dumps({"result": result})
+        if entrada.get("acao") == "diagnosticar":
+            from .diagnostico import diagnosticar
+            result = diagnosticar(entrada["code"], entrada["format"], entrada["politica"])
+        else:
+            from .qiskit_service import processar_circuito
+            result = processar_circuito(entrada["code"], entrada["format"], entrada["optimization_level"],
+                                        perfil=entrada.get("perfil"), hardware=entrada.get("hardware"),
+                                        prioridade=entrada.get("prioridade", "dois_qubits"))
+        response = json.dumps({"result": result}, default=_json_padrao)
         if len(response.encode()) > limits.max_request_bytes:
             raise CircuitError("OUTPUT_LIMIT_EXCEEDED", "O resultado excede o orçamento de saída.", status=413)
     except CircuitError as exc:

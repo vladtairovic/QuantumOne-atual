@@ -1,5 +1,5 @@
-import { AnalysisError, circuitContext, createConversation, getCircuitLimits, optimizeCircuit, sendTurn } from "./analysis-api";
-import type { AnalysisResponse, CodeFormat } from "./analysis-api";
+import { AnalysisError, circuitContext, createConversation, diagnoseCode, getCircuitLimits, optimizeCircuit, sendTurn } from "./analysis-api";
+import type { AnalysisResponse, CodeFormat, OptimizationProfile } from "./analysis-api";
 import type { AnalysisResultRecord, AttachmentRecord, ConversationRecord } from "../components/layout/conversationTypes";
 import { isConversationRecord } from "../components/security/workspaceData";
 
@@ -8,8 +8,8 @@ export function report(response: AnalysisResponse): AnalysisResultRecord {
   return {
     summary: response.answer,
     requestId: response.request_id,
-    searchSuggestions: response.search_suggestions_html || undefined,
     insufficient: response.status === "insufficient_context",
+    answerMode: response.answer_mode,
     warnings: response.warnings,
     suggestions: q?.circuito_otimizado_qasm ? [{
       title: "Circuito otimizado em OpenQASM 2",
@@ -28,6 +28,24 @@ export function report(response: AnalysisResponse): AnalysisResultRecord {
     circuit: q && {
       qubits: q.proposta.qubits,
       equivalence: q.equivalente === null ? "unknown" : q.equivalente ? "equivalent" : "different",
+    },
+    engine: q && {
+      profile: q.perfil || "nivel_fixo", strategy: q.estrategia_aplicada,
+      verificationMethod: q.verificacao?.metodo, guarantee: q.verificacao?.garantia,
+      cxBefore: q.analise_original?.cx_equivalentes, cxAfter: q.analise_final?.cx_equivalentes,
+      twoQubitBefore: q.analise_original?.operacoes_dois_qubits, twoQubitAfter: q.analise_final?.operacoes_dois_qubits,
+      memoryBytes: q.simulacao?.memoria_statevector_bytes, simulationMethod: q.simulacao?.metodo,
+      simulationReason: q.simulacao?.justificativa, tradeoffs: q.compromissos?.slice(0, 5),
+    },
+    diagnosis: response.diagnosis && {
+      language: response.diagnosis.linguagem, confidence: response.diagnosis.confianca_global,
+      problems: response.diagnosis.problemas.slice(0, 300).map(p => ({
+        code: p.codigo, line: p.linha, message: p.mensagem.slice(0, 2000), cause: p.causa_raiz?.slice(0, 2000) ?? null,
+        fix: (p.correcao?.descricao || "").slice(0, 2000), alternatives: p.alternativas.slice(0, 5).map(a => a.slice(0, 500)),
+        confidence: p.confianca,
+      })),
+      correctedCode: response.diagnosis.codigo_corrigido, valid: response.diagnosis.validacao?.valido,
+      limitations: response.diagnosis.limitacoes.slice(0, 30),
     },
   };
 }
@@ -65,7 +83,7 @@ export function diagnostic(error: unknown) {
 export type TurnAttempt = { messageId: string; remoteId?: string };
 
 export async function analyze(input: {
-  code: string; format: CodeFormat; question: string; topK: number;
+  code: string; format: CodeFormat; question: string; topK: number; profile?: OptimizationProfile;
   attachments: AttachmentRecord[]; remoteId?: string;
 }, signal: AbortSignal, attempt: TurnAttempt) {
   const { code, format, question, attachments } = input;
@@ -79,7 +97,18 @@ export async function analyze(input: {
     const limits = await getCircuitLimits(signal);
     if (code.split(/\r?\n/).length > limits.max_circuit_lines || new Blob([code]).size > limits.max_code_size_bytes)
       throw new Error("O circuito ultrapassa o limite de " + limits.max_circuit_lines + " linhas ou " + limits.max_code_size_bytes + " bytes.");
-    result = await optimizeCircuit(code, signal, format);
+    try {
+      result = await optimizeCircuit(code, signal, format, input.profile ?? "balanceado");
+    } catch (error) {
+      // Código inválido: em vez de só exibir o primeiro erro, diagnostica todas as linhas.
+      if (!(error instanceof AnalysisError) || !["INVALID_CIRCUIT", "UNSUPPORTED_PYTHON"].includes(error.code || "")) throw error;
+      const diagnosis = await diagnoseCode(code, signal, format);
+      result = {
+        request_id: error.requestId || "", status: "ok", sources: [], diagnosis,
+        warnings: ["O otimizador recusou o código: " + error.message],
+        answer: `O diagnóstico encontrou ${diagnosis.problemas.length} problema(s). Confira as correções propostas abaixo.`,
+      };
+    }
   }
   if (prompt) {
     try {

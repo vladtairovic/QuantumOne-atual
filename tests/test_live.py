@@ -22,5 +22,11 @@ def test_fluxo_real():
         busca = client.post("/search", json={"query": texto})
         assert busca.status_code == 200, busca.text
         assert any(c["document_id"] == id for c in busca.json()["chunks"])
-        consulta = client.post("/query", json={"input": "O que é transpilação?"})
-        assert consulta.status_code == 503 and consulta.json()["code"] == "LLM_NOT_CONFIGURED"
+        consulta = client.post("/query", json={"input": "O que é transpilação?", "web_search": True})
+        # Nunca há busca web; com ou sem Gemini a resposta vem da base local (LLM ou extrativa).
+        assert consulta.status_code == 200, consulta.text
+        corpo = consulta.json()
+        assert corpo["web_status"] == "disabled" and corpo["answer_mode"] in ("llm", "local", "none")
+        assert all(f["origin"] == "local" for f in corpo["sources"])
+        diagnostico = client.post("/qiskit/diagnose", json={"code": "OPENQASM 2.0;\nqreg q[1];\nh q[3];\n"})
+        assert diagnostico.status_code == 200 and diagnostico.json()["validacao"]["valido"] is True

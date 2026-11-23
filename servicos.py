@@ -38,6 +38,10 @@ class ServicosIntegrados:
                 obter_cliente().heartbeat()
                 colecao = obter_colecao()
                 documentos.carregar_uploads_iniciais(colecao)
+                # Conhecimento interno versionado: só reindexa o que mudou.
+                from rag import conhecimento_interno
+                resumo = conhecimento_interno.indexar(colecao)
+                logger.info("Conhecimento interno: %s", resumo)
                 return
             except ColecaoIncompativel:
                 raise

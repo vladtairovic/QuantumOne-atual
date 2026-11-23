@@ -1,7 +1,8 @@
 """Interpret a bounded construction subset of Python; never execute source.
 
 Supported: Qiskit circuit/register imports, numeric arithmetic, math constants,
-register indexing/slices, lists/tuples/range, assignments and bounded for loops.
+register indexing/slices, lists/tuples/range, assignments, bounded for loops,
+``qc.qubits``/``qc.clbits`` and ``with qc.if_test((bit_or_register, value)):`` blocks.
 Only explicit circuit gate methods below are callable. No Python object access,
 filesystem/network calls, comprehensions, functions, classes or arbitrary imports.
 """
@@ -82,6 +83,8 @@ class Interpreter:
             if isinstance(node.value, ast.Name) and self.names.get(node.value.id) == "qiskit":
                 if node.attr in CONSTRUCTORS:
                     return CONSTRUCTORS[node.attr]
+            if isinstance(node.value, ast.Name) and isinstance(self.names.get(node.value.id), QuantumCircuit)                     and node.attr in ("qubits", "clbits"):
+                return list(getattr(self.names[node.value.id], node.attr))
             self.reject(node, "Acesso a atributos não permitido.")
         if isinstance(node, ast.Subscript):
             value = self.expression(node.value)
@@ -179,6 +182,8 @@ class Interpreter:
                     self.names[node.targets[0].id] = self.expression(node.value)
                 elif isinstance(node, ast.Expr):
                     self.expression(node.value)
+                elif isinstance(node, ast.With) and len(node.items) == 1 and node.items[0].optional_vars is None:
+                    self.if_test(node)
                 elif isinstance(node, ast.For) and isinstance(node.target, ast.Name) and not node.orelse:
                     items = self.expression(node.iter)
                     if not isinstance(items, (list, tuple, range)):
@@ -194,6 +199,24 @@ class Interpreter:
             except (ValueError, TypeError, IndexError, ZeroDivisionError, OverflowError, QiskitError) as exc:
                 raise CircuitError("INVALID_CIRCUIT", "Comando Python/Qiskit inválido.",
                                    {"line": node.lineno, "reason": str(exc)[:500]}) from exc
+
+
+def _if_test(self, node):
+    """with qc.if_test((Clbit | ClassicalRegister, int)): corpo"""
+    call = node.items[0].context_expr
+    if not (isinstance(call, ast.Call) and isinstance(call.func, ast.Attribute) and call.func.attr == "if_test"
+            and isinstance(call.func.value, ast.Name) and isinstance(self.names.get(call.func.value.id), QuantumCircuit)
+            and len(call.args) == 1 and not call.keywords):
+        self.reject(node, "Somente blocos 'with qc.if_test((bit, valor)):' são aceitos.")
+    condicao = self.expression(call.args[0])
+    if not (isinstance(condicao, list) and len(condicao) == 2 and isinstance(condicao[0], (Clbit, ClassicalRegister))
+            and type(condicao[1]) is int):
+        self.reject(node, "A condição de if_test deve ser (bit clássico ou registrador, inteiro).")
+    with self.names[call.func.value.id].if_test(tuple(condicao)):
+        self.statements(node.body)
+
+
+Interpreter.if_test = _if_test
 
 
 def carregar_circuito_python(code):

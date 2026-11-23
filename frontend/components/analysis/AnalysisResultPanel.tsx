@@ -3,16 +3,23 @@
 import { useState } from "react";
 import type { AnalysisResultRecord } from "../layout/conversationTypes";
 import FeedbackMessage from "../ui/FeedbackMessage";
+import CompactSources from "./CompactSources";
 
-function safeExternalUrl(value?: string) {
-  if (!value) return undefined;
-  try {
-    const url = new URL(value);
-    const localHttp = url.protocol === "http:" && ["localhost", "127.0.0.1", "::1"].includes(url.hostname);
-    return (url.protocol === "https:" || localHttp) && !url.username && !url.password ? url.href : undefined;
-  } catch {
-    return undefined;
-  }
+const METODOS: Record<string, string> = {
+  operador: "unitária comparada (exata)", clifford: "tableau de Clifford (exata)", reescrita: "reescrita U·V† (exata)",
+  estados_aleatorios: "estados aleatórios (amostral)", amostragem: "amostragem de medições (estatística)",
+  identidade: "circuito original mantido", nenhum: "não verificada",
+};
+const PERFIS: Record<string, string> = {
+  rapido: "Rápido", balanceado: "Balanceado", avancado: "Avançado", experimental: "Experimental", nivel_fixo: "Nível fixo",
+};
+
+function formatBytes(bytes?: number) {
+  if (bytes === undefined) return "-";
+  const unidades = ["B", "KiB", "MiB", "GiB", "TiB"];
+  let valor = bytes, i = 0;
+  while (valor >= 1024 && i < unidades.length - 1) { valor /= 1024; i++; }
+  return `${valor >= 10 ? valor.toFixed(0) : valor.toFixed(1)} ${unidades[i]}`;
 }
 
 export default function AnalysisResultPanel({ result }: { result?: AnalysisResultRecord }) {
@@ -68,8 +75,19 @@ export default function AnalysisResultPanel({ result }: { result?: AnalysisResul
       {notice && <FeedbackMessage tone={notice.tone} message={notice.message} />}
       <section className="analysis-result-section"><h3>Resumo</h3><p className="analysis-result-summary">{result.summary}</p></section>
       {result.insufficient && <FeedbackMessage tone="warning" message="A documentação recuperada foi insuficiente para fundamentar a resposta." />}
-      {result.searchSuggestions && <iframe title="Sugestões de pesquisa" sandbox="allow-popups allow-popups-to-escape-sandbox" referrerPolicy="no-referrer"
-        srcDoc={`<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; img-src https: data:; base-uri 'none'; form-action 'none'">` + result.searchSuggestions} />}
+      {result.answerMode === "local" && <p className="analysis-answer-mode">Resposta extrativa da base local (sem modelo de linguagem).</p>}
+      {result.diagnosis && <section className="analysis-result-section analysis-diagnosis"><h3>Diagnóstico <span>{result.diagnosis.problems.length}</span>
+        <em className={`analysis-confidence analysis-confidence-${result.diagnosis.confidence}`}>confiança {result.diagnosis.confidence}</em></h3>
+        <ol className="analysis-diagnosis-list">{result.diagnosis.problems.map((p, index) => <li key={`${p.code}-${index}`}>
+          <div><code>{p.code}</code>{p.line ? <span>linha {p.line}</span> : null}<span className={`analysis-confidence analysis-confidence-${p.confidence}`}>{p.confidence}</span></div>
+          <p>{p.message}</p>{p.cause && <p className="analysis-diagnosis-cause">Causa: {p.cause}</p>}
+          {p.fix && <p className="analysis-diagnosis-fix">Correção: {p.fix}</p>}
+          {p.alternatives.length > 0 && <ul>{p.alternatives.map((a, k) => <li key={k}>{a}</li>)}</ul>}
+        </li>)}</ol>
+        {result.diagnosis.correctedCode && <><h4 className="analysis-diagnosis-subtitle">Código corrigido {result.diagnosis.valid ? "(validado)" : "(não validado)"}</h4>
+          <pre><code>{result.diagnosis.correctedCode}</code></pre></>}
+        {result.diagnosis.limitations.length > 0 && <ul className="analysis-result-warnings">{result.diagnosis.limitations.map((l, k) => <li key={k}>{l}</li>)}</ul>}
+      </section>}
       {metrics && Object.values(metrics).some((value) => value !== undefined) && (
         <section className="analysis-result-section"><h3>Métricas</h3><dl className="analysis-result-metrics">
           {metrics.depthBefore !== undefined && <div><dt>Profundidade antes</dt><dd>{metrics.depthBefore}</dd></div>}
@@ -78,13 +96,19 @@ export default function AnalysisResultPanel({ result }: { result?: AnalysisResul
           {metrics.gatesAfter !== undefined && <div><dt>Portas depois</dt><dd>{metrics.gatesAfter}</dd></div>}
         </dl></section>
       )}
+      {result.engine && <section className="analysis-result-section"><h3>Motor quântico</h3><dl className="analysis-result-metrics">
+        <div><dt>Perfil</dt><dd>{PERFIS[result.engine.profile] || result.engine.profile}</dd></div>
+        <div><dt>Verificação</dt><dd className="analysis-engine-text">{METODOS[result.engine.verificationMethod || "nenhum"] || result.engine.verificationMethod}{result.engine.guarantee === "aproximada" ? " · aproximada (diferença desprezível medida)" : ""}</dd></div>
+        {result.engine.cxBefore !== undefined && <div><dt>CX equivalentes</dt><dd>{result.engine.cxBefore} → {result.engine.cxAfter}</dd></div>}
+        {result.engine.twoQubitBefore !== undefined && <div><dt>Portas de 2 qubits</dt><dd>{result.engine.twoQubitBefore} → {result.engine.twoQubitAfter}</dd></div>}
+        <div><dt>Simulação recomendada</dt><dd className="analysis-engine-text" title={result.engine.simulationReason}>{result.engine.simulationMethod || "-"}</dd></div>
+        <div><dt>Statevector exigiria</dt><dd>{formatBytes(result.engine.memoryBytes)}</dd></div>
+      </dl>{result.engine.tradeoffs?.length ? <ul className="analysis-result-warnings">{result.engine.tradeoffs.map((t, k) => <li key={k}>{t}</li>)}</ul> : null}</section>}
       {result.suggestions.length > 0 && <section className="analysis-result-section"><h3>Sugestões <span>{result.suggestions.length}</span></h3><div className="analysis-suggestions">
         {result.suggestions.map((item, index) => <article key={`${item.title}-${index}`} className="analysis-suggestion"><h4>{item.title}</h4><p>{item.description}</p><p><strong>Justificativa:</strong> {item.rationale}</p>{item.code && <pre><code>{item.code}</code></pre>}</article>)}
       </div></section>}
       {result.warnings?.length ? <section className="analysis-result-section"><h3>Observações</h3><ul className="analysis-result-warnings">{result.warnings.map((warning, index) => <li key={`${warning}-${index}`}>{warning}</li>)}</ul></section> : null}
-      {result.sources.length > 0 && <section className="analysis-result-section"><h3>Fontes <span>{result.sources.length}</span></h3><ul className="analysis-result-sources">
-        {result.sources.map((source, index) => { const href = safeExternalUrl(source.url); return <li key={`${source.title}-${index}`}><div><strong>{source.title}</strong>{source.origin && <span>{source.origin}</span>}</div>{source.excerpt && <p>{source.excerpt}</p>}{href && <a href={href} target="_blank" rel="noopener noreferrer">Abrir fonte <span aria-hidden="true">↗</span></a>}</li>; })}
-      </ul></section>}
+      <CompactSources sources={result.sources} />
       {result.requestId && <p className="analysis-result-id">Referência: <code>{result.requestId}</code></p>}
     </section>
   );

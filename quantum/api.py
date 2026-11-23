@@ -16,12 +16,22 @@ router = APIRouter()
 _active = 0
 _lock = threading.Lock()
 
+class AlvoHardware(Modelo):
+    topologia: Literal["linear", "anel", "grade", "heavy_hex", "todos"] = "todos"
+    portas_nativas: Literal["cx_u", "ibm_cx", "ibm_heron", "ibm_eagle"] | None = None
+
+
 class Circuito(Modelo):
     model_config = ConfigDict(extra="forbid", str_strip_whitespace=False)
     qasm: str | None = Field(default=None, description="Entrada OpenQASM 2 legada; exclusiva com code.")
     code: str | None = Field(default=None, description="Código QASM2 ou Python/Qiskit restrito.")
     format: Literal["auto", "qasm", "python"] = "auto"
     optimization_level: int = Field(default=3, ge=0, le=3, strict=True)
+    perfil: Literal["rapido", "balanceado", "avancado", "experimental"] | None = Field(
+        default=None, description="Estratégia multi-candidato; ausente mantém um transpile no optimization_level.")
+    prioridade: Literal["dois_qubits", "profundidade", "total"] = Field(
+        default="dois_qubits", description="Métrica prioritária na escolha entre candidatos.")
+    hardware: "AlvoHardware | None" = None
 
     @model_validator(mode="after")
     def source_contract(self):
@@ -50,6 +60,58 @@ class ResultadoQiskit(Modelo):
     passes_executados: list[str]
     otimizacoes_aplicadas: list[str]
     warnings: list[str]
+    perfil: str = "nivel_fixo"
+    prioridade: str = "dois_qubits"
+    estrategia_aplicada: str | None = None
+    estrategias_avaliadas: list[dict] = Field(default_factory=list)
+    tempo_otimizacao_segundos: float | None = None
+    verificacao: dict | None = Field(default=None, description=
+        "metodo: operador|clifford|reescrita|estados_aleatorios|amostragem|identidade|nenhum; "
+        "garantia: exata|amostral|estatistica|nenhuma.")
+    analise_original: dict | None = None
+    analise_final: dict | None = None
+    comparacao: dict | None = None
+    compromissos: list[str] = Field(default_factory=list)
+    hardware: dict | None = None
+    simulacao: dict | None = None
+
+class EntradaDiagnostico(Modelo):
+    model_config = ConfigDict(extra="forbid", str_strip_whitespace=False)
+    code: str = Field(description="OpenQASM 2/3, Python/Qiskit, traceback ou combinação de texto, código e erro.")
+    format: Literal["auto", "qasm", "python"] = "auto"
+    politica: Literal["conservadora", "expandir_registradores"] = Field(
+        default="conservadora", description="conservadora remove instruções de intenção indeterminável; "
+        "expandir_registradores amplia registradores para índices fora do limite.")
+
+
+class ProblemaDiagnostico(Modelo):
+    codigo: str
+    severidade: Literal["erro", "aviso"]
+    linha: int | None
+    trecho: str
+    mensagem: str
+    causa_raiz: str | None
+    correcao: dict
+    alternativas: list[str]
+    confianca: Literal["alta", "media", "baixa"]
+    categoria: str
+
+
+class ResultadoDiagnostico(Modelo):
+    interpretacao: dict
+    linguagem: Literal["qasm", "python"] | None
+    politica: str
+    codigo_original: str | None
+    codigo_corrigido: str | None
+    diff: str
+    problemas: list[ProblemaDiagnostico]
+    validacao: dict
+    limitacoes: list[str]
+    sugestoes: list[str]
+    confianca_global: Literal["alta", "media", "baixa"]
+    resumo: dict
+    tempo_segundos: float
+
 
 class DetalheErroCircuito(Modelo):
     code: str
@@ -131,6 +193,34 @@ async def execute_connected(payload, request):
             await asyncio.gather(worker, connection, return_exceptions=True)
 
 
+async def _executar_limitado(payload, request, limits):
+    global _active
+    with _lock:
+        if _active >= limits.max_concurrent_optimizations:
+            raise CircuitError("OPTIMIZER_BUSY", "O otimizador está ocupado. Tente novamente em instantes.", status=429)
+        _active += 1
+    try:
+        try:
+            return await asyncio.wait_for(execute_connected(payload, request), limits.optimization_timeout_seconds)
+        except asyncio.TimeoutError as exc:
+            raise CircuitError("OPTIMIZATION_TIMEOUT", "A análise excedeu o tempo configurado.",
+                               {"limit_seconds": limits.optimization_timeout_seconds}, 504) from exc
+    finally:
+        with _lock:
+            _active -= 1
+
+
+@router.post("/qiskit/diagnose", response_model=ResultadoDiagnostico,
+             responses={status: {"model": ErroCircuito} for status in (400, 413, 415, 422, 429, 499, 500, 502, 503, 504)})
+async def diagnosticar(entrada: EntradaDiagnostico, request: Request):
+    """Diagnostica entradas heterogêneas (QASM 2/3, Python/Qiskit, tracebacks, texto misto), lista todos os
+    problemas com causa raiz, propõe correções e valida a versão corrigida. O código nunca é executado."""
+    limits = get_limits()
+    validate_source(entrada.code, limits)
+    payload = {"acao": "diagnosticar", "code": entrada.code, "format": entrada.format, "politica": entrada.politica}
+    return await _executar_limitado(payload, request, limits)
+
+
 @router.post("/qiskit/optimize", response_model=ResultadoQiskit,
              responses={status: {"model": ErroCircuito} for status in (400, 413, 415, 422, 429, 499, 500, 502, 503, 504)})
 async def otimizar(entrada: Circuito, request: Request):
@@ -145,7 +235,9 @@ async def otimizar(entrada: Circuito, request: Request):
         _active += 1
     try:
         payload = {"code": source, "format": "qasm" if entrada.qasm is not None else entrada.format,
-                   "optimization_level": entrada.optimization_level}
+                   "optimization_level": entrada.optimization_level, "perfil": entrada.perfil,
+                   "prioridade": entrada.prioridade,
+                   "hardware": entrada.hardware.model_dump() if entrada.hardware else None}
         try:
             return await asyncio.wait_for(execute_connected(payload, request), limits.optimization_timeout_seconds)
         except asyncio.TimeoutError as exc:
@@ -154,3 +246,5 @@ async def otimizar(entrada: Circuito, request: Request):
     finally:
         with _lock:
             _active -= 1
+
+Circuito.model_rebuild()

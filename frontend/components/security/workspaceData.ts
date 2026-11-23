@@ -54,6 +54,20 @@ function isAnalysisResult(value: unknown): value is AnalysisResultRecord {
     !value.warnings.every((warning) => typeof warning === "string" && warning.length <= 2_000))) return false;
   if (value.requestId !== undefined && (typeof value.requestId !== "string" || value.requestId.length > 160)) return false;
   if (value.circuit !== undefined && (!isRecord(value.circuit) || !Number.isSafeInteger(value.circuit.qubits) || Number(value.circuit.qubits) < 0 || Number(value.circuit.qubits) > 4096 || !["equivalent","different","unknown"].includes(String(value.circuit.equivalence)))) return false;
+  if (value.answerMode !== undefined && !["llm", "local", "none"].includes(String(value.answerMode))) return false;
+  if (value.engine !== undefined && (!isRecord(value.engine) || typeof value.engine.profile !== "string" ||
+    Object.values(value.engine).some((item) => !(item === undefined || item === null || typeof item === "number" ||
+      (typeof item === "string" && item.length <= 2_000) ||
+      (Array.isArray(item) && item.length <= 20 && item.every((text) => typeof text === "string" && text.length <= 2_000))))))
+    return false;
+  if (value.diagnosis !== undefined) {
+    const d = value.diagnosis;
+    if (!isRecord(d) || typeof d.confidence !== "string" || !Array.isArray(d.problems) || d.problems.length > 300 ||
+      !Array.isArray(d.limitations) || d.limitations.length > 30 ||
+      (d.correctedCode !== undefined && d.correctedCode !== null && (typeof d.correctedCode !== "string" || d.correctedCode.length > 500_000)) ||
+      !d.problems.every((p) => isRecord(p) && typeof p.code === "string" && typeof p.message === "string" &&
+        p.message.length <= 2_000 && typeof p.fix === "string" && p.fix.length <= 2_000 && Array.isArray(p.alternatives))) return false;
+  }
   if (value.metrics !== undefined) {
     if (!isRecord(value.metrics)) return false;
     const numbers = [value.metrics.depthBefore, value.metrics.depthAfter, value.metrics.gatesBefore, value.metrics.gatesAfter];

@@ -1,3 +1,5 @@
+> **Atualização Beta-v2.0:** novas rotas `POST /qiskit/diagnose` e campos `perfil`, `prioridade` e `hardware` em `POST /qiskit/optimize`; `/query` ganhou `answer_mode`, `interpretation` e `evidence`. O contrato completo está em `openapi.json` e em [MOTOR-QUANTICO.md](MOTOR-QUANTICO.md). Obsoleto desde a Beta-v2.0: busca web.
+
 # API GrowUp QuantumOne — guia detalhado
 
 Este guia descreve os contratos implementados em `main.py`, `contratos.py`, `servicos.py`, `quantum/api.py` e `quantum/`. É voltado a quem precisa explicar, integrar ou depurar a API.
@@ -103,7 +105,7 @@ O endpoint **não** executa uma transação de teste no Google, Chroma ou Redis.
 |---|---|---|
 | `input` | string | Obrigatório, não vazio, até 30.000 caracteres. |
 | `top_k` | inteiro | Opcional, padrão 3, intervalo 1–10. |
-| `web_search` | boolean ou `null` | Opcional. `false` desliga busca web, `true` a habilita, ausente/`null` usa `WEB_SEARCH_ENABLED` do servidor. |
+| `web_search` | boolean ou `null` | **Obsoleto.** Aceito por compatibilidade e sempre ignorado: a busca web foi removida. `true` gera um aviso na resposta. |
 
 **Resposta 200** (forma resumida; fontes e alertas variam):
 
@@ -135,7 +137,7 @@ O endpoint **não** executa uma transação de teste no Google, Chroma ou Redis.
 **Erros importantes:**
 
 - `503 LLM_NOT_CONFIGURED`: `GEMINI_API_KEY` ausente; use `/search` para recuperação sem geração.
-- `503 WEB_SEARCH_UNAVAILABLE`: busca web não foi concluída, por exemplo por cota ou indisponibilidade do provedor. Tentar com `web_search:false` pode contornar apenas a dependência web.
+- `503 WEB_SEARCH_UNAVAILABLE`: **removido**. Sem LLM, ou com falha do Gemini, a resposta é extrativa local (`answer_mode: "local"`); `503 LLM_NOT_CONFIGURED` só ocorre com `QONE_LOCAL_FALLBACK=0`.
 - `503 SERVICE_ERROR`: dependência do serviço indisponível.
 - `504 TIMEOUT`: serviço externo excedeu o timeout geral.
 - `422 INVALID_INPUT`: corpo não atende ao contrato.

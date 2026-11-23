@@ -16,7 +16,7 @@ _QASM_CORPO = re.compile(r"^\s*(qreg|creg|qubit\s*\[|bit\s*\[|include\s+\"|gate\
 _PY = re.compile(r"^\s*(from\s+[\w.]+\s+import\b|import\s+\w|def\s+\w+\(|class\s+\w+|\w+\s*=\s*\w+\(|"
                  r"\w+\.(h|x|cx|measure|measure_all|append|compose|draw)\()", re.MULTILINE)
 _TRACEBACK = re.compile(r"Traceback \(most recent call last\):|^\s*File \".+\", line \d+|"
-                        r"^\w*(Error|Exception)(: .*)?$", re.MULTILINE)
+                        r"^[\w.]*(Error|Exception)(: .*)?$", re.MULTILINE)
 
 BIBLIOTECAS = {
     "qiskit": r"\bqiskit\b|QuantumCircuit|transpile\(|qiskit_aer|AerSimulator|SamplerV2|EstimatorV2|PassManager",

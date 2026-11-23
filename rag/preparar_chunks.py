@@ -4,6 +4,8 @@ import re
 from pathlib import Path
 
 PASTA = Path(__file__).resolve().parents[1] / "documentos"
+METADADOS_EXTRAS = ("biblioteca", "temas", "nivel", "tipo_fonte", "licenca", "idioma",
+                    "origem_conhecimento", "desatualizado", "motivo_desatualizado")
 
 
 def gerar_chunks(documento, tokenizer, limite, nome_modelo):
@@ -37,6 +39,9 @@ def gerar_chunks(documento, tokenizer, limite, nome_modelo):
                 "fragmentado": fragmentado,
                 "estrategia_chunks": "secoes_tokens_v2",
                 "versao_alvo_qiskit": documento.get("versao_alvo_qiskit", "não definida"),
+                # Classificação da curadoria (tema, biblioteca, nível, origem, obsolescência).
+                **{k: documento[k] for k in METADADOS_EXTRAS
+                   if isinstance(documento.get(k), (str, int, float, bool))},
             },
         })
 

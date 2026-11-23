@@ -7,6 +7,7 @@ verificável. Quando nenhuma frase compartilha termos com a pergunta, a função
 retorna None e o chamador informa contexto insuficiente.
 """
 import math
+import os
 from collections import Counter
 
 from .glossario import expandir
@@ -30,7 +31,13 @@ def gerar(pergunta: str, documentos: list[dict], max_frases: int = 6) -> dict | 
         return None
     candidatos = []
     df = Counter()
+    # Só usa seções próximas da melhor pontuação da recuperação: trechos muito
+    # abaixo do primeiro colocado tendem a ser tangenciais e geram citações fracas.
+    notas = [d.get("pontuacao") for d in documentos if d.get("pontuacao") is not None]
+    corte = max(notas) * float(os.getenv("QONE_LOCAL_CORTE", "0.7")) if notas else None
     for numero, documento in enumerate(documentos, start=1):
+        if corte is not None and documento.get("pontuacao") is not None and documento["pontuacao"] < corte:
+            continue
         for posicao, frase in enumerate(frases(documento.get("texto", ""))):
             toks = tokens(frase)
             if not toks:

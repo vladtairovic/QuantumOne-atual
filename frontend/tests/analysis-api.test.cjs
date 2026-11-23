@@ -1,6 +1,6 @@
 const { test } = require('node:test');
 const assert = require('node:assert/strict');
-const { circuitContext, optimizeCircuit, getCircuitLimits, AnalysisError } = require('/tmp/analysis-api-test/analysis-api.js');
+const { circuitContext, optimizeCircuit, diagnoseCode, getCircuitLimits, AnalysisError } = require('/tmp/analysis-api-test/analysis-api.js');
 
 test('large circuit context is bounded and preserves numeric metrics', () => {
   const code = 'h q[0];\n'.repeat(2000);
@@ -24,7 +24,7 @@ test('Python reaches deterministic endpoint with explicit format and warnings', 
   };
   const code = 'from qiskit import QuantumCircuit\nqc=QuantumCircuit(20)';
   const result = await optimizeCircuit(code, new AbortController().signal, 'python');
-  assert.deepEqual(calls, [{url:'/api/qiskit/optimize',body:{code,format:'python',optimization_level:3}}]);
+  assert.deepEqual(calls, [{url:'/api/qiskit/optimize',body:{code,format:'python',optimization_level:3,perfil:'balanceado'}}]);
   assert.equal(result.request_id,'test');
   assert.deepEqual(result.warnings,['Equivalência não verificada.']);
 });
@@ -95,4 +95,20 @@ test('diagnostics do not repeat the same message and reason', async () => {
   global.fetch = async () => new Response(JSON.stringify({error:{message:'Importação não permitida.',details:{line:2,reason:'Importação não permitida.'}}}),{status:422});
   await assert.rejects(optimizeCircuit('import os',new AbortController().signal,'python'), e =>
     e.message === 'Importação não permitida. Linha 2.');
+});
+
+test('optimization profile is forwarded and diagnosis uses its own endpoint', async () => {
+  const calls = [];
+  global.fetch = async (url, options) => {
+    calls.push({url, body: JSON.parse(options.body)});
+    const corpo = url.endsWith('/diagnose')
+      ? {linguagem:'qasm', confianca_global:'baixa', problemas:[], codigo_corrigido:'OPENQASM 2.0;', validacao:{valido:true}, limitacoes:[]}
+      : {warnings:[]};
+    return new Response(JSON.stringify(corpo), {headers:{'x-request-id':'id'}});
+  };
+  await optimizeCircuit('OPENQASM 2.0;', new AbortController().signal, 'qasm', 'avancado');
+  const diagnostico = await diagnoseCode('h q[9];', new AbortController().signal, 'qasm');
+  assert.equal(calls[0].body.perfil, 'avancado');
+  assert.deepEqual(calls[1], {url:'/api/qiskit/diagnose', body:{code:'h q[9];', format:'qasm'}});
+  assert.equal(diagnostico.validacao.valido, true);
 });

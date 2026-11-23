@@ -18,7 +18,7 @@ class CircuitBodyLimit:
         self.app = app
 
     async def __call__(self, scope, receive, send):
-        if scope["type"] != "http" or scope.get("path") != "/qiskit/optimize" or scope.get("method") != "POST":
+        if scope["type"] != "http" or scope.get("path") not in ("/qiskit/optimize", "/qiskit/diagnose") or scope.get("method") != "POST":
             return await self.app(scope, receive, send)
         limit = get_limits().max_request_bytes
         chunks, size = [], 0

@@ -26,7 +26,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
 from qiskit import QuantumCircuit, qasm2  # noqa: E402
-from qiskit.circuit.library import QFT  # noqa: E402
+from qiskit.circuit.library import QFTGate  # noqa: E402
 from qiskit.circuit.random import random_circuit  # noqa: E402
 
 TAMANHOS = (2, 4, 5, 8, 12, 16, 20, 25, 30)
@@ -80,7 +80,9 @@ def com_medicoes(n):
 
 
 def qft(n):
-    return QFT(n, do_swaps=True).decompose()
+    qc = QuantumCircuit(n)
+    qc.append(QFTGate(n), range(n))
+    return qc.decompose()
 
 
 GERADORES = {
@@ -101,6 +103,13 @@ def suite():
             yield nome, n, qasm2.dumps(gerar(n))
 
 
+def cx_equivalentes(texto_qasm):
+    """Custo em CX medido fora do motor: decompõe para {cx, u} sem otimizar."""
+    from qiskit import transpile
+    circuito = qasm2.loads(texto_qasm, custom_instructions=qasm2.LEGACY_CUSTOM_INSTRUCTIONS)
+    return int(transpile(circuito, basis_gates=["cx", "u", "measure", "reset"], optimization_level=0).count_ops().get("cx", 0))
+
+
 def executar(perfil, nivel, hardware):
     from quantum import qiskit_service as servico
     parametros = inspect.signature(servico.processar_circuito).parameters
@@ -111,7 +120,7 @@ def executar(perfil, nivel, hardware):
         if novo:
             kwargs["perfil"] = perfil
             if hardware:
-                kwargs["hardware"] = {"topologia": hardware}
+                kwargs["hardware"] = {"topologia": hardware, "portas_nativas": "ibm_cx"}
         tracemalloc.start()
         inicio = time.perf_counter()
         try:
@@ -132,6 +141,9 @@ def executar(perfil, nivel, hardware):
                 dois_qubits_original=o["operacoes_dois_qubits"], dois_qubits_final=p["operacoes_dois_qubits"],
                 equivalente=r["equivalente"], status_verificacao=r["status_verificacao"],
                 metodo_verificacao=(r.get("verificacao") or {}).get("metodo"),
+                garantia=(r.get("verificacao") or {}).get("garantia"),
+                cx_eq_original=cx_equivalentes(codigo),
+                cx_eq_final=cx_equivalentes(r["circuito_otimizado_qasm"]) if r["circuito_otimizado_qasm"] else None,
                 estrategia=r.get("estrategia_aplicada"),
             )
         linhas.append(linha)
@@ -160,6 +172,10 @@ def resumo(linhas):
         "reducao_total_profundidade_pct": reducao("profundidade_original", "profundidade_final"),
         "tempo_total_s": round(sum(l["tempo_s"] for l in linhas), 2),
         "maior_qubits_verificado": max((l["qubits"] for l in verificados), default=0),
+        "verificacao_por_metodo": {m: sum(1 for l in ok if str(l.get("metodo_verificacao")) == m)
+                                   for m in sorted({str(l.get("metodo_verificacao")) for l in ok})},
+        "reducao_total_cx_equivalentes_pct": reducao("cx_eq_original", "cx_eq_final")
+        if all(l.get("cx_eq_final") is not None for l in ok) else None,
     }
 
 

@@ -61,7 +61,7 @@ async def identificar_chamada(request: Request, call_next):
     esperado = 'multipart/form-data' if request.url.path == '/documents' else 'application/json'
     recebido = request.headers.get('content-type', '').split(';')[0].strip().lower()
     if request.method == 'POST' and recebido != esperado:
-        if request.url.path == '/qiskit/optimize':
+        if request.url.path in ('/qiskit/optimize', '/qiskit/diagnose'):
             resposta = error_response(request.state.request_id,
                 CircuitError('CONTENT_TYPE', f'Use Content-Type: {esperado}.', {'stage': 'transport'}, 415))
         else:
@@ -77,7 +77,7 @@ async def identificar_chamada(request: Request, call_next):
 @app.exception_handler(RequestValidationError)
 async def entrada_invalida(request, exc):
     fields = ['.'.join(map(str,e['loc'])) for e in exc.errors()]
-    if request.url.path == '/qiskit/optimize':
+    if request.url.path in ('/qiskit/optimize', '/qiskit/diagnose'):
         malformed = any(e['type'] == 'json_invalid' for e in exc.errors())
         failure = CircuitError('INVALID_JSON' if malformed else 'INVALID_REQUEST',
             'JSON malformado.' if malformed else 'Confira os campos e tipos da requisição.',
@@ -98,7 +98,7 @@ async def erro_http(request, exc):
     mensagens = {400:'Requisição ou formulário inválido.',404:'Rota não encontrada.',405:'Método não permitido.',
                  413:'Arquivo maior que 256 KiB.',415:'Use arquivo .txt, .md, .py ou .qasm em UTF-8.',
                  422:'Arquivo vazio, binário ou fora da codificação UTF-8.'}
-    if request.url.path == '/qiskit/optimize':
+    if request.url.path in ('/qiskit/optimize', '/qiskit/diagnose'):
         return error_response(request.state.request_id,
             CircuitError('INVALID_REQUEST', 'Requisição inválida.', {'stage': 'request'}, exc.status_code))
     return erro(request,exc.status_code,'HTTP_ERROR',exc.detail if request.url.path.startswith('/conversations') and isinstance(exc.detail, str)

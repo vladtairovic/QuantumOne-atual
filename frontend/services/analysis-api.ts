@@ -25,6 +25,23 @@ export type QuantumResult = {
   formato_detectado: CodeFormat;
   tempo_processamento_segundos: number;
   warnings: string[];
+  perfil?: string;
+  estrategia_aplicada?: string;
+  verificacao?: { metodo: string; garantia: string; equivalente: boolean | null } | null;
+  analise_original?: { cx_equivalentes: number; operacoes_dois_qubits: number } | null;
+  analise_final?: { cx_equivalentes: number; operacoes_dois_qubits: number } | null;
+  simulacao?: { metodo: string; justificativa: string; memoria_statevector_bytes: number } | null;
+  compromissos?: string[];
+};
+export type OptimizationProfile = "rapido" | "balanceado" | "avancado" | "experimental";
+export type DiagnosisResult = {
+  linguagem: CodeFormat | null;
+  confianca_global: "alta" | "media" | "baixa";
+  problemas: { codigo: string; linha: number | null; mensagem: string; causa_raiz: string | null;
+    correcao: { descricao?: string }; alternativas: string[]; confianca: string }[];
+  codigo_corrigido: string | null;
+  validacao: { valido?: boolean };
+  limitacoes: string[];
 };
 export type CircuitLimits = {
   max_circuit_lines: number;
@@ -85,7 +102,8 @@ export type AnalysisResponse = {
   quantum?: QuantumResult;
   warnings: string[];
   web_status?: string;
-  search_suggestions_html?: string | null;
+  answer_mode?: "llm" | "local" | "none";
+  diagnosis?: DiagnosisResult;
 };
 export class AnalysisError extends Error {
   constructor(
@@ -148,14 +166,20 @@ export async function sendTurn(
   return { ...data, answer: data.response, request_id: data.request_id || id };
 }
 
+export async function diagnoseCode(code: string, signal: AbortSignal, format: CodeFormat | "auto" = "auto") {
+  const { data } = await post<DiagnosisResult>("/qiskit/diagnose", { code, format }, signal);
+  return data;
+}
+
 export async function optimizeCircuit(
   code: string,
   signal: AbortSignal,
   format: CodeFormat = "qasm",
+  perfil: OptimizationProfile = "balanceado",
 ): Promise<AnalysisResponse> {
   const { data, id } = await post<QuantumResult>(
     "/qiskit/optimize",
-    { code, format, optimization_level: 3 },
+    { code, format, optimization_level: 3, perfil },
     signal,
   );
   return {

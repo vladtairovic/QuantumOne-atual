@@ -1648,6 +1648,155 @@
         }
       }
     },
+    "/qiskit/diagnose": {
+      "post": {
+        "summary": "Diagnosticar",
+        "description": "Diagnostica entradas heterogêneas (QASM 2/3, Python/Qiskit, tracebacks, texto misto), lista todos os\nproblemas com causa raiz, propõe correções e valida a versão corrigida. O código nunca é executado.",
+        "operationId": "diagnosticar_qiskit_diagnose_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EntradaDiagnostico"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultadoDiagnostico"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErroCircuito"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Rota inexistente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "405": {
+            "description": "Método incorreto",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Request Entity Too Large",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErroCircuito"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Unsupported Media Type",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErroCircuito"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErroCircuito"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErroCircuito"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Bad Gateway",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErroCircuito"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Service Unavailable",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErroCircuito"
+                }
+              }
+            }
+          },
+          "504": {
+            "description": "Gateway Timeout",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErroCircuito"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErroCircuito"
+                }
+              }
+            }
+          },
+          "499": {
+            "description": "Additional Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErroCircuito"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/qiskit/optimize": {
       "post": {
         "summary": "Otimizar",
@@ -2197,6 +2346,42 @@
         ],
         "title": "Address"
       },
+      "AlvoHardware": {
+        "properties": {
+          "topologia": {
+            "type": "string",
+            "enum": [
+              "linear",
+              "anel",
+              "grade",
+              "heavy_hex",
+              "todos"
+            ],
+            "title": "Topologia",
+            "default": "todos"
+          },
+          "portas_nativas": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "cx_u",
+                  "ibm_cx",
+                  "ibm_heron",
+                  "ibm_eagle"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Portas Nativas"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "AlvoHardware"
+      },
       "Avaliacao": {
         "properties": {
           "case_id": {
@@ -2327,6 +2512,45 @@
             "minimum": 0.0,
             "title": "Optimization Level",
             "default": 3
+          },
+          "perfil": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "rapido",
+                  "balanceado",
+                  "avancado",
+                  "experimental"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Perfil",
+            "description": "Estratégia multi-candidato; ausente mantém um transpile no optimization_level."
+          },
+          "prioridade": {
+            "type": "string",
+            "enum": [
+              "dois_qubits",
+              "profundidade",
+              "total"
+            ],
+            "title": "Prioridade",
+            "description": "Métrica prioritária na escolha entre candidatos.",
+            "default": "dois_qubits"
+          },
+          "hardware": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/AlvoHardware"
+              },
+              {
+                "type": "null"
+              }
+            ]
           }
         },
         "additionalProperties": false,
@@ -2504,6 +2728,41 @@
           "newEmail"
         ],
         "title": "EditEmail"
+      },
+      "EntradaDiagnostico": {
+        "properties": {
+          "code": {
+            "type": "string",
+            "title": "Code",
+            "description": "OpenQASM 2/3, Python/Qiskit, traceback ou combinação de texto, código e erro."
+          },
+          "format": {
+            "type": "string",
+            "enum": [
+              "auto",
+              "qasm",
+              "python"
+            ],
+            "title": "Format",
+            "default": "auto"
+          },
+          "politica": {
+            "type": "string",
+            "enum": [
+              "conservadora",
+              "expandir_registradores"
+            ],
+            "title": "Politica",
+            "description": "conservadora remove instruções de intenção indeterminável; expandir_registradores amplia registradores para índices fora do limite.",
+            "default": "conservadora"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "code"
+        ],
+        "title": "EntradaDiagnostico"
       },
       "Erro": {
         "properties": {
@@ -2881,6 +3140,92 @@
         ],
         "title": "Nota"
       },
+      "ProblemaDiagnostico": {
+        "properties": {
+          "codigo": {
+            "type": "string",
+            "title": "Codigo"
+          },
+          "severidade": {
+            "type": "string",
+            "enum": [
+              "erro",
+              "aviso"
+            ],
+            "title": "Severidade"
+          },
+          "linha": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Linha"
+          },
+          "trecho": {
+            "type": "string",
+            "title": "Trecho"
+          },
+          "mensagem": {
+            "type": "string",
+            "title": "Mensagem"
+          },
+          "causa_raiz": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Causa Raiz"
+          },
+          "correcao": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Correcao"
+          },
+          "alternativas": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Alternativas"
+          },
+          "confianca": {
+            "type": "string",
+            "enum": [
+              "alta",
+              "media",
+              "baixa"
+            ],
+            "title": "Confianca"
+          },
+          "categoria": {
+            "type": "string",
+            "title": "Categoria"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "codigo",
+          "severidade",
+          "linha",
+          "trecho",
+          "mensagem",
+          "causa_raiz",
+          "correcao",
+          "alternativas",
+          "confianca",
+          "categoria"
+        ],
+        "title": "ProblemaDiagnostico"
+      },
       "Register": {
         "properties": {
           "email": {
@@ -3174,6 +3519,122 @@
         ],
         "title": "RespostaDocumento"
       },
+      "ResultadoDiagnostico": {
+        "properties": {
+          "interpretacao": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Interpretacao"
+          },
+          "linguagem": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "qasm",
+                  "python"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Linguagem"
+          },
+          "politica": {
+            "type": "string",
+            "title": "Politica"
+          },
+          "codigo_original": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Codigo Original"
+          },
+          "codigo_corrigido": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Codigo Corrigido"
+          },
+          "diff": {
+            "type": "string",
+            "title": "Diff"
+          },
+          "problemas": {
+            "items": {
+              "$ref": "#/components/schemas/ProblemaDiagnostico"
+            },
+            "type": "array",
+            "title": "Problemas"
+          },
+          "validacao": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Validacao"
+          },
+          "limitacoes": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Limitacoes"
+          },
+          "sugestoes": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Sugestoes"
+          },
+          "confianca_global": {
+            "type": "string",
+            "enum": [
+              "alta",
+              "media",
+              "baixa"
+            ],
+            "title": "Confianca Global"
+          },
+          "resumo": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Resumo"
+          },
+          "tempo_segundos": {
+            "type": "number",
+            "title": "Tempo Segundos"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "interpretacao",
+          "linguagem",
+          "politica",
+          "codigo_original",
+          "codigo_corrigido",
+          "diff",
+          "problemas",
+          "validacao",
+          "limitacoes",
+          "sugestoes",
+          "confianca_global",
+          "resumo",
+          "tempo_segundos"
+        ],
+        "title": "ResultadoDiagnostico"
+      },
       "ResultadoQiskit": {
         "properties": {
           "original": {
@@ -3298,6 +3759,126 @@
             },
             "type": "array",
             "title": "Warnings"
+          },
+          "perfil": {
+            "type": "string",
+            "title": "Perfil",
+            "default": "nivel_fixo"
+          },
+          "prioridade": {
+            "type": "string",
+            "title": "Prioridade",
+            "default": "dois_qubits"
+          },
+          "estrategia_aplicada": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Estrategia Aplicada"
+          },
+          "estrategias_avaliadas": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "type": "array",
+            "title": "Estrategias Avaliadas"
+          },
+          "tempo_otimizacao_segundos": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Tempo Otimizacao Segundos"
+          },
+          "verificacao": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Verificacao",
+            "description": "metodo: operador|clifford|reescrita|estados_aleatorios|amostragem|identidade|nenhum; garantia: exata|amostral|estatistica|nenhuma."
+          },
+          "analise_original": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Analise Original"
+          },
+          "analise_final": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Analise Final"
+          },
+          "comparacao": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Comparacao"
+          },
+          "compromissos": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Compromissos"
+          },
+          "hardware": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Hardware"
+          },
+          "simulacao": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Simulacao"
           }
         },
         "additionalProperties": false,

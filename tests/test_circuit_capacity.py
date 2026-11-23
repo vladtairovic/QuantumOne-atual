@@ -29,7 +29,9 @@ def test_valid_capacity(client, fmt, lines):
     assert d['original']['total_operacoes'] == lines-3
     assert d['formato_detectado'] == fmt
     assert d['tempo_processamento_segundos'] >= 0
-    assert d['equivalente'] is None
+    # 20 qubits ultrapassam a comparação matricial; a prova vem da reescrita de U·V† (exata).
+    assert d['equivalente'] is True
+    assert d['verificacao']['metodo'] == 'reescrita' and d['verificacao']['garantia'] == 'exata'
     assert d['circuito_otimizado_qasm'].startswith('OPENQASM 2.0;')
 
 @pytest.mark.parametrize("fmt", ["qasm", "python"])
@@ -86,7 +88,9 @@ def test_python_loop_registers_and_measure(client):
     assert r.status_code == 200, r.text
     assert r.json()['original']['total_operacoes'] == 40
     assert r.json()['original']['tipos_operacoes']['measure'] == 20
-    assert r.json()['equivalente'] is None
+    # Circuito de Clifford com medições finais: verificação exata por tableau (ou original mantido).
+    assert r.json()['equivalente'] is True
+    assert r.json()['verificacao']['metodo'] in ('clifford', 'identidade')
 
 def test_timeout_and_recovery(client, monkeypatch):
     monkeypatch.setenv('OPTIMIZATION_TIMEOUT_SECONDS','0.001')
@@ -128,7 +132,9 @@ def test_classical_control_and_barriers(client):
     assert q.count_ops()['if_else'] == 1
     assert q.data[-1].operation.condition[1] == 1
     assert q.data[-1].operation.blocks[0].count_ops()['x'] == 1
-    assert r.json()['equivalente'] is None
+    # Controle clássico não tem unitária: ou o original é mantido (identidade) ou a verificação é estatística.
+    v = r.json()['verificacao']
+    assert (v['metodo'] == 'identidade' and r.json()['equivalente'] is True) or         (v['garantia'] == 'estatistica' and r.json()['equivalente'] is None)
 
 @pytest.mark.parametrize('fmt', ['qasm', 'python'])
 def test_gate_coverage_equivalence(client, fmt):

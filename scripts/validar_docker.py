@@ -29,6 +29,13 @@ COMPOSE = ["docker", "compose", "-p", PROJECT]
 REPORT = {"inicio_utc": datetime.now(timezone.utc).isoformat(), "etapas": []}
 
 
+def conhecimento_interno():
+    import sys
+    sys.path.insert(0, str(ROOT))
+    from rag.conhecimento_interno import carregar
+    return carregar()
+
+
 def registrar(etapa, **dados):
     REPORT["etapas"].append({"etapa": etapa, **dados})
     ARTIFACTS.mkdir(exist_ok=True)
@@ -133,10 +140,13 @@ def main():
         chunk["metadados"]["document_id"] for chunk in uploads_iniciais
     })
 
-    assert inicial["ids"] == ids_iniciais, (
-        "O volume de validação contém dados além dos exemplos iniciais; preserve-o."
+    # Além dos exemplos iniciais, a API indexa o conhecimento interno versionado (qone_*).
+    internos = sorted(d["document_id"] for d in conhecimento_interno())
+    assert set(ids_iniciais) <= set(inicial["ids"])
+    assert all(i in ids_iniciais or i.startswith("qone_") for i in inicial["ids"]), (
+        "O volume de validação contém dados além dos exemplos iniciais e do conhecimento interno; preserve-o."
     )
-    assert inicial["documentos"] == documentos_iniciais
+    assert inicial["documentos"] == sorted(set(documentos_iniciais) | set(internos))
 
     registrar(
         "containers_iniciados_com_uploads_iniciais",
@@ -153,7 +163,7 @@ def main():
     fontes = json.loads((ROOT / "documentos" / "base_documental.json").read_text(encoding="utf-8"))
     
     assert primeiro["documentos"] == sorted(
-        set(documentos_iniciais) | {d["document_id"] for d in fontes}
+        set(documentos_iniciais) | {d["document_id"] for d in fontes} | set(internos)
     )
     assert primeiro["chunks"] > inicial["chunks"] and primeiro["dimensao"] == 384
 
@@ -176,6 +186,7 @@ def main():
     fontes_permitidas = (
         {d["fonte"] for d in fontes}
         | {chunk["metadados"]["fonte"] for chunk in uploads_iniciais}
+        | {f"qone://conhecimento/{i}" for i in internos}
     )
     assert set(busca["citations"]).issubset(fontes_permitidas)
 
@@ -207,15 +218,36 @@ def main():
     registrar("qiskit_real", equivalente=True, operacoes_antes=2, operacoes_depois=0)
     registrar("gemini_real", resultado="nao_executado_sem_credencial_por_escolha_do_usuario")
 
-    falta_llm, _ = conferir("POST", "/query", 503, {"input": "Otimize o circuito."})
-    assert falta_llm["code"] == "LLM_NOT_CONFIGURED"
-    assert "nenhuma resposta de IA" in falta_llm["message"]
+    # Sem GEMINI_API_KEY: resposta extrativa local, sem busca web (Prioridade 0).
+    local, _ = conferir("POST", "/query", 200, {"input": "Como medir todos os qubits de um circuito?",
+                                               "web_search": True})
+    assert local["web_status"] == "disabled" and local["answer_mode"] in ("local", "none")
+    assert any("busca web foi removida" in a for a in local["warnings"])
+    if local["answer_mode"] == "local":
+        assert "[Fonte 1]" in local["response"] and local["sources"]
+    fora, _ = conferir("POST", "/query", 200, {"input": "Qual a melhor receita de lasanha de berinjela?"})
+    assert fora["status"] == "insufficient_context" and fora["answer_mode"] == "none"
+    registrar("consulta_local_sem_web", modo=local["answer_mode"], fontes=len(local["sources"]),
+              fora_do_dominio=fora["status"])
+
+    # Diagnóstico de múltiplos erros e otimização com perfil (Prioridades 3 e 4) no worker isolado.
+    danificado = 'OPENQASM 2.0;\ninclude "qelib1.inc";\nqreg q[2];\nh q[5];\ncnot q[0],q[1];\nx q[1]\n'
+    diagnostico, _ = conferir("POST", "/qiskit/diagnose", 200, {"code": danificado})
+    assert [p["codigo"] for p in diagnostico["problemas"]] == ["INDEX_OUT_OF_RANGE", "UNKNOWN_GATE", "MISSING_SEMICOLON"]
+    assert diagnostico["validacao"]["valido"] is True
+    ghz = "OPENQASM 2.0;\ninclude \"qelib1.inc\";\nqreg q[24];\nh q[0];\n" + "".join(
+        f"cx q[{i}],q[{i + 1}];\ncx q[{i}],q[{i + 1}];\ncx q[{i}],q[{i + 1}];\n" for i in range(23))
+    otimizado24, _ = conferir("POST", "/qiskit/optimize", 200, {"code": ghz, "perfil": "avancado"})
+    assert otimizado24["equivalente"] is True and otimizado24["verificacao"]["metodo"] == "clifford"
+    assert otimizado24["proposta"]["operacoes_dois_qubits"] == 23
+    registrar("diagnostico_e_motor_24_qubits", problemas=len(diagnostico["problemas"]),
+              verificacao=otimizado24["verificacao"]["metodo"])
     conferir("POST", "/query", 422, {})
     conferir("POST", "/search", 422, {"query": ""})
     conferir("POST", "/documents", 415, arquivo=("arquivo.pdf", b"texto"))
     conferir("POST", "/documents", 422, arquivo=("vazio.txt", b""))
     conferir("POST", "/documents", 413, arquivo=("grande.txt", b"x" * 262145))
-    registrar("validacoes_http_e_llm_ausente", codigo_llm=falta_llm["code"])
+    registrar("validacoes_http_e_llm_ausente", modo_resposta=local["answer_mode"])
 
     avaliacao = json.loads((ROOT / "exemplos" / "avaliacao.json").read_text(encoding="utf-8"))
     avaliacao["case_id"] = "validacao-docker-" + uuid4().hex

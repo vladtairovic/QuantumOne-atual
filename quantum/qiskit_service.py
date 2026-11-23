@@ -131,9 +131,24 @@ def exportar_circuito_qasm(circuito: QuantumCircuit):
         ) from erro
 
 
-def processar_circuito(code: str, formato: str = "auto", nivel_otimizacao: int = 3):
+def processar_circuito(code: str, formato: str = "auto", nivel_otimizacao: int = 3, perfil: str | None = None,
+                       hardware: dict | None = None, prioridade: str = "dois_qubits"):
+    """Analisa, otimiza e verifica um circuito.
+
+    ``perfil=None`` mantém o comportamento histórico (um transpile no nível
+    pedido); ``rapido``, ``balanceado``, ``avancado`` e ``experimental`` geram
+    vários candidatos e escolhem o melhor que não for refutado na verificação.
+    """
+    from .analise import analisar_estrutura, escolher_metodo_simulacao
+    from .config import get_limits
+    from .otimizador import PERFIS, escolher, gerar_candidatos
+    from .verificacao import verificar
     started = perf_counter()
     validate_source(code)
+    if perfil is not None and perfil not in PERFIS:
+        raise CircuitError("INVALID_REQUEST", "Perfil de otimização desconhecido.", {"opcoes": sorted(PERFIS)})
+    if nivel_otimizacao not in (0, 1, 2, 3):
+        raise ValueError("Nível de otimização deve ser 0, 1, 2 ou 3.")
     if formato == "auto":
         clean = _without_qasm_comments(code).lstrip()
         formato = "qasm" if clean.startswith("OPENQASM") else "python"
@@ -145,40 +160,99 @@ def processar_circuito(code: str, formato: str = "auto", nivel_otimizacao: int =
         validar_limites_circuito(original)
     else:
         raise CircuitError("INVALID_REQUEST", "Formato não suportado.")
+    analise_original = analisar_estrutura(original)
     passes = set()
-    otimizado = materializar_layout(original, otimizar_circuito(original, nivel_otimizacao, passes))
+    inicio_otimizacao = perf_counter()
+    candidatos, mapa, base = gerar_candidatos(original, perfil, nivel_otimizacao, hardware, passes)
+    fisico = mapa is not None
+
+    def logico(circuito):
+        return circuito if circuito is original else materializar_layout(original, circuito)
+
+    escolhido, verificacao, tabela = escolher(original, candidatos, prioridade, verificar, logico)
+    tempo_otimizacao = perf_counter() - inicio_otimizacao
+    if escolhido["nome"] == "original":
+        otimizado = original
+        verificacao = {"equivalente": True, "metodo": "identidade", "garantia": "exata", "tempo_s": 0.0,
+                       "detalhes": {"motivo": "Nenhuma estratégia superou o circuito original na métrica prioritária; "
+                                              "o original foi mantido."}}
+    else:
+        otimizado = escolhido["circuito"] if fisico else materializar_layout(original, escolhido["circuito"])
     warnings = []
     try:
         output = exportar_circuito_qasm(otimizado)
         try:
-            qasm2.loads(output, include_path=())
+            qasm2.loads(output, include_path=(), custom_instructions=qasm2.LEGACY_CUSTOM_INSTRUCTIONS)
         except qasm2.QASM2Error:
-            # The SDK exporter can emit legacy qelib extensions. Lower these to
-            # standard gates; report metrics for the circuit actually returned.
-            otimizado = transpile(otimizado, basis_gates=["u3", "cx"], optimization_level=0, num_processes=1,
+            # O exportador pode emitir extensões não padronizadas; decompõe e reverifica.
+            otimizado = transpile(otimizado, basis_gates=["u3", "cx", "measure", "reset"],
+                                  optimization_level=0, num_processes=1,
                                   callback=lambda **kw: passes.add(type(kw["pass_"]).__name__))
             output = exportar_circuito_qasm(otimizado)
-            qasm2.loads(output, include_path=())
+            qasm2.loads(output, include_path=(), custom_instructions=qasm2.LEGACY_CUSTOM_INSTRUCTIONS)
             warnings.append("A saída foi decomposta para portas OpenQASM 2 padrão; as métricas refletem essa decomposição.")
+            verificacao = verificar(original, materializar_layout(original, otimizado) if fisico else otimizado)
     except ValueError:
         output = ""
         warnings.append("O circuito otimizado não pode ser representado em OpenQASM 2.")
-    resultado = avaliar_proposta_ia(original, otimizado)
-    if resultado["equivalente"] is False:
+    if verificacao["equivalente"] is False:
         raise CircuitError("EQUIVALENCE_FAILED", "A proposta falhou na verificação de equivalência.", status=500)
+    resultado = avaliar_proposta_ia(original, otimizado, verificacao)
     if resultado["motivo"]:
         warnings.append(resultado["motivo"])
+    analise_final = analisar_estrutura(otimizado)
     changes = []
     if resultado["diferenca_operacoes"] < 0:
         changes.append("Redução observada na contagem de operações.")
     if resultado["diferenca_profundidade"] < 0:
         changes.append("Redução observada na profundidade.")
+    if analise_final["cx_equivalentes"] < analise_original["cx_equivalentes"]:
+        changes.append("Redução no custo de portas de dois qubits (CX equivalentes).")
+
+    def pct(a, b):
+        return round(100 * (a - b) / a, 2) if a else 0.0
+
+    comparacao = {
+        "reducao_portas_pct": pct(analise_original["total_operacoes"], analise_final["total_operacoes"]),
+        "reducao_profundidade_pct": pct(analise_original["profundidade"], analise_final["profundidade"]),
+        "reducao_dois_qubits_pct": pct(analise_original["operacoes_dois_qubits"], analise_final["operacoes_dois_qubits"]),
+        "reducao_cx_equivalentes_pct": pct(analise_original["cx_equivalentes"], analise_final["cx_equivalentes"]),
+    }
+    nomes = {"reducao_portas_pct": "total de portas", "reducao_profundidade_pct": "profundidade",
+             "reducao_dois_qubits_pct": "portas de dois qubits", "reducao_cx_equivalentes_pct": "CX equivalentes"}
+    piores = [nomes[k] for k, v in comparacao.items() if v < 0]
+    melhores = [nomes[k] for k, v in comparacao.items() if v > 0]
+    compromissos = []
+    if piores and melhores:
+        compromissos.append(f"Melhorou {', '.join(melhores)} ao custo de aumentar {', '.join(piores)}; "
+                            f"a escolha seguiu a prioridade '{prioridade}'.")
+    elif piores:
+        compromissos.append(f"Aumentou {', '.join(piores)}: exigido pela tradução para portas nativas e pelo "
+                            "roteamento do hardware-alvo." if fisico or base else f"Aumentou {', '.join(piores)}.")
+    info_hardware = None
+    if fisico or base:
+        layout = escolhido["circuito"].layout if escolhido["nome"] != "original" else None
+        info_hardware = {
+            "topologia": (hardware or {}).get("topologia") or "todos",
+            "portas_nativas": base, "arestas": len(mapa.get_edges()) if mapa else None,
+            "layout_inicial": layout.initial_index_layout() if layout is not None else None,
+            "layout_final": layout.final_index_layout() if layout is not None else None,
+            "observacao": "A saída usa a numeração física dos qubits; layout_inicial[i] é o qubit físico do qubit "
+                          "lógico i e layout_final, a posição após o roteamento." if fisico else
+                          "Saída traduzida para as portas nativas pedidas.",
+        }
     resultado.update(circuito_otimizado_qasm=output, formato_detectado=formato,
                      formato_saida="qasm" if output else None,
                      entrada_sha256=sha256(code.encode("utf-8")).hexdigest(),
                      tempo_processamento_segundos=perf_counter() - started,
                      nivel_otimizacao=nivel_otimizacao, passes_executados=sorted(passes),
-                     otimizacoes_aplicadas=changes, warnings=warnings)
+                     otimizacoes_aplicadas=changes, warnings=warnings,
+                     perfil=perfil or "nivel_fixo", prioridade=prioridade,
+                     estrategia_aplicada=escolhido["nome"], estrategias_avaliadas=tabela,
+                     tempo_otimizacao_segundos=round(tempo_otimizacao, 4),
+                     verificacao=verificacao, analise_original=analise_original, analise_final=analise_final,
+                     comparacao=comparacao, compromissos=compromissos, hardware=info_hardware,
+                     simulacao=escolher_metodo_simulacao(analise_original, get_limits().worker_memory_mb))
     return resultado
 
 
@@ -427,10 +501,13 @@ def analisar_adaptacao_hardware(original: QuantumCircuit, adaptado: QuantumCircu
 
     return resultados
 
-def avaliar_proposta_ia(original: QuantumCircuit, proposta: QuantumCircuit):
+def avaliar_proposta_ia(original: QuantumCircuit, proposta: QuantumCircuit, verificacao: dict | None = None):
     """
     Avalia uma proposta de otimização quântica,
     considerando métricas e equivalência.
+
+    Com ``verificacao`` (resultado de quantum.verificacao.verificar), usa esse
+    veredito em vez da comparação matricial limitada.
     """
 
     metricas_original = obter_metricas(original)
@@ -449,20 +526,30 @@ def avaliar_proposta_ia(original: QuantumCircuit, proposta: QuantumCircuit):
     # Tentar verificar equivalência
     motivo = None
 
-    try:
-        equivalente = verificar_equivalencia(
-            original, proposta
-        )
+    if verificacao is not None:
+        equivalente = verificacao["equivalente"]
+        status = {True: "equivalente", False: "nao_equivalente", None: "nao_verificado"}[equivalente]
+        detalhes = verificacao.get("detalhes") or {}
+        if equivalente is None:
+            motivo = detalhes.get("motivo") or "; ".join(detalhes.get("tentativas", [])) or None
+            if verificacao.get("garantia") == "estatistica":
+                motivo = (motivo or "") + (" Distribuições compatíveis na amostragem." if detalhes.get(
+                    "distribuicoes_compativeis") else " Distribuições divergiram na amostragem.")
+    else:
+        try:
+            equivalente = verificar_equivalencia(
+                original, proposta
+            )
 
-        if equivalente:
-            status = "equivalente"
-        else:
-            status = "nao_equivalente"
+            if equivalente:
+                status = "equivalente"
+            else:
+                status = "nao_equivalente"
 
-    except ValueError as erro:
-        equivalente = None
-        status = "nao_verificado"
-        motivo = str(erro)
+        except ValueError as erro:
+            equivalente = None
+            status = "nao_verificado"
+            motivo = str(erro)
 
     # Avaliar reduções apenas se houve verificação
     if equivalente is None:

@@ -10,9 +10,13 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 from .coleta_web import Coletor, validar_url
+from . import curadoria
 
 log = logging.getLogger(__name__)
 CATALOGO = Path(__file__).resolve().parents[1] / "documentos/fontes_conhecimento.json"
+MAX_FONTES = 600
+MAX_TRECHOS_PAGINA = 4000
+MAX_TRECHOS_COLECAO = 150000
 
 
 def pasta():
@@ -46,6 +50,76 @@ def _travar(arquivo):
         fcntl.flock(arquivo, fcntl.LOCK_EX | fcntl.LOCK_NB)
 
 
+def validar_catalogo(catalogo):
+    if not isinstance(catalogo, list) or not catalogo:
+        raise ValueError("Catálogo vazio ou inválido.")
+    if len(catalogo) > MAX_FONTES or len({d["document_id"] for d in catalogo}) != len(catalogo):
+        raise ValueError(f"Catálogo duplicado ou acima de {MAX_FONTES} fontes.")
+    if len({d["url"] for d in catalogo}) != len(catalogo):
+        raise ValueError("URLs duplicadas no catálogo.")
+    for fonte in catalogo:
+        validar_url(fonte["url"])
+        if not fonte["document_id"].replace("_", "").isalnum():
+            raise ValueError("Identificador de documento inválido.")
+
+
+def _snapshots(destino):
+    documentos = []
+    for arquivo in destino.glob("*.json"):
+        if arquivo.name == "status.json" or arquivo.name.endswith(".previous.json"):
+            continue
+        try:
+            documentos.append(json.loads(arquivo.read_text(encoding="utf-8")))
+        except (ValueError, OSError):
+            continue
+    return documentos
+
+
+def curar(fonte, titulo, secoes, url_final, boilerplate=None):
+    """Normaliza o documento coletado: deduplica, classifica e marca obsolescência."""
+    secoes, removidos = curadoria.remover_duplicados(secoes, boilerplate)
+    texto = "\n".join(b["texto"] for s in secoes for b in s["blocos"])
+    obsoleto = curadoria.detectar_desatualizado(
+        texto, titulo, fonte.get("biblioteca"),
+        guia_migracao="migration-guides" in fonte["url"] or "migracao" in (fonte.get("temas") or []))
+    return {
+        "document_id": fonte["document_id"], "titulo": titulo, "fonte": url_final,
+        "url_solicitada": fonte["url"], "secoes": secoes, "versao_documentacao": fonte["versao"],
+        "versao_alvo_qiskit": "2.6", "coletado_em": datetime.now(timezone.utc).isoformat(),
+        "blocos_duplicados_removidos": removidos,
+        "desatualizado": obsoleto["desatualizado"],
+        "motivo_desatualizado": "; ".join(obsoleto["motivos"])[:500],
+        **curadoria.metadados_catalogo(fonte),
+    }
+
+
+def verificar_catalogo(saida=None, limite=None):
+    """Baixa e extrai cada fonte do catálogo sem indexar (auditoria das URLs)."""
+    catalogo = json.loads(CATALOGO.read_text(encoding="utf-8"))
+    validar_catalogo(catalogo)
+    relatorio = []
+    with Coletor() as coletor:
+        for fonte in catalogo[:limite]:
+            item = {"document_id": fonte["document_id"], "url": fonte["url"], "biblioteca": fonte.get("biblioteca")}
+            try:
+                titulo, secoes = coletor.coletar(fonte["url"])
+                documento = curar(fonte, titulo, secoes, getattr(coletor, "ultima_url", fonte["url"]))
+                item.update(status="ok", titulo=titulo[:160], secoes=len(documento["secoes"]),
+                            caracteres=sum(len(b["texto"]) for s in documento["secoes"] for b in s["blocos"]),
+                            desatualizado=documento["desatualizado"], url_final=documento["fonte"])
+            except Exception as erro:
+                item.update(status="erro", erro=f"{type(erro).__name__}: {str(erro)[:200]}")
+            relatorio.append(item)
+            log.info("%s %s", item["status"], fonte["url"])
+            print(json.dumps(item, ensure_ascii=False), flush=True)
+    resumo = {"verificado_em": datetime.now(timezone.utc).isoformat(), "total": len(relatorio),
+              "ok": sum(i["status"] == "ok" for i in relatorio),
+              "erros": sum(i["status"] == "erro" for i in relatorio), "fontes": relatorio}
+    if saida:
+        Path(saida).write_text(json.dumps(resumo, ensure_ascii=False, indent=2), encoding="utf-8")
+    return resumo
+
+
 def sincronizar(reindexar=False):
     from .banco import obter_colecao
     from .configuracao import MODELO_EMBEDDINGS, MODELO_LOCK, obter_modelo, limite_tokens
@@ -59,13 +133,9 @@ def sincronizar(reindexar=False):
         except OSError:
             return {"status": "already_running"}
         catalogo = json.loads(CATALOGO.read_text(encoding="utf-8"))
-        if len(catalogo) > 32 or len({d["document_id"] for d in catalogo}) != len(catalogo):
-            raise ValueError("Catálogo duplicado ou acima de 32 páginas.")
-        for fonte in catalogo:
-            validar_url(fonte["url"])
-            if not fonte["document_id"].replace("_", "").isalnum():
-                raise ValueError("Identificador de documento inválido.")
+        validar_catalogo(catalogo)
         colecao = obter_colecao()
+        boilerplate = curadoria.boilerplate_entre_documentos(_snapshots(destino))
         status = {"status": "running", "started_at": datetime.now(timezone.utc).isoformat(), "documents": []}
         gravar(destino / "status.json", status)
         # Reindexação usa somente snapshots locais, mesmo sem internet.
@@ -85,13 +155,8 @@ def sincronizar(reindexar=False):
                             documento = anterior
                         else:
                             titulo, secoes = coletor.coletar(fonte["url"])
-                            documento = {
-                                "document_id": doc_id, "titulo": titulo, "fonte": getattr(coletor, "ultima_url", fonte["url"]),
-                                "url_solicitada": fonte["url"],
-                                "secoes": secoes, "versao_documentacao": fonte["versao"],
-                                "versao_alvo_qiskit": "2.6",
-                                "coletado_em": datetime.now(timezone.utc).isoformat(),
-                            }
+                            documento = curar(fonte, titulo, secoes, getattr(coletor, "ultima_url", fonte["url"]),
+                                              boilerplate)
                         digest = hashlib.sha256(json.dumps(
                             [documento["secoes"], documento["fonte"], MODELO_EMBEDDINGS],
                             sort_keys=True, ensure_ascii=False).encode()).hexdigest()
@@ -106,8 +171,9 @@ def sincronizar(reindexar=False):
                                 modelo = obter_modelo()
                                 chunks = gerar_chunks(documento, modelo.tokenizer, limite_tokens(), MODELO_EMBEDDINGS)
                             n = len(chunks)
-                            if n > 4000 or colecao.count() - len(existentes) + n > 20000:
-                                raise ValueError("Limite de 4000 trechos/página ou 20000 na coleção atingido.")
+                            if n > MAX_TRECHOS_PAGINA or colecao.count() - len(existentes) + n > MAX_TRECHOS_COLECAO:
+                                raise ValueError(f"Limite de {MAX_TRECHOS_PAGINA} trechos/página ou "
+                                                 f"{MAX_TRECHOS_COLECAO} na coleção atingido.")
                             # Guarda o texto antes da escrita remota; uma falha permite repetir a operação.
                             documento.update(hash=digest, chunks=n, indexed=False)
                             if anterior and anterior.get("indexed"):
@@ -159,7 +225,14 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--reindex", action="store_true", help="Reconstrói usando snapshots, sem acessar a web.")
     parser.add_argument("--status", action="store_true")
+    parser.add_argument("--verificar-catalogo", metavar="SAIDA_JSON",
+                        help="Baixa e extrai as fontes sem indexar; grava o relatório.")
+    parser.add_argument("--limite", type=int, default=None)
     args = parser.parse_args()
+    if args.verificar_catalogo:
+        resumo = verificar_catalogo(args.verificar_catalogo, args.limite)
+        print(json.dumps({k: v for k, v in resumo.items() if k != "fontes"}, ensure_ascii=True))
+        raise SystemExit(0)
     resultado = ler_status() if args.status else sincronizar(args.reindex)
     print(json.dumps(resultado, ensure_ascii=True, indent=2))
     if resultado["status"] in ("error", "partial"):

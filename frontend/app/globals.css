@@ -6602,3 +6602,42 @@ html[data-reduced-motion="true"] .ui-feedback-message.is-loading .ui-feedback-ic
 @media (prefers-reduced-motion: reduce) {
   .ui-feedback-message.is-loading .ui-feedback-icon { animation: none; }
 }
+
+/* Fontes consultadas: compactas e recolhidas por padrão. */
+.compact-sources { border: 1px solid rgba(182, 153, 222, .12); border-radius: 10px; background: rgba(255,255,255,.012); }
+.compact-sources-toggle { display: flex; width: 100%; align-items: center; justify-content: space-between; gap: 8px; padding: 7px 10px; border: 0; background: transparent; color: #b9adc8; font-size: 10px; font-weight: 600; letter-spacing: .02em; cursor: pointer; border-radius: 10px; }
+.compact-sources-toggle:hover, .compact-sources-toggle:focus-visible { color: #e6dcef; background: rgba(157, 107, 221, .08); outline: none; }
+.compact-sources-chevron { display: inline-block; transition: transform .22s ease; }
+.compact-sources.is-open .compact-sources-chevron { transform: rotate(180deg); }
+.compact-sources-body { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .25s ease; }
+.compact-sources.is-open .compact-sources-body { grid-template-rows: 1fr; }
+.compact-sources-inner { overflow: hidden; }
+.compact-sources-list { display: grid; gap: 6px; margin: 0; padding: 0 10px 10px; list-style: none; max-height: 320px; overflow-y: auto; }
+.compact-sources-list li { display: grid; gap: 4px; padding: 8px; border: 1px solid rgba(182, 153, 222, .1); border-radius: 8px; color: #aaa1b5; font-size: 10px; line-height: 1.55; overflow-wrap: anywhere; }
+.compact-sources-list p { margin: 0; }
+.compact-sources-title { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px; }
+.compact-sources-title strong { color: #d8cce6; font-size: 10px; }
+.compact-sources-number { display: inline-grid; min-width: 15px; height: 15px; place-items: center; border-radius: 5px; background: rgba(157, 107, 221, .15); color: #c3a6e8; font-size: 9px; }
+.compact-sources-origin { color: #8e849b; font-size: 9px; }
+.compact-sources-list a { width: fit-content; color: #c4a0f4; font-size: 9px; text-decoration: none; }
+.compact-sources-list a:hover { text-decoration: underline; }
+@media (prefers-reduced-motion: reduce) { .compact-sources-body, .compact-sources-chevron { transition: none; } }
+
+/* Motor quântico e diagnóstico. */
+.analysis-engine-text { font-size: 11px !important; line-height: 1.35; }
+.analysis-answer-mode { margin: 0; color: #a99cba !important; font-size: 10px !important; font-style: italic; }
+.analysis-confidence { margin-left: auto; padding: 1px 6px; border-radius: 6px; font-size: 9px; font-style: normal; font-weight: 500; }
+.analysis-confidence-alta { background: rgba(114, 214, 160, .12); color: #8fe0b4; }
+.analysis-confidence-media { background: rgba(240, 200, 110, .12); color: #ecd08c; }
+.analysis-confidence-baixa { background: rgba(255, 119, 127, .12); color: #ff9aa0; }
+.analysis-diagnosis-list { display: grid; gap: 7px; margin: 0; padding: 0; list-style: none; }
+.analysis-diagnosis-list > li { display: grid; gap: 4px; padding: 9px; border: 1px solid rgba(182, 153, 222, .12); border-radius: 10px; background: rgba(255,255,255,.018); color: #aaa1b5; font-size: 10px; line-height: 1.55; }
+.analysis-diagnosis-list > li > div { display: flex; align-items: center; gap: 8px; }
+.analysis-diagnosis-list code { color: #d8b9ff; font-size: 10px; }
+.analysis-diagnosis-list p { margin: 0; }
+.analysis-diagnosis-list ul { margin: 0; padding-left: 16px; }
+.analysis-diagnosis-cause { color: #968ca3; }
+.analysis-diagnosis-fix { color: #c9e9d6; }
+.analysis-diagnosis-subtitle { margin: 4px 0 0; color: #dcd0eb; font-size: 11px; font-weight: 600; }
+.analysis-diagnosis pre { margin: 0; max-height: 320px; overflow: auto; padding: 10px; border-radius: 10px; background: rgba(0,0,0,.28); font-size: 11px; }
+.composer-local-note { color: #8e849b; font-size: 10px; }

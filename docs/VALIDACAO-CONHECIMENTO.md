@@ -1,3 +1,5 @@
+> **Obsoleto desde a Beta-v2.0 (23/11/2026):** a busca web via Gemini/Google Search foi removida. As consultas usam somente a base local. Veja [ARQUITETURA.md](ARQUITETURA.md), [RAG.md](RAG.md) e [BASE-DE-CONHECIMENTO.md](BASE-DE-CONHECIMENTO.md). Este texto é mantido como histórico.
+
 # Validação da base de conhecimento e busca web — 13/11/2026
 
 ## Resultado

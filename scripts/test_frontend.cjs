@@ -93,10 +93,9 @@ async function run() {
     await circuit("Python", "from qiskit import QuantumCircuit\nfrom qiskit.circuit import Parameter");
     await page.getByText(/Parameter não é suportado/).waitFor();
     await button("Limpar").click();
-    await tab("Terminal").click();
-    await page.getByLabel("Comando do terminal").fill("limites");
-    await button("Executar").click();
-    await page.locator(".terminal-output-lines").getByText(/max_circuit_lines/).waitFor();
+    // A ferramenta Terminal foi removida do Desktop Chat (o CLI continua separado).
+    assert.equal(await page.getByRole("tab", { name: "Terminal" }).count(), 0);
+    assert.equal(await page.getByText("Buscar também na web").count(), 0);
     await button("Projetos").click();
     await page.locator(".project-create-button").click();
     await page.getByPlaceholder("Ex.: Otimização de circuitos").fill("Teste de integração");
@@ -110,11 +109,7 @@ async function run() {
       await page.route("**/api/conversations/*/messages", route => {
         const input = route.request().postDataJSON();
         assert.equal(input.top_k, 8);
-        if (turns.length === 0 && input.web_search) {
-          turns.push(route.request().url());
-          return route.fulfill({ status: 503, json: { code: "WEB_SEARCH_UNAVAILABLE", message: "Busca web indisponível" } });
-        }
-        assert.equal(input.web_search, turns.length !== 1);
+        assert.equal(input.web_search, undefined); // nenhuma busca web é solicitada
         assert.match(input.input, /Contexto da amostra/);
         turns.push(route.request().url());
         return route.fulfill({ json: { response: "Resposta de teste", status: "ok", sources: [
@@ -126,6 +121,12 @@ async function run() {
     await page.locator("#analysis-question").fill("Explique a transpilação no Qiskit.");
     await button("Analisar").click();
     await page.getByRole("heading", { name: "Resultado", exact: true }).waitFor({ timeout: 120000 });
+    // Fontes compactas: recolhidas por padrão e expansíveis.
+    const fontes = page.getByRole("button", { name: /Fontes consultadas \(\d+\)/ }).first();
+    await fontes.waitFor();
+    assert.equal(await fontes.getAttribute("aria-expanded"), "false");
+    await fontes.click();
+    assert.equal(await fontes.getAttribute("aria-expanded"), "true");
     await tab("Fontes").click();
     await page.locator(".workspace-source-card").first().click();
     await page.getByRole("dialog").waitFor();
@@ -134,9 +135,8 @@ async function run() {
     await button("Analisar").click();
     await page.locator(".analysis-result-panel").nth(1).waitFor({ timeout: 120000 });
     if (turns.length) {
-      assert.equal(turns.length, 3);
+      assert.equal(turns.length, 2);
       assert.equal(new Set(turns).size, 1);
-      await page.getByText(/Esta resposta usou apenas a documentação local/).waitFor();
     }
     await button("Histórico").click();
     await page.getByRole("heading", { name: "Histórico" }).waitFor();

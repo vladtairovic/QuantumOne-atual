@@ -5,7 +5,7 @@ import dynamic from "next/dynamic";
 import Image from "next/image";
 
 import { analyze, diagnostic, readLegacyHistory, type TurnAttempt } from "../../services/workspace-analysis";
-import { getCircuitLimits } from "../../services/analysis-api";
+import type { OptimizationProfile } from "../../services/analysis-api";
 import AnalysisResultPanel from "./AnalysisResultPanel";
 import AppFrame from "../layout/AppFrame";
 import type { AttachmentRecord, ConversationRecord, EditorFileRecord, EditorLanguage, ProjectRecord } from "../layout/conversationTypes";
@@ -83,6 +83,7 @@ export default function AnalysisForm() {
   const [question, setQuestion] = useState("");
   const [backend, setBackend] = useState("reference");
   const [topK, setTopK] = useState("5");
+  const [profile, setProfile] = useState<OptimizationProfile>("balanceado");
   const [showInputErrors, setShowInputErrors] = useState(false);
   const [isCodePanelOpen, setIsCodePanelOpen] = useState(false);
   const codeDialogRef = useModalFocus<HTMLElement>(isCodePanelOpen);
@@ -634,14 +635,14 @@ export default function AnalysisForm() {
     const id = selected?.id ?? crypto.randomUUID();
     const savedCodeFiles = codeFiles.map((file) => ({ ...file, isDirty: false }));
     const controller = new AbortController();
-    const key = JSON.stringify([activeConversationId, activeLanguageCode, activeLanguage, question, topK, attachments]);
+    const key = JSON.stringify([activeConversationId, activeLanguageCode, activeLanguage, question, topK, profile, attachments]);
     if (lastAttempt.current?.key !== key) lastAttempt.current = { key, messageId: crypto.randomUUID() };
     const attempt = lastAttempt.current;
     pending.current = controller;
     setBusy(true);
     try {
       const response = await analyze({
-        code: activeLanguageCode, format: activeLanguage, question: question.trim(), topK: Number(topK),
+        code: activeLanguageCode, format: activeLanguage, question: question.trim(), topK: Number(topK), profile,
         attachments, remoteId: selected?.remoteId,
       }, controller.signal, attempt);
       if (controller.signal.aborted) return;
@@ -746,6 +747,10 @@ export default function AnalysisForm() {
               <div className="composer-meta">
                 <label>Fontes por consulta <select value={topK} onChange={event => setTopK(event.target.value)}>
                   {[3,5,8,10].map(n => <option key={n}>{n}</option>)}
+                </select></label>
+                <label>Otimização <select value={profile} onChange={event => setProfile(event.target.value as OptimizationProfile)}>
+                  <option value="rapido">Rápida</option><option value="balanceado">Balanceada</option>
+                  <option value="avancado">Avançada</option><option value="experimental">Experimental</option>
                 </select></label>
                 <span className="composer-local-note" title="Respostas usam somente a base de conhecimento local; nenhuma busca web é feita.">Somente base local</span>
               </div>
