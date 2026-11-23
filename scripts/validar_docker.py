@@ -110,7 +110,7 @@ def aguardar_banco():
 
 def main():
     config = json.loads(executar(COMPOSE + ["config", "--format", "json"]))
-    assert set(config["services"]) == {"api", "chroma", "frontend", "cache"}
+    assert set(config["services"]) == {"api", "chroma", "frontend", "cache", "mailpit"}
     assert not config["services"]["chroma"].get("ports")
     assert config["networks"]["banco"]["internal"] is True
     
