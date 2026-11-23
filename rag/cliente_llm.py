@@ -1,19 +1,20 @@
 """Fila de prioridade de LLMs via API compatível com OpenAI (NVIDIA NIM por padrão).
 
 Cada modelo da fila recebe a mesma pergunta com os trechos locais e tem um
-tempo máximo rígido (``LLM_TIMEOUT_SECONDS``, padrão 10 s). Se não responder a
+tempo máximo rígido (``LLM_TIMEOUT_SECONDS``, padrão 15 s). Se não responder a
 tempo, responder vazio ou falhar, a fila passa para o próximo. Um modelo que
 falha é pausado por ``LLM_PAUSA_SEGUNDOS`` (disjuntor), para que as próximas
 perguntas não esperem por ele de novo. Nenhuma ferramenta de busca é enviada:
 o modelo só vê a pergunta e os trechos da base local.
 
-Ordem padrão (do mais capaz ao mais fraco), medida em 23/11/2026 com um
-prompt real do RAG e limite de 10 s (ver docs/LLM.md):
+Ordem padrão (do mais capaz ao mais fraco; ver docs/LLM.md):
 1. nvidia/nemotron-3-ultra-550b-a55b
-2. nvidia/nemotron-3-nano-omni-30b-a3b-reasoning
-3. poolside/laguna-xs-2.1
-4. nvidia/nemotron-3.5-bolt-e4b
-5. nvidia/ising-calibration-1.5-31b
+2. nvidia/nemotron-3.5-super-vl-120b-a12b
+3. nvidia/nemotron-3.5-lightning-30b-a3b
+4. nvidia/nemotron-3-nano-omni-30b-a3b-reasoning
+5. poolside/laguna-xs-2.1
+6. nvidia/nemotron-3.5-bolt-e4b
+7. nvidia/ising-calibration-1.5-31b
 """
 import logging
 import os
@@ -30,6 +31,8 @@ log = logging.getLogger(__name__)
 
 MODELOS_PADRAO = (
     "nvidia/nemotron-3-ultra-550b-a55b",
+    "nvidia/nemotron-3.5-super-vl-120b-a12b",
+    "nvidia/nemotron-3.5-lightning-30b-a3b",
     "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning",
     "poolside/laguna-xs-2.1",
     "nvidia/nemotron-3.5-bolt-e4b",
@@ -96,7 +99,7 @@ def gerar_resposta(pergunta: str, contexto: str, transporte=None) -> dict:
     if not chave:
         raise RuntimeError("NVIDIA_API_KEY não configurada.")
     base = os.getenv("NVIDIA_BASE_URL", "https://integrate.api.nvidia.com/v1").rstrip("/")
-    limite = float(os.getenv("LLM_TIMEOUT_SECONDS", "10"))
+    limite = float(os.getenv("LLM_TIMEOUT_SECONDS", "15"))
     pausa = float(os.getenv("LLM_PAUSA_SEGUNDOS", "300"))
     orcamento_total = float(os.getenv("LLM_TEMPO_TOTAL_SECONDS", "45"))
     max_tokens = int(os.getenv("LLM_MAX_TOKENS", "2000"))

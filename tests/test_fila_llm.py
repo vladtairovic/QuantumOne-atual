@@ -83,10 +83,19 @@ def test_fila_esgotada():
     assert [t["modelo"] for t in erro.value.tentativas] == FILA
 
 
-def test_fila_padrao_tem_cinco_modelos_em_ordem(monkeypatch):
+def test_fila_padrao_tem_sete_modelos_em_ordem(monkeypatch):
     monkeypatch.delenv("NVIDIA_MODELS")
     assert cliente_llm.fila() == list(cliente_llm.MODELOS_PADRAO)
-    assert len(cliente_llm.fila()) == 5 and cliente_llm.fila()[0] == "nvidia/nemotron-3-ultra-550b-a55b"
+    assert cliente_llm.fila() == [
+        "nvidia/nemotron-3-ultra-550b-a55b", "nvidia/nemotron-3.5-super-vl-120b-a12b",
+        "nvidia/nemotron-3.5-lightning-30b-a3b", "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning",
+        "poolside/laguna-xs-2.1", "nvidia/nemotron-3.5-bolt-e4b", "nvidia/ising-calibration-1.5-31b"]
+
+
+def test_limite_padrao_e_15_segundos(monkeypatch):
+    monkeypatch.delenv("LLM_TIMEOUT_SECONDS")
+    import inspect
+    assert 'getenv("LLM_TIMEOUT_SECONDS", "15")' in inspect.getsource(cliente_llm.gerar_resposta)
 
 
 def test_query_usa_a_fila_e_informa_o_modelo(contexto, monkeypatch):

@@ -13,7 +13,7 @@ circuitos de até 30 qubits e mede a qualidade do próprio RAG.
 | RAG | busca híbrida (vetorial + BM25 + PT→EN), verificação de evidência, avaliação com métricas | [RAG.md](docs/RAG.md) |
 | Diagnóstico e motor | todos os erros de uma vez, correções validadas, perfis, verificação até 30 qubits | [MOTOR-QUANTICO.md](docs/MOTOR-QUANTICO.md) |
 | Resultados | benchmarks contra a linha de base, problemas resolvidos e limitações | [BENCHMARKS.md](docs/BENCHMARKS.md) |
-| Geração de respostas | fila de 5 modelos NVIDIA, 10 s por modelo, fallback local | [LLM.md](docs/LLM.md) |
+| Geração de respostas | fila de 7 modelos NVIDIA, 15 s por modelo, fallback local | [LLM.md](docs/LLM.md) |
 
 ## Iniciar e abrir
 
