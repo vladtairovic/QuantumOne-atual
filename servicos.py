@@ -7,7 +7,7 @@ import time
 from contratos import Documento, Fonte, ResultadoBusca
 from rag import busca_chromadb, documentos
 from rag.banco import obter_cliente, obter_colecao, ColecaoIncompativel
-from rag.configuracao import criar_embeddings
+from rag.configuracao import MODELO_LOCK, obter_modelo
 
 logger = logging.getLogger(__name__)
 
@@ -30,8 +30,11 @@ class ServicosIntegrados:
     mode = "integrated"
 
     def inicializar(self):
-        # Carregamento e aquecimento acontecem antes de aceitar requisições.
-        criar_embeddings()(["Inicialização da busca documental."])
+        # Carregamento e aquecimento acontecem antes de aceitar requisições. O modelo é chamado
+        # direto (sem o cache Redis): com o vetor em cache ele não seria carregado, e a primeira
+        # busca do usuário pagaria a carga (~14 s medidos após um rebuild).
+        with MODELO_LOCK:
+            obter_modelo().encode(["Inicialização da busca documental."], show_progress_bar=False)
         prazo = time.monotonic() + float(os.getenv("CHROMA_STARTUP_TIMEOUT", "120"))
         while True:
             try:
@@ -77,7 +80,7 @@ class ServicosIntegrados:
         )
 
     async def consultar(self, texto, top_k=3, web_search=None, consulta=None):
-        from rag.pipeline_gemini import responder, llm_configurada, fallback_local_ativo
+        from rag.pipeline import responder, llm_configurada, fallback_local_ativo
         # Sem LLM, a resposta local extrativa é o comportamento padrão.
         # QONE_LOCAL_FALLBACK=0 restaura o 503 LLM_NOT_CONFIGURED.
         if not llm_configurada() and not fallback_local_ativo():

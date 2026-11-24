@@ -4,12 +4,12 @@ Material de estudo e apresentação do projeto, organizado por arquitetura, past
 
 ## 1. O que o projeto faz
 
-O GrowUp QuantumOne é uma aplicação web para estudar e trabalhar com circuitos quânticos usando Qiskit. A pessoa pode enviar um circuito em OpenQASM 2 ou um subconjunto seguro de Python/Qiskit para receber validação, métricas e uma proposta transpilada. Também pode fazer perguntas em linguagem natural: o backend busca trechos da documentação indexada e, quando configurado, usa Gemini para produzir uma resposta fundamentada. Há ainda endpoints para buscar documentos, enviar arquivos e registrar avaliações.
+O GrowUp QuantumOne é uma aplicação web para estudar e trabalhar com circuitos quânticos usando Qiskit. A pessoa pode enviar um circuito em OpenQASM 2 ou um subconjunto seguro de Python/Qiskit para receber validação, métricas e uma proposta transpilada. Também pode fazer perguntas em linguagem natural: o backend busca trechos da documentação indexada e, quando configurado, usa a fila de LLMs NVIDIA para produzir uma resposta fundamentada (sem chave, a resposta é extrativa local). Há ainda endpoints para buscar documentos, enviar arquivos e registrar avaliações.
 
 São dois caminhos relacionados, mas diferentes:
 
-1. **Análise determinística de circuito:** Qiskit lê e transpila o circuito. Esta operação não precisa da chave Gemini.
-2. **Pergunta documental:** Chroma recupera trechos; Gemini formula a resposta. Sem chave Gemini, a pergunta não é respondida pela LLM, embora `/search` continue oferecendo recuperação documental.
+1. **Análise determinística de circuito:** Qiskit lê e transpila o circuito. Esta operação não precisa de chave de LLM.
+2. **Pergunta documental:** Chroma e BM25 recuperam trechos; a fila de LLMs NVIDIA formula a resposta. Sem chave, a resposta é extrativa local (trechos literais com citações).
 
 ## 2. Frameworks e tecnologias
 
@@ -23,7 +23,7 @@ São dois caminhos relacionados, mas diferentes:
 | RAG | Sentence Transformers, Transformers e PyTorch CPU | Converte texto em embeddings para busca semântica |
 | Banco vetorial | ChromaDB Client 1.5.9 e servidor Chroma | Guarda documentos, trechos e metadados pesquisáveis |
 | Cache | Redis 7.4 | Mantém embeddings temporários; não é a base documental |
-| LLM e busca web | Google GenAI / Gemini e Google Search integrado | Redige respostas e, opcionalmente, consulta a web |
+| LLM | Fila de modelos NVIDIA (API compatível com OpenAI) | Redige respostas a partir dos trechos locais; sem busca web |
 | Orquestração local | Docker Compose | Constrói, conecta, inicia e monitora os quatro serviços |
 | Testes | pytest, Node.js Test Runner e scripts de integração | Verificam contratos, parsers e integração do frontend |
 
@@ -35,7 +35,7 @@ flowchart LR
   F -->|/api/* pela rede Docker| A[api: FastAPI + RAG + Qiskit]
   A -->|HTTP interno| C[(chroma: ChromaDB)]
   A -->|rede interna| R[(cache: Redis)]
-  A -->|HTTPS de saída, se configurado| G[Gemini / Google Search]
+  A -->|HTTPS de saída, se configurado| G[Fila de LLMs NVIDIA]
   A --> W[Worker Qiskit isolado]
   C --> VC[(volume chroma_data)]
   A --> VA[(volume api_data)]
@@ -79,7 +79,7 @@ docker compose down
 .
 ├── main.py, servicos.py, contratos.py
 ├── quantum/                 # API e processamento de circuitos
-├── rag/                     # Chroma, embeddings, busca, Gemini e ingestão
+├── rag/                     # Chroma, embeddings, busca, fila de LLMs e ingestão
 ├── frontend/                # App Next.js
 ├── documentos/              # Catálogo, uploads iniciais e base-fonte
 ├── exemplos/                # Exemplos de consulta, avaliação e circuitos
@@ -107,7 +107,7 @@ docker compose down
 | `compose.yaml` | Define frontend, API, Chroma, Redis, redes, volumes, portas, dependências e healthchecks. |
 | `Dockerfile` | Constrói a imagem Python em estágios `core`, `test` e `runtime`; instala dependências, inclui o código e roda Uvicorn como usuário sem privilégios. |
 | `requirements-api.txt` | Dependências mínimas da API. |
-| `requirements.txt` | Dependências de runtime, incluindo Sentence Transformers, PyTorch CPU, Chroma client, Gemini e Qiskit. |
+| `requirements.txt` | Dependências de runtime, incluindo Sentence Transformers, PyTorch CPU, Chroma client, Qiskit e qiskit-aer. |
 | `requirements-testes.txt` | Dependências usadas para testes, complementando as da API. |
 | `.env.example` | Modelo de configuração local. O arquivo `.env` real contém credenciais e não deve ser versionado. |
 | `openapi.json` | Especificação OpenAPI exportada para inspeção ou clientes. |
@@ -142,11 +142,10 @@ docker compose down
 | `indexar_documentos.py` | Valida lotes e grava/atualiza os chunks de um documento no Chroma. |
 | `coleta_web.py` | Coleta páginas permitidas do domínio IBM, respeita robots.txt, valida redirects e aplica limites HTTP. |
 | `sincronizar_conhecimento.py` | Atualiza o catálogo em segundo plano, mantém snapshots, status, trava de execução e reindexação offline. |
-| `busca_web.py` | Faz a integração de busca Google disponibilizada pelo Gemini e valida as fontes com evidência. |
-| `pipeline_gemini.py` | Coordena recuperação local, montagem de contexto, prompt e chamada ao Gemini. |
-| `contexto_gemini.py` | Prepara e limita o contexto documental enviado à LLM. |
-| `prompts_gemini.py` | Seleciona/carrega instruções do fluxo Gemini. |
-| `cliente_gemini.py` | Configura o cliente Google GenAI, chave, modelo, timeout e tentativas. |
+| `pipeline.py` | Coordena recuperação local, verificação de evidência, montagem de contexto e chamada à fila de LLMs (ou resposta local). |
+| `contexto.py` | Prepara e limita (6.000 caracteres) o contexto documental enviado à LLM. |
+| `prompts.py` | Instruções enviadas à LLM (citar fontes, separar inferência, cuidar de versões). |
+| `cliente_llm.py` | Fila de prioridade NVIDIA: 7 modelos, 15 s por modelo, disjuntor e teto total. |
 | `conversas.py` | Persiste histórico de chat em SQLite, com versão para evitar sobrescrita concorrente e limites de tamanho. |
 | `__init__.py` | Marca o pacote Python `rag`. |
 
@@ -210,7 +209,7 @@ Transpilação pode aumentar o número de portas: ela converte para um conjunto 
 1. Um texto de pergunta vira embedding com o modelo multilíngue local.
 2. O embedding busca trechos próximos no Chroma; Redis pode evitar recalcular o vetor.
 3. A aplicação monta contexto limitado com trechos e metadados/fonte.
-4. Se a chave Gemini estiver configurada, o contexto e a pergunta são enviados ao modelo para composição da resposta.
+4. Se a chave NVIDIA estiver configurada, o contexto e a pergunta são enviados à fila de modelos; senão, a resposta é extrativa local.
 5. A API devolve texto, fontes, estado de evidência, alertas e ID de solicitação. Busca web, se ativada, é uma capacidade separada e seus resultados não são armazenados na coleção.
 
 O catálogo de conhecimento é atualizado pelo sincronizador a partir de páginas permitidas da IBM. O processo registra `status.json` e snapshots no volume `api_data`. Uploads são indexados na coleção compartilhada; Redis não guarda a base.
@@ -229,9 +228,9 @@ O catálogo de conhecimento é atualizado pelo sincronizador a partir de página
 
 | Método e rota | Uso | Entrada e saída |
 |---|---|---|
-| `GET /health` | Liveness: confirma que o processo responde. Não prova que Gemini, Chroma e toda dependência externa estão disponíveis. | Resposta de saúde e modo. |
+| `GET /health` | Liveness: confirma que o processo responde. Não prova que a LLM, o Chroma e toda dependência externa estão disponíveis. | Resposta de saúde e modo. |
 | `POST /query` | Recupera contexto e pergunta à LLM; busca web pode ser configurada por requisição. | `input`, `top_k` (1–10, padrão 3), `web_search` (opcional). Devolve `response`, `sources`, `status`, alertas e estado web. |
-| `POST /search` | Busca somente trechos no Chroma, sem gerar resposta Gemini. | `query` e `top_k`; devolve `chunks`, `citations` e `status`. |
+| `POST /search` | Busca somente trechos no Chroma, sem gerar resposta de LLM. | `query` e `top_k`; devolve `chunks`, `citations` e `status`. |
 | `POST /documents` | Envia documento textual e indexa seus chunks. | Multipart `file`; extensões permitidas `.txt`, `.md`, `.py`, `.qasm`; tamanho máximo 256 KiB; UTF-8. Resposta 201 com ID e nome. |
 | `GET /documents` | Lista IDs e nomes encontrados na coleção documental. | Lista `documents` e modo. |
 | `POST /evaluate` | Grava avaliação humana em JSONL e calcula aprovação. | Cinco critérios únicos, cada nota de 0 a 5 e evidência. Devolve média, aprovação e sinalização crítica. |
@@ -258,7 +257,7 @@ Content-Type: application/json
 {"input":"Explique a medição em Qiskit.","top_k":5,"web_search":false}
 ```
 
-Se `web_search` não for enviado, o servidor usa `WEB_SEARCH_ENABLED`. A chave Gemini fica só no backend. Perguntas e trechos enviados ao Google saem do ambiente local; nunca coloque a chave em código cliente ou variável `NEXT_PUBLIC_*`.
+`web_search` é obsoleto e ignorado (não há busca web). A chave NVIDIA fica só no backend. Perguntas e trechos enviados à NVIDIA saem do ambiente local; nunca coloque a chave em código cliente ou variável `NEXT_PUBLIC_*`.
 
 ### Exemplo de otimização QASM2
 
@@ -281,7 +280,7 @@ Os defaults incluem 2.500 linhas, 512 KiB, 32 qubits, 256 bits clássicos, 10.00
 ## 9. Configuração e segredos
 
 1. Copie `.env.example` para `.env` local.
-2. Preencha `GEMINI_API_KEY` somente se a LLM/busca Google for usada.
+2. Preencha `NVIDIA_API_KEY` somente se quiser respostas redigidas por LLM.
 3. Ajuste portas, limites de circuitos, modelo e sincronização conforme o ambiente.
 4. Recrie os serviços necessários após mudanças.
 
@@ -337,8 +336,8 @@ Não como script Python livre. A AST é percorrida por interpretador próprio qu
 **A API é segura para publicar na internet?**  
 O Compose local restringe portas ao loopback, mas o produto não possui autenticação da API. Publicação externa requer autenticação, HTTPS, revisão dos limites e configuração de rede.
 
-**A chave Gemini é enviada ao navegador?**  
-Não. É uma variável do serviço API em `.env`. As perguntas e trechos de contexto podem ser enviados ao Google quando a LLM é usada, então isso precisa estar claro para a equipe e usuários.
+**A chave da LLM é enviada ao navegador?**  
+Não. É uma variável do serviço API em `.env`. As perguntas e trechos de contexto são enviados à NVIDIA quando a LLM é usada, então isso precisa estar claro para a equipe e usuários.
 
 ### Qiskit e qualidade
 
@@ -356,8 +355,8 @@ Consultar `GET /qiskit/limits`, validar a entrada antes do worker e usar limites
 
 ### RAG e limitações
 
-**O que ocorre sem `GEMINI_API_KEY`?**  
-`/query` devolve erro de configuração (503); `/search` ainda pode recuperar trechos sem gerar uma resposta de LLM.
+**O que ocorre sem `NVIDIA_API_KEY`?**  
+`/query` responde de forma extrativa com a base local (`answer_mode: "local"`); com `QONE_LOCAL_FALLBACK=0`, devolve 503.
 
 **Busca web grava os resultados no Chroma?**  
 Não. A busca web é chamada sob demanda e a coleção documental continua sendo controlada pela ingestão/sincronizador.
@@ -373,13 +372,13 @@ Dependência de disponibilidade/cota do Google para geração e busca web; ausê
 
 ## 11. Roteiro breve para apresentação oral
 
-> “O QuantumOne combina uma interface Next.js com uma API FastAPI. O usuário pode analisar circuitos com Qiskit sem depender de IA: a API valida a entrada e executa o processamento num worker Python com limites de recurso. Para perguntas documentais, calculamos embeddings, recuperamos trechos no Chroma e usamos Gemini para compor a resposta. Redis guarda somente cache. Docker Compose integra frontend, API, Chroma e Redis, com volumes para persistir documentos e modelo. A API expõe rotas para consulta, busca, documentos, avaliação, conversa e otimização. O Python aceito é um subconjunto interpretado, não execução arbitrária. Os principais limites são dependência/cota do provedor Gemini, cobertura limitada do parser e a falta de autenticação para publicação pública.”
+> “O QuantumOne combina uma interface Next.js com uma API FastAPI. O usuário pode analisar circuitos com Qiskit sem depender de IA: a API valida a entrada e executa o processamento num worker Python com limites de recurso. Para perguntas documentais, calculamos embeddings, recuperamos trechos no Chroma e usamos uma fila de modelos NVIDIA para compor a resposta, com resposta local quando nenhum responde. Redis guarda somente cache. Docker Compose integra frontend, API, Chroma e Redis, com volumes para persistir documentos e modelo. A API expõe rotas para consulta, busca, documentos, avaliação, conversa e otimização. O Python aceito é um subconjunto interpretado, não execução arbitrária. Os principais limites são a disponibilidade e o tempo de resposta dos modelos da fila, cobertura limitada do parser e a falta de autenticação para publicação pública.”
 
 ## 12. Onde aprofundar
 
 - `README.md`: instalação e visão geral.
 - `docs/circuitos-grandes.md`: contrato de otimização, limites e parser.
-- `docs/CONHECIMENTO-WEB.md`: ingestão, sincronização, snapshots e busca web.
+- `docs/BASE-DE-CONHECIMENTO.md`: catálogo, curadoria, ingestão e atualização.
 - `docs/diagnostico-entradas.md`: exemplos e erros de circuitos reais.
-- `docs/VALIDACAO.md` e `docs/VALIDACAO-CONHECIMENTO.md`: evidências de validação.
+- `docs/VALIDACAO.md` e `docs/BENCHMARKS.md`: evidências de validação.
 - `http://localhost:8000/docs`: experimentar API local com Swagger.

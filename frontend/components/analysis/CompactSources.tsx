@@ -17,6 +17,7 @@ function safeExternalUrl(value?: string) {
 
 function originLabel(source: CompactSource) {
   if (source.url?.startsWith("qone://") || source.origin === "qone_interno") return "conhecimento interno";
+  if (source.origin === "web") return "internet";
   return source.origin === "local" || !source.origin ? "base local" : source.origin;
 }
 
@@ -50,7 +51,7 @@ export default function CompactSources({ sources }: { sources: CompactSource[] }
                   <div className="compact-sources-title">
                     <span className="compact-sources-number">{index + 1}</span>
                     <strong>{source.title}</strong>
-                    <span className="compact-sources-origin">{originLabel(source)}</span>
+                    <span className={`compact-sources-origin${source.origin === "web" ? " is-web" : ""}`}>{originLabel(source)}</span>
                   </div>
                   {source.excerpt && <p>{source.excerpt.length > 420 ? source.excerpt.slice(0, 420) + "…" : source.excerpt}</p>}
                   {href && <a href={href} target="_blank" rel="noopener noreferrer">Abrir fonte <span aria-hidden="true">↗</span></a>}

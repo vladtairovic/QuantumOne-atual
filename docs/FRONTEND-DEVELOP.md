@@ -22,7 +22,7 @@ Rollback: frontend anterior preservado em artifacts/frontend-before-develop-2026
 Verificações:
 - Build produção Next.js/TypeScript.
 - 86 testes backend aprovados; teste live separado não selecionado na suíte isolada.
-- scripts/test_frontend.cjs verifica Chromium real, Qiskit, Gemini, fontes, top_k, formulários, estados de erro, retry, cancelamento e layout mobile. Falha de provedor e evidência insuficiente são controladas apenas pelo transporte do teste.
+- scripts/test_frontend.cjs verifica Chromium real, Qiskit, fontes, top_k, formulários, estados de erro, retry, cancelamento e layout mobile. Falha de provedor e evidência insuficiente são controladas apenas pelo transporte do teste.
 - Capturas em artifacts/develop-input.png, develop-results.png e develop-mobile.png.
 - npm ci reportou 8 vulnerabilidades moderadas no conjunto de dependências herdado. Não foi aplicado upgrade incompatível automaticamente.
 

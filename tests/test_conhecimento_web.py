@@ -3,7 +3,7 @@ from types import SimpleNamespace as NS
 from unittest.mock import Mock
 import httpx
 import pytest
-from rag import coleta_web, pipeline_gemini, sincronizar_conhecimento as sync, configuracao, banco
+from rag import coleta_web, sincronizar_conhecimento as sync, configuracao, banco
 from tests.test_integracao import contexto, TokenizerTeste
 
 

@@ -6641,3 +6641,93 @@ html[data-reduced-motion="true"] .ui-feedback-message.is-loading .ui-feedback-ic
 .analysis-diagnosis-subtitle { margin: 4px 0 0; color: #dcd0eb; font-size: 11px; font-weight: 600; }
 .analysis-diagnosis pre { margin: 0; max-height: 320px; overflow: auto; padding: 10px; border-radius: 10px; background: rgba(0,0,0,.28); font-size: 11px; }
 .composer-local-note { color: #8e849b; font-size: 10px; }
+
+/* Análise unificada: pesquisa complementar, anexos de pasta e andamento ao vivo. */
+.composer-settings { flex-wrap: wrap; align-items: center; row-gap: 8px; }
+.composer-settings .composer-web-toggle, .composer-settings .composer-local-note { white-space: nowrap; }
+.composer-web-toggle { display: inline-flex; align-items: center; gap: 6px; color: #c1b8d0; font-size: 10px; cursor: pointer; }
+.composer-web-toggle input { width: 13px; height: 13px; margin: 0; accent-color: #9d6bdd; cursor: pointer; }
+.composer-web-toggle input:disabled { cursor: not-allowed; }
+.attachment-feedback { margin-top: 10px; }
+.chat-thread.is-busy { flex-direction: column; justify-content: flex-end; gap: 12px; }
+.chat-pending-message { align-self: flex-end; opacity: .85; }
+.analysis-live-status { align-self: stretch; display: grid; gap: 9px; padding: 13px 15px; border: 1px solid rgba(183, 145, 241, .26); border-radius: 14px; background: linear-gradient(145deg, rgba(64, 42, 99, .32), rgba(18, 14, 28, .6)); color: #c9bfd6; font-size: 11px; }
+.analysis-live-status-heading { display: flex; align-items: center; gap: 9px; min-width: 0; }
+.analysis-live-status-heading strong { min-width: 0; flex: 1; color: #efe7fa; font-size: 12px; font-weight: 600; overflow-wrap: anywhere; }
+.analysis-live-status-pulse { flex: none; width: 8px; height: 8px; border-radius: 50%; background: #b58aff; box-shadow: 0 0 0 0 rgba(181, 138, 255, .6); animation: analysis-live-pulse 1.4s ease-out infinite; }
+.analysis-live-status-timer { flex: none; padding: 2px 7px; border-radius: 7px; background: rgba(157, 107, 221, .16); color: #d8c4f4; font-size: 10px; font-variant-numeric: tabular-nums; }
+.analysis-live-status-model { margin: 0; color: #b9adc8; font-size: 10px; overflow-wrap: anywhere; }
+.analysis-live-status-model code { padding: 2px 6px; border-radius: 6px; background: rgba(157, 107, 221, .2); color: #f1e6ff; font-size: 10px; font-weight: 600; }
+.analysis-live-status-draft { display: grid; gap: 5px; }
+.analysis-live-status-draft-label { color: #9d8fb3; font-size: 9px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; }
+.analysis-live-status-draft-text { max-height: 190px; overflow-y: auto; padding: 9px 11px; border: 1px solid rgba(183, 145, 241, .16); border-radius: 10px; background: rgba(10, 8, 16, .45); color: #ddd3ea; font-size: 11px; line-height: 1.55; white-space: pre-wrap; overflow-wrap: anywhere; scrollbar-width: thin; }
+.analysis-live-status-draft-text::after { content: ""; display: inline-block; width: 6px; height: 12px; margin-left: 2px; vertical-align: -2px; background: #b58aff; animation: analysis-live-caret 1s steps(1) infinite; }
+@keyframes analysis-live-caret { 50% { opacity: 0; } }
+html[data-reduced-motion="true"] .analysis-live-status-draft-text::after { animation: none; }
+@media (prefers-reduced-motion: reduce) { .analysis-live-status-draft-text::after { animation: none; } }
+.analysis-live-status-history { display: grid; gap: 4px; margin: 0; padding: 0; list-style: none; }
+.analysis-live-status-history li { display: flex; justify-content: space-between; gap: 10px; color: #998fa8; font-size: 10px; overflow-wrap: anywhere; }
+.analysis-live-status-history li::before { content: "\2713"; color: #8fe0b4; margin-right: 2px; }
+.analysis-live-status-history li span:first-child { flex: 1; min-width: 0; }
+.analysis-live-status-seconds { flex: none; font-variant-numeric: tabular-nums; }
+.analysis-live-status-footer { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; color: #8e849b; font-size: 10px; font-variant-numeric: tabular-nums; }
+.analysis-live-status-footer button { min-height: 27px; padding: 0 10px; border: 1px solid rgba(183, 145, 241, .24); border-radius: 9px; background: rgba(106, 69, 153, .12); color: #d0c0e7; font-size: 10px; cursor: pointer; }
+.analysis-live-status-footer button:hover, .analysis-live-status-footer button:focus-visible { border-color: rgba(190, 145, 255, .5); background: rgba(125, 76, 187, .22); }
+@keyframes analysis-live-pulse { 0% { box-shadow: 0 0 0 0 rgba(181, 138, 255, .55); } 100% { box-shadow: 0 0 0 9px rgba(181, 138, 255, 0); } }
+html[data-reduced-motion="true"] .analysis-live-status-pulse { animation: none; }
+@media (prefers-reduced-motion: reduce) { .analysis-live-status-pulse { animation: none; } }
+
+/* Resposta em Markdown mínimo. */
+.analysis-answer { display: grid; gap: 9px; min-width: 0; }
+.analysis-answer code { padding: 1px 4px; border-radius: 5px; background: rgba(157, 107, 221, .14); color: #e3d1fb; font: 11px/1.5 ui-monospace, SFMono-Regular, Consolas, monospace; }
+.analysis-answer-heading { color: #efe7fa; font-weight: 600; }
+.analysis-answer-code { position: relative; max-width: 100%; max-height: 420px; overflow: auto; margin: 0; padding: 12px; border: 1px solid rgba(184, 160, 223, .12); border-radius: 10px; background: rgba(4, 5, 12, .5); white-space: pre; }
+.analysis-answer-code code { padding: 0; background: none; color: #d9c8ed; font-size: 10.5px; line-height: 1.6; }
+.analysis-answer-code-lang { display: block; margin-bottom: 6px; color: #8e849b; font: 600 9px/1 ui-sans-serif, system-ui, sans-serif; letter-spacing: .08em; text-transform: uppercase; }
+
+/* Blocos recolhíveis (tentativas, arquivos, etapas e QASM otimizado). */
+.analysis-collapsible { min-width: 0; border: 1px solid rgba(182, 153, 222, .12); border-radius: 10px; background: rgba(255,255,255,.012); }
+.analysis-collapsible > summary { display: flex; align-items: center; gap: 8px; padding: 7px 10px; border-radius: 10px; color: #b9adc8; font-size: 10px; font-weight: 600; letter-spacing: .02em; cursor: pointer; list-style: none; }
+.analysis-collapsible > summary::-webkit-details-marker { display: none; }
+.analysis-collapsible > summary::after { content: "\2304"; margin-left: auto; transition: transform .22s ease; }
+.analysis-collapsible[open] > summary::after { transform: rotate(180deg); }
+.analysis-collapsible > summary:hover, .analysis-collapsible > summary:focus-visible { color: #e6dcef; background: rgba(157, 107, 221, .08); outline: none; }
+.analysis-collapsible > ol, .analysis-collapsible > ul { display: grid; gap: 5px; max-height: 320px; overflow-y: auto; margin: 0; padding: 0 10px 10px; list-style: none; }
+.analysis-collapsible > ol > li, .analysis-collapsible > ul > li { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 10px; padding: 7px 8px; border: 1px solid rgba(182, 153, 222, .1); border-radius: 8px; color: #aaa1b5; font-size: 10px; line-height: 1.5; overflow-wrap: anywhere; }
+.analysis-collapsible > pre { max-width: calc(100% - 20px); max-height: 320px; overflow: auto; margin: 0 10px 10px; padding: 10px; border: 1px solid rgba(184, 160, 223, .11); border-radius: 9px; background: rgba(4, 5, 12, .45); color: #d9c8ed; font: 10px/1.6 ui-monospace, SFMono-Regular, Consolas, monospace; white-space: pre; }
+.analysis-attempts code { color: #d8b9ff; font-size: 10px; }
+.analysis-attempt-seconds { margin-left: auto; color: #8e849b; font-variant-numeric: tabular-nums; }
+.analysis-text-ok { color: #8fe0b4; }
+.analysis-text-error { color: #ff9aa0; }
+.analysis-text-muted { color: #ecd08c; }
+@media (prefers-reduced-motion: reduce) { .analysis-collapsible > summary::after { transition: none; } }
+
+/* Circuitos analisados. */
+.analysis-circuit-list { display: grid; gap: 9px; }
+.analysis-circuit { display: grid; gap: 9px; min-width: 0; padding: 11px; border: 1px solid rgba(182, 153, 222, .14); border-radius: 12px; background: rgba(255,255,255,.018); }
+.analysis-circuit-heading { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+.analysis-circuit-heading strong { min-width: 0; margin-right: 4px; color: #e6dcef; font-size: 11px; font-weight: 600; overflow-wrap: anywhere; }
+.analysis-badge { display: inline-flex; align-items: center; padding: 2px 7px; border-radius: 7px; background: rgba(157, 107, 221, .13); color: #c3a6e8; font-size: 9px; font-weight: 500; white-space: nowrap; }
+.analysis-badge.is-ok { background: rgba(114, 214, 160, .12); color: #8fe0b4; }
+.analysis-badge.is-error { background: rgba(255, 119, 127, .12); color: #ff9aa0; }
+.analysis-badge.is-muted { background: rgba(255, 255, 255, .05); color: #8e849b; }
+.analysis-circuit-diagnosis { display: grid; gap: 4px; margin: 0; padding-left: 16px; color: #aaa1b5; font-size: 10px; line-height: 1.55; overflow-wrap: anywhere; }
+.analysis-circuit-more { color: #8e849b !important; font-size: 10px !important; }
+.analysis-circuit-block { display: grid; gap: 7px; min-width: 0; padding-top: 9px; border-top: 1px solid rgba(183, 160, 219, .08); }
+.analysis-circuit-block h4 { margin: 0; color: #dcd0eb; font-size: 11px; font-weight: 600; }
+.analysis-circuit-block > pre { max-width: 100%; max-height: 300px; overflow: auto; margin: 0; padding: 10px; border: 1px solid rgba(184, 160, 223, .11); border-radius: 9px; background: rgba(4, 5, 12, .45); color: #d9c8ed; font: 10px/1.6 ui-monospace, SFMono-Regular, Consolas, monospace; white-space: pre; }
+.analysis-circuit-block .analysis-result-metrics dd { font-size: 13px; }
+.analysis-circuit-error { padding: 8px 10px; border: 1px solid rgba(255, 119, 127, .22); border-radius: 9px; background: rgba(255, 119, 127, .06); color: #ffb3b7 !important; font-size: 10px !important; }
+
+/* Arquivos analisados e etapas. */
+.analysis-file-name { flex: 1 1 200px; min-width: 0; color: #d8cce6; font-family: ui-monospace, SFMono-Regular, Consolas, monospace; }
+.analysis-file-size { color: #8e849b; font-variant-numeric: tabular-nums; }
+.analysis-file-reason { flex-basis: 100%; color: #968ca3; font-style: normal; }
+.analysis-timeline li span:first-child { flex: 1; min-width: 0; }
+.compact-sources-origin.is-web { padding: 0 5px; border-radius: 5px; background: rgba(110, 170, 240, .12); color: #a9cdf5; }
+
+@media (max-width: 560px) {
+  .analysis-live-status { padding: 11px 12px; }
+  .analysis-live-status-heading { flex-wrap: wrap; }
+  .analysis-circuit { padding: 9px; }
+}

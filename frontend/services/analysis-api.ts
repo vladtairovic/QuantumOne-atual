@@ -11,9 +11,9 @@ export type Source = {
   chunk_id: string;
   source: string;
   content: string;
-  origin?: "local";
-  title?: string;
-  retrieved_at?: string;
+  origin?: "local" | "web";
+  title?: string | null;
+  retrieved_at?: string | null;
 };
 export type QuantumResult = {
   original: { qubits: number; profundidade: number; total_operacoes: number };
@@ -191,4 +191,135 @@ export async function optimizeCircuit(
     quantum: data,
     answer: "O Qiskit calculou as métricas e gerou a proposta abaixo.",
   };
+}
+
+// ---------------------------------------------------------------------------
+// Análise unificada: POST /analise e GET /analise/progresso/{id}
+// (contrato em contratos_analise.py).
+// ---------------------------------------------------------------------------
+
+export type ArquivoEnviado = { nome: string; conteudo: string };
+export type EntradaAnalise = {
+  mensagem: string;
+  codigo: string | null;
+  formato: "auto" | CodeFormat;
+  arquivos: ArquivoEnviado[];
+  conversation_id: string | null;
+  progress_id: string;
+  perfil: OptimizationProfile;
+  top_k: number;
+  pesquisa_web: boolean;
+};
+export type TentativaLLM = { modelo: string; resultado: string; segundos: number };
+export type InfoLLM = { provedor: string; modelo: string | null; tentativas: TentativaLLM[] };
+export type MetricasCircuito = {
+  qubits?: number;
+  profundidade?: number;
+  total_operacoes?: number;
+  operacoes_dois_qubits?: number;
+};
+/** Resumo do /qiskit/optimize que a análise devolve para cada circuito válido. */
+export type OtimizacaoCircuito = {
+  perfil?: string;
+  estrategia_aplicada?: string;
+  equivalente?: boolean | null;
+  verificacao?: { metodo?: string; garantia?: string; equivalente?: boolean | null } | null;
+  original?: MetricasCircuito | null;
+  proposta?: MetricasCircuito | null;
+  cx_equivalentes_antes?: number | null;
+  cx_equivalentes_depois?: number | null;
+  circuito_otimizado_qasm?: string | null;
+  warnings?: string[];
+  simulacao?: { metodo?: string; justificativa?: string; memoria_statevector_bytes?: number } | null;
+  compromissos?: string[];
+};
+export type CorrecaoCircuito = {
+  metodo: "nenhuma" | "deterministica" | "llm";
+  modelo: string | null;
+  codigo: string | null;
+  valido: boolean;
+  explicacao: string | null;
+};
+export type CircuitoAnalisado = {
+  origem: string;
+  formato: CodeFormat | null;
+  valido_original: boolean;
+  problemas: number;
+  diagnostico_resumo: string[];
+  correcao: CorrecaoCircuito;
+  otimizacao: OtimizacaoCircuito | null;
+  erro: string | null;
+};
+export type ArquivoClassificado = {
+  nome: string;
+  tipo: "circuito_qasm" | "circuito_python" | "python" | "notebook" | "documento" | "dados" | "ignorado";
+  tamanho: number;
+  motivo: string | null;
+};
+export type EtapaAnalise = { texto: string; segundos: number };
+export type RespostaAnalise = {
+  request_id: string;
+  progress_id: string | null;
+  conversation_id: string | null;
+  resposta: string;
+  status: "ok" | "insufficient_context";
+  answer_mode: "llm" | "local" | "none";
+  llm: InfoLLM | null;
+  sources: Source[];
+  circuitos: CircuitoAnalisado[];
+  arquivos: ArquivoClassificado[];
+  interpretation: unknown;
+  evidence: unknown;
+  pesquisa_web: Record<string, unknown> | null;
+  warnings: string[];
+  etapas: EtapaAnalise[];
+  tempo_total_segundos: number;
+};
+export type ProgressoAnalise = {
+  progress_id: string;
+  concluido: boolean;
+  etapa: string;
+  modelo: string | null;
+  segundos_na_etapa: number;
+  segundos_total: number;
+  historico: EtapaAnalise[];
+  /** Texto que o modelo em uso já escreveu (streaming); null fora da redação. */
+  parcial: string | null;
+};
+
+/**
+ * Envia texto, código e arquivos numa única chamada. Não há tempo limite no
+ * cliente: a fila de LLMs pode levar minutos; só o cancelamento do usuário
+ * (signal) interrompe a requisição.
+ */
+export async function analisar(body: EntradaAnalise, signal?: AbortSignal): Promise<RespostaAnalise> {
+  const { data, id } = await post<RespostaAnalise>("/analise", body, signal);
+  return { ...data, request_id: data.request_id || id };
+}
+
+/** Progresso ao vivo. Retorna null em 404 (ainda não registrado ou expirado) e em falhas de rede. */
+export async function obterProgresso(progressId: string, signal?: AbortSignal): Promise<ProgressoAnalise | null> {
+  try {
+    const res = await fetch("/api/analise/progresso/" + encodeURIComponent(progressId), { signal, cache: "no-store" });
+    if (!res.ok) return null;
+    const data: unknown = await res.json().catch(() => null);
+    if (!data || typeof data !== "object" || Array.isArray(data)) return null;
+    const progresso = data as Partial<ProgressoAnalise>;
+    if (typeof progresso.etapa !== "string") return null;
+    return {
+      progress_id: typeof progresso.progress_id === "string" ? progresso.progress_id : progressId,
+      concluido: progresso.concluido === true,
+      etapa: progresso.etapa,
+      modelo: typeof progresso.modelo === "string" && progresso.modelo ? progresso.modelo : null,
+      segundos_na_etapa: Number.isFinite(progresso.segundos_na_etapa) ? Number(progresso.segundos_na_etapa) : 0,
+      segundos_total: Number.isFinite(progresso.segundos_total) ? Number(progresso.segundos_total) : 0,
+      historico: Array.isArray(progresso.historico)
+        ? progresso.historico.filter((item): item is EtapaAnalise =>
+          Boolean(item) && typeof item.texto === "string" && Number.isFinite(item.segundos))
+        : [],
+      parcial: typeof progresso.parcial === "string" && progresso.parcial ? progresso.parcial : null,
+    };
+  } catch {
+    return null;
+  }
 }

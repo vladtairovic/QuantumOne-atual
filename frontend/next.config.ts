@@ -1,12 +1,25 @@
 import type { NextConfig } from "next";
 
+function seconds(value: string | undefined, fallback: number) {
+  const parsed = Number(value);
+  return Number.isFinite(parsed) && parsed > 0 ? parsed : fallback;
+}
+
+// A análise unificada (POST /analise) percorre a fila de LLMs em sequência e pode
+// levar minutos; o proxy precisa esperar mais que o maior tempo limite da API.
+const PROXY_TIMEOUT_SECONDS = Math.max(
+  seconds(process.env.OPTIMIZATION_TIMEOUT_SECONDS, 60),
+  seconds(process.env.API_TIMEOUT_SECONDS, 60),
+  seconds(process.env.ANALISE_TIMEOUT_SECONDS, 900),
+) + 15;
+
 const nextConfig: NextConfig = {
   output: "standalone",
   async rewrites() {
     return [{ source: "/api/:path*", destination: (process.env.API_INTERNAL_URL || "http://api:8000") + "/:path*" }];
   },
   experimental: {
-    proxyTimeout: (Math.max(Number(process.env.OPTIMIZATION_TIMEOUT_SECONDS || 60), Number(process.env.API_TIMEOUT_SECONDS || 60)) + 15) * 1000,
+    proxyTimeout: PROXY_TIMEOUT_SECONDS * 1000,
   },
   async headers() {
     return [{

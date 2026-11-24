@@ -65,7 +65,7 @@ Não há exec/eval, compilação ou importação arbitrária de código recebido
 
 Não é um executor geral de programas Python. Funções/classes/comprehensions, while, imports de filesystem/rede, atributos arbitrários, parâmetros simbólicos e métodos fora da lista retornam diagnóstico de subconjunto não suportado. Operações válidas para a linguagem Python podem não pertencer a esse subconjunto. QASM permite somente `qelib1.inc`; extensões legadas são reconhecidas sem substituir definições explícitas do usuário. Nenhum include arbitrário é lido.
 
-O subprocesso recebe ambiente mínimo, sem credenciais Gemini. Threads numéricas e paralelismo Qiskit são limitados. Linux aplica orçamento CPU, memória, arquivos e descritores; timeout/cancelamento mata e coleta o processo, inclusive durante criação. Esses limites de SO não existem na execução Windows nativa; use Docker para as garantias de recursos. A segurança do Python vem da interpretação restrita, não de assumir que um subprocesso comum seja uma sandbox de código arbitrário. O Compose limita processos a 128, remove capabilities e impede ganho de privilégios, preservando a rede necessária ao RAG.
+O subprocesso recebe ambiente mínimo, sem credenciais de LLM. Threads numéricas e paralelismo Qiskit são limitados. Linux aplica orçamento CPU, memória, arquivos e descritores; timeout/cancelamento mata e coleta o processo, inclusive durante criação. Esses limites de SO não existem na execução Windows nativa; use Docker para as garantias de recursos. A segurança do Python vem da interpretação restrita, não de assumir que um subprocesso comum seja uma sandbox de código arbitrário. O Compose limita processos a 128, remove capabilities e impede ganho de privilégios, preservando a rede necessária ao RAG.
 
 ## Erros
 
@@ -121,5 +121,5 @@ Arquivos alterados/adicionados:
 - Backend: `main.py`, `quantum/api.py`, `quantum/qiskit_service.py`, `quantum/worker.py`; novos `quantum/config.py`, `quantum/errors.py`, `quantum/http.py`, `quantum/python_parser.py`.
 - Frontend: `frontend/services/analysis-api.ts`, `frontend/components/analysis/AnalysisForm.tsx`, `ResultsView.tsx`, `SourceDrawer.tsx`, `frontend/next.config.ts` e `frontend/Dockerfile`.
 - Configuração/contrato: `.env.example`, `compose.yaml`, `Dockerfile`, `openapi.json`.
-- Testes: `tests/test_circuit_capacity.py`, `tests/test_gemini_qiskit.py`, `tests/test_qiskit_upstream.py`, `tests/test_api_original.py`, `frontend/tests/analysis-api.test.cjs`; script `scripts/verificar_circuitos_http.py`.
+- Testes: `tests/test_circuit_capacity.py`, `tests/test_llm_qiskit.py`, `tests/test_qiskit_upstream.py`, `tests/test_api_original.py`, `frontend/tests/analysis-api.test.cjs`; script `scripts/verificar_circuitos_http.py`.
 - Documentação/evidências: `README.md`, este guia, plano e dois relatórios JSON em `artifacts/`.

@@ -6,10 +6,14 @@ import Image from "next/image";
 
 import { analyze, diagnostic, readLegacyHistory, type TurnAttempt } from "../../services/workspace-analysis";
 import type { OptimizationProfile } from "../../services/analysis-api";
+import AnalysisLiveStatus, { type LiveProgress } from "./AnalysisLiveStatus";
 import AnalysisResultPanel from "./AnalysisResultPanel";
 import AppFrame from "../layout/AppFrame";
 import type { AttachmentRecord, ConversationRecord, EditorFileRecord, EditorLanguage, ProjectRecord } from "../layout/conversationTypes";
-import { isConversationRecord, isProjectRecord, MAX_CONVERSATIONS, MAX_PROJECTS, parseUniqueRecords } from "../security/workspaceData";
+import {
+  isConversationRecord, isProjectRecord, MAX_ATTACHMENT_CONTENT, MAX_ATTACHMENT_NAME, MAX_ATTACHMENTS, MAX_CONVERSATIONS, MAX_PROJECTS,
+  parseUniqueRecords,
+} from "../security/workspaceData";
 import FeedbackMessage from "../ui/FeedbackMessage";
 import useModalFocus from "../ui/useModalFocus";
 import WorkspaceToolsPanel, { previewGates, WorkspaceToolTabs, type WorkspaceToolId } from "../workspace/WorkspaceToolsPanel";
@@ -20,6 +24,62 @@ const CodeEditor = dynamic(() => import("./CodeEditor"), {
     <div className="editor-loading" role="status" aria-live="polite" aria-busy="true">Carregando editor...</div>
   ),
 });
+
+/** Extensões de texto aceitas em anexos soltos e em pastas de projeto. */
+const ATTACHMENT_EXTENSIONS = ["py", "qasm", "ipynb", "txt", "md", "json", "toml", "cfg", "ini", "yaml", "yml", "csv", "log", "rst"];
+const ATTACHMENT_ACCEPT = ATTACHMENT_EXTENSIONS.map((extension) => "." + extension).join(",");
+const ATTACHMENT_PATTERN = new RegExp("\\.(" + ATTACHMENT_EXTENSIONS.join("|") + ")$", "i");
+/** Pastas de dependências, ambientes e artefatos que nunca entram na análise. */
+const IGNORED_FOLDERS = new Set(["node_modules", ".git", "__pycache__", "venv", ".venv", "dist", "build", ".next", ".ipynb_checkpoints"]);
+const MAX_ATTACHMENT_BYTES = Math.min(300_000, MAX_ATTACHMENT_CONTENT);
+const MAX_ATTACHMENTS_TOTAL_BYTES = 3_000_000;
+/** Acima disso, o histórico guarda só nome, tamanho e tipo dos anexos (cota do localStorage). */
+const STORED_ATTACHMENT_CONTENT_LIMIT = 1_000_000;
+const CONVERSATIONS_STORAGE_KEY = "quantumone.conversations.v1";
+/** Relógio usado apenas em manipuladores de evento (início da análise e chegada do progresso). */
+const currentTime = () => Date.now();
+
+type AttachmentNotice = { tone: "success" | "warning" | "info"; message: string };
+type SkipReasons = {
+  ignoredFolder: number; unsupported: number; tooLarge: number; empty: number;
+  duplicate: number; countLimit: number; totalLimit: number; unreadable: number;
+};
+
+function describeAttachmentResult(added: number, skipped: SkipReasons, folder?: string): AttachmentNotice {
+  const reasons = [
+    skipped.ignoredFolder && `${skipped.ignoredFolder} em pastas ignoradas (node_modules, .git, venv, build…)`,
+    skipped.unsupported && `${skipped.unsupported} com tipo não suportado`,
+    skipped.tooLarge && `${skipped.tooLarge} acima de 300 KB`,
+    skipped.empty && `${skipped.empty} vazio(s)`,
+    skipped.duplicate && `${skipped.duplicate} já anexado(s)`,
+    skipped.countLimit && `${skipped.countLimit} além do limite de ${MAX_ATTACHMENTS} arquivos`,
+    skipped.totalLimit && `${skipped.totalLimit} além do limite total de 3 MB`,
+    skipped.unreadable && `${skipped.unreadable} que não puderam ser lidos`,
+  ].filter(Boolean);
+  const skippedCount = Object.values(skipped).reduce((sum, value) => sum + value, 0);
+  const origin = folder ? ` da pasta ${folder}` : "";
+  const head = added
+    ? `${added} arquivo(s) adicionado(s)${origin}.`
+    : `Nenhum arquivo foi adicionado${origin}.`;
+  return {
+    tone: added && !skippedCount ? "success" : "warning",
+    message: skippedCount ? `${head} ${skippedCount} ignorado(s): ${reasons.join("; ")}.` : head,
+  };
+}
+
+/** Remove o conteúdo dos anexos grandes antes de gravar o histórico (o envio usa o estado em memória). */
+function conversationsForStorage(conversations: ConversationRecord[], dropAllContent = false) {
+  return conversations.map((conversation) => {
+    const attachments = conversation.attachments;
+    if (!attachments?.length) return conversation;
+    const total = attachments.reduce((sum, attachment) => sum + (attachment.content?.length ?? 0), 0);
+    if (!total || (!dropAllContent && total <= STORED_ATTACHMENT_CONTENT_LIMIT)) return conversation;
+    return {
+      ...conversation,
+      attachments: attachments.map((attachment) => ({ id: attachment.id, name: attachment.name, size: attachment.size, type: attachment.type })),
+    };
+  });
+}
 
 function conversationCodeSummary(conversation: ConversationRecord) {
   const files = conversation.codeFiles?.filter((file) => file.language === conversation.activeLanguage && file.content.trim()) ?? [];
@@ -84,6 +144,10 @@ export default function AnalysisForm() {
   const [backend, setBackend] = useState("reference");
   const [topK, setTopK] = useState("5");
   const [profile, setProfile] = useState<OptimizationProfile>("balanceado");
+  const [webSearch, setWebSearch] = useState(true);
+  const [progress, setProgress] = useState<LiveProgress | null>(null);
+  const [startedAt, setStartedAt] = useState(0);
+  const [attachmentNotice, setAttachmentNotice] = useState<AttachmentNotice | null>(null);
   const [showInputErrors, setShowInputErrors] = useState(false);
   const [isCodePanelOpen, setIsCodePanelOpen] = useState(false);
   const codeDialogRef = useModalFocus<HTMLElement>(isCodePanelOpen);
@@ -97,6 +161,7 @@ export default function AnalysisForm() {
   const [renamingCodeFileId, setRenamingCodeFileId] = useState<string | null>(null);
   const [renamingCodeFileName, setRenamingCodeFileName] = useState("");
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const folderInputRef = useRef<HTMLInputElement>(null);
   const codeDialogSnapshot = useRef<{
     qasmCode: string;
     pythonCode: string;
@@ -133,6 +198,7 @@ export default function AnalysisForm() {
     pending.current = null;
     lastAttempt.current = null;
     setBusy(false);
+    setProgress(null);
   }
   const [editorMessage, setEditorMessage] = useState("");
 
@@ -257,8 +323,11 @@ export default function AnalysisForm() {
 
   useEffect(() => {
     if (!isHydrated || blockConversationWrites.current) return;
+    const write = (dropAllContent: boolean) => window.localStorage.setItem(
+      CONVERSATIONS_STORAGE_KEY, JSON.stringify(conversationsForStorage(conversations, dropAllContent)));
     try {
-      window.localStorage.setItem("quantumone.conversations.v1", JSON.stringify(conversations));
+      // Se a cota estourar, tenta de novo guardando os anexos só com nome, tamanho e tipo.
+      try { write(false); } catch { write(true); }
       window.setTimeout(() => setHistoryStorageIssue(""), 0);
     } catch {
       window.setTimeout(() => setFeedback({
@@ -409,35 +478,63 @@ export default function AnalysisForm() {
     setEditorMessage("Código removido.");
   }
 
-  async function handleSelectFiles(files: FileList | null) {
-    if (!files?.length) return;
-    const picked = Array.from(files);
-    const accepted = picked.filter((file) => file.size <= 30000 && /\.(txt|md|py|qasm|json|csv|log)$/i.test(file.name) && file.name.length <= 255);
-    const rejectedCount = picked.length - accepted.length;
-    setFeedback(rejectedCount ? {
-      type: "error",
-      message: "Alguns arquivos foram recusados. Use arquivos de texto, Markdown, Python, QASM, JSON, CSV ou log de até 30 KB.",
-    } : null);
-    const remainingSlots = Math.max(0, 10 - attachments.length);
-    let selected: AttachmentRecord[];
-    try {
-      selected = await Promise.all(accepted.slice(0, remainingSlots).map(async (file) => ({
-        content: await file.text(),
-        id: globalThis.crypto?.randomUUID?.() ?? `${file.name}-${file.lastModified}-${Date.now()}`,
-        name: file.name,
-        size: file.size,
-        type: file.type || "Arquivo local",
-      })));
-    } catch { setFeedback({ type: "error", message: "Falha ao ler o arquivo." }); return; }
-    if (accepted.length > remainingSlots) {
-      setFeedback({ type: "error", message: "O limite é de 10 arquivos por conversa. Remova um arquivo para adicionar outro." });
+  /**
+   * Anexa arquivos soltos ou uma pasta inteira (webkitdirectory). Em pastas, o
+   * nome guardado é o caminho relativo ("projeto/src/circuito.py"); dependências,
+   * ambientes e artefatos de build são ignorados.
+   */
+  async function handleSelectFiles(files: FileList | null, source: "files" | "folder" = "files") {
+    const picked = files ? Array.from(files) : [];
+    const input = source === "folder" ? folderInputRef.current : fileInputRef.current;
+    if (input) input.value = "";
+    if (!picked.length) return;
+    const skipped: SkipReasons = {
+      ignoredFolder: 0, unsupported: 0, tooLarge: 0, empty: 0, duplicate: 0, countLimit: 0, totalLimit: 0, unreadable: 0,
+    };
+    const names = new Set(attachments.map((attachment) => attachment.name));
+    let slots = Math.max(0, MAX_ATTACHMENTS - attachments.length);
+    let totalBytes = attachments.reduce((sum, attachment) => sum + (attachment.content ? attachment.size : 0), 0);
+    const entries = picked
+      .map((file) => ({ file, path: (file.webkitRelativePath || file.name).replace(/\\/g, "/") }))
+      .sort((a, b) => a.path.localeCompare(b.path));
+    const accepted: typeof entries = [];
+    for (const entry of entries) {
+      const segments = entry.path.split("/");
+      // A pasta escolhida pelo usuário (primeiro segmento) nunca é descartada pelo nome.
+      const folders = entry.file.webkitRelativePath ? segments.slice(1, -1) : segments.slice(0, -1);
+      if (folders.some((folder) => IGNORED_FOLDERS.has(folder))) skipped.ignoredFolder++;
+      else if (!ATTACHMENT_PATTERN.test(entry.path) || entry.path.length > MAX_ATTACHMENT_NAME) skipped.unsupported++;
+      else if (entry.file.size === 0) skipped.empty++;
+      else if (entry.file.size > MAX_ATTACHMENT_BYTES) skipped.tooLarge++;
+      else if (names.has(entry.path)) skipped.duplicate++;
+      else if (slots <= 0) skipped.countLimit++;
+      else if (totalBytes + entry.file.size > MAX_ATTACHMENTS_TOTAL_BYTES) skipped.totalLimit++;
+      else {
+        accepted.push(entry);
+        names.add(entry.path);
+        slots--;
+        totalBytes += entry.file.size;
+      }
     }
+    const read = await Promise.allSettled(accepted.map(async ({ file, path }): Promise<AttachmentRecord> => ({
+      content: await file.text(),
+      id: globalThis.crypto?.randomUUID?.() ?? `${path}-${file.lastModified}-${Math.random().toString(16).slice(2)}`,
+      name: path,
+      size: file.size,
+      type: file.type || "Arquivo local",
+    })));
+    const selected: AttachmentRecord[] = [];
+    for (const item of read) {
+      if (item.status === "fulfilled" && (item.value.content?.length ?? 0) <= MAX_ATTACHMENT_CONTENT) selected.push(item.value);
+      else skipped.unreadable++;
+    }
+    const folder = source === "folder" ? entries[0]?.file.webkitRelativePath.split("/")[0] || undefined : undefined;
+    setAttachmentNotice(describeAttachmentResult(selected.length, skipped, folder));
     if (selected.length) {
-      setAttachments((current) => [...current, ...selected].slice(0, 10));
+      setAttachments((current) => [...current, ...selected].slice(0, MAX_ATTACHMENTS));
       setActiveTool("files");
       setActiveConversationId(null);
     }
-    if (fileInputRef.current) fileInputRef.current.value = "";
   }
 
   function removeAttachment(id: string) {
@@ -474,6 +571,7 @@ export default function AnalysisForm() {
     setBackend(conversation.backend);
     setTopK(conversation.topK);
     setAttachments(conversation.attachments ?? []);
+    setAttachmentNotice(null);
     const restoredFiles = conversation.codeFiles?.slice() ?? [];
     if (!restoredFiles.length) {
       restoredFiles.push(conversation.activeLanguage === "qasm"
@@ -584,6 +682,7 @@ export default function AnalysisForm() {
     setRenamingCodeFileId(null);
     setRenamingCodeFileName("");
     setAttachments([]);
+    setAttachmentNotice(null);
     setQuestion("");
     setBackend("reference");
     setTopK(defaultTopK);
@@ -615,7 +714,7 @@ export default function AnalysisForm() {
       setFeedback({ type: "error", message: "O histórico está cheio. Exporte ou remova uma conversa antes de continuar." });
       return;
     }
-    if (question.length > 20_000 || activeLanguageCode.length > 500_000 || attachments.length > 10) {
+    if (question.length > 20_000 || activeLanguageCode.length > 500_000 || attachments.length > MAX_ATTACHMENTS) {
       setFeedback({ type: "error", message: "A pergunta, o código ou os anexos excedem os limites permitidos. Revise o conteúdo antes de continuar." });
       return;
     }
@@ -632,18 +731,28 @@ export default function AnalysisForm() {
 
     setShowInputErrors(false);
     setFeedback(null);
+    const withoutContent = attachments.filter((attachment) => !attachment.content).length;
+    setAttachmentNotice(withoutContent ? {
+      tone: "warning",
+      message: `${withoutContent} anexo(s) restaurado(s) do histórico sem conteúdo salvo não serão enviados. Anexe-os novamente para incluí-los.`,
+    } : null);
     const id = selected?.id ?? crypto.randomUUID();
     const savedCodeFiles = codeFiles.map((file) => ({ ...file, isDirty: false }));
     const controller = new AbortController();
-    const key = JSON.stringify([activeConversationId, activeLanguageCode, activeLanguage, question, topK, profile, attachments]);
+    const key = JSON.stringify([activeConversationId, activeLanguageCode, activeLanguage, question, topK, profile, webSearch, attachments]);
     if (lastAttempt.current?.key !== key) lastAttempt.current = { key, messageId: crypto.randomUUID() };
     const attempt = lastAttempt.current;
     pending.current = controller;
+    setProgress(null);
+    setStartedAt(currentTime());
     setBusy(true);
     try {
       const response = await analyze({
         code: activeLanguageCode, format: activeLanguage, question: question.trim(), topK: Number(topK), profile,
-        attachments, remoteId: selected?.remoteId,
+        attachments, remoteId: selected?.remoteId, webSearch,
+        onProgress: (data) => {
+          if (pending.current === controller) setProgress({ data, receivedAt: currentTime() });
+        },
       }, controller.signal, attempt);
       if (controller.signal.aborted) return;
       lastAttempt.current = null;
@@ -671,7 +780,7 @@ export default function AnalysisForm() {
     } catch (error) {
       if (!controller.signal.aborted) setFeedback({ type: "error", message: diagnostic(error) });
     } finally {
-      if (pending.current === controller) { pending.current = null; setBusy(false); }
+      if (pending.current === controller) { pending.current = null; setBusy(false); setProgress(null); }
     }
   }
 
@@ -744,7 +853,7 @@ export default function AnalysisForm() {
               {historyStorageIssue && <FeedbackMessage tone="warning" className="chat-storage-warning" message={historyStorageIssue} />}
               {projectStorageIssue && <FeedbackMessage tone="warning" className="chat-storage-warning" message={projectStorageIssue} />}
 
-              <div className="composer-meta">
+              <div className="composer-meta composer-settings">
                 <label>Fontes por consulta <select value={topK} onChange={event => setTopK(event.target.value)}>
                   {[3,5,8,10].map(n => <option key={n}>{n}</option>)}
                 </select></label>
@@ -752,7 +861,18 @@ export default function AnalysisForm() {
                   <option value="rapido">Rápida</option><option value="balanceado">Balanceada</option>
                   <option value="avancado">Avançada</option><option value="experimental">Experimental</option>
                 </select></label>
-                <span className="composer-local-note" title="Respostas usam somente a base de conhecimento local; nenhuma busca web é feita.">Somente base local</span>
+                <label className="composer-web-toggle">
+                  <input type="checkbox" checked={webSearch} disabled={busy} onChange={(event) => setWebSearch(event.target.checked)} />
+                  Pesquisar também na internet
+                </label>
+                <span
+                  className="composer-local-note"
+                  title={webSearch
+                    ? "A resposta usa primeiro a base de conhecimento local; a internet entra apenas como complemento."
+                    : "A resposta usa somente a base de conhecimento local."}
+                >
+                  {webSearch ? "Base local primeiro; internet como complemento" : "Somente base local"}
+                </span>
               </div>
               <WorkspaceToolTabs activeTool={activeTool} onSelect={setActiveTool} />
               {activeTool && (
@@ -777,12 +897,13 @@ export default function AnalysisForm() {
                     setCodeFiles(current => [...current.filter(item => item.id !== "optimized-qasm" && item.id !== originalFile.id), originalFile]);
                     setActiveCodeFileId(originalFile.id); setActiveLanguage(originalFile.language); setIsCodePanelOpen(true);
                   }}
-                  sources={result?.sources.map((source, index) => ({ ...source, id: String(index), origin: source.origin || "local",
+                  sources={result?.sources.map((source, index) => ({ ...source, id: String(index),
+                    origin: source.origin === "web" ? "internet" : source.origin || "local",
                     category: "RAG", type: "Documento", excerpt: source.excerpt || "", relationship: "Trecho recuperado para esta resposta." }))}
                 />
               )}
 
-              <div className="chat-thread">
+              <div className={"chat-thread" + (busy ? " is-busy" : "")}>
                 {activeConversationId ? (
                   <div className="chat-conversation-thread">
                     {(() => {
@@ -822,7 +943,7 @@ export default function AnalysisForm() {
                       );
                     })()}
                   </div>
-                ) : <div className="chat-empty-state">
+                ) : busy ? null : <div className="chat-empty-state">
                   <div className="chat-mark" aria-hidden="true">
                     <Image
                       src="/images/quantumone-icon.png"
@@ -854,6 +975,15 @@ export default function AnalysisForm() {
                     ))}
                   </div>
                 </div>}
+                {busy && (
+                  <>
+                    <div className="chat-user-message chat-pending-message">
+                      <p>{question.trim() || (attachments.length ? "Analisar os arquivos anexados." : "Analisar o código do editor.")}</p>
+                      {attachments.length > 0 && <span className="chat-code-attachment">{attachments.length} anexo(s)</span>}
+                    </div>
+                    <AnalysisLiveStatus progress={progress} startedAt={startedAt} onCancel={cancelPending} />
+                  </>
+                )}
               </div>
 
               <div className="chat-composer">
@@ -861,10 +991,19 @@ export default function AnalysisForm() {
                   ref={fileInputRef}
                   className="visually-hidden"
                   type="file"
-                  accept=".txt,.md,.py,.qasm,.json,.csv,.log"
+                  accept={ATTACHMENT_ACCEPT}
                   multiple
-                  onChange={(event) => handleSelectFiles(event.target.files)}
+                  onChange={(event) => handleSelectFiles(event.target.files, "files")}
                   aria-label="Selecionar arquivos para a conversa"
+                />
+                <input
+                  ref={folderInputRef}
+                  className="visually-hidden"
+                  type="file"
+                  multiple
+                  {...{ webkitdirectory: "", directory: "" }}
+                  onChange={(event) => handleSelectFiles(event.target.files, "folder")}
+                  aria-label="Selecionar pasta de projeto para a conversa"
                 />
                 <label
                   className="visually-hidden"
@@ -942,6 +1081,16 @@ export default function AnalysisForm() {
                       <span aria-hidden="true">⌁</span>
                       Anexar
                     </button>
+                    <button
+                      type="button"
+                      className="button-secondary add-code-button"
+                      onClick={() => folderInputRef.current?.click()}
+                      aria-label="Anexar pasta à conversa"
+                      title="Anexar uma pasta de projeto (até 300 arquivos de texto e código, 3 MB no total)"
+                    >
+                      <span aria-hidden="true">▤</span>
+                      Anexar pasta
+                    </button>
                   </div>
 
                   <div className="form-actions">
@@ -961,6 +1110,10 @@ export default function AnalysisForm() {
                 </div>
               </div>
 
+              {attachmentNotice && (
+                <FeedbackMessage tone={attachmentNotice.tone} className="attachment-feedback" message={attachmentNotice.message}
+                  action={{ label: "Fechar aviso", onClick: () => setAttachmentNotice(null) }} />
+              )}
               {feedback && (
                 <FeedbackMessage tone="error" className="form-feedback error" message={feedback.message} />
               )}

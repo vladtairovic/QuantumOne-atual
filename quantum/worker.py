@@ -39,9 +39,16 @@ def main():
             result = diagnosticar(entrada["code"], entrada["format"], entrada["politica"])
         else:
             from .qiskit_service import processar_circuito
-            result = processar_circuito(entrada["code"], entrada["format"], entrada["optimization_level"],
+            codigo, ignoradas = entrada["code"], []
+            if entrada.get("extrair_construcao") and entrada["format"] in ("python", "auto") and not entrada["code"].lstrip().startswith("OPENQASM"):
+                from .diagnostico import extrair_construcao
+                codigo, ignoradas, _ = extrair_construcao(entrada["code"])
+            result = processar_circuito(codigo, entrada["format"], entrada["optimization_level"],
                                         perfil=entrada.get("perfil"), hardware=entrada.get("hardware"),
                                         prioridade=entrada.get("prioridade", "dois_qubits"))
+            if ignoradas:
+                result["warnings"].append(f"{len(ignoradas)} linha(s) de execução/simulação/impressão foram ignoradas: "
+                                          "só a construção do circuito foi otimizada.")
         response = json.dumps({"result": result}, default=_json_padrao)
         if len(response.encode()) > limits.max_request_bytes:
             raise CircuitError("OUTPUT_LIMIT_EXCEEDED", "O resultado excede o orçamento de saída.", status=413)

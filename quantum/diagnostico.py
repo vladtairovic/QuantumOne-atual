@@ -114,6 +114,72 @@ def analisar_traceback(texto):
     return problemas
 
 
+def _esvaziar(linhas, n):
+    """Esvazia a linha n (1-based); se for cabeçalho de bloco (termina em ':'), esvazia o corpo também."""
+    cabecalho = linhas[n - 1]
+    removidas = [cabecalho.strip()]
+    linhas[n - 1] = ""
+    if cabecalho.split("#", 1)[0].rstrip().endswith(":"):
+        recuo = len(cabecalho) - len(cabecalho.lstrip())
+        k = n
+        while k < len(linhas):
+            atual = linhas[k]
+            if atual.strip() and len(atual) - len(atual.lstrip()) <= recuo:
+                break
+            if atual.strip():
+                removidas.append(atual.strip())
+            linhas[k] = ""
+            k += 1
+    return removidas
+
+
+def _reduzir_import(linha):
+    """'from qiskit import QuantumCircuit, transpile' -> mantém só os nomes de construção.
+
+    Devolve (nova_linha, nomes_removidos) ou None quando a linha não é um import misto
+    (sem nada aproveitável, a linha inteira é esvaziada pelo chamador)."""
+    from .python_parser import CONSTRUCTORS, MATH
+    m = re.match(r"(\s*)from\s+(qiskit(?:\.circuit)?|math)\s+import\s+\(?([^()#]+?)\)?\s*(?:#.*)?$", linha)
+    if not m:
+        return None
+    permitidos = MATH if m.group(2) == "math" else CONSTRUCTORS
+    nomes = [x.strip() for x in m.group(3).split(",") if x.strip()]
+    mantidos = [x for x in nomes if x.split(" as ")[0].strip() in permitidos]
+    removidos = [x for x in nomes if x not in mantidos]
+    if not mantidos or not removidos:
+        return None
+    return f"{m.group(1)}from {m.group(2)} import {', '.join(mantidos)}", removidos
+
+
+def extrair_construcao(codigo):
+    """Mantém só as linhas que o interpretador restrito aceita (construção do circuito).
+
+    Linhas de execução, simulação, impressão ou bibliotecas externas são esvaziadas
+    (a numeração é preservada) e devolvidas em ``ignoradas``. Blocos não suportados
+    (por exemplo ``if __name__ == "__main__":`` ou ``def``) são esvaziados inteiros.
+    Nada é executado.
+    """
+    from .python_parser import carregar_circuito_python
+    linhas = codigo.split("\n")
+    ignoradas = []
+    for _ in range(80):
+        try:
+            circuito = carregar_circuito_python("\n".join(linhas))
+            return "\n".join(linhas), ignoradas, circuito
+        except CircuitError as erro:
+            n = erro.details.get("line")
+            if erro.code != "UNSUPPORTED_PYTHON" or not n or n > len(linhas) or not linhas[n - 1].strip():
+                raise
+            reduzida = _reduzir_import(linhas[n - 1])
+            if reduzida:
+                linhas[n - 1], removidos = reduzida
+                ignoradas.append({"linha": n, "texto": f"import de {', '.join(removidos)}"[:160], "motivo": erro.message})
+                continue
+            for texto in _esvaziar(linhas, n):
+                ignoradas.append({"linha": n, "texto": texto[:160], "motivo": erro.message})
+    raise CircuitError("INVALID_CIRCUIT", "Muitas instruções fora do subconjunto de construção.")
+
+
 def _validar(codigo, linguagem):
     """Carrega o código corrigido com os carregadores restritos do otimizador."""
     from .qiskit_service import carregar_circuito_qasm, obter_metricas, validar_limites_circuito
@@ -121,20 +187,7 @@ def _validar(codigo, linguagem):
     if linguagem == "qasm":
         circuito = carregar_circuito_qasm(codigo)
     else:
-        from .python_parser import carregar_circuito_python
-        linhas = codigo.split("\n")
-        for _ in range(30):
-            try:
-                circuito = carregar_circuito_python("\n".join(linhas))
-                break
-            except CircuitError as erro:
-                n = erro.details.get("line")
-                if erro.code != "UNSUPPORTED_PYTHON" or not n or not linhas[n - 1].strip():
-                    raise
-                ignoradas.append({"linha": n, "texto": linhas[n - 1].strip()[:160], "motivo": erro.message})
-                linhas[n - 1] = ""
-        else:
-            raise CircuitError("INVALID_CIRCUIT", "Muitas instruções fora do subconjunto de construção.")
+        _, ignoradas, circuito = extrair_construcao(codigo)
         validar_limites_circuito(circuito)
     return circuito, obter_metricas(circuito), ignoradas
 

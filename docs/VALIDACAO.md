@@ -1,3 +1,5 @@
+> **Relatório histórico (Beta).** Resultados atuais: [BENCHMARKS.md](BENCHMARKS.md). A integração com o Gemini citada em versões anteriores foi removida em 23/11/2026; o `/query` sem chave agora responde de forma extrativa local.
+
 # Validação — 08/11/2026
 
 ## Resultado desta entrega
@@ -16,7 +18,7 @@ Executado localmente com Docker Desktop, engine 29.9.2, containers Linux/Python 
 - ChromaDB parado: busca/listagem retornaram 503; após religar, serviço recuperado.
 - Containers removidos e recriados sem excluir volumes: coleção/IDs, documentos e avaliação preservados; modelo carregou do cache com download desativado.
 - `/query` sem chave: 503 `LLM_NOT_CONFIGURED`.
-- Fluxo RAG/Gemini, ausência de contexto, falha do provedor, timeout configurado e fechamento do cliente cobertos por testes com transporte controlado; esses testes não são respostas reais de IA.
+- Fluxo RAG com LLM, ausência de contexto, falha do provedor e timeout cobertos por testes com transporte controlado; esses testes não são respostas reais de IA.
 - Dados locais antigos, ambientes virtuais e modelos baixados não foram incorporados ao repositório.
 
 Evidência detalhada desta execução: [validacao-docker.json](validacao-docker.json).
@@ -24,7 +26,7 @@ A CI em [.github/workflows/validar.yml](../.github/workflows/validar.yml) repete
 
 ## Limitações confirmadas
 
-**Não houve chamada real ao Gemini**, por escolha explícita do usuário de continuar sem credencial. Para validar essa última dependência, configure `GEMINI_API_KEY` em `.env`, confirme acesso ao `GEMINI_MODEL`, recrie a API e execute a consulta descrita no README. Ainda precisam ser avaliadas a qualidade das respostas, pertinência e fidelidade das citações.
+Nesta validação não houve chamada real a um provedor de LLM. A geração hoje usa a fila de LLMs NVIDIA (ver [LLM.md](LLM.md)); a qualidade das respostas e a fidelidade das citações ainda precisam de avaliação humana.
 
 Qiskit não executa hardware IBM nem Aer. O endpoint transpila e avalia equivalência unitária dentro dos limites do serviço original. Casos não verificáveis são identificados no retorno; não são declarados equivalentes.
 
@@ -32,4 +34,4 @@ Foram observados três avisos de depreciação na suíte isolada (Starlette/AnyI
 
 ## Histórico
 
-A primeira preparação ocorreu em 26/10/2026. A CI anterior já validou o projeto sem Gemini/Qiskit em 27/10/2026. O presente relatório substitui as antigas pendências locais de Docker e GitHub, agora disponíveis e autenticados. As fontes/commits desta nova integração constam em [INTEGRACOES.md](INTEGRACOES.md).
+A primeira preparação ocorreu em 26/10/2026. A CI anterior já validou o projeto sem LLM nem Qiskit em 27/10/2026. O presente relatório substitui as antigas pendências locais de Docker e GitHub, agora disponíveis e autenticados. As fontes/commits desta nova integração constam em [INTEGRACOES.md](INTEGRACOES.md).

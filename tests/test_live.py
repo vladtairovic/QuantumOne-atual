@@ -23,7 +23,7 @@ def test_fluxo_real():
         assert busca.status_code == 200, busca.text
         assert any(c["document_id"] == id for c in busca.json()["chunks"])
         consulta = client.post("/query", json={"input": "O que é transpilação?", "web_search": True})
-        # Nunca há busca web; com ou sem Gemini a resposta vem da base local (LLM ou extrativa).
+        # Nunca há busca web; com ou sem LLM a resposta vem da base local (fila NVIDIA ou extrativa).
         assert consulta.status_code == 200, consulta.text
         corpo = consulta.json()
         assert corpo["web_status"] == "disabled" and corpo["answer_mode"] in ("llm", "local", "none")

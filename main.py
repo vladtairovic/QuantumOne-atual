@@ -46,7 +46,7 @@ ERROS = {n: {'model': Erro, 'description': descricao} for n, descricao in {
     503:'Serviço externo indisponível', 504:'Tempo limite excedido'}.items()}
 app = FastAPI(title='GrowUp - API integrada', version='0.4.0', responses=ERROS,
     lifespan=lifespan,
-    description='API do QuantumOne: RAG híbrido local (ChromaDB + BM25), resposta por Gemini opcional ou extrativa local, '
+    description='API do QuantumOne: RAG híbrido local (ChromaDB + BM25), resposta por fila de LLMs NVIDIA (opcional) ou extrativa local, '
                 'diagnóstico de entradas e otimização Qiskit verificada. Sem busca web.')
 app.openapi_version = '3.1.0'
 
@@ -136,8 +136,8 @@ async def health():
 
 @app.post('/query', response_model=RespostaConsulta)
 async def query(entrada: Consulta, request: Request):
-    """Consulta somente a base local (RAG híbrido). Com GEMINI_API_KEY, o Gemini redige a resposta a partir
-    dos trechos; sem chave, ou se o Gemini falhar, a resposta é extrativa local (answer_mode=local).
+    """Consulta somente a base local (RAG híbrido). Com NVIDIA_API_KEY, a fila de LLMs redige a resposta a partir
+    dos trechos; sem chave, ou se nenhum modelo responder a tempo, a resposta é extrativa local (answer_mode=local).
     Nenhuma busca web é executada."""
     if entrada.web_search is None:
         chamada = servicos.consultar(entrada.input) if entrada.top_k == 3 else servicos.consultar(entrada.input, entrada.top_k)
@@ -256,3 +256,30 @@ async def enviar_mensagem(
     ]
     conversas.registrar(identificador, versao, atualizadas)
     return resposta
+
+
+# Análise unificada: texto, código, arquivos e pastas em uma única chamada.
+from contratos_analise import EntradaAnalise, ProgressoAnalise, RespostaAnalise
+from rag import progresso as progresso_analise
+
+TEMPO_ANALISE = float(os.getenv('QONE_ANALISE_TIMEOUT_SECONDS', '900'))
+
+
+@app.post('/analise', response_model=RespostaAnalise)
+async def analisar_envio(entrada: EntradaAnalise, request: Request):
+    """Interpreta e analisa qualquer combinação de texto, código e arquivos (inclusive pastas de projeto):
+    Qiskit diagnostica e otimiza os circuitos, a fila de LLMs corrige o código inválido (revalidado pelo Qiskit),
+    planeja as buscas, consulta a base local primeiro e a internet como complemento, e redige a resposta.
+    Acompanhe a etapa e o modelo em uso por GET /analise/progresso/{progress_id}."""
+    import orquestrador
+    resultado = await asyncio.wait_for(orquestrador.analisar(entrada, request.state.request_id), TEMPO_ANALISE)
+    return RespostaAnalise.model_validate(resultado)
+
+
+@app.get('/analise/progresso/{progress_id}', response_model=ProgressoAnalise)
+async def progresso_do_envio(progress_id: UUID):
+    """Etapa atual e modelo de LLM solicitado no momento (texto ao vivo da interface)."""
+    estado = progresso_analise.obter(progress_id)
+    if estado is None:
+        raise HTTPException(404, 'Progresso não encontrado.')
+    return ProgressoAnalise.model_validate(estado)

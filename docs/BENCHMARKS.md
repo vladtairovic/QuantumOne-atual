@@ -91,7 +91,7 @@ Novos arquivos de teste: `test_sem_busca_web.py` (P0, com bloqueio de rede), `te
 | Problema | Causa | Resolução |
 |---|---|---|
 | Consultas consumiam a cota gratuita e falhavam com `WEB_SEARCH_UNAVAILABLE` | `WEB_SEARCH_ENABLED=1` por padrão no compose | busca web removida; resposta local |
-| Sem chave do Gemini, `/query` devolvia 503 | LLM obrigatória | resposta extrativa local (`answer_mode=local`) |
+| Sem chave de LLM, `/query` devolvia 503 | LLM obrigatória | resposta extrativa local (`answer_mode=local`) |
 | Perguntas em português recuperavam mal a documentação em inglês | só busca vetorial | BM25 + glossário PT→EN + RRF |
 | Parser parava no primeiro erro | `qasm2.loads`/interpretador lançam na 1ª falha | analisadores tolerantes |
 | Motor aumentava portas de 2 qubits | decomposição sem comparar com o original | original como candidato, CX equivalentes |

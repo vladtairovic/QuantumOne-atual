@@ -24,7 +24,7 @@ class Fonte(Modelo):
 
 class FonteContexto(Fonte):
     model_config = ConfigDict(from_attributes=True)
-    origin: Literal['local'] = 'local'
+    origin: Literal['local', 'web'] = 'local'
     title: str | None = None
     retrieved_at: str | None = None
 
@@ -51,14 +51,14 @@ class TentativaLLM(Modelo):
     segundos: float
 
 class InfoLLM(Modelo):
-    provedor: Literal['nvidia', 'gemini']
+    provedor: Literal['nvidia']
     modelo: str | None = Field(description='Modelo que gerou a resposta; null se nenhum respondeu.')
     tentativas: list[TentativaLLM]
 
 class ResultadoConsulta(Modelo):
     web_status: Literal['disabled'] = Field(default='disabled', description='A busca web foi removida; sempre disabled.')
     answer_mode: Literal['llm', 'local', 'none'] = Field(default='llm', description=
-        'llm: gerada pelo Gemini com os trechos locais; local: extrativa, sem LLM; none: nenhuma resposta gerada.')
+        'llm: redigida pela fila de LLMs NVIDIA com os trechos locais; local: extrativa, sem LLM; none: nenhuma resposta gerada.')
     interpretation: Interpretacao | None = None
     evidence: Evidencia | None = None
     llm: InfoLLM | None = None

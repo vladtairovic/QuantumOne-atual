@@ -34,10 +34,6 @@
       "operacoes_depois": 0
     },
     {
-      "etapa": "gemini_real",
-      "resultado": "nao_executado_sem_credencial_por_escolha_do_usuario"
-    },
-    {
       "etapa": "validacoes_http_e_llm_ausente",
       "codigo_llm": "LLM_NOT_CONFIGURED"
     },
@@ -71,5 +67,6 @@
     }
   ],
   "resultado": "aprovado",
-  "fim_utc": "2026-11-09T02:08:31.615673+00:00"
+  "fim_utc": "2026-11-09T02:08:31.615673+00:00",
+  "observacao": "Etapa sobre o Gemini retirada deste registro em 23/11/2026, quando a integração foi removida do projeto."
 }

@@ -23,7 +23,7 @@ ENV = {
     **os.environ, "API_PORT": "18080", "MAILPIT_PORT": "18025", "FRONTEND_PORT": "13000", "GROWUP_PERMITIR_DOWNLOAD": "1", "KNOWLEDGE_AUTO_SYNC": "0",
     "CHROMA_COLLECTION": "qiskit_documentacao_multilingue",
     "EMBEDDING_MODEL": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
-    "RAG_MAX_DISTANCE": "", "API_TIMEOUT_SECONDS": "120", "GEMINI_API_KEY": "",
+    "RAG_MAX_DISTANCE": "", "API_TIMEOUT_SECONDS": "120", "NVIDIA_API_KEY": "",
 }
 COMPOSE = ["docker", "compose", "-p", PROJECT]
 REPORT = {"inicio_utc": datetime.now(timezone.utc).isoformat(), "etapas": []}
@@ -216,9 +216,9 @@ def main():
     assert otimizado["proposta"]["total_operacoes"] == 0
     conferir("POST", "/qiskit/optimize", 422, {"qasm": "invalido"})
     registrar("qiskit_real", equivalente=True, operacoes_antes=2, operacoes_depois=0)
-    registrar("gemini_real", resultado="nao_executado_sem_credencial_por_escolha_do_usuario")
+    registrar("llm_real", resultado="nao_executado_sem_credencial_na_validacao")
 
-    # Sem GEMINI_API_KEY: resposta extrativa local, sem busca web (Prioridade 0).
+    # Sem NVIDIA_API_KEY: resposta extrativa local, sem busca web (Prioridade 0).
     local, _ = conferir("POST", "/query", 200, {"input": "Como medir todos os qubits de um circuito?",
                                                "web_search": True})
     assert local["web_status"] == "disabled" and local["answer_mode"] in ("local", "none")

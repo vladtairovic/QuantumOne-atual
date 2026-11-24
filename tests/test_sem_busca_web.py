@@ -7,7 +7,7 @@ from uuid import uuid4
 
 import pytest
 
-from rag import cliente_gemini
+from rag import cliente_llm
 from tests.test_integracao import contexto  # noqa: F401  (fixture)
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -45,7 +45,8 @@ def test_modulo_de_busca_web_removido():
 
 
 def test_codigo_fonte_nao_referencia_ferramenta_de_busca():
-    proibidos = ("google_search", "GoogleSearch", "WEB_SEARCH_ENABLED", "GEMINI_WEB_MODEL",
+    proibidos = ("google_search", "GoogleSearch", "WEB_SEARCH_ENABLED", "GEMINI_WEB_MODEL", "GEMINI_API_KEY",
+                 "google.genai", "google-genai", "cliente_gemini",
                  "Buscar também na web", "Consultar a internet")
     arquivos = [p for p in ROOT.rglob("*") if p.suffix in (".py", ".ts", ".tsx", ".yaml", ".example")
                 and "node_modules" not in p.parts and ".next" not in p.parts and "tests" not in p.parts]
@@ -77,53 +78,36 @@ def test_web_search_true_e_ignorado_com_aviso(contexto, sem_rede):
     assert sem_rede == []
 
 
-def test_gemini_nunca_recebe_ferramenta_de_busca_e_falha_vira_resposta_local(contexto, monkeypatch, sem_rede):
+def test_fila_llm_nunca_recebe_ferramenta_de_busca(contexto, monkeypatch, sem_rede):
+    import httpx
     client, _ = contexto
     _enviar(client)
-    monkeypatch.setenv("GEMINI_API_KEY", "chave-de-teste")
-    configuracoes = []
+    monkeypatch.setenv("NVIDIA_API_KEY", "chave-de-teste")
+    monkeypatch.setenv("NVIDIA_MODELS", "m1")
+    cliente_llm.limpar_pausas()
+    corpos = []
+    original = cliente_llm.gerar_resposta
 
-    class Modelos:
-        def generate_content(self, model, contents, config):
-            configuracoes.append(config)
-            raise RuntimeError("429 RESOURCE_EXHAUSTED chave-de-teste")
-
-    monkeypatch.setattr(cliente_gemini.genai, "Client",
-                        lambda **kw: SimpleNamespace(models=Modelos(), close=lambda: None))
+    def responder(request):
+        import json as _json
+        corpos.append(_json.loads(request.content))
+        return httpx.Response(429, json={"detail": "chave-de-teste"})
+    monkeypatch.setattr(cliente_llm, "gerar_resposta",
+                        lambda p, c: original(p, c, transporte=httpx.MockTransport(responder)))
     r = client.post("/query", json={"input": "Como medir qubits no Qiskit?", "web_search": True})
-    assert r.status_code == 200, r.text
-    corpo = r.json()
-    assert corpo["answer_mode"] == "local"
-    assert any("modelo de linguagem não respondeu" in a for a in corpo["warnings"])
+    cliente_llm.limpar_pausas()
+    assert r.status_code == 200 and r.json()["answer_mode"] == "local"
     assert "chave-de-teste" not in r.text
-    assert len(configuracoes) == 1 and not getattr(configuracoes[0], "tools", None)
+    assert len(corpos) == 1 and set(corpos[0]) == {"model", "messages", "max_tokens", "temperature", "stream"}
     assert sem_rede == []
-
-
-def test_gemini_configurado_gera_resposta_com_trechos_locais(contexto, monkeypatch):
-    client, _ = contexto
-    _enviar(client)
-    monkeypatch.setenv("GEMINI_API_KEY", "chave-de-teste")
-    prompts = []
-
-    class Modelos:
-        def generate_content(self, model, contents, config):
-            prompts.append(contents)
-            return SimpleNamespace(text="Use measure [Fonte 1].")
-
-    monkeypatch.setattr(cliente_gemini.genai, "Client",
-                        lambda **kw: SimpleNamespace(models=Modelos(), close=lambda: None))
-    corpo = client.post("/query", json={"input": "Como medir qubits no Qiskit?"}).json()
-    assert corpo["answer_mode"] == "llm" and corpo["response"] == "Use measure [Fonte 1]."
-    assert "QuantumCircuit.measure" in prompts[0]
 
 
 def test_modo_local_forcado_nao_chama_llm_mesmo_com_chave(contexto, monkeypatch):
     client, _ = contexto
     _enviar(client)
-    monkeypatch.setenv("GEMINI_API_KEY", "chave-de-teste")
+    monkeypatch.setenv("NVIDIA_API_KEY", "chave-de-teste")
     monkeypatch.setenv("QONE_LLM", "local")
-    monkeypatch.setattr(cliente_gemini.genai, "Client", lambda **kw: pytest.fail("LLM chamada no modo local"))
+    monkeypatch.setattr(cliente_llm, "gerar_resposta", lambda *a, **k: pytest.fail("LLM chamada no modo local"))
     assert client.post("/query", json={"input": "Como medir qubits no Qiskit?"}).json()["answer_mode"] == "local"
 
 

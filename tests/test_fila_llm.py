@@ -17,8 +17,6 @@ def configuracao(monkeypatch):
     monkeypatch.setenv("NVIDIA_API_KEY", "chave-de-teste")
     monkeypatch.setenv("NVIDIA_MODELS", ",".join(FILA))
     monkeypatch.setenv("LLM_TIMEOUT_SECONDS", "0.5")
-    monkeypatch.setenv("LLM_PAUSA_SEGUNDOS", "60")
-    monkeypatch.delenv("GEMINI_API_KEY", raising=False)
     cliente_llm.limpar_pausas()
     yield
     cliente_llm.limpar_pausas()
@@ -46,7 +44,7 @@ def test_primeiro_da_fila_responde():
     assert r["modelo"] == "forte" and r["texto"] == "Resposta [Fonte 1]"
     assert len(chamadas) == 1
     # Só a pergunta e os trechos locais: nenhuma ferramenta (busca web) é enviada.
-    assert set(chamadas[0]) == {"model", "messages", "max_tokens", "temperature"}
+    assert set(chamadas[0]) == {"model", "messages", "max_tokens", "temperature", "stream"} and chamadas[0]["stream"] is True
     assert chamadas[0]["messages"][0]["role"] == "system"
 
 
@@ -69,7 +67,7 @@ def test_vazio_e_erro_http_seguem_a_fila_e_pensamento_e_removido():
 
 def test_disjuntor_pula_modelo_que_falhou():
     chamadas = []
-    comportamento = {"forte": ("http", 503), "medio": ("ok", "ok")}
+    comportamento = {"forte": ("http", 404), "medio": ("ok", "ok")}  # só erros permanentes pausam
     cliente_llm.gerar_resposta("p", "c", transporte(comportamento, chamadas))
     chamadas.clear()
     r = cliente_llm.gerar_resposta("p", "c", transporte(comportamento, chamadas))
@@ -92,10 +90,10 @@ def test_fila_padrao_tem_sete_modelos_em_ordem(monkeypatch):
         "poolside/laguna-xs-2.1", "nvidia/nemotron-3.5-bolt-e4b", "nvidia/ising-calibration-1.5-31b"]
 
 
-def test_limite_padrao_e_15_segundos(monkeypatch):
+def test_limite_padrao_e_30_segundos(monkeypatch):
     monkeypatch.delenv("LLM_TIMEOUT_SECONDS")
     import inspect
-    assert 'getenv("LLM_TIMEOUT_SECONDS", "15")' in inspect.getsource(cliente_llm.gerar_resposta)
+    assert 'getenv("LLM_TIMEOUT_SECONDS", "30")' in inspect.getsource(cliente_llm.conversar)
 
 
 def test_query_usa_a_fila_e_informa_o_modelo(contexto, monkeypatch):
@@ -122,3 +120,71 @@ def test_fila_esgotada_vira_resposta_local(contexto, monkeypatch):
     corpo = client.post("/query", json={"input": "Como medir qubits no Qiskit?"}).json()
     assert corpo["answer_mode"] == "local" and corpo["llm"]["modelo"] is None
     assert any("Nenhum modelo da fila" in a for a in corpo["warnings"])
+
+
+def _sse(pedacos, atraso_apos=None, atraso=0.0):
+    """Corpo SSE no formato do chat/completions; ``atraso_apos`` pausa depois desse pedaço."""
+    def gerar():
+        for n, pedaco in enumerate(pedacos):
+            yield ("data: " + json.dumps({"choices": [{"delta": {"content": pedaco}}]}) + "\n\n").encode()
+            if atraso_apos is not None and n == atraso_apos:
+                time.sleep(atraso)
+        yield b"data: [DONE]\n\n"
+    return gerar()
+
+
+def test_streaming_junta_os_pedacos_remove_raciocinio_e_avisa_o_parcial(monkeypatch):
+    monkeypatch.setattr(cliente_llm, "_INTERVALO_PARCIAL", 0)
+    parciais = []
+
+    def responder(request):
+        assert json.loads(request.content)["stream"] is True
+        return httpx.Response(200, headers={"content-type": "text/event-stream"},
+                              content=_sse(["<think>pensando", "</think>Olá", ", mundo", " [Fonte 1]"]))
+
+    r = cliente_llm.conversar([{"role": "user", "content": "oi"}], transporte=httpx.MockTransport(responder),
+                              ao_parcial=lambda modelo, texto: parciais.append((modelo, texto)))
+    assert r["modelo"] == "forte" and r["texto"] == "Olá, mundo [Fonte 1]"
+    assert parciais[0] == ("forte", "") and parciais[-1] == ("forte", "Olá, mundo [Fonte 1]")
+    assert all("pensando" not in texto for _, texto in parciais)
+
+
+def test_parcial_de_modelo_que_estourou_o_prazo_nao_vaza_para_o_proximo(monkeypatch):
+    monkeypatch.setattr(cliente_llm, "_INTERVALO_PARCIAL", 0)
+    eventos = []
+
+    def responder(request):
+        modelo = json.loads(request.content)["model"]
+        if modelo == "forte":  # escreve um pedaço e trava além do prazo de 0,5 s
+            return httpx.Response(200, headers={"content-type": "text/event-stream"},
+                                  content=_sse(["começo do forte", " fim tardio do forte"], atraso_apos=0, atraso=1.2))
+        return httpx.Response(200, headers={"content-type": "text/event-stream"}, content=_sse(["resposta do médio"]))
+
+    r = cliente_llm.conversar([{"role": "user", "content": "oi"}], transporte=httpx.MockTransport(responder),
+                              ao_progresso=lambda modelo, *a: eventos.append(("modelo", modelo)),
+                              ao_parcial=lambda modelo, texto: eventos.append(("parcial", modelo, texto)))
+    assert r["modelo"] == "medio" and r["tentativas"][0]["resultado"].startswith("tempo_esgotado")
+    time.sleep(1.0)  # dá tempo de a thread do modelo lento ler o pedaço tardio
+    depois_do_medio = eventos[eventos.index(("modelo", "medio")):]
+    assert not [e for e in depois_do_medio if e[0] == "parcial" and e[1] == "forte"]
+    assert ("parcial", "forte", "começo do forte") in eventos
+
+
+def test_progresso_guarda_parcial_so_do_modelo_em_uso():
+    from uuid import uuid4
+
+    from rag import progresso
+    pid = str(uuid4())
+    r = progresso.Rastreador(pid)
+    r.modelo("m1", 1, 7, "Redigindo a resposta")
+    r.parcial("m1", "texto do m1")
+    assert progresso.obter(pid)["parcial"] == "texto do m1"
+    r.modelo("m2", 2, 7, "Redigindo a resposta")
+    assert progresso.obter(pid)["parcial"] is None  # trocou de modelo: o texto anterior some
+    r.parcial("m1", "atrasado")
+    assert progresso.obter(pid)["parcial"] is None
+    r.registrar("Internet: 3 resultado(s)")
+    estado = progresso.obter(pid)
+    assert estado["etapa"].endswith("(2/7)") and estado["historico"][-1]["texto"] == "Internet: 3 resultado(s)"
+    r.concluir()
+    assert progresso.obter(pid)["parcial"] is None

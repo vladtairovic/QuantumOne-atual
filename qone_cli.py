@@ -2,6 +2,8 @@
 
 Exemplos:
     python qone_cli.py saude
+    python qone_cli.py analisar "Corrija e otimize meu projeto" --anexo meu_projeto/
+    python qone_cli.py analisar "Por que dá erro?" --codigo circuito.qasm --sem-web
     python qone_cli.py perguntar "Como medir todos os qubits?"
     python qone_cli.py diagnosticar circuito.qasm --politica expandir_registradores
     python qone_cli.py otimizar circuito.qasm --perfil avancado --topologia heavy_hex --portas ibm_heron
@@ -14,10 +16,20 @@ import argparse
 import json
 import os
 import sys
+import threading
+import uuid
+from pathlib import Path
 
 import httpx
 
 API_PADRAO = os.getenv("QONE_API_URL", "http://127.0.0.1:8000")
+TEMPO_ANALISE = float(os.getenv("QONE_ANALISE_TIMEOUT_SECONDS", "900")) + 30
+# Mesmos limites de POST /analise (contratos_analise.py).
+MAX_ARQUIVOS, MAX_BYTES_ARQUIVO, MAX_BYTES_TOTAL = 300, 300_000, 3_000_000
+PASTAS_IGNORADAS = {".git", "node_modules", "__pycache__", ".venv", "venv", ".next", "dist", "build",
+                    ".mypy_cache", ".pytest_cache", ".ipynb_checkpoints", ".idea", ".vscode"}
+EXTENSOES_TEXTO = {".qasm", ".py", ".ipynb", ".md", ".txt", ".rst", ".json", ".yaml", ".yml", ".toml",
+                   ".cfg", ".ini", ".csv", ".inc"}
 
 
 def _ler(caminho):
@@ -25,6 +37,124 @@ def _ler(caminho):
         return sys.stdin.read()
     with open(caminho, encoding="utf-8") as arquivo:
         return arquivo.read()
+
+
+def _coletar_anexos(caminhos, saida):
+    """Lê arquivos e pastas (recursivamente) como [{nome, conteudo}], respeitando os limites da API."""
+    arquivos, total = [], 0
+    for caminho in caminhos:
+        base = Path(caminho)
+        if base.is_dir():
+            candidatos = [(item, item.relative_to(base.parent).as_posix()) for item in sorted(base.rglob("*"))
+                          if item.is_file() and item.suffix.lower() in EXTENSOES_TEXTO
+                          and not PASTAS_IGNORADAS.intersection(item.relative_to(base).parts)]
+        elif base.is_file():
+            candidatos = [(base, base.name)]
+        else:
+            saida.write(f"! Anexo não encontrado: {caminho}\n")
+            continue
+        for item, nome in candidatos:
+            try:
+                conteudo = item.read_text(encoding="utf-8")
+            except (UnicodeDecodeError, OSError):
+                saida.write(f"! Ignorado (não é texto UTF-8): {nome}\n")
+                continue
+            tamanho = len(conteudo.encode("utf-8"))
+            if tamanho > MAX_BYTES_ARQUIVO or total + tamanho > MAX_BYTES_TOTAL or len(arquivos) >= MAX_ARQUIVOS:
+                saida.write(f"! Ignorado (limite de {MAX_ARQUIVOS} arquivos, 300 KB cada, 3 MB no total): {nome}\n")
+                continue
+            arquivos.append({"nome": nome[:500], "conteudo": conteudo})
+            total += tamanho
+    return arquivos
+
+
+def _analisar(cliente, args, saida):
+    """Envia POST /analise e, enquanto espera, mostra cada etapa e o modelo consultado no momento."""
+    progress_id = str(uuid.uuid4())
+    corpo = {"mensagem": args.mensagem or "", "formato": args.formato, "perfil": args.perfil, "top_k": args.top_k,
+             "pesquisa_web": not args.sem_web, "progress_id": progress_id,
+             "arquivos": _coletar_anexos(args.anexo or [], saida)}
+    if args.codigo:
+        corpo["codigo"] = _ler(args.codigo)
+    if args.conversa:
+        corpo["conversation_id"] = args.conversa
+    resultado = {}
+
+    def enviar():
+        try:
+            resultado["resposta"] = cliente.post("/analise", json=corpo, timeout=TEMPO_ANALISE)
+        except httpx.HTTPError as erro:
+            resultado["erro"] = erro
+
+    tarefa = threading.Thread(target=enviar, daemon=True)
+    tarefa.start()
+    ultima = None
+    while True:
+        tarefa.join(1.0)
+        if not tarefa.is_alive():
+            break
+        try:
+            r = cliente.get(f"/analise/progresso/{progress_id}", timeout=5)
+        except httpx.HTTPError:
+            continue
+        if r.status_code == 200:
+            estado = r.json()
+            if estado["etapa"] != ultima:
+                ultima = estado["etapa"]
+                saida.write(f"[{estado['segundos_total']:6.1f} s] {ultima}\n")
+                saida.flush()
+    if "erro" in resultado:
+        raise resultado["erro"]
+    return resultado["resposta"]
+
+
+def _imprimir_analise(corpo, saida):
+    saida.write("\n" + corpo["resposta"].rstrip() + "\n")
+    llm = corpo.get("llm") or {}
+    if corpo.get("answer_mode") == "llm" and llm.get("modelo"):
+        saida.write(f"\n[Redigida por {llm['modelo']}]\n")
+    else:
+        saida.write({"local": "\n[extrativa local (sem LLM)]\n",
+                     "none": "\n[sem resposta (evidência insuficiente)]\n"}.get(corpo.get("answer_mode"), ""))
+    for t in llm.get("tentativas") or []:
+        saida.write(f"  tentativa: {t.get('modelo')} -> {t.get('resultado')} ({t.get('segundos')} s)\n")
+    for c in corpo.get("circuitos", []):
+        corr = c.get("correcao") or {}
+        estado = "válido" if c.get("valido_original") else f"inválido, {c.get('problemas', 0)} problema(s)"
+        saida.write(f"\nCircuito {c['origem']} ({c.get('formato') or '?'}): {estado}\n")
+        for linha in c.get("diagnostico_resumo", []):
+            saida.write(f"  {linha}\n")
+        if corr.get("metodo") != "nenhuma":
+            quem = f" por {corr['modelo']}" if corr.get("modelo") else ""
+            saida.write(f"  Correção {corr['metodo']}{quem}: {'validada pelo Qiskit' if corr.get('valido') else 'não validada'}\n")
+            for falha in corr.get("falhas", []):
+                saida.write(f"  ! {falha}\n")
+            if corr.get("valido") and corr.get("codigo"):
+                saida.write(corr["codigo"].rstrip() + "\n")
+        o = c.get("otimizacao") or {}
+        if o:
+            a, b = o.get("original") or {}, o.get("proposta") or {}
+            saida.write(f"  Otimização ({o.get('perfil')}): portas {a.get('total_operacoes')} -> {b.get('total_operacoes')}, "
+                        f"profundidade {a.get('profundidade')} -> {b.get('profundidade')}, "
+                        f"CX equivalentes {o.get('cx_equivalentes_antes')} -> {o.get('cx_equivalentes_depois')}, "
+                        f"equivalente={o.get('equivalente')}\n")
+        if c.get("erro"):
+            saida.write(f"  ! {c['erro']}\n")
+    if corpo.get("arquivos"):
+        tipos = {}
+        for a in corpo["arquivos"]:
+            tipos[a["tipo"]] = tipos.get(a["tipo"], 0) + 1
+        saida.write("\nArquivos: " + ", ".join(f"{n} {t}" for t, n in sorted(tipos.items())) + "\n")
+    for aviso in corpo.get("warnings", []):
+        saida.write(f"! {aviso}\n")
+    locais = [f for f in corpo.get("sources", []) if f.get("origin", "local") == "local"]
+    web = [f for f in corpo.get("sources", []) if f.get("origin") == "web"]
+    if locais or web:
+        saida.write(f"\nFontes consultadas ({len(locais) + len(web)}):\n")
+    for rotulo, lista in (("Fonte", locais), ("Web", web)):
+        for numero, fonte in enumerate(lista, start=1):
+            saida.write(f"  [{rotulo} {numero}] {fonte.get('title') or fonte['document_id']} - {fonte['source']}\n")
+    saida.write(f"\nTempo total: {corpo.get('tempo_total_segundos')} s\n")
 
 
 def _erro(resposta):
@@ -101,6 +231,15 @@ def construir_parser():
     parser.add_argument("--json", action="store_true", help="Imprime a resposta JSON completa.")
     sub = parser.add_subparsers(dest="comando", required=True)
     sub.add_parser("saude", help="Confere se a API responde.")
+    a = sub.add_parser("analisar", help="Análise completa: texto, código, arquivos e pastas (Qiskit + base + internet + LLM).")
+    a.add_argument("mensagem", nargs="?", default="", help="Pedido em linguagem natural (opcional).")
+    a.add_argument("--codigo", help="Arquivo de código ou '-' para ler da entrada padrão.")
+    a.add_argument("--anexo", action="append", help="Arquivo ou pasta do projeto (pode repetir).")
+    a.add_argument("--formato", choices=["auto", "qasm", "python"], default="auto")
+    a.add_argument("--perfil", choices=["rapido", "balanceado", "avancado", "experimental"], default="balanceado")
+    a.add_argument("--top-k", type=int, default=5)
+    a.add_argument("--sem-web", action="store_true", help="Usa só a base local, sem pesquisa na internet.")
+    a.add_argument("--conversa", help="conversation_id para continuar uma conversa.")
     sub.add_parser("limites", help="Mostra os limites do motor de circuitos.")
     p = sub.add_parser("perguntar", help="Pergunta à base de conhecimento local (RAG).")
     p.add_argument("texto")
@@ -129,6 +268,8 @@ def executar(argv=None, cliente=None, saida=sys.stdout):
     try:
         if args.comando == "saude":
             resposta = cliente.get("/health")
+        elif args.comando == "analisar":
+            resposta = _analisar(cliente, args, saida)
         elif args.comando == "limites":
             resposta = cliente.get("/qiskit/limits")
         elif args.comando == "perguntar":
@@ -156,6 +297,8 @@ def executar(argv=None, cliente=None, saida=sys.stdout):
     corpo = resposta.json()
     if args.json or args.comando in ("saude", "limites", "buscar"):
         saida.write(json.dumps(corpo, ensure_ascii=False, indent=2) + "\n")
+    elif args.comando == "analisar":
+        _imprimir_analise(corpo, saida)
     elif args.comando == "perguntar":
         _imprimir_resposta(corpo, saida)
     elif args.comando == "diagnosticar":

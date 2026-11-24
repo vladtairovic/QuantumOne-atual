@@ -10,10 +10,10 @@ A API é o backend HTTP do QuantumOne. Ela recebe JSON ou arquivos multipart, va
 
 Há dois fluxos principais:
 
-- **Circuitos:** análise determinística com Qiskit; não chama Gemini, RAG ou Chroma.
-- **Conhecimento:** busca semântica no Chroma e, nas rotas de consulta/conversa, geração de texto por Gemini.
+- **Circuitos:** análise determinística com Qiskit; não chama LLM, RAG ou Chroma.
+- **Conhecimento:** busca semântica no Chroma e, nas rotas de consulta/conversa, geração de texto pela fila de LLMs NVIDIA (ou resposta extrativa local).
 
-O frontend não chama o Chroma, Redis ou Gemini diretamente. Ele chama a API pela reescrita Next `/api/*`. A chave Google existe somente no ambiente do serviço API.
+O frontend não chama o Chroma, Redis ou a LLM diretamente. Ele chama a API pela reescrita Next `/api/*`. A chave da NVIDIA existe somente no ambiente do serviço API.
 
 ## 2. Como acessar e explorar
 
@@ -60,8 +60,8 @@ Rotas gerais normalmente respondem com:
 | Método | Caminho | O que faz |
 |---|---|---|
 | GET | `/health` | Confirma que o processo FastAPI responde e informa o modo. |
-| POST | `/query` | Busca contexto e pede resposta ao Gemini; busca Google pode ser habilitada. |
-| POST | `/search` | Busca trechos no Chroma sem pedir geração ao Gemini. |
+| POST | `/query` | Busca contexto na base local e pede a resposta à fila de LLMs (ou responde de forma extrativa). Sem busca web. |
+| POST | `/search` | Busca trechos no Chroma sem pedir geração à LLM. |
 | POST | `/documents` | Valida e indexa um documento de texto enviado como multipart. |
 | GET | `/documents` | Lista documentos presentes na coleção. |
 | POST | `/evaluate` | Registra avaliação humana de uma resposta/caso. |
@@ -87,7 +87,7 @@ O endpoint **não** executa uma transação de teste no Google, Chroma ou Redis.
 
 ### `POST /query`
 
-**Finalidade:** responder uma pergunta usando recuperação documental e Gemini. A busca web opcional também é realizada pela integração Gemini/Google Search quando habilitada.
+**Finalidade:** responder uma pergunta usando recuperação documental local e a fila de LLMs NVIDIA (ver [LLM.md](LLM.md)); sem chave, ou se nenhum modelo responder a tempo, a resposta é extrativa local. Não há busca web.
 
 **Cabeçalho:** `Content-Type: application/json`.
 
@@ -136,8 +136,8 @@ O endpoint **não** executa uma transação de teste no Google, Chroma ou Redis.
 
 **Erros importantes:**
 
-- `503 LLM_NOT_CONFIGURED`: `GEMINI_API_KEY` ausente; use `/search` para recuperação sem geração.
-- `503 WEB_SEARCH_UNAVAILABLE`: **removido**. Sem LLM, ou com falha do Gemini, a resposta é extrativa local (`answer_mode: "local"`); `503 LLM_NOT_CONFIGURED` só ocorre com `QONE_LOCAL_FALLBACK=0`.
+- `503 LLM_NOT_CONFIGURED`: `NVIDIA_API_KEY` ausente **e** `QONE_LOCAL_FALLBACK=0`; use `/search` para recuperação sem geração.
+- `503 WEB_SEARCH_UNAVAILABLE`: **removido**. Sem LLM, ou se nenhum modelo da fila responder, a resposta é extrativa local (`answer_mode: "local"`); `503 LLM_NOT_CONFIGURED` só ocorre com `QONE_LOCAL_FALLBACK=0`.
 - `503 SERVICE_ERROR`: dependência do serviço indisponível.
 - `504 TIMEOUT`: serviço externo excedeu o timeout geral.
 - `422 INVALID_INPUT`: corpo não atende ao contrato.
@@ -146,7 +146,7 @@ Uma resposta gerada depende de um serviço externo: disponibilidade, cota, model
 
 ### `POST /search`
 
-**Finalidade:** busca semântica na base local, sem chamar Gemini para compor resposta.
+**Finalidade:** busca semântica na base local, sem chamar LLM para compor resposta.
 
 **Corpo:**
 
@@ -389,7 +389,7 @@ O envelope de circuito é mais detalhado que o envelope geral:
 1. FastAPI valida formato e limites simples.
 2. Lock/counter limita otimizações simultâneas.
 3. API chama `python -m quantum.worker` como subprocesso e passa JSON pelo stdin.
-4. Worker recebe ambiente reduzido; não herda `GEMINI_API_KEY`.
+4. Worker recebe ambiente reduzido; não herda `NVIDIA_API_KEY`.
 5. Em Linux, `resource` aplica limites de endereço de memória, CPU, core dump, tamanho de arquivo e descritores.
 6. O worker importa Qiskit, processa, serializa JSON e termina.
 7. Timeout, desconexão do cliente ou término do worker cancela, mata quando preciso e coleta o subprocesso.
@@ -463,14 +463,14 @@ O status e código específico variam conforme a rota. Clientes devem esperar re
 | Domínio Qiskit | `quantum/qiskit_service.py` | Parsing, validação, transpilation, métricas e equivalência. |
 | Python seguro | `quantum/python_parser.py` | Interpretação permitida de AST. |
 | Worker | `quantum/worker.py` | Recursos do SO e fronteira de processo. |
-| RAG e ingestão | `rag/` | Embeddings, Chroma, contexto, Gemini, documentos e conversas. |
+| RAG e ingestão | `rag/` | Embeddings, Chroma, contexto, fila de LLMs, documentos e conversas. |
 
 ## 10. Como depurar uma chamada
 
 1. Guarde o `request_id` mostrado ao usuário ou o cabeçalho `X-Request-ID`.
 2. Confirme rota, método, `Content-Type` e corpo esperado.
 3. Para Qiskit, consulte `/qiskit/limits` e confira primeiro `error.code`, depois linha/detalhes.
-4. Para `/query`, confira presença da chave, cota Gemini e `web_status`; teste `/search` para separar recuperação local da geração.
+4. Para `/query`, confira `answer_mode` e `llm.tentativas` (qual modelo respondeu ou estourou o prazo); teste `/search` para separar recuperação local da geração.
 5. Veja logs do container: `docker compose logs --since=10m api`.
 6. Não copie API keys ou conteúdos privados para ticket/log público. Os códigos de solicitação permitem correlação sem precisar publicar o circuito inteiro.
 
@@ -489,16 +489,16 @@ curl -sS http://localhost:8000/qiskit/optimize \
 É uma API HTTP organizada por recursos e operações, usando métodos GET/POST, status HTTP, JSON e OpenAPI. Algumas rotas de processamento são ações (`/qiskit/optimize`), portanto é mais preciso chamá-la de API HTTP REST-like em vez de afirmar aderência estrita a toda restrição REST.
 
 **Por que separar `/search` e `/query`?**  
-`/search` recupera evidência sem LLM; `/query` acrescenta geração da resposta. Essa separação permite testar/debugar recuperação e ainda consultar a base quando Gemini está indisponível.
+`/search` recupera evidência sem LLM; `/query` acrescenta geração da resposta. Essa separação permite testar/debugar recuperação e ainda consultar a base quando a LLM está indisponível.
 
-**Por que `/health` não testa Gemini e Chroma?**  
+**Por que `/health` não testa a LLM e o Chroma?**  
 É uma verificação rápida de liveness. Uma checagem profunda chamaria dependências e poderia ficar lenta ou gerar tráfego/custos. Para diagnóstico, faça verificações específicas e observe status/logs das dependências.
 
 **O que significa `top_k`?**  
 Quantos resultados/candidatos a camada de busca deve recuperar, limitado a 1–10. Não é limite de tokens nem promessa de usar todos os trechos na resposta.
 
 **O que significa `web_search:null`?**  
-Usar a configuração do servidor. `false` desativa e `true` permite uso do Google Search pelo Gemini; ainda pode retornar `not_used` se o grounding não trouxer evidência.
+Nada: o campo é obsoleto e sempre ignorado, porque a busca web foi removida. `true` só gera um aviso na resposta.
 
 **O que garante `equivalente:true`?**  
 Que a comparação implementada concluiu equivalência dentro do orçamento/casos aplicáveis. `null` declara explicitamente que não houve prova. Nenhum resultado prova propriedades para um circuito fora do domínio/método de comparação usado.

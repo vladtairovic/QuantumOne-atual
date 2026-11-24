@@ -2,7 +2,7 @@
   "openapi": "3.1.0",
   "info": {
     "title": "GrowUp - API integrada",
-    "description": "API do QuantumOne: RAG híbrido local (ChromaDB + BM25), resposta por Gemini opcional ou extrativa local, diagnóstico de entradas e otimização Qiskit verificada. Sem busca web.",
+    "description": "API do QuantumOne: RAG híbrido local (ChromaDB + BM25), resposta por fila de LLMs NVIDIA (opcional) ou extrativa local, diagnóstico de entradas e otimização Qiskit verificada. Sem busca web.",
     "version": "0.4.0"
   },
   "paths": {
@@ -128,7 +128,7 @@
     "/query": {
       "post": {
         "summary": "Query",
-        "description": "Consulta somente a base local (RAG híbrido). Com GEMINI_API_KEY, o Gemini redige a resposta a partir\ndos trechos; sem chave, ou se o Gemini falhar, a resposta é extrativa local (answer_mode=local).\nNenhuma busca web é executada.",
+        "description": "Consulta somente a base local (RAG híbrido). Com NVIDIA_API_KEY, a fila de LLMs redige a resposta a partir\ndos trechos; sem chave, ou se nenhum modelo responder a tempo, a resposta é extrativa local (answer_mode=local).\nNenhuma busca web é executada.",
         "operationId": "query_query_post",
         "requestBody": {
           "content": {
@@ -2327,6 +2327,266 @@
           }
         }
       }
+    },
+    "/analise": {
+      "post": {
+        "summary": "Analisar Envio",
+        "description": "Interpreta e analisa qualquer combinação de texto, código e arquivos (inclusive pastas de projeto):\nQiskit diagnostica e otimiza os circuitos, a fila de LLMs corrige o código inválido (revalidado pelo Qiskit),\nplaneja as buscas, consulta a base local primeiro e a internet como complemento, e redige a resposta.\nAcompanhe a etapa e o modelo em uso por GET /analise/progresso/{progress_id}.",
+        "operationId": "analisar_envio_analise_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EntradaAnalise"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespostaAnalise"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Requisição malformada",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Rota inexistente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "405": {
+            "description": "Método incorreto",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Arquivo acima do limite",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Tipo de conteúdo não aceito",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Entrada inválida",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Falha interna",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Resposta externa inválida",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Serviço externo indisponível",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "504": {
+            "description": "Tempo limite excedido",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/analise/progresso/{progress_id}": {
+      "get": {
+        "summary": "Progresso Do Envio",
+        "description": "Etapa atual e modelo de LLM solicitado no momento (texto ao vivo da interface).",
+        "operationId": "progresso_do_envio_analise_progresso__progress_id__get",
+        "parameters": [
+          {
+            "name": "progress_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Progress Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProgressoAnalise"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Requisição malformada",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Rota inexistente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "405": {
+            "description": "Método incorreto",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Arquivo acima do limite",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Tipo de conteúdo não aceito",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Entrada inválida",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Falha interna",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Resposta externa inválida",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Serviço externo indisponível",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "504": {
+            "description": "Tempo limite excedido",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -2381,6 +2641,74 @@
         "additionalProperties": false,
         "type": "object",
         "title": "AlvoHardware"
+      },
+      "ArquivoClassificado": {
+        "properties": {
+          "nome": {
+            "type": "string",
+            "title": "Nome"
+          },
+          "tipo": {
+            "type": "string",
+            "enum": [
+              "circuito_qasm",
+              "circuito_python",
+              "python",
+              "notebook",
+              "documento",
+              "dados",
+              "ignorado"
+            ],
+            "title": "Tipo"
+          },
+          "tamanho": {
+            "type": "integer",
+            "title": "Tamanho"
+          },
+          "motivo": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Motivo"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "nome",
+          "tipo",
+          "tamanho"
+        ],
+        "title": "ArquivoClassificado"
+      },
+      "ArquivoEnviado": {
+        "properties": {
+          "nome": {
+            "type": "string",
+            "maxLength": 500,
+            "minLength": 1,
+            "title": "Nome",
+            "description": "Nome ou caminho relativo (pastas: 'projeto/src/circuito.py')."
+          },
+          "conteudo": {
+            "type": "string",
+            "maxLength": 300000,
+            "title": "Conteudo",
+            "description": "Conteúdo em texto (UTF-8)."
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "nome",
+          "conteudo"
+        ],
+        "title": "ArquivoEnviado"
       },
       "Avaliacao": {
         "properties": {
@@ -2557,6 +2885,81 @@
         "type": "object",
         "title": "Circuito"
       },
+      "CircuitoAnalisado": {
+        "properties": {
+          "origem": {
+            "type": "string",
+            "title": "Origem",
+            "description": "'editor' ou o caminho do arquivo."
+          },
+          "formato": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "qasm",
+                  "python"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Formato"
+          },
+          "valido_original": {
+            "type": "boolean",
+            "title": "Valido Original"
+          },
+          "problemas": {
+            "type": "integer",
+            "title": "Problemas",
+            "default": 0
+          },
+          "diagnostico_resumo": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Diagnostico Resumo"
+          },
+          "correcao": {
+            "$ref": "#/components/schemas/CorrecaoCircuito"
+          },
+          "otimizacao": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Otimizacao",
+            "description": "Resumo do /qiskit/optimize sobre o código válido."
+          },
+          "erro": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Erro"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "origem",
+          "valido_original",
+          "correcao"
+        ],
+        "title": "CircuitoAnalisado"
+      },
       "Confirm": {
         "properties": {
           "email": {
@@ -2622,6 +3025,71 @@
           "input"
         ],
         "title": "Consulta"
+      },
+      "CorrecaoCircuito": {
+        "properties": {
+          "metodo": {
+            "type": "string",
+            "enum": [
+              "nenhuma",
+              "deterministica",
+              "llm"
+            ],
+            "title": "Metodo"
+          },
+          "modelo": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Modelo"
+          },
+          "codigo": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Codigo"
+          },
+          "valido": {
+            "type": "boolean",
+            "title": "Valido",
+            "default": false
+          },
+          "explicacao": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Explicacao"
+          },
+          "falhas": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Falhas",
+            "description": "Por que uma correção da LLM foi recusada pelo Qiskit."
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "metodo"
+        ],
+        "title": "CorrecaoCircuito"
       },
       "Credentials": {
         "properties": {
@@ -2729,6 +3197,100 @@
         ],
         "title": "EditEmail"
       },
+      "EntradaAnalise": {
+        "properties": {
+          "mensagem": {
+            "type": "string",
+            "maxLength": 30000,
+            "title": "Mensagem",
+            "description": "Pedido em linguagem natural (opcional).",
+            "default": ""
+          },
+          "codigo": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 524288
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Codigo",
+            "description": "Código do editor (opcional)."
+          },
+          "formato": {
+            "type": "string",
+            "enum": [
+              "auto",
+              "qasm",
+              "python"
+            ],
+            "title": "Formato",
+            "default": "auto"
+          },
+          "arquivos": {
+            "items": {
+              "$ref": "#/components/schemas/ArquivoEnviado"
+            },
+            "type": "array",
+            "maxItems": 300,
+            "title": "Arquivos"
+          },
+          "conversation_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Conversation Id"
+          },
+          "progress_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Progress Id",
+            "description": "Identificador para GET /analise/progresso/{id}."
+          },
+          "perfil": {
+            "type": "string",
+            "enum": [
+              "rapido",
+              "balanceado",
+              "avancado",
+              "experimental"
+            ],
+            "title": "Perfil",
+            "default": "balanceado"
+          },
+          "top_k": {
+            "type": "integer",
+            "maximum": 10.0,
+            "minimum": 1.0,
+            "title": "Top K",
+            "default": 5
+          },
+          "pesquisa_web": {
+            "type": "boolean",
+            "title": "Pesquisa Web",
+            "description": "Complementa a base local com pesquisa na internet (APIs públicas, sem chave).",
+            "default": true
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "EntradaAnalise"
+      },
       "EntradaDiagnostico": {
         "properties": {
           "code": {
@@ -2832,6 +3394,25 @@
         ],
         "title": "ErroCircuito"
       },
+      "EtapaAnalise": {
+        "properties": {
+          "texto": {
+            "type": "string",
+            "title": "Texto"
+          },
+          "segundos": {
+            "type": "number",
+            "title": "Segundos"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "texto",
+          "segundos"
+        ],
+        "title": "EtapaAnalise"
+      },
       "Evidencia": {
         "properties": {
           "suficiente": {
@@ -2918,7 +3499,10 @@
           },
           "origin": {
             "type": "string",
-            "const": "local",
+            "enum": [
+              "local",
+              "web"
+            ],
             "title": "Origin",
             "default": "local"
           },
@@ -2959,10 +3543,7 @@
         "properties": {
           "provedor": {
             "type": "string",
-            "enum": [
-              "nvidia",
-              "gemini"
-            ],
+            "const": "nvidia",
             "title": "Provedor"
           },
           "modelo": {
@@ -3265,6 +3846,74 @@
         ],
         "title": "ProblemaDiagnostico"
       },
+      "ProgressoAnalise": {
+        "properties": {
+          "progress_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Progress Id"
+          },
+          "concluido": {
+            "type": "boolean",
+            "title": "Concluido"
+          },
+          "etapa": {
+            "type": "string",
+            "title": "Etapa",
+            "description": "Texto ao vivo, por exemplo 'Consultando nvidia/nemotron-3-ultra-550b-a55b (1/7)'."
+          },
+          "modelo": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Modelo",
+            "description": "Modelo solicitado neste momento, se houver."
+          },
+          "segundos_na_etapa": {
+            "type": "number",
+            "title": "Segundos Na Etapa"
+          },
+          "segundos_total": {
+            "type": "number",
+            "title": "Segundos Total"
+          },
+          "historico": {
+            "items": {
+              "$ref": "#/components/schemas/EtapaAnalise"
+            },
+            "type": "array",
+            "title": "Historico"
+          },
+          "parcial": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Parcial",
+            "description": "Texto que o modelo em uso já escreveu (streaming); some quando o modelo muda ou a análise termina."
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "progress_id",
+          "concluido",
+          "etapa",
+          "segundos_na_etapa",
+          "segundos_total",
+          "historico"
+        ],
+        "title": "ProgressoAnalise"
+      },
       "Register": {
         "properties": {
           "email": {
@@ -3295,6 +3944,153 @@
           "name"
         ],
         "title": "Register"
+      },
+      "RespostaAnalise": {
+        "properties": {
+          "request_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Request Id"
+          },
+          "progress_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Progress Id"
+          },
+          "conversation_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Conversation Id"
+          },
+          "resposta": {
+            "type": "string",
+            "title": "Resposta"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "ok",
+              "insufficient_context"
+            ],
+            "title": "Status"
+          },
+          "answer_mode": {
+            "type": "string",
+            "enum": [
+              "llm",
+              "local",
+              "none"
+            ],
+            "title": "Answer Mode"
+          },
+          "llm": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/InfoLLM"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "sources": {
+            "items": {
+              "$ref": "#/components/schemas/FonteContexto"
+            },
+            "type": "array",
+            "title": "Sources",
+            "description": "Base local (origin=local) e internet (origin=web)."
+          },
+          "circuitos": {
+            "items": {
+              "$ref": "#/components/schemas/CircuitoAnalisado"
+            },
+            "type": "array",
+            "title": "Circuitos"
+          },
+          "arquivos": {
+            "items": {
+              "$ref": "#/components/schemas/ArquivoClassificado"
+            },
+            "type": "array",
+            "title": "Arquivos"
+          },
+          "interpretation": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Interpretacao"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "evidence": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Evidencia"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "pesquisa_web": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Pesquisa Web",
+            "description": "Consultas feitas, fontes consultadas e falhas."
+          },
+          "warnings": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Warnings"
+          },
+          "etapas": {
+            "items": {
+              "$ref": "#/components/schemas/EtapaAnalise"
+            },
+            "type": "array",
+            "title": "Etapas"
+          },
+          "tempo_total_segundos": {
+            "type": "number",
+            "title": "Tempo Total Segundos"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "request_id",
+          "resposta",
+          "status",
+          "answer_mode",
+          "sources",
+          "tempo_total_segundos"
+        ],
+        "title": "RespostaAnalise"
       },
       "RespostaAvaliacao": {
         "properties": {
@@ -3450,7 +4246,7 @@
               "none"
             ],
             "title": "Answer Mode",
-            "description": "llm: gerada pelo Gemini com os trechos locais; local: extrativa, sem LLM; none: nenhuma resposta gerada.",
+            "description": "llm: redigida pela fila de LLMs NVIDIA com os trechos locais; local: extrativa, sem LLM; none: nenhuma resposta gerada.",
             "default": "llm"
           },
           "interpretation": {

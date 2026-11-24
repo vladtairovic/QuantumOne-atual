@@ -18,16 +18,16 @@
    trechos (direto ou pelo glossário). Abaixo de `RAG_MIN_COBERTURA` (0,34) **nenhuma resposta é
    gerada** e o status é `insufficient_context`.
 4. **Resposta**:
-   - com `GEMINI_API_KEY`: o Gemini recebe só a pergunta e os trechos locais (sem ferramenta de
+   - com `NVIDIA_API_KEY`: a fila de LLMs ([LLM.md](LLM.md)) recebe só a pergunta e até 6.000 caracteres de trechos locais (sem ferramenta de
      busca), com instruções para separar fonte de inferência e alertar sobre APIs antigas;
-   - sem chave, com `QONE_LLM=local` ou se o Gemini falhar: **resposta extrativa local**
+   - sem chave, com `QONE_LLM=local` ou se nenhum modelo responder a tempo: **resposta extrativa local**
      (`rag/resposta_local.py`), feita de frases copiadas literalmente das fontes, com `[Fonte N]`.
 
 ## Redução de alucinações
 
 - Nada é gerado sem evidência mínima; perguntas fora do domínio são recusadas.
 - A resposta local não sintetiza: a literalidade medida é 100%.
-- O prompt do Gemini proíbe inventar APIs, versões, fontes e execuções, e exige marcar inferências.
+- As instruções enviadas à LLM proíbem inventar APIs, versões, fontes e execuções, e exige marcar inferências.
 - Conteúdo com APIs removidas do Qiskit recebe `desatualizado=true` e gera aviso na resposta.
 - O conhecimento interno é identificado como tal (`qone://conhecimento/...`), nunca como documentação oficial.
 
@@ -60,7 +60,7 @@ Ajustes calibrados no gabarito, e só mantidos porque melhoraram as métricas: r
   não substitui avaliação humana independente.
 - O corpus avaliado é o snapshot local (IBM + conhecimento interno). As 308 fontes verificadas do
   catálogo só entram na base após a sincronização administrativa.
-- Fidelidade de respostas do Gemini não é medida automaticamente (exigiria a API); a métrica de
+- Fidelidade das respostas redigidas pela LLM não é medida automaticamente (exigiria a API); a métrica de
   fidelidade vale para a resposta local.
 - Não há reranker neural: a reordenação é por regras e foi medida.
 

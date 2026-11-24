@@ -5,7 +5,6 @@ python-multipart==0.0.20
 httpx==0.28.1
 chromadb-client==1.5.9
 
-google-genai==2.34.0
 qiskit==2.6.0
 # Simulação por amostragem e MPS na verificação de equivalência (opcional em tempo de execução).
 qiskit-aer==0.18.4

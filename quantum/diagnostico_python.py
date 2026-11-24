@@ -12,7 +12,9 @@ ambíguas trazem alternativas e seguem a política escolhida.
 """
 import ast
 import difflib
+import io
 import re
+import tokenize
 
 from qiskit import QuantumCircuit
 
@@ -258,11 +260,11 @@ def analisar(codigo: str, politica: str = "conservadora") -> dict:
 
     # Regras de migração por padrão de texto (imports e chamadas removidas).
     imports_novos = []
-    for numero, linha in enumerate(linhas, start=1):
+    for numero, (linha, codigo_linha) in enumerate(zip(linhas, _somente_codigo(linhas)), start=1):
         for regra in REGRAS:
             if regra.get("metodo") or regra.get("aviso_apenas"):
                 continue
-            if re.search(regra["padrao"], linha):
+            if re.search(regra["padrao"], codigo_linha):
                 problema("REMOVED_API", numero, f"{regra['antigo']} não existe no Qiskit 2.x.",
                          f"API removida (versão {regra['removido_em']}). Substituto: {regra['novo']}.",
                          {"tipo": "manual", "descricao": f"Substituir por {regra['novo']}."},
@@ -306,6 +308,30 @@ def analisar(codigo: str, politica: str = "conservadora") -> dict:
             "circuitos": rastreador.circuitos}
 
 
+_TOKENS_TEXTO = {tokenize.COMMENT, tokenize.STRING} | (
+    {tokenize.FSTRING_MIDDLE} if hasattr(tokenize, "FSTRING_MIDDLE") else set())
+
+
+def _somente_codigo(linhas):
+    """Cada linha sem comentários e com strings esvaziadas, para as regras de texto não casarem
+    com ``# antes: execute(...)`` ou mensagens. Se o código não tokenizar (quebrado), corta só o '#'
+    de linhas sem aspas."""
+    limpas = list(linhas)
+    try:
+        for tok in tokenize.generate_tokens(io.StringIO("\n".join(linhas) + "\n").readline):
+            if tok.type not in _TOKENS_TEXTO:
+                continue
+            (l1, c1), (l2, c2) = tok.start, tok.end
+            if l1 != l2 or l1 > len(limpas):
+                continue  # strings de várias linhas: mantém (raro em construção de circuito)
+            atual = limpas[l1 - 1]
+            # preserva o comprimento para que as colunas dos tokens seguintes continuem válidas
+            limpas[l1 - 1] = atual[:c1] + " " * (c2 - c1) + atual[c2:]
+        return limpas
+    except (tokenize.TokenError, IndentationError, SyntaxError):
+        return [l.split("#", 1)[0] if "#" in l and not re.search(r"['\"]", l.split("#", 1)[0]) else l for l in linhas]
+
+
 def _definido(arvore, nome):
     for no in ast.walk(arvore):
         if isinstance(no, (ast.FunctionDef, ast.ClassDef)) and no.name == nome:
@@ -318,12 +344,12 @@ def _definido(arvore, nome):
 def _reescrever_migracao(regra, linha, imports_novos):
     """Reescritas seguras e locais; retorna None quando exigem revisão humana."""
     if regra == "execute":
-        m = re.match(r"(\s*)(\w+)\s*=\s*execute\(\s*(\w+)\s*,\s*(\w+)\s*(?:,\s*shots\s*=\s*(\w+))?\s*\)(.*)$", linha)
-        if m:
-            indent, destino, circ, backend, shots, resto = m.groups()
+        # execute(qc, backend[, shots=N]) em qualquer posição da linha (atribuição, print(...), encadeado)
+        padrao = r"(?<![\w.])execute\(\s*(\w+)\s*,\s*(\w+)\s*(?:,\s*shots\s*=\s*(\w+))?\s*\)"
+        if re.search(padrao, linha):
             imports_novos.append("from qiskit import transpile")
-            extra = f", shots={shots}" if shots else ""
-            return f"{indent}{destino} = {backend}.run(transpile({circ}, {backend}){extra}){resto}"
+            return re.sub(padrao, lambda m: f"{m.group(2)}.run(transpile({m.group(1)}, {m.group(2)})"
+                          + (f", shots={m.group(3)}" if m.group(3) else "") + ")", linha)
         if re.match(r"\s*from\s+qiskit\s+import\s+", linha):
             nomes = [n.strip() for n in linha.split("import", 1)[1].strip(" ()").split(",")]
             restantes = [n for n in nomes if n not in ("execute", "Aer", "BasicAer", "IBMQ", "assemble")]

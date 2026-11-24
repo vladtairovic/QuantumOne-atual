@@ -1,6 +1,72 @@
 const { test } = require('node:test');
 const assert = require('node:assert/strict');
-const { circuitContext, optimizeCircuit, diagnoseCode, getCircuitLimits, AnalysisError } = require('/tmp/analysis-api-test/analysis-api.js');
+const { circuitContext, optimizeCircuit, diagnoseCode, getCircuitLimits, analisar, obterProgresso, AnalysisError } = require('/tmp/analysis-api-test/analysis-api.js');
+
+const corpoAnalise = {
+  mensagem: 'Explique o circuito.', codigo: 'OPENQASM 2.0;', formato: 'qasm',
+  arquivos: [{nome: 'projeto/src/c.py', conteudo: 'from qiskit import QuantumCircuit'}],
+  conversation_id: null, progress_id: '7f0c5d1e-8a4b-4c6d-9e2f-1a2b3c4d5e6f', perfil: 'avancado', top_k: 8, pesquisa_web: true,
+};
+
+test('analisar posts the unified body to /api/analise without a client timeout', async () => {
+  const calls = [];
+  global.fetch = async (url, options) => {
+    calls.push({url, method: options.method, headers: options.headers, body: JSON.parse(options.body), signal: options.signal});
+    return new Response(JSON.stringify({request_id: 'r1', resposta: 'Resposta.', status: 'ok', answer_mode: 'llm', sources: [],
+      circuitos: [], arquivos: [], warnings: [], etapas: [], tempo_total_segundos: 1.5, conversation_id: null}),
+      {headers: {'x-request-id': 'cabecalho'}});
+  };
+  const controller = new AbortController();
+  const resposta = await analisar(corpoAnalise, controller.signal);
+  assert.equal(calls.length, 1);
+  assert.equal(calls[0].url, '/api/analise');
+  assert.equal(calls[0].method, 'POST');
+  assert.equal(calls[0].headers['Content-Type'], 'application/json');
+  assert.deepEqual(calls[0].body, corpoAnalise);
+  assert.equal(calls[0].signal, controller.signal);
+  assert.equal(resposta.request_id, 'r1');
+  assert.equal(resposta.resposta, 'Resposta.');
+});
+
+test('analisar falls back to the x-request-id header and surfaces API errors', async () => {
+  global.fetch = async () => new Response(JSON.stringify({resposta: 'ok', status: 'ok', answer_mode: 'local', sources: []}),
+    {headers: {'x-request-id': 'cabecalho'}});
+  assert.equal((await analisar(corpoAnalise)).request_id, 'cabecalho');
+  global.fetch = async () => new Response(JSON.stringify({request_id: 'e1', code: 'VALIDATION_ERROR', message: 'Envie uma mensagem, um código ou arquivos.', fields: ['mensagem']}), {status: 422});
+  await assert.rejects(analisar({...corpoAnalise, mensagem: '', codigo: null, arquivos: []}), e =>
+    e instanceof AnalysisError && e.status === 422 && e.code === 'VALIDATION_ERROR' && e.requestId === 'e1' &&
+    e.message === 'Envie uma mensagem, um código ou arquivos.');
+});
+
+test('obterProgresso reads live progress without cache', async () => {
+  const progresso = {progress_id: corpoAnalise.progress_id, concluido: false, etapa: 'Consultando nvidia/modelo (1/7)',
+    modelo: 'nvidia/modelo', segundos_na_etapa: 2.5, segundos_total: 9, historico: [{texto: 'Base local consultada', segundos: 1.2}],
+    parcial: 'O circuito tem dois erros'};
+  global.fetch = async (url, options) => {
+    assert.equal(url, '/api/analise/progresso/' + corpoAnalise.progress_id);
+    assert.equal(options.cache, 'no-store');
+    return new Response(JSON.stringify(progresso));
+  };
+  assert.deepEqual(await obterProgresso(corpoAnalise.progress_id, new AbortController().signal), progresso);
+  // Sem texto parcial (fora da redação, ou API antiga), o campo vem como null.
+  const semParcial = { ...progresso };
+  delete semParcial.parcial;
+  global.fetch = async () => new Response(JSON.stringify({...semParcial, parcial: ''}));
+  assert.equal((await obterProgresso(corpoAnalise.progress_id)).parcial, null);
+  global.fetch = async () => new Response(JSON.stringify(semParcial));
+  assert.equal((await obterProgresso(corpoAnalise.progress_id)).parcial, null);
+});
+
+test('obterProgresso returns null on 404, server errors and network failures', async () => {
+  global.fetch = async () => new Response(JSON.stringify({code: 'NOT_FOUND', message: 'Progresso não encontrado.'}), {status: 404});
+  assert.equal(await obterProgresso(corpoAnalise.progress_id), null);
+  global.fetch = async () => new Response('', {status: 502});
+  assert.equal(await obterProgresso(corpoAnalise.progress_id), null);
+  global.fetch = async () => { throw new TypeError('Failed to fetch'); };
+  assert.equal(await obterProgresso(corpoAnalise.progress_id), null);
+  global.fetch = async () => new Response('não é JSON');
+  assert.equal(await obterProgresso(corpoAnalise.progress_id), null);
+});
 
 test('large circuit context is bounded and preserves numeric metrics', () => {
   const code = 'h q[0];\n'.repeat(2000);

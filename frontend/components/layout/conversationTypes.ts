@@ -50,7 +50,7 @@ export type AnalysisResultRecord = {
   };
   warnings?: string[];
   requestId?: string;
-  /** llm: redigida pelo Gemini com trechos locais; local: extrativa, sem LLM; none: sem resposta. */
+  /** llm: redigida pela fila de LLMs com trechos locais; local: extrativa, sem LLM; none: sem resposta. */
   answerMode?: "llm" | "local" | "none";
   /** Modelo da fila que redigiu a resposta (quando answerMode = "llm"). */
   llmModel?: string;
@@ -77,6 +77,63 @@ export type AnalysisResultRecord = {
     valid?: boolean;
     limitations: string[];
   };
+  /** Circuitos encontrados pela análise unificada (editor e arquivos). */
+  circuits?: AnalyzedCircuitRecord[];
+  /** Arquivos enviados e como a análise os classificou. */
+  files?: AnalyzedFileRecord[];
+  /** Etapas concluídas da análise, com a duração de cada uma. */
+  timeline?: { text: string; seconds: number }[];
+  /** Tentativas da fila de LLMs, na ordem em que foram feitas. */
+  llmAttempts?: { model: string; result: string; seconds: number }[];
+  /** Duração total da análise no servidor. */
+  totalSeconds?: number;
+};
+
+export type CircuitMetricsRecord = {
+  qubits?: number;
+  depth?: number;
+  operations?: number;
+  twoQubit?: number;
+};
+
+export type AnalyzedCircuitRecord = {
+  /** "editor" ou o caminho do arquivo. */
+  origin: string;
+  format: EditorLanguage | null;
+  validOriginal: boolean;
+  problems: number;
+  diagnosis: string[];
+  correction: {
+    method: "nenhuma" | "deterministica" | "llm";
+    model?: string | null;
+    code?: string | null;
+    valid: boolean;
+    explanation?: string | null;
+  };
+  optimization?: {
+    profile?: string;
+    strategy?: string;
+    equivalent?: boolean | null;
+    verificationMethod?: string;
+    guarantee?: string;
+    before?: CircuitMetricsRecord;
+    after?: CircuitMetricsRecord;
+    cxBefore?: number;
+    cxAfter?: number;
+    optimizedQasm?: string;
+    warnings: string[];
+    simulationMethod?: string;
+    simulationReason?: string;
+    memoryBytes?: number;
+  };
+  error?: string | null;
+};
+
+export type AnalyzedFileRecord = {
+  name: string;
+  type: "circuito_qasm" | "circuito_python" | "python" | "notebook" | "documento" | "dados" | "ignorado";
+  size: number;
+  reason?: string | null;
 };
 
 export type ConversationRecord = {
