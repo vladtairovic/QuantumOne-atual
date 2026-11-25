@@ -17,7 +17,7 @@ const montserrat = Montserrat({
 });
 
 export const metadata: Metadata = {
-  title: "Agente RAG | Qiskit",
+  title: "QuantumOne",
   description:
     "Ferramenta inteligente para análise e otimização de código quântico.",
 };
