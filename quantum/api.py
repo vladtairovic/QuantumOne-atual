@@ -32,6 +32,10 @@ class Circuito(Modelo):
     prioridade: Literal["dois_qubits", "profundidade", "total"] = Field(
         default="dois_qubits", description="Métrica prioritária na escolha entre candidatos.")
     hardware: "AlvoHardware | None" = None
+    extrair_construcao: bool = Field(
+        default=False, strict=True,
+        description="Python de projeto: ignora linhas de execução, simulação e impressão e otimiza só a construção "
+                    "do circuito (as linhas ignoradas voltam em warnings; nada é executado).")
 
     @model_validator(mode="after")
     def source_contract(self):
@@ -237,7 +241,8 @@ async def otimizar(entrada: Circuito, request: Request):
         payload = {"code": source, "format": "qasm" if entrada.qasm is not None else entrada.format,
                    "optimization_level": entrada.optimization_level, "perfil": entrada.perfil,
                    "prioridade": entrada.prioridade,
-                   "hardware": entrada.hardware.model_dump() if entrada.hardware else None}
+                   "hardware": entrada.hardware.model_dump() if entrada.hardware else None,
+                   "extrair_construcao": entrada.extrair_construcao}
         try:
             return await asyncio.wait_for(execute_connected(payload, request), limits.optimization_timeout_seconds)
         except asyncio.TimeoutError as exc:

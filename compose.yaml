@@ -20,12 +20,6 @@ services:
       interval: 15s
       timeout: 5s
       retries: 5
-  mailpit:
-    image: axllent/mailpit:v1.27.8
-    restart: unless-stopped
-    ports:
-      - "127.0.0.1:${MAILPIT_PORT:-8025}:8025"
-    networks: [banco, saida]
   cache:
     image: redis:7.4-alpine
     restart: unless-stopped
@@ -61,12 +55,6 @@ services:
       chroma:
         condition: service_started
     environment:
-      SMTP_HOST: ${SMTP_HOST:-mailpit}
-      SMTP_PORT: ${SMTP_PORT:-1025}
-      SMTP_STARTTLS: ${SMTP_STARTTLS:-0}
-      SMTP_FROM: ${SMTP_FROM:-quantumone@localhost}
-      SMTP_USER: ${SMTP_USER:-}
-      SMTP_PASSWORD: ${SMTP_PASSWORD:-}
       # Coleta de documentação é administrativa (manual ou em lote); desligada nas consultas.
       KNOWLEDGE_AUTO_SYNC: ${KNOWLEDGE_AUTO_SYNC:-0}
       QONE_LLM: ${QONE_LLM:-auto}

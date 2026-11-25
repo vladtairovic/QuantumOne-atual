@@ -15,6 +15,7 @@ Enquanto a análise roda, a interface mostra ao vivo a etapa e o modelo consulta
 | Diagnóstico e motor | todos os erros de uma vez, correções validadas, perfis, verificação até 30 qubits | [MOTOR-QUANTICO.md](docs/MOTOR-QUANTICO.md) |
 | Resultados | benchmarks contra a linha de base, problemas resolvidos e limitações | [BENCHMARKS.md](docs/BENCHMARKS.md) |
 | Geração de respostas | fila de 7 modelos NVIDIA, um de cada vez, 30 s por modelo, streaming, fallback local | [LLM.md](docs/LLM.md) |
+| CLI interativa (`qone`) | chat no terminal com a análise unificada, propostas de edição revisadas, Qiskit e histórico | [CLI.md](docs/CLI.md) |
 
 ## Iniciar e abrir
 
@@ -77,7 +78,7 @@ Escreva o pedido, cole código (OpenQASM 2/3 ou Python/Qiskit, inclusive dentro 
   Em Python legado (Aer, `execute`, `print`), só a construção do circuito é aproveitada; nada é executado.
 - **Pastas e notebooks**: cada arquivo é classificado (circuito QASM, circuito Python, notebook,
   documento, dados ou ignorado); circuitos são analisados um a um e documentos entram no contexto.
-- **Código válido**: otimização pelo perfil escolhido (Rápida, Balanceada, Avançada, Experimental), relatório antes/depois, CX equivalentes, método e garantia da verificação, método de simulação recomendado e compromissos entre métricas.
+- **Código válido**: otimização com o perfil `avancado` por padrão (a rota `/qiskit/optimize` e a CLI ainda aceitam Rápida, Balanceada, Avançada e Experimental), relatório antes/depois, CX equivalentes, método e garantia da verificação, método de simulação recomendado e compromissos entre métricas.
 - **Código inválido**: em vez de parar no primeiro erro, a interface mostra o diagnóstico completo (linha, causa, correção, alternativas, confiança) e o código corrigido validado.
 - **Pergunta**: a LLM planeja as consultas, busca primeiro na base local [Fonte N], complementa com a internet [Web N] (caixa “Pesquisar também na internet”) e cita as duas. Sem chave, ou se nenhum modelo responder, a resposta é **extrativa local** e identificada como tal.
 - **Fontes**: caixa compacta "Fontes consultadas (N)", recolhida por padrão, com selo “base local” ou “internet”.
@@ -86,6 +87,16 @@ Os painéis **Arquivos**, **Diff**, **Qiskit** e **Fontes** continuam disponíve
 foi removida da interface; o terminal agora é o CLI abaixo.
 
 ## CLI
+
+A CLI interativa (`cli.py`, comando `qone`) conversa com a análise unificada sobre os arquivos do seu
+projeto, mostra ao vivo o modelo consultado, propõe edições com diff (conferidas pelo Qiskit antes de
+gravar) e guarda o histórico localmente. Guia completo em [docs/CLI.md](docs/CLI.md).
+
+```powershell
+python cli.py --repo . --chat
+```
+
+Para comandos de uma linha em scripts, use `qone_cli.py`:
 
 ```powershell
 python qone_cli.py saude
@@ -100,11 +111,13 @@ A URL vem de `--api` ou de `QONE_API_URL` (padrão `http://127.0.0.1:8000`). O C
 do Desktop Chat, e nenhum código é executado localmente. `analisar` mostra no terminal, ao vivo, cada
 etapa e o modelo consultado; pastas são lidas recursivamente (sem `.git`, `node_modules`, `.venv`).
 
-## Contas e e-mail
+## Perfil local (sem contas)
 
-O cadastro e a alteração de senha usam a API. As credenciais ficam no volume `api_data`. Projetos, histórico, foto e preferências pertencem ao workspace deste navegador. Exporte o backup em **Configurações** para levá-lo a outro navegador.
+Não há cadastro, login nem e-mail: as rotas `/auth/*`, o `contas.py` e o serviço Mailpit foram removidos. Na primeira abertura, uma personalização por etapas (nome, perfil, experiência, interesses, linguagem do editor e estilo das explicações) cria um perfil salvo só no `localStorage` deste navegador (`quantumone.localProfile.v1`); ele pode ser editado depois em **Meu perfil**, na barra lateral. Projetos, histórico e preferências também pertencem ao workspace deste navegador. Exporte o backup em **Configurações** para levá-los a outro navegador.
 
-No Compose local, o Mailpit recebe os códigos de confirmação. [Abrir a caixa de testes](http://localhost:8025). Para entrega em caixas reais, configure `SMTP_HOST`, `SMTP_PORT`, `SMTP_STARTTLS=1`, `SMTP_FROM`, `SMTP_USER` e `SMTP_PASSWORD` no ambiente da API.
+## Análise automática
+
+A interface não oferece mais escolha de fontes, nível de otimização nem pesquisa na internet: a análise unificada (`POST /analise`) usa até 15 fontes da base local (as de evidência fraca são descartadas; `GROWUP_MAX_CONTEXT_CHARS`, padrão 14000, limita o contexto), sempre complementa com a internet quando o assunto é de computação quântica e otimiza com o perfil `avancado` — o mais forte que segue exigindo verificação de equivalência sem o custo de compilação do `experimental`. Os campos `top_k`, `perfil` e `pesquisa_web` continuam aceitos pela API por compatibilidade (`pesquisa_web=false` é ignorado).
 
 ## Credencial e modelo
 

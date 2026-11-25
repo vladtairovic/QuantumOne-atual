@@ -282,8 +282,8 @@ function pollProgress(progressId: string, signal: AbortSignal, onProgress: (prog
  * do editor e todos os anexos (arquivos soltos ou pastas, com caminho relativo).
  */
 export async function analyze(input: {
-  code: string; format: CodeFormat; question: string; topK: number; profile?: OptimizationProfile;
-  attachments: AttachmentRecord[]; remoteId?: string; webSearch?: boolean;
+  code: string; format: CodeFormat; question: string; topK?: number; profile?: OptimizationProfile;
+  attachments: AttachmentRecord[]; remoteId?: string;
   onProgress?: (progress: ProgressoAnalise) => void;
 }, signal: AbortSignal, attempt: TurnAttempt) {
   const remoteId = attempt.remoteId ?? input.remoteId;
@@ -303,9 +303,10 @@ export async function analyze(input: {
     arquivos,
     conversation_id: remoteId && UUID.test(remoteId) ? remoteId : null,
     progress_id: attempt.messageId,
-    perfil: input.profile ?? "balanceado",
-    top_k: Math.min(10, Math.max(1, Math.round(Number(input.topK) || 5))),
-    pesquisa_web: input.webSearch ?? true,
+    // O programa decide: otimização mais forte que segue verificada, até 15 fontes e internet sempre ativa.
+    perfil: input.profile ?? "avancado",
+    top_k: Math.min(15, Math.max(1, Math.round(Number(input.topK) || 15))),
+    pesquisa_web: true,
   };
   const stopPolling = input.onProgress ? pollProgress(attempt.messageId, signal, input.onProgress) : () => undefined;
   let response: RespostaAnalise;

@@ -23,7 +23,7 @@ RUN pip install --no-cache-dir --index-url https://download.pytorch.org/whl/cpu 
 RUN useradd --create-home --uid 10001 growup \
     && mkdir -p /app/data /home/growup/.cache/huggingface \
     && chown -R growup:growup /app /home/growup
-COPY --chown=growup:growup main.py contas.py servicos.py contratos.py contratos_analise.py orquestrador.py qone_cli.py exportar_openapi.py openapi.json ./
+COPY --chown=growup:growup main.py servicos.py contratos.py contratos_analise.py orquestrador.py qone_cli.py exportar_openapi.py openapi.json ./
 COPY --chown=growup:growup rag ./rag
 COPY --chown=growup:growup quantum ./quantum
 COPY --chown=growup:growup documentos ./documentos

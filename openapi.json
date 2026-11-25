@@ -758,780 +758,6 @@
         }
       }
     },
-    "/auth/register": {
-      "post": {
-        "tags": [
-          "Conta"
-        ],
-        "summary": "Register",
-        "operationId": "register_auth_register_post",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/Register"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "201": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {}
-              }
-            }
-          },
-          "400": {
-            "description": "Requisição malformada",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Erro"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Rota inexistente",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Erro"
-                }
-              }
-            }
-          },
-          "405": {
-            "description": "Método incorreto",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Erro"
-                }
-              }
-            }
-          },
-          "413": {
-            "description": "Arquivo acima do limite",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Erro"
-                }
-              }
-            }
-          },
-          "415": {
-            "description": "Tipo de conteúdo não aceito",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Erro"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Entrada inválida",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Erro"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Falha interna",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Erro"
-                }
-              }
-            }
-          },
-          "502": {
-            "description": "Resposta externa inválida",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Erro"
-                }
-              }
-            }
-          },
-          "503": {
-            "description": "Serviço externo indisponível",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Erro"
-                }
-              }
-            }
-          },
-          "504": {
-            "description": "Tempo limite excedido",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Erro"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/auth/login": {
-      "post": {
-        "tags": [
-          "Conta"
-        ],
-        "summary": "Login",
-        "operationId": "login_auth_login_post",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/Credentials"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {}
-              }
-            }
-          },
-          "400": {
-            "description": "Requisição malformada",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Erro"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Rota inexistente",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Erro"
-                }
-              }
-            }
-          },
-          "405": {
-            "description": "Método incorreto",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Erro"
-                }
-              }
-            }
-          },
-          "413": {
-            "description": "Arquivo acima do limite",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Erro"
-                }
-              }
-            }
-          },
-          "415": {
-            "description": "Tipo de conteúdo não aceito",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Erro"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Entrada inválida",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Erro"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Falha interna",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Erro"
-                }
-              }
-            }
-          },
-          "502": {
-            "description": "Resposta externa inválida",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Erro"
-                }
-              }
-            }
-          },
-          "503": {
-            "description": "Serviço externo indisponível",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Erro"
-                }
-              }
-            }
-          },
-          "504": {
-            "description": "Tempo limite excedido",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Erro"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/auth/email": {
-      "post": {
-        "tags": [
-          "Conta"
-        ],
-        "summary": "Edit Email",
-        "operationId": "edit_email_auth_email_post",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/EditEmail"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {}
-              }
-            }
-          },
-          "400": {
-            "description": "Requisição malformada",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Erro"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Rota inexistente",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Erro"
-                }
-              }
-            }
-          },
-          "405": {
-            "description": "Método incorreto",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Erro"
-                }
-              }
-            }
-          },
-          "413": {
-            "description": "Arquivo acima do limite",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Erro"
-                }
-              }
-            }
-          },
-          "415": {
-            "description": "Tipo de conteúdo não aceito",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Erro"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Entrada inválida",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Erro"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Falha interna",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Erro"
-                }
-              }
-            }
-          },
-          "502": {
-            "description": "Resposta externa inválida",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Erro"
-                }
-              }
-            }
-          },
-          "503": {
-            "description": "Serviço externo indisponível",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Erro"
-                }
-              }
-            }
-          },
-          "504": {
-            "description": "Tempo limite excedido",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Erro"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/auth/password-reset/request": {
-      "post": {
-        "tags": [
-          "Conta"
-        ],
-        "summary": "Request Code",
-        "operationId": "request_code_auth_password_reset_request_post",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/Address"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {}
-              }
-            }
-          },
-          "400": {
-            "description": "Requisição malformada",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Erro"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Rota inexistente",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Erro"
-                }
-              }
-            }
-          },
-          "405": {
-            "description": "Método incorreto",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Erro"
-                }
-              }
-            }
-          },
-          "413": {
-            "description": "Arquivo acima do limite",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Erro"
-                }
-              }
-            }
-          },
-          "415": {
-            "description": "Tipo de conteúdo não aceito",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Erro"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Entrada inválida",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Erro"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Falha interna",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Erro"
-                }
-              }
-            }
-          },
-          "502": {
-            "description": "Resposta externa inválida",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Erro"
-                }
-              }
-            }
-          },
-          "503": {
-            "description": "Serviço externo indisponível",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Erro"
-                }
-              }
-            }
-          },
-          "504": {
-            "description": "Tempo limite excedido",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Erro"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/auth/password-reset/verify": {
-      "post": {
-        "tags": [
-          "Conta"
-        ],
-        "summary": "Verify",
-        "operationId": "verify_auth_password_reset_verify_post",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/Verify"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {}
-              }
-            }
-          },
-          "400": {
-            "description": "Requisição malformada",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Erro"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Rota inexistente",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Erro"
-                }
-              }
-            }
-          },
-          "405": {
-            "description": "Método incorreto",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Erro"
-                }
-              }
-            }
-          },
-          "413": {
-            "description": "Arquivo acima do limite",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Erro"
-                }
-              }
-            }
-          },
-          "415": {
-            "description": "Tipo de conteúdo não aceito",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Erro"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Entrada inválida",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Erro"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Falha interna",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Erro"
-                }
-              }
-            }
-          },
-          "502": {
-            "description": "Resposta externa inválida",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Erro"
-                }
-              }
-            }
-          },
-          "503": {
-            "description": "Serviço externo indisponível",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Erro"
-                }
-              }
-            }
-          },
-          "504": {
-            "description": "Tempo limite excedido",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Erro"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/auth/password-reset/confirm": {
-      "post": {
-        "tags": [
-          "Conta"
-        ],
-        "summary": "Confirm",
-        "operationId": "confirm_auth_password_reset_confirm_post",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/Confirm"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {}
-              }
-            }
-          },
-          "400": {
-            "description": "Requisição malformada",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Erro"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Rota inexistente",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Erro"
-                }
-              }
-            }
-          },
-          "405": {
-            "description": "Método incorreto",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Erro"
-                }
-              }
-            }
-          },
-          "413": {
-            "description": "Arquivo acima do limite",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Erro"
-                }
-              }
-            }
-          },
-          "415": {
-            "description": "Tipo de conteúdo não aceito",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Erro"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Entrada inválida",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Erro"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Falha interna",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Erro"
-                }
-              }
-            }
-          },
-          "502": {
-            "description": "Resposta externa inválida",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Erro"
-                }
-              }
-            }
-          },
-          "503": {
-            "description": "Serviço externo indisponível",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Erro"
-                }
-              }
-            }
-          },
-          "504": {
-            "description": "Tempo limite excedido",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Erro"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/qiskit/limits": {
       "get": {
         "summary": "Limites",
@@ -2587,25 +1813,139 @@
           }
         }
       }
+    },
+    "/assistente/proposta": {
+      "post": {
+        "summary": "Propor Edicao",
+        "description": "Proposta de edição para a CLI (`qone /propor`): devolve um JSON com plano, riscos, verificação e\nedições por intervalo de linhas. Nada é gravado aqui; a CLI mostra o diff e pede autorização.\nO andamento (modelo em uso) aparece em GET /analise/progresso/{progress_id}.",
+        "operationId": "propor_edicao_assistente_proposta_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EntradaProposta"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RespostaProposta"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Requisição malformada",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Rota inexistente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "405": {
+            "description": "Método incorreto",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Arquivo acima do limite",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Tipo de conteúdo não aceito",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Entrada inválida",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Falha interna",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Resposta externa inválida",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Serviço externo indisponível",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          },
+          "504": {
+            "description": "Tempo limite excedido",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Erro"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
     "schemas": {
-      "Address": {
-        "properties": {
-          "email": {
-            "type": "string",
-            "maxLength": 254,
-            "pattern": "^[^\\s@<>:,;]{1,64}@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$",
-            "title": "Email"
-          }
-        },
-        "type": "object",
-        "required": [
-          "email"
-        ],
-        "title": "Address"
-      },
       "AlvoHardware": {
         "properties": {
           "topologia": {
@@ -2879,6 +2219,12 @@
                 "type": "null"
               }
             ]
+          },
+          "extrair_construcao": {
+            "type": "boolean",
+            "title": "Extrair Construcao",
+            "description": "Python de projeto: ignora linhas de execução, simulação e impressão e otimiza só a construção do circuito (as linhas ignoradas voltam em warnings; nada é executado).",
+            "default": false
           }
         },
         "additionalProperties": false,
@@ -2959,37 +2305,6 @@
           "correcao"
         ],
         "title": "CircuitoAnalisado"
-      },
-      "Confirm": {
-        "properties": {
-          "email": {
-            "type": "string",
-            "maxLength": 254,
-            "pattern": "^[^\\s@<>:,;]{1,64}@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$",
-            "title": "Email"
-          },
-          "resetToken": {
-            "type": "string",
-            "maxLength": 128,
-            "minLength": 20,
-            "title": "Resettoken"
-          },
-          "newPassword": {
-            "type": "string",
-            "maxLength": 128,
-            "minLength": 8,
-            "format": "password",
-            "title": "Newpassword",
-            "writeOnly": true
-          }
-        },
-        "type": "object",
-        "required": [
-          "email",
-          "resetToken",
-          "newPassword"
-        ],
-        "title": "Confirm"
       },
       "Consulta": {
         "properties": {
@@ -3091,30 +2406,6 @@
         ],
         "title": "CorrecaoCircuito"
       },
-      "Credentials": {
-        "properties": {
-          "email": {
-            "type": "string",
-            "maxLength": 254,
-            "pattern": "^[^\\s@<>:,;]{1,64}@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$",
-            "title": "Email"
-          },
-          "password": {
-            "type": "string",
-            "maxLength": 128,
-            "minLength": 8,
-            "format": "password",
-            "title": "Password",
-            "writeOnly": true
-          }
-        },
-        "type": "object",
-        "required": [
-          "email",
-          "password"
-        ],
-        "title": "Credentials"
-      },
       "DetalheErroCircuito": {
         "properties": {
           "code": {
@@ -3158,44 +2449,6 @@
           "filename"
         ],
         "title": "Documento"
-      },
-      "EditEmail": {
-        "properties": {
-          "email": {
-            "type": "string",
-            "maxLength": 254,
-            "pattern": "^[^\\s@<>:,;]{1,64}@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$",
-            "title": "Email"
-          },
-          "password": {
-            "type": "string",
-            "maxLength": 128,
-            "minLength": 8,
-            "format": "password",
-            "title": "Password",
-            "writeOnly": true
-          },
-          "name": {
-            "type": "string",
-            "maxLength": 80,
-            "minLength": 2,
-            "title": "Name"
-          },
-          "newEmail": {
-            "type": "string",
-            "maxLength": 254,
-            "pattern": "^[^\\s@<>:,;]{1,64}@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$",
-            "title": "Newemail"
-          }
-        },
-        "type": "object",
-        "required": [
-          "email",
-          "password",
-          "name",
-          "newEmail"
-        ],
-        "title": "EditEmail"
       },
       "EntradaAnalise": {
         "properties": {
@@ -3271,19 +2524,21 @@
               "experimental"
             ],
             "title": "Perfil",
-            "default": "balanceado"
+            "description": "Padrão: o perfil mais forte que segue exigindo verificação de equivalência e cabe no tempo da análise.",
+            "default": "avancado"
           },
           "top_k": {
             "type": "integer",
-            "maximum": 10.0,
+            "maximum": 15.0,
             "minimum": 1.0,
             "title": "Top K",
-            "default": 5
+            "description": "Máximo de fontes da base local; as fracas são descartadas pela avaliação de evidência.",
+            "default": 15
           },
           "pesquisa_web": {
             "type": "boolean",
             "title": "Pesquisa Web",
-            "description": "Complementa a base local com pesquisa na internet (APIs públicas, sem chave).",
+            "description": "Mantido por compatibilidade: a pesquisa na internet é sempre usada como complemento.",
             "default": true
           }
         },
@@ -3325,6 +2580,52 @@
           "code"
         ],
         "title": "EntradaDiagnostico"
+      },
+      "EntradaProposta": {
+        "properties": {
+          "pedido": {
+            "type": "string",
+            "maxLength": 4000,
+            "minLength": 1,
+            "title": "Pedido"
+          },
+          "arquivos": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "title": "Arquivos",
+            "description": "Caminho relativo -> conteúdo com as linhas numeradas ('1: ...')."
+          },
+          "resultado_testes": {
+            "type": "string",
+            "maxLength": 8000,
+            "title": "Resultado Testes",
+            "description": "Saída dos testes locais (dado, não instrução).",
+            "default": ""
+          },
+          "progress_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Progress Id",
+            "description": "Identificador para GET /analise/progresso/{id}."
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "pedido",
+          "arquivos"
+        ],
+        "title": "EntradaProposta",
+        "description": "Pedido de proposta de edição da CLI: os arquivos vão numerados por linha."
       },
       "Erro": {
         "properties": {
@@ -3914,37 +3215,6 @@
         ],
         "title": "ProgressoAnalise"
       },
-      "Register": {
-        "properties": {
-          "email": {
-            "type": "string",
-            "maxLength": 254,
-            "pattern": "^[^\\s@<>:,;]{1,64}@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$",
-            "title": "Email"
-          },
-          "password": {
-            "type": "string",
-            "maxLength": 128,
-            "minLength": 8,
-            "format": "password",
-            "title": "Password",
-            "writeOnly": true
-          },
-          "name": {
-            "type": "string",
-            "maxLength": 80,
-            "minLength": 2,
-            "title": "Name"
-          }
-        },
-        "type": "object",
-        "required": [
-          "email",
-          "password",
-          "name"
-        ],
-        "title": "Register"
-      },
       "RespostaAnalise": {
         "properties": {
           "request_id": {
@@ -4363,6 +3633,45 @@
           "mode"
         ],
         "title": "RespostaDocumento"
+      },
+      "RespostaProposta": {
+        "properties": {
+          "request_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Request Id"
+          },
+          "response": {
+            "type": "string",
+            "title": "Response",
+            "description": "Objeto JSON da proposta: plano, riscos, verificacao e arquivos (intervalos de linhas)."
+          },
+          "llm": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/InfoLLM"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "sources": {
+            "items": {
+              "$ref": "#/components/schemas/FonteContexto"
+            },
+            "type": "array",
+            "title": "Sources",
+            "description": "Trechos da base local usados como referência."
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "request_id",
+          "response"
+        ],
+        "title": "RespostaProposta"
       },
       "ResultadoDiagnostico": {
         "properties": {
@@ -4798,34 +4107,6 @@
           "segundos"
         ],
         "title": "TentativaLLM"
-      },
-      "Verify": {
-        "properties": {
-          "email": {
-            "type": "string",
-            "maxLength": 254,
-            "pattern": "^[^\\s@<>:,;]{1,64}@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$",
-            "title": "Email"
-          },
-          "challengeId": {
-            "type": "string",
-            "maxLength": 128,
-            "minLength": 20,
-            "title": "Challengeid"
-          },
-          "code": {
-            "type": "string",
-            "pattern": "^[0-9]{6}$",
-            "title": "Code"
-          }
-        },
-        "type": "object",
-        "required": [
-          "email",
-          "challengeId",
-          "code"
-        ],
-        "title": "Verify"
       }
     }
   }

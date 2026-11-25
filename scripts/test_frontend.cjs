@@ -7,39 +7,29 @@ const path = require("node:path");
 // A análise unificada pode percorrer a fila de LLMs (até 7 modelos x 15 s) antes de responder.
 const ANALISE_MS = 300000;
 
-async function testLocalAccount(page, base) {
-  const email = "quantumone-check-" + crypto.randomUUID() + "@example.invalid";
-  const password = crypto.randomUUID();
-  await page.goto(base + "/cadastro");
-  await page.locator("#registration-name").fill("Teste de integração");
-  await page.locator("#registration-email").fill(email);
-  await page.locator("#registration-password").fill(password);
-  await page.locator("#registration-confirmPassword").fill(password);
-  await page.getByRole("button", { name: "Criar conta", exact: true }).click();
+// Primeira abertura: personalização por etapas, salva só neste navegador; depois, edição em "Meu perfil".
+async function testOnboarding(page, base) {
+  await page.goto(base);
+  await page.locator(".startup-splash").waitFor({state:"detached"});
+  await page.evaluate(() => localStorage.removeItem("quantumone.localProfile.v1"));
+  await page.reload();
+  await page.locator(".startup-splash").waitFor({state:"detached"});
+  const dialog = page.getByRole("dialog");
+  await dialog.getByRole("heading", { name: /Bem-vindo/ }).waitFor();
+  await dialog.getByLabel("Como podemos te chamar?").fill("Teste Integração");
+  for (let step = 0; step < 4; step++) await dialog.getByRole("button", { name: "Continuar" }).click();
+  await dialog.getByRole("button", { name: "Começar a explorar" }).click();
+  await dialog.waitFor({ state: "detached" });
+  await page.reload();
+  await page.locator(".startup-splash").waitFor({state:"detached"});
+  assert.equal(await page.getByRole("dialog").count(), 0, "o onboarding aparece só na primeira abertura");
+  await page.getByRole("button", { name: "Meu perfil", exact: true }).click();
   await page.getByRole("heading", { name: "Meu perfil" }).waitFor();
-  await page.getByRole("button", { name: "Enviar código de confirmação" }).click();
-  const field = page.getByLabel("Código de confirmação de 6 dígitos");
-  await field.waitFor();
-  const mailbox = process.env.MAILPIT_URL || "http://localhost:8025";
-  const list = await page.request.get(mailbox + "/api/v1/search", {params:{ query: "to:" + email }});
-  const message = (await list.json()).messages[0];
-  assert.ok(message, "Mailpit recebeu o código da conta de teste");
-  const body = await (await page.request.get(mailbox + "/api/v1/message/" + message.ID)).json();
-  const code = body.Text.match(/\b\d{6}\b/)[0];
-  await field.fill(code);
-  await page.getByRole("button", {name: "Confirmar e-mail", exact: true}).click();
-  const nextPassword = crypto.randomUUID();
-  await page.getByPlaceholder("Pelo menos 8 caracteres").fill(nextPassword);
-  await page.getByPlaceholder("Digite a senha novamente").fill(nextPassword);
-  await page.getByRole("button", {name:"Salvar nova senha"}).click();
-  await page.getByText("Senha atualizada", {exact:true}).waitFor();
-  await page.goto(base + "/cadastro");
-  await page.getByRole("button", {name:/Já tenho conta/}).click();
-  await page.locator("#registration-email").fill(email);
-  await page.locator("#registration-password").fill(nextPassword);
-  await page.getByRole("button", {name:"Entrar",exact:true}).click();
-  await page.getByRole("heading", {name:"Meu perfil"}).waitFor();
-  console.log("OK: cadastro, perfil, recebimento local do código, confirmação, nova senha e login.");
+  await page.getByLabel("Como podemos te chamar?").fill("Teste Editado");
+  await page.getByRole("button", { name: "Salvar perfil" }).click();
+  await page.getByText("Perfil atualizado neste dispositivo.").waitFor();
+  assert.equal(JSON.parse(await page.evaluate(() => localStorage.getItem("quantumone.localProfile.v1"))).name, "Teste Editado");
+  console.log("OK: onboarding na primeira abertura, perfil local salvo e editado.");
 }
 
 async function run() {
@@ -52,7 +42,7 @@ async function run() {
   const tab = name => page.getByRole("tab", { name, exact: true });
   const base = process.env.FRONTEND_URL || "http://localhost:3000";
   try {
-    if (process.env.TEST_LOCAL_ACCOUNT === "1") await testLocalAccount(page, base);
+    await testOnboarding(page, base);
     await page.goto(base);
     await page.locator(".startup-splash").waitFor({state:"detached"});
     await page.evaluate(() => {
@@ -106,7 +96,9 @@ async function run() {
     // A ferramenta Terminal foi removida do Desktop Chat (o CLI continua separado).
     assert.equal(await page.getByRole("tab", { name: "Terminal" }).count(), 0);
     assert.equal(await page.getByText("Buscar também na web").count(), 0);
-    assert.equal(await page.getByRole("checkbox", { name: "Pesquisar também na internet" }).isChecked(), true);
+    // Fontes, otimização e internet são decididas pelo programa: nenhum seletor no compositor.
+    assert.equal(await page.getByText("Pesquisar também na internet").count(), 0);
+    assert.equal(await page.getByText("Fontes por consulta").count(), 0);
     // Anexar pasta: caminhos relativos, pastas de dependências e tipos não suportados ficam de fora.
     const pasta = fs.mkdtempSync(path.join(os.tmpdir(), "qone-pasta-"));
     const projeto = path.join(pasta, "projeto");
@@ -130,7 +122,6 @@ async function run() {
     await page.getByRole("heading", { name: "Teste de integração" }).waitFor();
     await page.locator(".project-open-button").first().click();
     await page.getByText("PROJETO ATIVO", { exact: true }).waitFor();
-    await page.getByRole("combobox", { name: "Fontes por consulta" }).selectOption("8");
     const turns = [];
     const mocked = process.env.SKIP_LIVE_LLM === "1";
     const conversaRemota = "9b2f6a8e-3c1d-4e5f-8a7b-6c5d4e3f2a1b";
@@ -143,8 +134,9 @@ async function run() {
       } }));
       await page.route("**/api/analise", async route => {
         const input = route.request().postDataJSON();
-        assert.equal(input.top_k, 8);
-        assert.equal(input.pesquisa_web, true); // "Pesquisar também na internet" vem marcado
+        assert.equal(input.top_k, 15);
+        assert.equal(input.perfil, "avancado");
+        assert.equal(input.pesquisa_web, true);
         assert.ok(input.arquivos.some(arquivo => arquivo.nome === "nota.txt" && /Contexto da amostra/.test(arquivo.conteudo)));
         assert.match(input.progress_id, /^[0-9a-f-]{36}$/i);
         assert.match(input.mensagem, /\S/);

@@ -4,13 +4,13 @@ import { useEffect, useRef, useState } from "react";
 import type { EditorLanguage } from "../layout/conversationTypes";
 import { isConversationRecord, isProjectRecord, MAX_CONVERSATIONS, MAX_PROJECTS, MAX_WORKSPACE_BACKUP_BYTES, parseUniqueRecords } from "../security/workspaceData";
 import FeedbackMessage, { type FeedbackAction, type FeedbackTone } from "../ui/FeedbackMessage";
+import Icon from "../ui/Icon";
 
 type AppPreferences = {
   interfaceScale: "90" | "100" | "110";
   reduceMotion: boolean;
   highContrast: boolean;
   defaultLanguage: EditorLanguage;
-  defaultTopK: "3" | "5" | "8" | "10";
   sendWithEnter: boolean;
   openCodePanelOnNewConversation: boolean;
 };
@@ -20,7 +20,6 @@ const DEFAULT_PREFERENCES: AppPreferences = {
   reduceMotion: false,
   highContrast: false,
   defaultLanguage: "qasm",
-  defaultTopK: "5",
   sendWithEnter: false,
   openCodePanelOnNewConversation: false,
 };
@@ -40,7 +39,6 @@ function readStoredPreferences(): { preferences: AppPreferences; issue: boolean 
       highContrast: values.highContrast === true,
       interfaceScale: values.interfaceScale === "90" || values.interfaceScale === "110" ? values.interfaceScale : "100",
       defaultLanguage: values.defaultLanguage === "python" ? "python" : "qasm",
-      defaultTopK: values.defaultTopK === "3" || values.defaultTopK === "8" || values.defaultTopK === "10" ? values.defaultTopK : "5",
       sendWithEnter: values.sendWithEnter === true,
       openCodePanelOnNewConversation: values.openCodePanelOnNewConversation === true,
     };
@@ -206,7 +204,6 @@ export default function SettingsPage() {
           reduceMotion: imported.reduceMotion === true,
           highContrast: imported.highContrast === true,
           defaultLanguage: imported.defaultLanguage === "python" ? "python" : "qasm",
-          defaultTopK: imported.defaultTopK === "3" || imported.defaultTopK === "8" || imported.defaultTopK === "10" ? imported.defaultTopK : "5",
           sendWithEnter: imported.sendWithEnter === true,
           openCodePanelOnNewConversation: imported.openCodePanelOnNewConversation === true,
         };
@@ -394,19 +391,9 @@ export default function SettingsPage() {
 
             <div className="settings-row settings-analysis-row">
               <div>
-                <strong>Trechos documentais padrão</strong>
-                <span>Quantidade inicial usada na recuperação de contexto.</span>
+                <strong>Análise automática</strong>
+                <span>O QuantumOne usa até 15 fontes (as fracas são descartadas), pesquisa sempre a base local e a internet e aplica a otimização mais forte que continua verificada pelo Qiskit.</span>
               </div>
-              <select
-                value={preferences.defaultTopK}
-                onChange={(event) => updatePreference("defaultTopK", event.target.value as AppPreferences["defaultTopK"])}
-                aria-label="Quantidade padrão de trechos documentais"
-              >
-                <option value="3">3 trechos</option>
-                <option value="5">5 trechos</option>
-                <option value="8">8 trechos</option>
-                <option value="10">10 trechos</option>
-              </select>
             </div>
           </section>
 
@@ -456,7 +443,7 @@ export default function SettingsPage() {
 
           <section className="panel settings-page-card" id="data-settings">
             <div className="settings-card-heading">
-              <span className="settings-card-icon" aria-hidden="true">▤</span>
+              <span className="settings-card-icon" aria-hidden="true"><Icon name="database" size={18} /></span>
               <div>
                 <h2>Dados e recuperação</h2>
                 <p>Conversas e projetos ficam salvos localmente neste dispositivo.</p>

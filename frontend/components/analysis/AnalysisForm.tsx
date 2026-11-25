@@ -5,7 +5,6 @@ import dynamic from "next/dynamic";
 import Image from "next/image";
 
 import { analyze, diagnostic, readLegacyHistory, type TurnAttempt } from "../../services/workspace-analysis";
-import type { OptimizationProfile } from "../../services/analysis-api";
 import AnalysisLiveStatus, { type LiveProgress } from "./AnalysisLiveStatus";
 import AnalysisResultPanel from "./AnalysisResultPanel";
 import AppFrame from "../layout/AppFrame";
@@ -17,6 +16,8 @@ import {
 import FeedbackMessage from "../ui/FeedbackMessage";
 import useModalFocus from "../ui/useModalFocus";
 import WorkspaceToolsPanel, { previewGates, WorkspaceToolTabs, type WorkspaceToolId } from "../workspace/WorkspaceToolsPanel";
+import Icon from "../ui/Icon";
+import { suggestionsFor, useLocalProfile } from "../profile/localProfile";
 
 const CodeEditor = dynamic(() => import("./CodeEditor"), {
   ssr: false,
@@ -36,6 +37,13 @@ const MAX_ATTACHMENTS_TOTAL_BYTES = 3_000_000;
 /** Acima disso, o histórico guarda só nome, tamanho e tipo dos anexos (cota do localStorage). */
 const STORED_ATTACHMENT_CONTENT_LIMIT = 1_000_000;
 const CONVERSATIONS_STORAGE_KEY = "quantumone.conversations.v1";
+/** Máximo de fontes por análise; o mínimo fica a critério do backend (evidências fracas são descartadas). */
+const MAX_SOURCES = 15;
+
+function useProfileForChat() {
+  const stored = useLocalProfile();
+  return stored && stored !== "loading" ? stored : null;
+}
 /** Relógio usado apenas em manipuladores de evento (início da análise e chegada do progresso). */
 const currentTime = () => Date.now();
 
@@ -132,19 +140,16 @@ const getClientHydrationSnapshot = () => true;
 const getServerHydrationSnapshot = () => false;
 
 export default function AnalysisForm() {
+  const localProfile = useProfileForChat();
   const [qasmCode, setQasmCode] = useState("");
   const [pythonCode, setPythonCode] = useState("");
   const [activeLanguage, setActiveLanguage] =
     useState<EditorLanguage>("qasm");
   const [defaultLanguage, setDefaultLanguage] = useState<EditorLanguage>("qasm");
-  const [defaultTopK, setDefaultTopK] = useState("5");
   const [sendWithEnter, setSendWithEnter] = useState(false);
   const [openCodePanelOnNewConversation, setOpenCodePanelOnNewConversation] = useState(false);
   const [question, setQuestion] = useState("");
   const [backend, setBackend] = useState("reference");
-  const [topK, setTopK] = useState("5");
-  const [profile, setProfile] = useState<OptimizationProfile>("balanceado");
-  const [webSearch, setWebSearch] = useState(true);
   const [progress, setProgress] = useState<LiveProgress | null>(null);
   const [startedAt, setStartedAt] = useState(0);
   const [attachmentNotice, setAttachmentNotice] = useState<AttachmentNotice | null>(null);
@@ -230,7 +235,6 @@ export default function AnalysisForm() {
         const language = storedPreferences.defaultLanguage === "python" ? "python" : "qasm";
         setActiveLanguage(language);
         setActiveCodeFileId(language === "python" ? "main-python" : "main-qasm");
-        setTopK(["3","5","8","10"].includes(storedPreferences.defaultTopK) ? storedPreferences.defaultTopK : "5");
       } catch {
         applyPreferences({});
       }
@@ -242,9 +246,6 @@ export default function AnalysisForm() {
 
     function applyPreferences(preferences: Record<string, unknown>) {
       setDefaultLanguage(preferences.defaultLanguage === "python" ? "python" : "qasm");
-      setDefaultTopK(["3", "5", "8", "10"].includes(String(preferences.defaultTopK))
-        ? String(preferences.defaultTopK)
-        : "5");
       setSendWithEnter(preferences.sendWithEnter === true);
       setOpenCodePanelOnNewConversation(preferences.openCodePanelOnNewConversation === true);
       document.documentElement.dataset.reducedMotion = String(preferences.reduceMotion === true);
@@ -428,11 +429,9 @@ export default function AnalysisForm() {
     setRenamingCodeFileName("");
   }
 
-  const examples = [
-    "Reduzir profundidade",
-    "Explicar o circuito",
-    "Adaptar ao backend",
-  ];
+  // Sugestões e saudação personalizadas pelo perfil local (onboarding).
+  const examples = suggestionsFor(localProfile);
+  const firstName = localProfile?.name.trim().split(/\s+/)[0];
 
   function selectExample(example: string) {
     setActiveConversationId(null);
@@ -569,7 +568,6 @@ export default function AnalysisForm() {
     setPythonCode(conversation.pythonCode);
     setActiveLanguage(conversation.activeLanguage);
     setBackend(conversation.backend);
-    setTopK(conversation.topK);
     setAttachments(conversation.attachments ?? []);
     setAttachmentNotice(null);
     const restoredFiles = conversation.codeFiles?.slice() ?? [];
@@ -685,7 +683,6 @@ export default function AnalysisForm() {
     setAttachmentNotice(null);
     setQuestion("");
     setBackend("reference");
-    setTopK(defaultTopK);
     setFeedback(null);
     setEditorMessage("");
     setShowInputErrors(false);
@@ -739,7 +736,7 @@ export default function AnalysisForm() {
     const id = selected?.id ?? crypto.randomUUID();
     const savedCodeFiles = codeFiles.map((file) => ({ ...file, isDirty: false }));
     const controller = new AbortController();
-    const key = JSON.stringify([activeConversationId, activeLanguageCode, activeLanguage, question, topK, profile, webSearch, attachments]);
+    const key = JSON.stringify([activeConversationId, activeLanguageCode, activeLanguage, question, attachments]);
     if (lastAttempt.current?.key !== key) lastAttempt.current = { key, messageId: crypto.randomUUID() };
     const attempt = lastAttempt.current;
     pending.current = controller;
@@ -748,8 +745,8 @@ export default function AnalysisForm() {
     setBusy(true);
     try {
       const response = await analyze({
-        code: activeLanguageCode, format: activeLanguage, question: question.trim(), topK: Number(topK), profile,
-        attachments, remoteId: selected?.remoteId, webSearch,
+        code: activeLanguageCode, format: activeLanguage, question: question.trim(),
+        attachments, remoteId: selected?.remoteId,
         onProgress: (data) => {
           if (pending.current === controller) setProgress({ data, receivedAt: currentTime() });
         },
@@ -766,7 +763,7 @@ export default function AnalysisForm() {
         qasmCode, pythonCode,
         activeLanguage,
         backend,
-        topK,
+        topK: String(MAX_SOURCES),
         createdAt: new Date().toISOString(),
         isPinned: selected?.isPinned ?? false,
         attachments,
@@ -853,27 +850,10 @@ export default function AnalysisForm() {
               {historyStorageIssue && <FeedbackMessage tone="warning" className="chat-storage-warning" message={historyStorageIssue} />}
               {projectStorageIssue && <FeedbackMessage tone="warning" className="chat-storage-warning" message={projectStorageIssue} />}
 
-              <div className="composer-meta composer-settings">
-                <label>Fontes por consulta <select value={topK} onChange={event => setTopK(event.target.value)}>
-                  {[3,5,8,10].map(n => <option key={n}>{n}</option>)}
-                </select></label>
-                <label>Otimização <select value={profile} onChange={event => setProfile(event.target.value as OptimizationProfile)}>
-                  <option value="rapido">Rápida</option><option value="balanceado">Balanceada</option>
-                  <option value="avancado">Avançada</option><option value="experimental">Experimental</option>
-                </select></label>
-                <label className="composer-web-toggle">
-                  <input type="checkbox" checked={webSearch} disabled={busy} onChange={(event) => setWebSearch(event.target.checked)} />
-                  Pesquisar também na internet
-                </label>
-                <span
-                  className="composer-local-note"
-                  title={webSearch
-                    ? "A resposta usa primeiro a base de conhecimento local; a internet entra apenas como complemento."
-                    : "A resposta usa somente a base de conhecimento local."}
-                >
-                  {webSearch ? "Base local primeiro; internet como complemento" : "Somente base local"}
-                </span>
-              </div>
+              <p className="composer-auto-note">
+                <Icon name="sparkle" size={14} />
+                <span>Análise automática: até {MAX_SOURCES} fontes da base local e da internet, com a otimização mais forte que continua verificada pelo Qiskit.</span>
+              </p>
               <WorkspaceToolTabs activeTool={activeTool} onSelect={setActiveTool} />
               {activeTool && (
                 <WorkspaceToolsPanel
@@ -930,7 +910,7 @@ export default function AnalysisForm() {
                             {activeConversation.attachments?.length ? (
                               <div className="chat-message-attachments">
                                 {activeConversation.attachments.map((attachment) => (
-                                  <span key={attachment.id}>▤ {attachment.name}</span>
+                                  <span key={attachment.id}><Icon name="files" size={13} />{attachment.name}</span>
                                 ))}
                               </div>
                             ) : null}
@@ -956,7 +936,7 @@ export default function AnalysisForm() {
                   <span className="chat-empty-kicker">
                     SEU WORKSPACE QUÂNTICO
                   </span>
-                  <h2>O que vamos explorar?</h2>
+                  <h2>{firstName ? `O que vamos explorar, ${firstName}?` : "O que vamos explorar?"}</h2>
                   <p>
                     Faça uma pergunta sobre seu circuito ou escolha uma
                     sugestão para começar.
@@ -1066,7 +1046,7 @@ export default function AnalysisForm() {
                       aria-haspopup="dialog"
                       aria-expanded={isCodePanelOpen}
                     >
-                      <span aria-hidden="true">＋</span>
+                      <Icon name="plus" size={15} />
                       {qasmCode.trim() || pythonCode.trim() || codeFiles.some((file) => file.content.trim())
                         ? "Editar código"
                         : "Adicionar código"}
@@ -1078,7 +1058,7 @@ export default function AnalysisForm() {
                       aria-label="Anexar arquivos à conversa"
                       title="Anexar arquivos à conversa"
                     >
-                      <span aria-hidden="true">⌁</span>
+                      <Icon name="attach" size={15} />
                       Anexar
                     </button>
                     <button
@@ -1088,7 +1068,7 @@ export default function AnalysisForm() {
                       aria-label="Anexar pasta à conversa"
                       title="Anexar uma pasta de projeto (até 300 arquivos de texto e código, 3 MB no total)"
                     >
-                      <span aria-hidden="true">▤</span>
+                      <Icon name="folder" size={15} />
                       Anexar pasta
                     </button>
                   </div>
@@ -1104,7 +1084,7 @@ export default function AnalysisForm() {
 
                     <button type="submit" disabled={busy} className="button-primary">
                       {busy ? "Analisando…" : "Analisar"}
-                      <span aria-hidden="true">↑</span>
+                      <Icon name="arrowUp" size={15} />
                     </button>
                   </div>
                 </div>

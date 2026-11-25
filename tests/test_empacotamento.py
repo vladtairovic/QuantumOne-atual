@@ -8,8 +8,7 @@ ROOT = Path(__file__).resolve().parents[1]
 
 def test_compose_integra_servicos_locais_e_banco_persistente_interno():
     config = yaml.safe_load((ROOT / "compose.yaml").read_text(encoding="utf-8"))
-    assert set(config["services"]) == {"api", "chroma", "frontend", "cache", "mailpit"}
-    assert config["services"]["mailpit"]["ports"] == ["127.0.0.1:${MAILPIT_PORT:-8025}:8025"]
+    assert set(config["services"]) == {"api", "chroma", "frontend", "cache"}
     assert config["services"]["chroma"]["image"] == "chromadb/chroma:1.5.9"
     assert "ports" not in config["services"]["chroma"]
     assert "chroma_data:/data" in config["services"]["chroma"]["volumes"]

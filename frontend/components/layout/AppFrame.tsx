@@ -5,6 +5,8 @@ import Sidebar from "./Sidebar";
 import ProjectsPage from "../projects/ProjectsPage";
 import HistoryPage from "../history/HistoryPage";
 import SettingsPage from "../settings/SettingsPage";
+import ProfileEditor from "../profile/ProfileEditor";
+import OnboardingWizard from "../profile/OnboardingWizard";
 import type { ConversationRecord, ProjectRecord } from "./conversationTypes";
 
 type AppFrameProps = {
@@ -104,10 +106,13 @@ export default function AppFrame({
           />
         ) : currentItem === "settings" ? (
           <SettingsPage />
+        ) : currentItem === "profile" ? (
+          <ProfileEditor />
         ) : (
           children
         )}
       </div>
+      <OnboardingWizard />
     </div>
   );
 }

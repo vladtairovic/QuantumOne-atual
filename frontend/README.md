@@ -4,4 +4,4 @@ Na raiz do projeto, execute `docker compose up -d --build --wait` e abra [o work
 
 O editor aceita OpenQASM 2 e o subconjunto numérico de Python/Qiskit aceito pela API. A análise considera o arquivo selecionado. A proposta do Qiskit é apresentada em OpenQASM 2 para os dois formatos. Anexos de texto acompanham a pergunta ao agente. Em **Configurações**, é possível exportar ou restaurar conversas, projetos e preferências.
 
-O cadastro e a troca de senha usam as rotas `/api/auth`. No ambiente padrão, o código chega à [caixa de testes do Mailpit](http://localhost:8025). O README principal descreve como configurar entrega por SMTP.
+Não há contas: na primeira abertura, uma personalização por etapas cria um perfil local (salvo só neste navegador), editável em **Meu perfil**. A análise escolhe sozinha as fontes (até 15), a otimização (a mais forte verificada) e sempre complementa com a internet.

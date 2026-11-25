@@ -1,0 +1,17 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+# Empacota só a CLI interativa (cli.py, qone_core.py, qone_store.py): a API roda no Docker.
+[project]
+name = "quantumone-cli"
+version = "0.3.0"
+description = "Assistente de terminal do QuantumOne para projetos Qiskit"
+requires-python = ">=3.10"
+
+[project.scripts]
+qone = "cli:main"
+quantumone = "cli:main"
+
+[tool.setuptools]
+py-modules = ["cli", "qone_core", "qone_store"]

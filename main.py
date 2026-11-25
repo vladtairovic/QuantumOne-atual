@@ -199,9 +199,6 @@ async def avaliar(entrada: Avaliacao):
         arquivo.write(resultado.model_dump_json()+'\n')
     return resultado
 
-from contas import router as account_router
-app.include_router(account_router)
-
 from quantum.api import router as quantum_router
 app.include_router(quantum_router)
 app.add_middleware(CircuitBodyLimit)
@@ -259,7 +256,7 @@ async def enviar_mensagem(
 
 
 # Análise unificada: texto, código, arquivos e pastas em uma única chamada.
-from contratos_analise import EntradaAnalise, ProgressoAnalise, RespostaAnalise
+from contratos_analise import EntradaAnalise, EntradaProposta, ProgressoAnalise, RespostaAnalise, RespostaProposta
 from rag import progresso as progresso_analise
 
 TEMPO_ANALISE = float(os.getenv('QONE_ANALISE_TIMEOUT_SECONDS', '900'))
@@ -283,3 +280,20 @@ async def progresso_do_envio(progress_id: UUID):
     if estado is None:
         raise HTTPException(404, 'Progresso não encontrado.')
     return ProgressoAnalise.model_validate(estado)
+
+
+@app.post('/assistente/proposta', response_model=RespostaProposta)
+async def propor_edicao(entrada: EntradaProposta, request: Request):
+    """Proposta de edição para a CLI (`qone /propor`): devolve um JSON com plano, riscos, verificação e
+    edições por intervalo de linhas. Nada é gravado aqui; a CLI mostra o diff e pede autorização.
+    O andamento (modelo em uso) aparece em GET /analise/progresso/{progress_id}."""
+    import orquestrador
+    from rag import cliente_llm
+    if not cliente_llm.configurada() or os.getenv('QONE_LLM', 'auto').lower() == 'local':
+        return erro(request, 503, 'LLM_NOT_CONFIGURED',
+                    'Propostas de edição precisam da fila de LLMs (NVIDIA_API_KEY) e QONE_LLM diferente de local.')
+    try:
+        resultado = await asyncio.wait_for(orquestrador.propor_edicao(entrada, request.state.request_id), TEMPO_ANALISE)
+    except cliente_llm.FilaEsgotada:
+        return erro(request, 503, 'LLM_UNAVAILABLE', 'Nenhum modelo da fila respondeu; tente novamente em instantes.')
+    return RespostaProposta.model_validate(resultado)

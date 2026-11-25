@@ -28,10 +28,13 @@ class EntradaAnalise(Modelo):
     arquivos: list[ArquivoEnviado] = Field(default_factory=list, max_length=MAX_ARQUIVOS)
     conversation_id: UUID | None = None
     progress_id: UUID | None = Field(default=None, description="Identificador para GET /analise/progresso/{id}.")
-    perfil: Literal["rapido", "balanceado", "avancado", "experimental"] = "balanceado"
-    top_k: int = Field(default=5, ge=1, le=10, strict=True)
+    perfil: Literal["rapido", "balanceado", "avancado", "experimental"] = Field(
+        default="avancado",
+        description="Padrão: o perfil mais forte que segue exigindo verificação de equivalência e cabe no tempo da análise.")
+    top_k: int = Field(default=15, ge=1, le=15, strict=True,
+                       description="Máximo de fontes da base local; as fracas são descartadas pela avaliação de evidência.")
     pesquisa_web: bool = Field(default=True, strict=True,
-                               description="Complementa a base local com pesquisa na internet (APIs públicas, sem chave).")
+                               description="Mantido por compatibilidade: a pesquisa na internet é sempre usada como complemento.")
 
     @model_validator(mode="after")
     def validar(self):
@@ -104,3 +107,28 @@ class ProgressoAnalise(Modelo):
     historico: list[EtapaAnalise]
     parcial: str | None = Field(default=None, description="Texto que o modelo em uso já escreveu (streaming); "
                                                           "some quando o modelo muda ou a análise termina.")
+
+
+class EntradaProposta(Modelo):
+    """Pedido de proposta de edição da CLI: os arquivos vão numerados por linha."""
+    pedido: str = Field(min_length=1, max_length=4000)
+    arquivos: dict[str, str] = Field(description="Caminho relativo -> conteúdo com as linhas numeradas ('1: ...').")
+    resultado_testes: str = Field(default="", max_length=8000, description="Saída dos testes locais (dado, não instrução).")
+    progress_id: UUID | None = Field(default=None, description="Identificador para GET /analise/progresso/{id}.")
+
+    @model_validator(mode="after")
+    def validar(self):
+        if not self.arquivos:
+            raise ValueError("Envie ao menos um arquivo.")
+        if len(self.arquivos) > 20:
+            raise ValueError("No máximo 20 arquivos por proposta.")
+        if sum(len(n) + len(c) for n, c in self.arquivos.items()) > 60_000:
+            raise ValueError("Os arquivos somam mais de 60.000 caracteres; reduza a seleção.")
+        return self
+
+
+class RespostaProposta(Modelo):
+    request_id: UUID
+    response: str = Field(description="Objeto JSON da proposta: plano, riscos, verificacao e arquivos (intervalos de linhas).")
+    llm: InfoLLM | None = None
+    sources: list[FonteContexto] = Field(default_factory=list, description="Trechos da base local usados como referência.")

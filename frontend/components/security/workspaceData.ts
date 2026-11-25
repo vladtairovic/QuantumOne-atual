@@ -183,7 +183,7 @@ export function isConversationRecord(value: unknown): value is ConversationRecor
     typeof value.pythonCode === "string" && value.pythonCode.length <= 500_000 &&
     (value.activeLanguage === "qasm" || value.activeLanguage === "python") &&
     (value.backend === undefined || (typeof value.backend === "string" && value.backend.length <= 120)) &&
-    (value.topK === undefined || ["3", "5", "8", "10"].includes(String(value.topK))) &&
+    (value.topK === undefined || ["3", "5", "8", "10", "15"].includes(String(value.topK))) &&
     (value.createdAt === undefined || (typeof value.createdAt === "string" && !Number.isNaN(Date.parse(value.createdAt)))) &&
     (value.isPinned === undefined || typeof value.isPinned === "boolean") &&
     (value.projectId === undefined || (typeof value.projectId === "string" && value.projectId.length <= 160)) &&

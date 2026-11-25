@@ -1,0 +1,476 @@
+/* =========================================================================
+   QUANTUMONE — SPATIAL UI + NEON (camada 2)
+   Carregada depois de glass.css (ver app/layout.tsx).
+   - Fundo dinâmico: orbes de neon, grade em perspectiva e brilho do cursor.
+   - Neon atrás do vidro em botões, abas e superfícies em foco.
+   - Barra lateral flutuante, cantos consistentes, separadores sem pontas.
+   - Interações com o mouse: holofote, inclinação 3D, botão magnético.
+   ========================================================================= */
+
+@property --q1-angle {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+
+:root {
+  --radius-sm: 10px;
+  --radius-md: 14px;
+  --radius-lg: 22px;
+  --neon-violet: #9b5cff;
+  --neon-magenta: #d946ef;
+  --neon-cyan: #22d3ee;
+  --neon-flow: linear-gradient(110deg, #7c3aed, #c026d3, #0e9fbf, #7c3aed);
+  --hairline: linear-gradient(90deg, transparent, rgba(214, 192, 250, 0.24) 14%, rgba(214, 192, 250, 0.24) 86%, transparent);
+}
+
+/* -------------------------------------------------------------------------
+   1. Fundo dinâmico
+   ------------------------------------------------------------------------- */
+
+.spatial-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  --px: 0;
+  --py: 0;
+}
+
+.spatial-bg-parallax {
+  position: absolute;
+  inset: -8%;
+  transform: translate3d(calc(var(--px) * -22px), calc(var(--py) * -16px), 0);
+  transition: transform 900ms var(--ease-spring);
+}
+
+.spatial-orb {
+  position: absolute;
+  border-radius: 50%;
+  mix-blend-mode: screen;
+  will-change: transform;
+}
+
+.spatial-orb-1 {
+  top: -12%;
+  right: -6%;
+  width: 48vmax;
+  height: 48vmax;
+  background: radial-gradient(circle, rgba(150, 82, 255, 0.5), rgba(150, 82, 255, 0) 64%);
+  animation: q1-orb-a 28s ease-in-out infinite alternate;
+}
+
+.spatial-orb-2 {
+  bottom: -18%;
+  left: 6%;
+  width: 40vmax;
+  height: 40vmax;
+  background: radial-gradient(circle, rgba(217, 70, 239, 0.3), rgba(217, 70, 239, 0) 64%);
+  animation: q1-orb-b 34s ease-in-out infinite alternate;
+}
+
+.spatial-orb-3 {
+  top: 28%;
+  left: 38%;
+  width: 32vmax;
+  height: 32vmax;
+  background: radial-gradient(circle, rgba(34, 211, 238, 0.16), rgba(34, 211, 238, 0) 62%);
+  animation: q1-orb-c 40s ease-in-out infinite alternate;
+}
+
+.spatial-orb-4 {
+  top: 6%;
+  left: -8%;
+  width: 28vmax;
+  height: 28vmax;
+  background: radial-gradient(circle, rgba(99, 102, 241, 0.3), rgba(99, 102, 241, 0) 64%);
+  animation: q1-orb-b 30s ease-in-out infinite alternate-reverse;
+}
+
+.spatial-grid {
+  position: absolute;
+  right: -50%;
+  bottom: -12%;
+  left: -50%;
+  height: 52%;
+  background-image:
+    linear-gradient(rgba(181, 138, 255, 0.1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(181, 138, 255, 0.1) 1px, transparent 1px);
+  background-size: 64px 64px;
+  transform: perspective(620px) rotateX(64deg);
+  transform-origin: bottom center;
+  mask-image: linear-gradient(to top, #000 8%, transparent 80%);
+  -webkit-mask-image: linear-gradient(to top, #000 8%, transparent 80%);
+  animation: q1-grid-flow 16s linear infinite;
+}
+
+.spatial-cursor-glow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 560px;
+  height: 560px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(170, 110, 255, 0.15), rgba(34, 211, 238, 0.04) 40%, transparent 64%);
+  transform: translate3d(calc(var(--cx, 50vw) - 280px), calc(var(--cy, 40vh) - 280px), 0);
+  transition: transform 500ms var(--ease-spring);
+  will-change: transform;
+}
+
+/* O neon atravessa o vidro: superfícies um pouco mais translúcidas. */
+.chat-panel,
+.context-panel {
+  background:
+    radial-gradient(ellipse 58% 56% at 100% 0%, rgba(142, 78, 229, 0.16), transparent 76%),
+    linear-gradient(145deg, rgba(29, 24, 43, 0.72), rgba(13, 11, 20, 0.7) 58%, rgba(23, 16, 34, 0.74));
+}
+
+/* -------------------------------------------------------------------------
+   2. Barra lateral flutuante (camada espacial)
+   ------------------------------------------------------------------------- */
+
+@media (min-width: 561px) {
+  .quantum-sidebar {
+    top: 12px;
+    bottom: 12px;
+    left: 12px;
+    width: 226px;
+    min-height: 0;
+    overflow: visible;
+    border: 1px solid var(--glass-edge);
+    border-radius: var(--radius-lg);
+    background:
+      radial-gradient(ellipse 90% 40% at 0% 0%, rgba(155, 92, 255, 0.16), transparent 70%),
+      linear-gradient(165deg, rgba(40, 30, 62, 0.6), rgba(14, 11, 22, 0.72));
+    box-shadow: var(--elev-3), var(--glass-highlight);
+    backdrop-filter: saturate(170%) blur(28px);
+    -webkit-backdrop-filter: saturate(170%) blur(28px);
+  }
+
+  .quantum-sidebar.is-collapsed {
+    width: 56px;
+    padding-right: 7px;
+    padding-left: 7px;
+  }
+}
+
+@media (min-width: 561px) and (max-width: 760px) {
+  .quantum-sidebar { width: 186px; }
+}
+
+/* -------------------------------------------------------------------------
+   3. Cantos e separadores (sem pontas)
+   ------------------------------------------------------------------------- */
+
+/* Linhas que encostavam nas bordas arredondadas agora esmaecem nas pontas. */
+.chat-context-bar,
+.workspace-tool-tabs {
+  border-bottom: 1px solid transparent;
+  border-image: var(--hairline) 1;
+}
+
+/* Painel de ferramentas: cartão de vidro embutido, com cantos arredondados. */
+.workspace-tool-panel {
+  margin: 10px 0 4px;
+  padding: 16px;
+  border: 1px solid var(--glass-edge);
+  border-radius: var(--radius-md);
+  background: var(--glass-fill), rgba(20, 15, 32, 0.4);
+  box-shadow: var(--elev-1), var(--glass-highlight);
+}
+
+.workspace-tool-panel :is(input, textarea, pre, code, article, section, nav, li) {
+  border-radius: var(--radius-sm);
+}
+
+.button-primary,
+.button-secondary,
+.add-code-button,
+.tool-action-button,
+.analysis-live-status-footer button {
+  border-radius: 12px;
+}
+
+.example-chip { border-radius: 999px; }
+.chat-composer { border-radius: 18px; }
+.analysis-live-status,
+.analysis-result-panel { border-radius: 16px; }
+.chat-user-message { border-radius: 16px 16px 6px 16px; }
+
+/* Rolagem fina nas listas de vidro. */
+.chat-log,
+.analysis-live-status-draft-text,
+.glass-dropdown-list {
+  scrollbar-color: rgba(181, 138, 255, 0.35) transparent;
+  scrollbar-width: thin;
+}
+
+/* -------------------------------------------------------------------------
+   4. Neon atrás do vidro
+   ------------------------------------------------------------------------- */
+
+.button-primary::before,
+.button-secondary::before,
+.add-code-button::before,
+.example-chip::before,
+.glass-dropdown-trigger::before,
+.workspace-tool-tab-indicator::before {
+  position: absolute;
+  inset: 3px;
+  z-index: -1;
+  border-radius: inherit;
+  content: "";
+  pointer-events: none;
+  background: var(--neon-flow);
+  background-size: 300% 100%;
+  filter: blur(12px);
+  opacity: 0;
+  transition: opacity var(--dur-slow) var(--ease-spring);
+  animation: q1-neon-flow 7s linear infinite;
+}
+
+.button-primary::before { opacity: 0.38; }
+
+.button-primary:hover::before { opacity: 0.72; }
+
+.button-secondary:hover::before,
+.add-code-button:hover::before,
+.example-chip:hover::before,
+.glass-dropdown-trigger:hover::before,
+.glass-dropdown[data-open="true"] .glass-dropdown-trigger::before {
+  opacity: 0.42;
+}
+
+.workspace-tool-tab-indicator::before { opacity: 0.45; }
+
+.button-primary:disabled::before,
+.button-secondary:disabled::before { opacity: 0; }
+
+/* Contorno de neon girando: compositor em foco e análise em andamento. */
+.chat-composer,
+.analysis-live-status {
+  position: relative;
+}
+
+.chat-composer::before,
+.analysis-live-status::after {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  padding: 1px;
+  border-radius: inherit;
+  content: "";
+  pointer-events: none;
+  background: conic-gradient(from var(--q1-angle), transparent 0 55%, var(--neon-violet) 70%, var(--neon-cyan) 82%, var(--neon-magenta) 90%, transparent 97%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+  opacity: 0;
+  transition: opacity var(--dur-slow) var(--ease-spring);
+  animation: q1-spin 5s linear infinite;
+}
+
+.chat-composer:focus-within::before { opacity: 1; }
+.analysis-live-status::after { opacity: 0.85; }
+
+.chat-composer:focus-within {
+  box-shadow: var(--elev-3), var(--glass-highlight), 0 0 46px rgba(155, 92, 255, 0.28), 0 0 90px rgba(34, 211, 238, 0.08);
+}
+
+/* Holofote que acompanha o cursor dentro dos painéis. */
+.chat-panel::before,
+.context-panel::before {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  content: "";
+  pointer-events: none;
+  background: radial-gradient(560px circle at var(--mx, 70%) var(--my, -30%), rgba(181, 138, 255, 0.08), transparent 45%);
+}
+
+/* -------------------------------------------------------------------------
+   5. Movimento interativo com o mouse
+   ------------------------------------------------------------------------- */
+
+.example-chip,
+.settings-page-card,
+.project-card,
+.history-card {
+  transform: perspective(700px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) translateY(var(--lift, 0px));
+  transform-style: preserve-3d;
+  transition:
+    transform 260ms var(--ease-spring),
+    box-shadow var(--dur-base) var(--ease-spring),
+    border-color var(--dur-base) var(--ease-spring),
+    background-color var(--dur-base) var(--ease-spring);
+}
+
+.example-chip:hover,
+.settings-page-card:hover,
+.project-card:hover,
+.history-card:hover {
+  --lift: -2px;
+  transform: perspective(700px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) translateY(var(--lift));
+}
+
+.settings-page-card:hover,
+.project-card:hover,
+.history-card:hover {
+  border-color: var(--glass-edge-hover);
+  box-shadow: var(--elev-3), var(--glass-highlight), 0 0 40px rgba(155, 92, 255, 0.14);
+}
+
+.button-primary {
+  transform: translate3d(var(--tx, 0px), var(--ty, 0px), 0);
+}
+
+.button-primary:hover {
+  transform: translate3d(var(--tx, 0px), calc(var(--ty, 0px) - 1px), 0);
+}
+
+.button-primary:active {
+  transform: translate3d(var(--tx, 0px), var(--ty, 0px), 0) scale(0.97);
+}
+
+/* Indicador de vidro que desliza entre as abas de ferramentas. */
+.workspace-tool-tabs {
+  position: relative;
+}
+
+.workspace-tool-tab-indicator {
+  position: absolute;
+  top: 8px;
+  left: 0;
+  z-index: 0;
+  width: 0;
+  height: 32px;
+  border: 1px solid rgba(214, 188, 255, 0.45);
+  border-radius: 10px;
+  background: var(--glass-fill-strong), rgba(120, 59, 219, 0.24);
+  box-shadow: var(--elev-2), var(--glass-highlight), 0 0 22px rgba(155, 92, 255, 0.28);
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    transform 420ms var(--ease-pop),
+    width 420ms var(--ease-spring),
+    opacity var(--dur-base) ease;
+}
+
+.workspace-tool-tabs button {
+  position: relative;
+  z-index: 1;
+}
+
+.workspace-tool-tabs button.active,
+.workspace-tool-tabs button.active:hover {
+  border-color: transparent;
+  background: transparent;
+  box-shadow: none;
+}
+
+/* -------------------------------------------------------------------------
+   7. Animações
+   ------------------------------------------------------------------------- */
+
+@keyframes q1-orb-a {
+  0% { transform: translate3d(0, 0, 0) scale(1); }
+  50% { transform: translate3d(-8vw, 6vh, 0) scale(1.12); }
+  100% { transform: translate3d(-3vw, 12vh, 0) scale(0.94); }
+}
+
+@keyframes q1-orb-b {
+  0% { transform: translate3d(0, 0, 0) scale(1); }
+  50% { transform: translate3d(10vw, -6vh, 0) scale(0.9); }
+  100% { transform: translate3d(4vw, -12vh, 0) scale(1.1); }
+}
+
+@keyframes q1-orb-c {
+  0% { transform: translate3d(0, 0, 0) scale(0.9); }
+  50% { transform: translate3d(-12vw, -4vh, 0) scale(1.15); }
+  100% { transform: translate3d(8vw, 8vh, 0) scale(1); }
+}
+
+@keyframes q1-grid-flow {
+  from { background-position: 0 0, 0 0; }
+  to { background-position: 0 64px, 0 0; }
+}
+
+@keyframes q1-neon-flow {
+  from { background-position: 0% 50%; }
+  to { background-position: 300% 50%; }
+}
+
+@keyframes q1-spin {
+  to { --q1-angle: 360deg; }
+}
+
+@keyframes q1-option-in {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: none; }
+}
+
+/* -------------------------------------------------------------------------
+   8. Movimento reduzido, alto contraste e telas de toque
+   ------------------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .spatial-orb,
+  .spatial-grid,
+  .chat-composer::before,
+  .analysis-live-status::after,
+  :is(.button-primary, .button-secondary, .add-code-button, .example-chip, .glass-dropdown-trigger, .workspace-tool-tab-indicator)::before {
+    animation: none !important;
+  }
+
+  .spatial-bg-parallax,
+  .spatial-cursor-glow,
+  .example-chip,
+  .settings-page-card,
+  .project-card,
+  .history-card,
+  .button-primary {
+    transform: none !important;
+  }
+}
+
+html[data-reduced-motion="true"] .spatial-orb,
+html[data-reduced-motion="true"] .spatial-grid,
+html[data-reduced-motion="true"] .chat-composer::before,
+html[data-reduced-motion="true"] .analysis-live-status::after,
+html[data-reduced-motion="true"] :is(.button-primary, .button-secondary, .add-code-button, .example-chip, .glass-dropdown-trigger, .workspace-tool-tab-indicator)::before {
+  animation: none !important;
+}
+
+html[data-reduced-motion="true"] :is(.spatial-bg-parallax, .spatial-cursor-glow, .example-chip, .settings-page-card, .project-card, .history-card, .button-primary) {
+  transform: none !important;
+}
+
+@media (hover: none) {
+  .spatial-cursor-glow { display: none; }
+}
+
+html[data-high-contrast="true"] .spatial-bg,
+html[data-high-contrast="true"] .chat-panel::before {
+  opacity: 0.35;
+}
+
+html[data-high-contrast="true"] :is(.glass-dropdown-trigger, .glass-dropdown-list, .workspace-tool-panel, .quantum-sidebar) {
+  border-color: rgba(255, 255, 255, 0.6);
+}
+
+@media (forced-colors: active) {
+  .spatial-bg { display: none; }
+  .glass-dropdown-list li.is-active { outline: 2px solid Highlight; }
+  .glass-dropdown-trigger { border-color: CanvasText; }
+}
+
+/* Marca da barra lateral: subtítulo numa linha só, mesmo com a barra flutuante mais estreita. */
+.sidebar-brand-copy { min-width: 0; }
+.sidebar-brand-copy span {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  letter-spacing: 0.04em;
+  font-size: 8.5px;
+}

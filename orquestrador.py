@@ -25,7 +25,7 @@ from uuid import uuid4
 from rag import busca_chromadb, cliente_llm, conversas, pesquisa_web, progresso, resposta_local
 from rag.contexto import MENSAGEM_SEM_CONTEXTO, preparar_contexto
 from rag.interpretacao import interpretar
-from rag.prompts import INSTRUCOES_ANALISE, INSTRUCOES_CORRECAO, INSTRUCOES_PLANEJAMENTO
+from rag.prompts import INSTRUCOES_ANALISE, INSTRUCOES_CORRECAO, INSTRUCOES_PLANEJAMENTO, INSTRUCOES_PROPOSTA
 
 log = logging.getLogger(__name__)
 
@@ -503,7 +503,7 @@ async def analisar(entrada, request_id):
 
         # Base local e internet não usam LLM: rodam em paralelo à correção dos circuitos.
         consultas_base = [c for c in [mensagem] + plano["consultas_base"] if c.strip()] or ["Qiskit circuito quântico"]
-        web_paralela = bool(entrada.pesquisa_web and pesquisa_web.ativa() and sinal_dominio)
+        web_paralela = bool(pesquisa_web.ativa() and sinal_dominio)  # internet sempre como complemento
         consultas_web = (plano["consultas_web"] or [mensagem or plano["objetivo"]]) if web_paralela else []
         texto_busca = "Buscando na base local" + (
             " e pesquisando na internet: " + "; ".join(consultas_web[:2])[:160] if consultas_web else "")
@@ -525,14 +525,14 @@ async def analisar(entrada, request_id):
                 busca.cancel()
         if falha_base:
             avisos.append("A base local não respondeu; a análise seguiu sem ela.")
-        contexto_local, referencias = preparar_contexto(documentos_base, limite=int(os.getenv("GROWUP_MAX_CONTEXT_CHARS", "8000"))) \
+        contexto_local, referencias = preparar_contexto(documentos_base, limite=int(os.getenv("GROWUP_MAX_CONTEXT_CHARS", "14000"))) \
             if documentos_base else ("", [])
         usados = documentos_base[:len(referencias)]
         fontes = [_fonte_local(d) for d in usados]
 
         dominio = bool(PALAVRAS_DOMINIO.search(mensagem)) or bool(candidatos) or bool(
             evidencia and evidencia["suficiente"])
-        if not web_paralela and entrada.pesquisa_web and pesquisa_web.ativa() and dominio:
+        if not web_paralela and pesquisa_web.ativa() and dominio:
             # sem sinal prévio de domínio, a internet só entra depois que a base confirmou o assunto
             consultas_web = plano["consultas_web"] or [mensagem or plano["objetivo"]]
             rastreador.etapa("Pesquisando na internet: " + "; ".join(consultas_web[:2])[:160])
@@ -591,4 +591,34 @@ async def analisar(entrada, request_id):
                 "warnings": avisos, "etapas": rastreador.historico, "tempo_total_segundos": round(time.monotonic() - inicio, 2)}
     except Exception:
         rastreador.concluir("A análise falhou")
+        raise
+
+
+# ---------------------------------------------------------------- propostas de edição (CLI)
+
+async def propor_edicao(entrada, request_id):
+    """Proposta estruturada de edição para a CLI: base local como referência e a fila de LLMs
+    (um modelo de cada vez). A CLI valida, mostra o diff e só grava com autorização do usuário."""
+    rastreador = progresso.Rastreador(entrada.progress_id)
+    try:
+        rastreador.etapa("Buscando referências na base local")
+        documentacao, fontes = "", []
+        try:
+            docs = await asyncio.to_thread(buscar_na_base, [entrada.pedido, "migração Qiskit 2 APIs removidas"], 4, "qiskit")
+            documentacao, referencias = preparar_contexto(docs, limite=4000)
+            fontes = [_fonte_local(d) for d in docs[:len(referencias)]]
+        except Exception as erro:  # a proposta segue sem a base
+            log.warning("Base local indisponível para a proposta: %s", type(erro).__name__)
+        dados = {"pedido": entrada.pedido, "arquivos": entrada.arquivos, "resultado_testes": entrada.resultado_testes,
+                 "documentacao": documentacao}
+        gerado = await asyncio.to_thread(
+            cliente_llm.conversar,
+            [{"role": "system", "content": INSTRUCOES_PROPOSTA},
+             {"role": "user", "content": json.dumps(dados, ensure_ascii=False)}],
+            None, "Preparando a proposta", rastreador.modelo, temperatura=0.1, ao_parcial=rastreador.parcial)
+        rastreador.concluir("Proposta pronta")
+        return {"request_id": request_id, "response": gerado["texto"], "sources": fontes,
+                "llm": {"provedor": "nvidia", "modelo": gerado["modelo"], "tentativas": gerado["tentativas"]}}
+    except Exception:
+        rastreador.concluir("A proposta falhou")
         raise

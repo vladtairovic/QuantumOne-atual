@@ -1,0 +1,834 @@
+/* =========================================================================
+   QUANTUMONE — CAMADA GLASS + SPATIAL UI
+   Carregada depois de globals.css (ver app/layout.tsx).
+   - Vidro no estilo expo-glass-effect, adaptado para a web com
+     backdrop-filter: translucidez, borda luminosa, brilho especular que
+     segue o ponteiro (--mx/--my, definidos por GlassPointerEffects).
+   - Profundidade em camadas (elevações 1–3) e movimento com molas suaves.
+   - Movimento desligado com prefers-reduced-motion ou
+     html[data-reduced-motion="true"] (regra global em globals.css).
+   ========================================================================= */
+
+:root {
+  /* Tipografia */
+  --font-space-grotesk: var(--font-montserrat), "Segoe UI", system-ui, sans-serif;
+
+  /* Vidro */
+  --glass-fill: linear-gradient(145deg, rgba(255, 255, 255, 0.085), rgba(255, 255, 255, 0.025));
+  --glass-fill-strong: linear-gradient(145deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.04));
+  --glass-tint: rgba(120, 59, 219, 0.16);
+  --glass-edge: rgba(226, 210, 255, 0.34);
+  --glass-edge-hover: rgba(232, 214, 255, 0.6);
+  --glass-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.16), inset 0 -1px 0 rgba(181, 138, 255, 0.08);
+  --glass-filter-sm: saturate(160%) blur(12px);
+  --glass-filter-md: saturate(165%) blur(20px);
+  --glass-filter-lg: saturate(170%) blur(30px);
+  --glass-sheen: radial-gradient(120px circle at var(--mx, 50%) var(--my, 0%), rgba(255, 255, 255, 0.1), transparent 70%);
+
+  /* Profundidade (spatial) */
+  --elev-1: 0 1px 2px rgba(0, 0, 0, 0.24), 0 6px 16px rgba(6, 3, 14, 0.22);
+  --elev-2: 0 2px 6px rgba(0, 0, 0, 0.26), 0 16px 40px rgba(6, 3, 14, 0.34);
+  --elev-3: 0 4px 12px rgba(0, 0, 0, 0.3), 0 30px 80px rgba(6, 3, 14, 0.48);
+  --glow-accent: 0 0 0 1px rgba(181, 138, 255, 0.18), 0 10px 32px rgba(120, 59, 219, 0.32);
+
+  /* Movimento */
+  --ease-spring: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-pop: cubic-bezier(0.34, 1.4, 0.64, 1);
+  --dur-fast: 150ms;
+  --dur-base: 240ms;
+  --dur-slow: 460ms;
+}
+
+body {
+  font-family: var(--font-space-grotesk);
+  letter-spacing: 0.002em;
+  text-rendering: optimizeLegibility;
+}
+
+input,
+button,
+textarea,
+select,
+optgroup {
+  font-family: inherit;
+}
+
+/* Montserrat é mais larga: títulos com espaçamento um pouco mais justo. */
+h1,
+h2,
+h3 {
+  letter-spacing: -0.015em;
+}
+
+/* -------------------------------------------------------------------------
+   1. Superfícies espaciais (painéis em camadas)
+   ------------------------------------------------------------------------- */
+
+.panel,
+.chat-panel,
+.context-panel {
+  box-shadow: var(--elev-3), var(--glass-highlight);
+  animation: q1-surface-in var(--dur-slow) var(--ease-spring) backwards;
+}
+
+.chat-composer {
+  transition:
+    border-color var(--dur-base) var(--ease-spring),
+    box-shadow var(--dur-base) var(--ease-spring),
+    transform var(--dur-base) var(--ease-spring);
+}
+
+.chat-composer:focus-within {
+  transform: translateY(-2px);
+}
+
+/* -------------------------------------------------------------------------
+   2. Botões de vidro (interativos)
+   ------------------------------------------------------------------------- */
+
+.button-primary,
+.button-secondary,
+.example-chip,
+.add-code-button,
+.tool-action-button,
+.analysis-live-status-footer button,
+.drawer-close-button,
+.history-icon-button {
+  position: relative;
+  isolation: isolate;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  line-height: 1.2;
+  white-space: nowrap;
+  transition:
+    transform var(--dur-fast) var(--ease-spring),
+    box-shadow var(--dur-base) var(--ease-spring),
+    border-color var(--dur-base) var(--ease-spring),
+    background-color var(--dur-base) var(--ease-spring),
+    color var(--dur-base) var(--ease-spring);
+}
+
+.button-secondary,
+.example-chip,
+.add-code-button,
+.tool-action-button,
+.analysis-live-status-footer button,
+.drawer-close-button,
+.history-icon-button {
+  border: 1px solid var(--glass-edge);
+  background: var(--glass-sheen), var(--glass-fill), rgba(30, 22, 46, 0.42);
+  box-shadow: var(--elev-1), var(--glass-highlight);
+  color: #e9e1f5;
+  backdrop-filter: var(--glass-filter-sm);
+  -webkit-backdrop-filter: var(--glass-filter-sm);
+}
+
+.button-primary {
+  border: 1px solid rgba(220, 196, 255, 0.42);
+  background:
+    var(--glass-sheen),
+    linear-gradient(135deg, rgba(138, 88, 214, 0.9), rgba(96, 48, 178, 0.9)),
+    rgba(70, 36, 120, 0.7);
+  color: #ffffff;
+  box-shadow: var(--glow-accent), var(--glass-highlight);
+  text-shadow: 0 1px 1px rgba(40, 14, 80, 0.35);
+  backdrop-filter: var(--glass-filter-sm);
+  -webkit-backdrop-filter: var(--glass-filter-sm);
+}
+
+.chat-composer .button-primary,
+.chat-composer .button-secondary {
+  min-height: 38px;
+}
+
+.button-secondary:hover,
+.example-chip:hover,
+.add-code-button:hover,
+.tool-action-button:hover,
+.analysis-live-status-footer button:hover,
+.drawer-close-button:hover,
+.history-icon-button:hover {
+  border-color: var(--glass-edge-hover);
+  background: var(--glass-sheen), var(--glass-fill-strong), rgba(64, 38, 104, 0.5);
+  box-shadow: var(--elev-2), var(--glass-highlight), 0 0 24px rgba(147, 92, 214, 0.18);
+  color: #ffffff;
+  transform: translateY(-1px);
+}
+
+.button-primary:hover {
+  border-color: rgba(236, 220, 255, 0.62);
+  box-shadow: 0 0 0 1px rgba(196, 160, 255, 0.28), 0 16px 40px rgba(120, 59, 219, 0.45), var(--glass-highlight);
+  transform: translateY(-1px);
+}
+
+.button-primary:active,
+.button-secondary:active,
+.example-chip:active,
+.add-code-button:active,
+.tool-action-button:active,
+.analysis-live-status-footer button:active,
+.drawer-close-button:active,
+.history-icon-button:active {
+  transform: translateY(0) scale(0.97);
+  transition-duration: 80ms;
+}
+
+.button-primary:disabled,
+.button-secondary:disabled {
+  transform: none;
+  box-shadow: var(--elev-1);
+}
+
+.button-primary .ui-icon {
+  transition: transform var(--dur-base) var(--ease-pop);
+}
+
+.button-primary:hover:not(:disabled) .ui-icon {
+  transform: translateY(-2px);
+}
+
+/* Ícones SVG alinhados ao texto. */
+.ui-icon {
+  flex: none;
+  display: block;
+}
+
+.add-code-button .ui-icon,
+.button-secondary .ui-icon {
+  color: #cdb2f5;
+}
+
+/* -------------------------------------------------------------------------
+   3. Caixas de seleção (select) de vidro
+   ------------------------------------------------------------------------- */
+
+.glass-select {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.glass-select::after {
+  position: absolute;
+  right: 11px;
+  top: 50%;
+  width: 6px;
+  height: 6px;
+  border-right: 1.6px solid #cdb2f5;
+  border-bottom: 1.6px solid #cdb2f5;
+  content: "";
+  pointer-events: none;
+  transform: translateY(-70%) rotate(45deg);
+  transition: transform var(--dur-base) var(--ease-spring);
+}
+
+.glass-select:focus-within::after {
+  transform: translateY(-25%) rotate(225deg);
+}
+
+:root select {
+  min-height: 32px;
+  padding: 0 30px 0 11px;
+  border: 1px solid var(--glass-edge);
+  border-radius: 10px;
+  appearance: none;
+  -webkit-appearance: none;
+  background-color: rgba(30, 22, 46, 0.5);
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23cdb2f5' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E"),
+    var(--glass-fill);
+  background-position: right 10px center, 0 0;
+  background-repeat: no-repeat;
+  background-size: 12px, auto;
+  box-shadow: var(--elev-1), var(--glass-highlight);
+  color: #f1eafb;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.2;
+  cursor: pointer;
+  backdrop-filter: var(--glass-filter-sm);
+  -webkit-backdrop-filter: var(--glass-filter-sm);
+  transition:
+    border-color var(--dur-base) var(--ease-spring),
+    box-shadow var(--dur-base) var(--ease-spring);
+}
+
+/* O wrapper .glass-select desenha a seta animada. */
+:root .glass-select select {
+  background-image: var(--glass-fill);
+  background-size: auto;
+  background-position: 0 0;
+}
+
+:root select:hover {
+  border-color: var(--glass-edge-hover);
+  box-shadow: var(--elev-2), var(--glass-highlight), 0 0 18px rgba(147, 92, 214, 0.16);
+}
+
+:root select:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* A lista nativa não aceita blur: fundo opaco escuro e legível. */
+:root option,
+:root optgroup {
+  background-color: #1d1530;
+  color: #f1eafb;
+}
+
+/* -------------------------------------------------------------------------
+   4. Barra de opções do compositor: rótulos e controles alinhados
+   ------------------------------------------------------------------------- */
+
+.composer-settings {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 18px;
+  padding: 10px 2px 8px;
+}
+
+.composer-field {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  margin: 0;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+.composer-field-label {
+  color: #c8bdd8;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.composer-settings .composer-local-note {
+  margin-left: auto;
+  color: #b3a9c4;
+  font-size: 12px;
+  line-height: 1.3;
+}
+
+/* Interruptor de vidro para "Pesquisar também na internet". */
+.composer-web-toggle {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  min-height: 32px;
+  margin: 0;
+  color: #ddd2ea;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.2;
+  cursor: pointer;
+  user-select: none;
+}
+
+.composer-web-toggle input {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 36px;
+  height: 20px;
+  margin: 0;
+  opacity: 0;
+  outline: none !important;
+  box-shadow: none !important;
+  transform: translateY(-50%);
+  cursor: pointer;
+}
+
+.glass-switch-track {
+  position: relative;
+  flex: none;
+  width: 36px;
+  height: 20px;
+  border: 1px solid var(--glass-edge);
+  border-radius: 999px;
+  background: var(--glass-fill), rgba(30, 22, 46, 0.6);
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.35), var(--glass-highlight);
+  transition:
+    background var(--dur-base) var(--ease-spring),
+    border-color var(--dur-base) var(--ease-spring),
+    box-shadow var(--dur-base) var(--ease-spring);
+}
+
+.glass-switch-thumb {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: linear-gradient(160deg, #ffffff, #d9c9f2);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35), inset 0 -1px 1px rgba(110, 70, 170, 0.25);
+  transition: transform var(--dur-base) var(--ease-pop);
+}
+
+.composer-web-toggle input:checked + .glass-switch-track {
+  border-color: rgba(214, 188, 255, 0.55);
+  background: linear-gradient(135deg, rgba(186, 140, 255, 0.75), rgba(120, 59, 219, 0.7));
+  box-shadow: 0 0 16px rgba(147, 92, 214, 0.35), var(--glass-highlight);
+}
+
+.composer-web-toggle input:checked + .glass-switch-track .glass-switch-thumb {
+  transform: translateX(16px);
+}
+
+.composer-web-toggle input:focus-visible + .glass-switch-track {
+  outline: 3px solid #d9beff;
+  outline-offset: 3px;
+}
+
+.composer-web-toggle input:disabled + .glass-switch-track {
+  opacity: 0.55;
+}
+
+.composer-web-toggle:has(input:disabled) {
+  cursor: not-allowed;
+}
+
+/* Meta do compositor e ferramentas, alinhadas na mesma linha de base. */
+.composer-meta {
+  align-items: center;
+  font-size: 11px;
+}
+
+.composer-actions {
+  align-items: center;
+  gap: 10px;
+}
+
+.composer-tools {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.composer-hint {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 11px;
+}
+
+.chat-message-attachments span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10.5px;
+}
+
+/* -------------------------------------------------------------------------
+   5. Abas de vidro
+   ------------------------------------------------------------------------- */
+
+.workspace-tool-tabs {
+  gap: 6px;
+  padding: 8px 2px 10px;
+}
+
+.workspace-tool-tabs-label {
+  align-self: center;
+  font-size: 9.5px;
+  line-height: 1;
+}
+
+.workspace-tool-tabs button,
+.editor-tab,
+.editor-file-tab,
+.settings-page-nav a {
+  transition:
+    background var(--dur-base) var(--ease-spring),
+    border-color var(--dur-base) var(--ease-spring),
+    box-shadow var(--dur-base) var(--ease-spring),
+    color var(--dur-base) var(--ease-spring),
+    transform var(--dur-fast) var(--ease-spring);
+}
+
+.workspace-tool-tabs button {
+  min-height: 32px;
+  gap: 7px;
+  padding: 0 12px;
+  border-radius: 10px;
+  font-size: 11.5px;
+  font-weight: 500;
+  line-height: 1;
+}
+
+.workspace-tool-tabs button .ui-icon {
+  color: #b99ae6;
+  transition: transform var(--dur-base) var(--ease-pop), color var(--dur-base) ease;
+}
+
+.workspace-tool-tabs button:hover,
+.workspace-tool-tabs button.active,
+.editor-tab:hover,
+.editor-tab.active,
+.settings-page-nav a:hover {
+  border-color: var(--glass-edge);
+  background: var(--glass-sheen), var(--glass-fill), var(--glass-tint);
+  box-shadow: var(--elev-1), var(--glass-highlight);
+  color: #f3ecfc;
+}
+
+.workspace-tool-tabs button.active,
+.editor-tab.active {
+  border-color: rgba(214, 188, 255, 0.45);
+  box-shadow: var(--elev-2), var(--glass-highlight), 0 0 20px rgba(147, 92, 214, 0.22);
+}
+
+.workspace-tool-tabs button:hover .ui-icon,
+.workspace-tool-tabs button.active .ui-icon {
+  color: #e2cdff;
+  transform: scale(1.12);
+}
+
+.workspace-tool-tabs button:active,
+.editor-tab:active {
+  transform: scale(0.97);
+}
+
+.workspace-tool-panel {
+  animation: q1-drop-in var(--dur-base) var(--ease-spring) backwards;
+  transform-origin: top center;
+}
+
+/* -------------------------------------------------------------------------
+   6. Barra lateral
+   ------------------------------------------------------------------------- */
+
+.sidebar-item,
+.sidebar-create-account {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  line-height: 1.2;
+  transition:
+    background var(--dur-base) var(--ease-spring),
+    border-color var(--dur-base) var(--ease-spring),
+    box-shadow var(--dur-base) var(--ease-spring),
+    color var(--dur-base) var(--ease-spring),
+    transform var(--dur-fast) var(--ease-spring);
+}
+
+.sidebar-item-icon {
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  width: 22px;
+  height: 22px;
+  line-height: 1;
+}
+
+.sidebar-item:hover,
+.sidebar-create-account:hover {
+  background: var(--glass-sheen), var(--glass-fill), var(--glass-tint);
+  box-shadow: var(--elev-1), var(--glass-highlight);
+  transform: translateX(2px);
+}
+
+.sidebar-item.active {
+  border-color: rgba(214, 188, 255, 0.4);
+  background: var(--glass-sheen), var(--glass-fill-strong), rgba(120, 59, 219, 0.22);
+}
+
+.sidebar-item:active,
+.sidebar-create-account:active {
+  transform: translateX(2px) scale(0.98);
+}
+
+.sidebar-item .ui-icon,
+.sidebar-create-account .ui-icon {
+  transition: transform var(--dur-base) var(--ease-pop);
+}
+
+.sidebar-item:hover .ui-icon,
+.sidebar-create-account:hover .ui-icon {
+  transform: scale(1.1);
+}
+
+/* -------------------------------------------------------------------------
+   7. Menus suspensos (popovers) de vidro
+   ------------------------------------------------------------------------- */
+
+.sidebar-conversation-popover,
+.project-actions-popover {
+  border: 1px solid var(--glass-edge);
+  background: linear-gradient(160deg, rgba(48, 36, 70, 0.78), rgba(18, 14, 28, 0.88));
+  box-shadow: var(--elev-3), var(--glass-highlight);
+  backdrop-filter: var(--glass-filter-lg);
+  -webkit-backdrop-filter: var(--glass-filter-lg);
+  transform-origin: top right;
+  animation: q1-pop-in var(--dur-base) var(--ease-pop) backwards;
+}
+
+.sidebar-conversation-popover > button,
+.sidebar-project-picker > button,
+.project-actions-popover button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11.5px;
+  line-height: 1.2;
+  transition:
+    background var(--dur-fast) ease,
+    color var(--dur-fast) ease,
+    transform var(--dur-fast) var(--ease-spring);
+}
+
+.sidebar-conversation-popover > button:hover,
+.project-actions-popover button:hover {
+  transform: translateX(2px);
+}
+
+.sidebar-conversation-menu > summary,
+.project-actions-menu > summary {
+  transition:
+    background var(--dur-base) var(--ease-spring),
+    border-color var(--dur-base) var(--ease-spring),
+    transform var(--dur-fast) var(--ease-spring);
+}
+
+.sidebar-conversation-menu > summary:active,
+.project-actions-menu > summary:active {
+  transform: scale(0.94);
+}
+
+/* Lista de histórico e gaveta de fontes. */
+.history-list {
+  border-color: var(--glass-edge);
+  box-shadow: var(--elev-3), var(--glass-highlight);
+  backdrop-filter: var(--glass-filter-md);
+  -webkit-backdrop-filter: var(--glass-filter-md);
+}
+
+.source-drawer-overlay {
+  background: rgba(8, 5, 16, 0.5);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  animation: q1-fade-in var(--dur-base) ease backwards;
+}
+
+.source-drawer {
+  animation: q1-slide-in var(--dur-slow) var(--ease-spring) backwards;
+}
+
+/* -------------------------------------------------------------------------
+   8. Conversa: entrada fluida de mensagens e cartão ao vivo
+   ------------------------------------------------------------------------- */
+
+.chat-user-message,
+.analysis-result-panel,
+.chat-empty-state {
+  animation: q1-rise var(--dur-slow) var(--ease-spring) backwards;
+}
+
+.chat-user-message {
+  border: 1px solid rgba(214, 188, 255, 0.24);
+  background: var(--glass-fill), rgba(120, 59, 219, 0.2);
+  box-shadow: var(--elev-1), var(--glass-highlight);
+}
+
+.analysis-result-panel {
+  animation-delay: 60ms;
+}
+
+.example-chip {
+  animation: q1-rise var(--dur-slow) var(--ease-spring) backwards;
+}
+
+.example-chip:nth-child(2) { animation-delay: 60ms; }
+.example-chip:nth-child(3) { animation-delay: 120ms; }
+.example-chip:nth-child(4) { animation-delay: 180ms; }
+
+.chat-mark {
+  animation: q1-float 6s ease-in-out 3;
+}
+
+.analysis-live-status {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  border-color: rgba(205, 170, 255, 0.32);
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.015)),
+    linear-gradient(145deg, rgba(72, 46, 112, 0.42), rgba(18, 14, 28, 0.66));
+  box-shadow: var(--elev-2), var(--glass-highlight), 0 0 30px rgba(120, 59, 219, 0.16);
+  backdrop-filter: var(--glass-filter-md);
+  -webkit-backdrop-filter: var(--glass-filter-md);
+  font-size: 12px;
+  animation: q1-rise var(--dur-slow) var(--ease-spring) backwards;
+}
+
+/* Reflexo que atravessa o cartão enquanto a análise roda. */
+.analysis-live-status::before {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  content: "";
+  pointer-events: none;
+  background: linear-gradient(105deg, transparent 35%, rgba(214, 188, 255, 0.1) 50%, transparent 65%);
+  background-size: 250% 100%;
+  animation: q1-sheen 3.2s ease-in-out infinite;
+}
+
+.analysis-live-status-heading strong { font-size: 13px; }
+.analysis-live-status-model,
+.analysis-live-status-history li,
+.analysis-live-status-footer { font-size: 11px; }
+.analysis-live-status-draft-label { font-size: 10.5px; }
+.analysis-live-status-draft-text {
+  border-color: rgba(205, 170, 255, 0.2);
+  background: rgba(10, 8, 16, 0.5);
+  font-size: 12px;
+  box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.3);
+}
+
+.analysis-live-status-history li {
+  animation: q1-rise var(--dur-base) var(--ease-spring) backwards;
+}
+
+/* -------------------------------------------------------------------------
+   9. Animações
+   ------------------------------------------------------------------------- */
+
+@keyframes q1-surface-in {
+  from { opacity: 0; transform: translateY(10px) scale(0.99); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes q1-rise {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes q1-drop-in {
+  from { opacity: 0; transform: translateY(-6px) scaleY(0.98); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes q1-pop-in {
+  from { opacity: 0; transform: translateY(-4px) scale(0.94); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes q1-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes q1-slide-in {
+  from { opacity: 0.4; transform: translateX(40px); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes q1-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+
+@keyframes q1-sheen {
+  0% { background-position: 120% 0; }
+  100% { background-position: -120% 0; }
+}
+
+/* -------------------------------------------------------------------------
+   10. Preferências: movimento reduzido, contraste e desempenho
+   ------------------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .chat-composer:focus-within,
+  .sidebar-item:hover,
+  .sidebar-create-account:hover,
+  .button-primary:hover,
+  .button-secondary:hover {
+    transform: none;
+  }
+}
+
+html[data-reduced-motion="true"] .chat-composer:focus-within,
+html[data-reduced-motion="true"] .sidebar-item:hover,
+html[data-reduced-motion="true"] .sidebar-create-account:hover,
+html[data-reduced-motion="true"] .button-primary:hover,
+html[data-reduced-motion="true"] .button-secondary:hover {
+  transform: none;
+}
+
+html[data-reduced-motion="true"] .analysis-live-status::before,
+html[data-reduced-motion="true"] .chat-mark {
+  animation: none;
+}
+
+/* Sem suporte a backdrop-filter: superfícies mais opacas para manter contraste. */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .button-secondary,
+  .example-chip,
+  .add-code-button,
+  .sidebar-conversation-popover,
+  .project-actions-popover,
+  .analysis-live-status,
+  :root select {
+    background-color: #241a36;
+  }
+}
+
+html[data-high-contrast="true"] :is(.button-secondary, .example-chip, .add-code-button, .workspace-tool-tabs button, select, .glass-switch-track) {
+  border-color: rgba(255, 255, 255, 0.6);
+}
+
+@media (max-width: 700px) {
+  .composer-settings .composer-local-note {
+    flex-basis: 100%;
+    margin-left: 0;
+  }
+}
+
+/* Rótulos longos quebram linha em telas estreitas / zoom alto (WCAG 1.4.10). */
+.example-chip,
+.analysis-live-status-footer button {
+  white-space: normal;
+  text-align: center;
+}
+
+@media (max-width: 700px) {
+  .composer-field { white-space: normal; }
+}
+
+/* Movimento reduzido: nenhum deslocamento em hover/press, nas duas preferências. */
+@media (prefers-reduced-motion: reduce) {
+  :is(button, a, summary, select, .ui-icon, .sidebar-item, .example-chip):is(:hover, :active),
+  :is(button, a, summary):hover .ui-icon,
+  .chat-composer:focus-within {
+    transform: none !important;
+  }
+}
+
+html[data-reduced-motion="true"] :is(button, a, summary, select, .sidebar-item, .example-chip):is(:hover, :active),
+html[data-reduced-motion="true"] :is(button, a, summary):hover .ui-icon {
+  transform: none !important;
+}
+
+/* Alto contraste do Windows: estados do interruptor e do select continuam visíveis. */
+@media (forced-colors: active) {
+  .glass-switch-track { border-color: CanvasText; forced-color-adjust: none; background: Canvas; }
+  .glass-switch-thumb { background: CanvasText; }
+  .composer-web-toggle input:checked + .glass-switch-track { background: Highlight; }
+  .composer-web-toggle input:checked + .glass-switch-track .glass-switch-thumb { background: HighlightText; }
+  .glass-select::after { border-color: CanvasText; }
+  :root select { border-color: CanvasText; }
+}

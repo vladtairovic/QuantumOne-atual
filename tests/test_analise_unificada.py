@@ -265,3 +265,56 @@ def test_correcao_automatica_completa_dispensa_a_llm(contexto, llm_simulada):
     assert not [c for c in llm_simulada if c["tarefa"].startswith("Correção")]
     assert any("a LLM não foi necessária" in e["texto"] for e in d["etapas"])
     assert circuito["otimizacao"] and circuito["otimizacao"]["equivalente"] is True
+
+
+def test_proposta_da_cli_usa_a_fila_e_devolve_json(contexto, monkeypatch):
+    client, _ = contexto
+    _documento(client)
+    monkeypatch.setenv("NVIDIA_API_KEY", "chave-de-teste")
+    recebido = {}
+
+    def conversar(mensagens, modelos=None, tarefa="Resposta", ao_progresso=None, transporte=None, temperatura=0.2,
+                  max_tokens=None, ao_parcial=None):
+        recebido.update(sistema=mensagens[0]["content"], dados=json.loads(mensagens[1]["content"]), tarefa=tarefa)
+        if ao_progresso:
+            ao_progresso("nvidia/modelo-teste", 1, 7, tarefa)
+        proposta = {"plano": "trocar cnot", "riscos": "nenhum", "verificacao": "Qiskit",
+                    "arquivos": {"bell.qasm": [{"inicio": 2, "fim": 2, "linhas": ["cx q[0],q[1];"]}]}}
+        return {"texto": json.dumps(proposta), "modelo": "nvidia/modelo-teste",
+                "tentativas": [{"modelo": "nvidia/modelo-teste", "resultado": "ok", "segundos": 0.1}]}
+
+    monkeypatch.setattr(cliente_llm, "conversar", conversar)
+    pid = str(uuid4())
+    r = client.post("/assistente/proposta", json={"pedido": "corrija a porta", "progress_id": pid,
+                                                  "arquivos": {"bell.qasm": "1: h q[0];\n2: cnot q[0],q[1];"}})
+    assert r.status_code == 200, r.text
+    d = r.json()
+    assert json.loads(d["response"])["arquivos"]["bell.qasm"][0]["linhas"] == ["cx q[0],q[1];"]
+    assert d["llm"]["modelo"] == "nvidia/modelo-teste"
+    assert recebido["tarefa"] == "Preparando a proposta" and "SOMENTE com um objeto JSON" in recebido["sistema"]
+    assert recebido["dados"]["arquivos"] == {"bell.qasm": "1: h q[0];\n2: cnot q[0],q[1];"}
+    p = client.get(f"/analise/progresso/{pid}").json()
+    assert p["concluido"] is True and any("consultando nvidia/modelo-teste" in e["texto"] for e in p["historico"])
+
+
+def test_proposta_da_cli_sem_llm_explica_e_valida_entrada(contexto, monkeypatch):
+    client, _ = contexto
+    monkeypatch.delenv("NVIDIA_API_KEY", raising=False)
+    r = client.post("/assistente/proposta", json={"pedido": "x", "arquivos": {"a.py": "1: pass"}})
+    assert r.status_code == 503 and r.json()["code"] == "LLM_NOT_CONFIGURED"
+    assert client.post("/assistente/proposta", json={"pedido": "x", "arquivos": {}}).status_code == 422
+
+
+def test_otimizar_python_de_projeto_extrai_so_a_construcao(contexto):
+    client, _ = contexto
+    codigo = ("from qiskit import QuantumCircuit, transpile\nfrom qiskit_aer import AerSimulator\n\n"
+              "qc = QuantumCircuit(2, 2)\nqc.h(0)\nqc.cx(0, 1)\nqc.measure([0, 1], [0, 1])\n\n"
+              "if __name__ == \"__main__\":\n    backend = AerSimulator()\n"
+              "    print(backend.run(transpile(qc, backend), shots=100).result().get_counts())\n")
+    corpo = {"code": codigo, "format": "python", "perfil": "avancado"}
+    assert client.post("/qiskit/optimize", json=corpo).status_code == 422  # rota estrita por padrão
+    r = client.post("/qiskit/optimize", json={**corpo, "extrair_construcao": True})
+    assert r.status_code == 200, r.text
+    d = r.json()
+    assert d["original"]["qubits"] == 2 and d["equivalente"] is True
+    assert any("ignorad" in w.lower() for w in d["warnings"])

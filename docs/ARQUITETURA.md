@@ -117,12 +117,13 @@ Foram removidos o antigo `rag/busca_web.py` (busca web genérica, substituída p
 - Removida a ferramenta Terminal e seus estilos.
 - `CompactSources`: "Fontes consultadas (N)", recolhido por padrão, com selo “base local” ou “internet”.
 - Painel de resultado mostra modo da resposta, motor (perfil, verificação, CX equivalentes, simulação, compromissos) e diagnóstico (problemas, causa, correção, alternativas, código corrigido).
-- Seletor de perfil de otimização no compositor.
+- Sem seletores no compositor: até 15 fontes, perfil `avancado` e internet sempre ativa são decididos pelo programa.
+- Perfil local com onboarding por etapas na primeira abertura e edição em "Meu perfil" (sem contas).
 
 ## Decisões técnicas
 
 1. **Resposta local por padrão sem LLM.** Sem chave (ou se nenhum modelo da fila responder) a API não devolve 503: responde com trechos literais da base. `QONE_LOCAL_FALLBACK=0` restaura o 503 `LLM_NOT_CONFIGURED`.
-2. **Base local primeiro, internet como complemento.** A pesquisa web usa só APIs públicas sem chave e páginas da allowlist (com robots.txt), em paralelo e com prazo; os trechos entram separados ([Web N]) e são tratados como dado, nunca como instrução. `QONE_PESQUISA_WEB=0` ou a caixa “Pesquisar também na internet” desligam. `KNOWLEDGE_AUTO_SYNC=0` continua: a base só muda pela coleta administrativa.
+2. **Base local primeiro, internet como complemento.** A pesquisa web usa só APIs públicas sem chave e páginas da allowlist (com robots.txt), em paralelo e com prazo; os trechos entram separados ([Web N]) e são tratados como dado, nunca como instrução. Só `QONE_PESQUISA_WEB=0` desliga (a interface não oferece mais a opção). `KNOWLEDGE_AUTO_SYNC=0` continua: a base só muda pela coleta administrativa.
 7. **Toda correção da LLM passa pelo Qiskit.** Código proposto por um modelo só é apresentado como “validado” depois de carregado pelo carregador restrito no worker.
 3. **Busca híbrida sem novos serviços.** O BM25 roda em memória sobre os trechos do próprio ChromaDB e é invalidado a cada gravação; não há novo banco nem dependência.
 4. **Diagnóstico nunca executa código.** QASM é analisado por regras e validado pelo parser do Qiskit; Python é analisado por AST e validado pelo interpretador restrito.

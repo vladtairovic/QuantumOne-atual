@@ -2,10 +2,11 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
-import { useEffect, useMemo, useState, type FormEvent, type MouseEvent } from "react";
+import { useMemo, useState, type FormEvent, type MouseEvent } from "react";
 import type { ConversationRecord, ProjectRecord } from "./conversationTypes";
-import { readUserProfile, type UserProfile } from "../auth/profileStorage";
+import { useLocalProfile } from "../profile/localProfile";
+import { ProfileAvatar } from "../profile/ProfileFields";
+import Icon, { type IconName } from "../ui/Icon";
 
 type SidebarProps = {
   activeItem: string;
@@ -26,17 +27,17 @@ const navigationItems = [
   {
     id: "new-analysis",
     label: "Nova análise",
-    icon: "＋",
+    icon: "plus" as IconName,
   },
   {
     id: "projects",
     label: "Projetos",
-    icon: "▤",
+    icon: "projects" as IconName,
   },
   {
     id: "history",
     label: "Histórico",
-    icon: "◷",
+    icon: "history" as IconName,
   },
 ];
 
@@ -57,22 +58,12 @@ export default function Sidebar({
   const [editingConversationId, setEditingConversationId] = useState<string | null>(null);
   const [editingTitle, setEditingTitle] = useState("");
   const [openConversationMenuId, setOpenConversationMenuId] = useState<string | null>(null);
-  const [profile, setProfile] = useState<UserProfile | null>(null);
+  const storedProfile = useLocalProfile();
+  const profile = storedProfile && storedProfile !== "loading" ? storedProfile : null;
   const orderedConversations = useMemo(() => [...conversations].sort((a, b) => {
     if (Boolean(a.isPinned) !== Boolean(b.isPinned)) return a.isPinned ? -1 : 1;
     return (b.createdAt ?? "").localeCompare(a.createdAt ?? "");
   }), [conversations]);
-
-  useEffect(() => {
-    const syncProfile = () => setProfile(readUserProfile());
-    syncProfile();
-    window.addEventListener("storage", syncProfile);
-    window.addEventListener("quantumone:profile-changed", syncProfile);
-    return () => {
-      window.removeEventListener("storage", syncProfile);
-      window.removeEventListener("quantumone:profile-changed", syncProfile);
-    };
-  }, []);
 
   function saveConversationTitle(event: FormEvent<HTMLFormElement>, id: string) {
     event.preventDefault();
@@ -145,7 +136,7 @@ export default function Sidebar({
             }
           >
             <span className="sidebar-item-icon" aria-hidden="true">
-              {item.icon}
+              <Icon name={item.icon} size={17} />
             </span>
 
             <span>{item.label}</span>
@@ -153,19 +144,19 @@ export default function Sidebar({
         ))}
       </nav>
 
-      <Link href={profile ? "/perfil" : "/cadastro"} className="sidebar-create-account" aria-label={profile?.name ?? "Criar conta"} title={profile?.name ?? "Criar conta"}>
-        <span className={`sidebar-item-icon ${profile ? "sidebar-user-icon" : ""}`} aria-hidden="true">
-          {profile?.avatarDataUrl ? (
-            <Image src={profile.avatarDataUrl} alt="" aria-hidden="true" width={26} height={26} unoptimized className="sidebar-user-avatar" />
-          ) : profile ? (
-            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-              <circle cx="12" cy="8" r="3.25" />
-              <path d="M5.5 19.25c.5-3.05 2.9-5.1 6.5-5.1s6 2.05 6.5 5.1" />
-            </svg>
-          ) : "✦"}
+      <button
+        type="button"
+        className={`sidebar-create-account ${activeItem === "profile" ? "active" : ""}`}
+        onClick={() => onNavigate("profile")}
+        aria-label="Meu perfil"
+        aria-current={activeItem === "profile" ? "page" : undefined}
+        title="Editar meu perfil"
+      >
+        <span className="sidebar-item-icon" aria-hidden="true">
+          {profile ? <ProfileAvatar name={profile.name} accent={profile.accent} size={24} /> : <Icon name="sparkle" size={17} />}
         </span>
-        <span>{profile?.name ?? "Criar conta"}</span>
-      </Link>
+        <span>Meu perfil</span>
+      </button>
 
       {conversations.length > 0 && (
         <section className="sidebar-recent-conversations" aria-label="Conversas recentes">
@@ -330,7 +321,7 @@ export default function Sidebar({
         }
       >
         <span className="sidebar-item-icon" aria-hidden="true">
-          ⚙
+          <Icon name="settings" size={17} />
         </span>
 
         <span>Configurações</span>
@@ -338,19 +329,21 @@ export default function Sidebar({
 
       <div className="sidebar-profile">
         <div className="sidebar-avatar">
-          <Image
-            src="/images/quantumone-icon.png"
-            alt=""
-            aria-hidden="true"
-            width={30}
-            height={30}
-            className="sidebar-avatar-image"
-          />
+          {profile ? <ProfileAvatar name={profile.name} accent={profile.accent} size={30} /> : (
+            <Image
+              src="/images/quantumone-icon.png"
+              alt=""
+              aria-hidden="true"
+              width={30}
+              height={30}
+              className="sidebar-avatar-image"
+            />
+          )}
         </div>
 
         <div className="sidebar-profile-copy">
-          <strong>QuantumOne</strong>
-          <span>Workspace</span>
+          <strong>{profile?.name ?? "QuantumOne"}</strong>
+          <span>{profile ? "Perfil local" : "Workspace"}</span>
         </div>
 
         <span className="sidebar-status" />
