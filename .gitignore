@@ -41,3 +41,6 @@ node_modules/
 .next/
 frontend/node_modules/
 frontend/.next/
+
+# pasta "~" criada por ferramentas que não expandem o til
+/~/
