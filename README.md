@@ -17,26 +17,92 @@ Enquanto a análise roda, a interface mostra ao vivo a etapa e o modelo consulta
 | Geração de respostas | fila de 7 modelos NVIDIA, um de cada vez, 30 s por modelo, streaming, fallback local | [LLM.md](docs/LLM.md) |
 | CLI interativa (`qone`) | chat no terminal com a análise unificada, propostas de edição revisadas, Qiskit e histórico | [CLI.md](docs/CLI.md) |
 
-## Iniciar e abrir
+## Rodar em uma máquina nova
 
-Abra PowerShell nesta pasta:
+O repositório não traz o `.env` (ele guarda a sua chave de API e fica só na sua máquina, bloqueado
+pelo `.gitignore`). Depois de clonar, siga os passos abaixo uma vez.
+
+### 1. Instale os programas
+
+| Programa | Para quê | Obrigatório |
+|---|---|---|
+| [Docker Desktop](https://www.docker.com/products/docker-desktop/) | Roda a API, o ChromaDB, o Redis e a interface | Sim |
+| [Git](https://git-scm.com/) | Clonar o repositório | Sim |
+| [GitHub CLI](https://cli.github.com/) (`gh`) ou um token do GitHub | Entrar na conta, pois o repositório é privado | Sim |
+| Python 3.10 ou superior | Usar a CLI interativa `qone` | Só para a CLI |
+
+No Windows, o Docker Desktop usa o WSL 2 (o instalador oferece habilitar). Reserve cerca de 10 GB
+livres para as imagens e o modelo de embeddings, e deixe o Docker Desktop aberto.
+
+### 2. Clone o repositório
+
+A conta precisa ter acesso ao repositório (dona ou colaboradora convidada).
+
+```powershell
+gh auth login
+gh repo clone vladtairovic/QuantumOne-atual
+cd QuantumOne-atual
+```
+
+### 3. Crie o `.env` a partir do modelo
+
+```powershell
+Copy-Item .env.example .env
+```
+
+No Git Bash, Linux ou macOS: `cp .env.example .env`.
+
+Abra o `.env` e preencha a chave da NVIDIA (gratuita, em [build.nvidia.com](https://build.nvidia.com/)):
+
+```text
+NVIDIA_API_KEY=sua-chave-aqui
+```
+
+- Cada pessoa usa a própria chave. Nunca envie o `.env` por chat, e-mail ou commit.
+- Sem chave o projeto também funciona: as respostas viram extrativas, montadas com trechos da base
+  local, e a proposta de edição da CLI (`/propor`) fica indisponível. Diagnóstico e otimização com o
+  Qiskit não dependem da chave.
+- Os demais valores do `.env.example` já vêm prontos; mude só se precisar (por exemplo
+  `API_PORT` e `FRONTEND_PORT`, se as portas 8000 ou 3000 estiverem ocupadas).
+
+### 4. Suba o projeto
 
 ```powershell
 docker compose up --build -d --wait
 docker compose ps
 ```
 
-Frontend: http://localhost:3000
+A primeira vez leva de 10 a 20 minutos: o Docker baixa as dependências e o modelo de embeddings, e a
+API indexa os exemplos iniciais e o **conhecimento interno** (`documentos/conhecimento_interno/`).
+Todos os serviços devem aparecer como `healthy`.
 
-Swagger da API: http://localhost:8000/docs
+- Interface: http://localhost:3000
+- Documentação da API (Swagger): http://localhost:8000/docs
 
-O primeiro build baixa dependências e o modelo de embeddings. Na inicialização, a API indexa os
-exemplos iniciais e o **conhecimento interno** (`documentos/conhecimento_interno/`). Durante a análise,
-a internet só é usada para a fila de LLMs e para a pesquisa complementar (desligável na interface ou com
-`QONE_PESQUISA_WEB=0`); a base local não é alterada por ela.
+Para conferir: faça uma pergunta na interface. O cartão ao vivo mostra o modelo consultado e a
+resposta termina com “Redigida por …” (com a chave configurada).
 
-A atualização da documentação externa é um **processo administrativo separado**, manual ou em lote,
-sem API de busca (detalhes em [BASE-DE-CONHECIMENTO.md](docs/BASE-DE-CONHECIMENTO.md#como-atualizar-processo-administrativo-fora-das-consultas)):
+### 5. CLI no terminal (opcional)
+
+```powershell
+python cli.py --repo . --chat
+```
+
+Guia completo, inclusive como instalar o comando `qone`, em [docs/CLI.md](docs/CLI.md).
+
+### Problemas comuns
+
+| Sintoma | O que fazer |
+|---|---|
+| `port is already allocated` | Outra aplicação usa a porta 3000 ou 8000: feche-a ou mude `FRONTEND_PORT`/`API_PORT` no `.env`. |
+| O Docker não inicia | Habilite o WSL 2 e a virtualização na BIOS; abra o Docker Desktop antes do `docker compose`. |
+| Resposta sem “Redigida por” | Chave ausente ou errada no `.env`. Corrija e rode `docker compose up -d --force-recreate api`. |
+| A primeira subida demora ou falha no download | Confira a internet e rode o `docker compose up --build -d --wait` de novo; o que já foi baixado é reaproveitado. |
+
+Durante a análise, a internet é usada para a fila de LLMs e para a pesquisa complementar
+(`QONE_PESQUISA_WEB=0` desliga); a base local não é alterada por ela. A atualização da documentação
+externa é um **processo administrativo separado**, manual ou em lote, sem API de busca (detalhes em
+[BASE-DE-CONHECIMENTO.md](docs/BASE-DE-CONHECIMENTO.md#como-atualizar-processo-administrativo-fora-das-consultas)):
 
 ```powershell
 docker compose exec api python -m rag.sincronizar_conhecimento
@@ -121,7 +187,7 @@ A interface não oferece mais escolha de fontes, nível de otimização nem pesq
 
 ## Credencial e modelo
 
-A credencial fica somente no `.env` local, ignorado pelo Git e pelos builds. Nunca use chave em variáveis `NEXT_PUBLIC` ou no navegador. Copie `.env.example` para `.env`; as chaves são **opcionais**. Com `NVIDIA_API_KEY`, a resposta é redigida pela fila de modelos NVIDIA ([LLM.md](docs/LLM.md)); sem ela, a resposta é extrativa local.
+A credencial fica somente no `.env` local, ignorado pelo Git e pelos builds (veja [Rodar em uma máquina nova](#rodar-em-uma-máquina-nova)). Nunca use chave em variáveis `NEXT_PUBLIC` ou no navegador. As chaves são **opcionais**. Com `NVIDIA_API_KEY`, a resposta é redigida pela fila de modelos NVIDIA ([LLM.md](docs/LLM.md)); sem ela, a resposta é extrativa local.
 
 - Sem chave: `/query` responde de forma extrativa com a base local (`answer_mode: "local"`).
 - `QONE_LLM=local`: nunca chama a LLM, mesmo com chave (100% offline).
