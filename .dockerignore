@@ -33,7 +33,9 @@ model_cache
 documentos/chunks*.json
 dist
 build
-artifacts/
+# Só os snapshots de conhecimento entram (testes do gabarito do RAG); o resto de artifacts/ fica fora.
+artifacts/*
+!artifacts/conhecimento/
 
 node_modules/
 .next/

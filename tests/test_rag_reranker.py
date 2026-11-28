@@ -341,6 +341,7 @@ def _cache_hf(raiz, arquivos, commit="abc123"):
 
 
 def test_disponivel_com_cache_enxuto(tmp_path, monkeypatch):
+    pytest.importorskip("huggingface_hub")  # vem com o sentence-transformers, ausente na imagem de testes do CI
     monkeypatch.setenv("RAG_RERANKER_MODEL", "org/nome")
     assert reranker.disponivel(_cache_dir=_cache_hf(tmp_path, ["config.json", "model.safetensors"])) is True
 
