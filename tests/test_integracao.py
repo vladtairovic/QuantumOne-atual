@@ -64,6 +64,7 @@ def contexto(monkeypatch, tmp_path):
     vetores = lambda tipo="consulta": lambda textos: [[1.0, 0.0] for _ in textos]
     monkeypatch.setattr(documentos, "obter_modelo", lambda: modelo)
     monkeypatch.setattr(documentos, "limite_tokens", lambda: 110)
+    monkeypatch.setattr(configuracao, "limite_tokens", lambda: 110)  # validar_lote lê o limite sem carregar o modelo real
     monkeypatch.setattr(documentos, "obter_colecao", lambda: colecao)
     monkeypatch.setattr(busca_chromadb, "obter_colecao", lambda: colecao)
     monkeypatch.setattr(busca_chromadb, "criar_embeddings", vetores)
