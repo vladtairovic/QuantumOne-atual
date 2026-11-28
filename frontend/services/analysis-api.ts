@@ -209,6 +209,13 @@ export type EntradaAnalise = {
   perfil: OptimizationProfile;
   top_k: number;
   pesquisa_web: boolean;
+  /** Perfil local: orienta o nível e o estilo da resposta (sem ele, o nível é inferido pela pergunta). */
+  usuario?: PerfilUsuario | null;
+};
+export type PerfilUsuario = {
+  experiencia: "iniciante" | "intermediario" | "avancado" | null;
+  estilo: "direta" | "didatica" | "detalhada" | null;
+  papel: string | null;
 };
 export type TentativaLLM = { modelo: string; resultado: string; segundos: number };
 export type InfoLLM = { provedor: string; modelo: string | null; tentativas: TentativaLLM[] };

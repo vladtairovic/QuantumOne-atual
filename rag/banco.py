@@ -2,7 +2,7 @@
 import os
 from functools import lru_cache
 
-from .configuracao import MODELO_EMBEDDINGS, NOME_COLECAO
+from .configuracao import LIMITE_CONFIGURADO, MODELO_EMBEDDINGS, NOME_COLECAO, estrategia_chunks
 
 
 class ColecaoIncompativel(ValueError):
@@ -36,7 +36,7 @@ def obter_colecao():
     esperado = {
         "modelo_embeddings": MODELO_EMBEDDINGS,
         "normalizado": True,
-        "estrategia_chunks": "secoes_tokens_v2",
+        "estrategia_chunks": estrategia_chunks(LIMITE_CONFIGURADO),
     }
     colecao = obter_cliente().get_or_create_collection(
         name=NOME_COLECAO, embedding_function=None, metadata=esperado,

@@ -20,7 +20,7 @@ def test_rag_com_llm_controlada(contexto, monkeypatch):
     assert r.status_code == 200
     assert r.json()["sources"][0]["source"] == "guia.txt"
     assert "[Fonte 1]" in gerar.call_args.args[1]
-    assert r.json()["response"] == "Resposta controlada de teste [Fonte 1]."
+    assert r.json()["response"] == "Resposta controlada de teste."  # sem o marcador; a fonte segue em sources
 
 def test_sem_contexto_nao_chama_llm(contexto, monkeypatch):
     client, _ = contexto

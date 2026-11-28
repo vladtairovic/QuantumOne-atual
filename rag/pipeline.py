@@ -8,11 +8,14 @@ busca. A fila de LLMs, quando configurada, recebe somente a pergunta e os
 trechos locais, sem ferramenta de busca.
 """
 import logging
+import math
 import os
 
-from . import busca_chromadb, cliente_llm, resposta_local
+from . import busca_chromadb, cliente_llm, configuracao, recursos, resposta_local, traco, verificacao
+from .consulta import expandir_consulta
 from .contexto import preparar_contexto, MENSAGEM_SEM_CONTEXTO
 from .interpretacao import interpretar
+from .texto import remover_marcadores_de_fonte
 
 log = logging.getLogger(__name__)
 
@@ -49,7 +52,58 @@ def _fonte(d):
             "retrieved_at": meta.get("coletado_em")}
 
 
+def _fidelidade_minima(padrao=0.6):
+    try:
+        valor = float(os.getenv("RAG_MIN_FIDELIDADE", str(padrao)))
+    except ValueError:
+        return padrao
+    return min(1.0, max(0.0, valor)) if math.isfinite(valor) else padrao
+
+
+def _verificar(texto, fontes, avisos, base):
+    """Verifica a resposta da LLM frase a frase; devolve True se ela deve ser descartada.
+
+    Nunca lança: em caso de erro registra ``base["verificacao"] = {"erro": True}`` e mantém a resposta."""
+    try:
+        resultado = verificacao.verificar_resposta(texto, fontes)
+        sem_suporte = [f["texto"] for f in resultado["frases"] if not f["suportada"]]
+        fidelidade = resultado["fidelidade"]
+        minimo = _fidelidade_minima()
+    except Exception:
+        log.warning("Verificação da resposta falhou; mantendo a resposta da LLM.", exc_info=True)
+        traco.registrar_fallback("verificacao: falha ao verificar a resposta")
+        base["verificacao"] = {"erro": True}
+        return False
+    for frase in sem_suporte[:5]:
+        corte = frase if len(frase) <= 160 else frase[:159] + "…"
+        avisos.append(f"Frase sem suporte nas fontes: \"{corte}\"")
+    if len(sem_suporte) > 5:
+        avisos.append(f"{len(sem_suporte)} frases sem suporte nas fontes")
+    base["verificacao"] = {"fidelidade": fidelidade, "frases_sem_suporte": len(sem_suporte)}
+    if fidelidade < minimo:
+        avisos.append("A resposta da LLM foi descartada porque não estava sustentada pelas fontes "
+                      f"(fidelidade {fidelidade:.0%}); a resposta abaixo foi montada localmente a partir da base documental.")
+        return True
+    return False
+
+
+CAMADAS = ("reranker", "consulta", "mmr", "orcamento", "verificacao")
+
+
 def responder(pergunta, top_k=3, web_search=None, consulta=None):
+    """Responde e anexa ``trace`` (etapas, consultas, camadas, fallbacks) ao resultado de ``_responder``."""
+    traco.iniciar()
+    estado = {"tempos": {}, "consultas": [], "documentos": []}
+    resultado = _responder(pergunta, top_k, web_search, consulta, estado)
+    resultado["trace"] = {
+        "etapas": {nome: round(float(s), 6) for nome, s in estado["tempos"].items()},
+        "consultas": estado["consultas"], "candidatos": len(estado["documentos"]),
+        "camadas": {nome: recursos.ativo(nome) for nome in CAMADAS},
+        "modelo_embeddings": configuracao.MODELO_EMBEDDINGS, "fallbacks": traco.coletar()}
+    return resultado
+
+
+def _responder(pergunta, top_k, web_search, consulta, estado):
     """``pergunta`` vai para a LLM; ``consulta`` (a mensagem do usuário) guia a busca.
 
     Nas conversas, ``pergunta`` inclui instruções e histórico; usá-la na busca
@@ -58,10 +112,21 @@ def responder(pergunta, top_k=3, web_search=None, consulta=None):
     avisos = [AVISO_WEB_REMOVIDA] if web_search else []
     consulta = extrair_consulta(consulta if consulta is not None else pergunta)
     analise = interpretar(consulta)
-    documentos = busca_chromadb.buscar_documentos(
-        consulta, quantidade=top_k, biblioteca=analise["biblioteca_principal"])
+    variantes = None
+    if recursos.ativo("consulta") and llm_configurada():
+        variantes = expandir_consulta(consulta, conversa=pergunta if pergunta != consulta else None, transporte=None)
+        documentos = busca_chromadb.buscar_documentos(
+            consulta, quantidade=top_k, biblioteca=analise["biblioteca_principal"], consultas=variantes,
+            tempos=estado["tempos"])
+    else:
+        documentos = busca_chromadb.buscar_documentos(
+            consulta, quantidade=top_k, biblioteca=analise["biblioteca_principal"], tempos=estado["tempos"])
+    estado["consultas"] = list(variantes) if variantes is not None else [consulta]
+    estado["documentos"] = documentos
     evidencia = busca_chromadb.avaliar_evidencia(consulta, documentos)
     base = {"web_status": "disabled", "interpretation": analise, "evidence": evidencia}
+    if variantes is not None:
+        base["variantes_consulta"] = variantes
     contexto, referencias = preparar_contexto(
         documentos, limite=int(os.getenv("GROWUP_MAX_CONTEXT_CHARS", "6000")))
     usados = [d for d in documentos if d.get("texto", "").strip()][:len(referencias)]
@@ -82,9 +147,16 @@ def responder(pergunta, top_k=3, web_search=None, consulta=None):
             pulados = [t["modelo"] for t in gerado["tentativas"] if t["resultado"] != "ok"]
             if pulados:
                 avisos.append(f"Respondido por {gerado['modelo']} após {len(pulados)} modelo(s) da fila não responderem a tempo.")
-            return {**base, "response": gerado["texto"], "sources": fontes, "status": "ok", "answer_mode": "llm",
-                    "llm": {"provedor": "nvidia", "modelo": gerado["modelo"], "tentativas": gerado["tentativas"]},
-                    "warnings": avisos}
+            llm = {"provedor": "nvidia", "modelo": gerado["modelo"], "tentativas": gerado["tentativas"]}
+            descartada = False
+            if recursos.ativo("verificacao"):
+                descartada = _verificar(gerado["texto"], fontes, avisos, base)
+            if not descartada:
+                # A verificação usa o texto original; quem lê vê o texto sem marcadores [Fonte N]
+                # (as fontes já aparecem em "sources").
+                return {**base, "response": remover_marcadores_de_fonte(gerado["texto"]), "sources": fontes, "status": "ok",
+                        "answer_mode": "llm", "llm": llm, "warnings": avisos}
+            base["llm"] = llm
         except cliente_llm.FilaEsgotada as erro:
             if not fallback_local_ativo():
                 raise

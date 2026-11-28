@@ -7,6 +7,7 @@ import type {
   AnalysisResultRecord, AnalyzedCircuitRecord, AnalyzedFileRecord, AttachmentRecord, CircuitMetricsRecord, ConversationRecord,
 } from "../components/layout/conversationTypes";
 import { isConversationRecord, RESULT_LIMITS } from "../components/security/workspaceData";
+import { readLocalProfile } from "../components/profile/localProfile";
 
 /** Converte respostas antigas (conversas e /qiskit/optimize) guardadas no histórico. */
 export function report(response: AnalysisResponse): AnalysisResultRecord {
@@ -256,6 +257,48 @@ function wait(ms: number, signal: AbortSignal) {
   });
 }
 
+/** Falhas de conexão ou do servidor que valem nova tentativa (entrada inválida, 4xx, não melhora repetindo). */
+const STATUS_PASSAGEIROS = [0, 408, 429, 500, 502, 503, 504];
+const INSISTIR_POR_MS = 30 * 60 * 1000; // mesmo teto da análise no servidor (QONE_ANALISE_TIMEOUT_SECONDS)
+
+/**
+ * Envia a análise e, se a conexão cair ou o servidor falhar, tenta de novo sozinho (2, 4, 8, 15 s...),
+ * avisando no cartão ao vivo. Só desiste se o usuário cancelar, se o erro for da própria entrada
+ * ou depois de 30 minutos tentando.
+ */
+async function analisarInsistindo(body: EntradaAnalise, signal: AbortSignal,
+  onProgress?: (progress: ProgressoAnalise) => void): Promise<RespostaAnalise> {
+  const inicio = Date.now();
+  for (let tentativa = 1; ; tentativa++) {
+    try {
+      return await analisar(body, signal);
+    } catch (error) {
+      signal.throwIfAborted();
+      const status = error instanceof AnalysisError ? error.status : 0;
+      const passageiro = error instanceof TypeError || (error instanceof AnalysisError && STATUS_PASSAGEIROS.includes(status));
+      if (!passageiro || Date.now() - inicio > INSISTIR_POR_MS) throw error;
+      const espera = Math.min(2000 * 2 ** (tentativa - 1), 15_000);
+      const motivo = status ? `o servidor respondeu ${status}` : "a conexão com o servidor caiu";
+      try {
+        onProgress?.({
+          progress_id: body.progress_id, concluido: false, modelo: null, parcial: null, historico: [],
+          etapa: `Falha passageira (${motivo}); tentando de novo em ${Math.round(espera / 1000)} s (tentativa ${tentativa + 1})`,
+          segundos_na_etapa: 0, segundos_total: (Date.now() - inicio) / 1000,
+        });
+      } catch { /* O aviso é apenas informativo. */ }
+      await wait(espera, signal);
+      signal.throwIfAborted();
+    }
+  }
+}
+
+/** Nível, estilo e papel do perfil local, para a resposta se adaptar a quem pergunta. */
+function perfilDoUsuario(): EntradaAnalise["usuario"] {
+  const perfil = readLocalProfile();
+  if (!perfil) return null;
+  return { experiencia: perfil.experience, estilo: perfil.answerStyle, papel: perfil.role };
+}
+
 /** Consulta GET /analise/progresso/{id} a cada 500 ms até a função devolvida ser chamada ou o sinal abortar. */
 function pollProgress(progressId: string, signal: AbortSignal, onProgress: (progress: ProgressoAnalise) => void) {
   const controller = new AbortController();
@@ -307,11 +350,12 @@ export async function analyze(input: {
     perfil: input.profile ?? "avancado",
     top_k: Math.min(15, Math.max(1, Math.round(Number(input.topK) || 15))),
     pesquisa_web: true,
+    usuario: perfilDoUsuario(),
   };
   const stopPolling = input.onProgress ? pollProgress(attempt.messageId, signal, input.onProgress) : () => undefined;
   let response: RespostaAnalise;
   try {
-    response = await analisar(body, signal);
+    response = await analisarInsistindo(body, signal, input.onProgress);
   } finally {
     stopPolling();
   }

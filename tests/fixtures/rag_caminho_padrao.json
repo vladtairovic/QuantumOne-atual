@@ -1,0 +1,3749 @@
+{
+ "perguntas": [
+  "O que é transpilação no Qiskit?",
+  "Quais são os estágios do transpilador?",
+  "Qual a diferença entre os níveis de otimização 0, 1, 2 e 3 do transpile?",
+  "Qual é o nível de otimização padrão do transpile no Qiskit 2?",
+  "Como o roteamento insere portas SWAP para respeitar a conectividade do hardware?",
+  "Como usar generate_preset_pass_manager?",
+  "Por que o Qiskit mostra os bits invertidos nas contagens?",
+  "O qubit 0 corresponde ao bit mais à direita no resultado?",
+  "Como medir todos os qubits de um circuito?",
+  "Como fazer uma medição no meio do circuito e usar o resultado para controlar outra porta?",
+  "Como usar if_test com um registrador clássico?",
+  "c_if não funciona mais no Qiskit 2, o que devo usar?",
+  "ImportError: cannot import name 'execute' from 'qiskit'",
+  "AttributeError: 'QuantumCircuit' object has no attribute 'cnot'",
+  "Como substituir Aer.get_backend no Qiskit 2?",
+  "O método qc.u3 foi removido, qual é o substituto?",
+  "Como trocar bind_parameters por algo que funcione?",
+  "Como criar um circuito parametrizado com Parameter?",
+  "Como atribuir valores numéricos aos parâmetros de um circuito?",
+  "Como carregar um programa OpenQASM 2 no Qiskit?"
+ ],
+ "corpus": [
+  {
+   "document_id": "doc_00",
+   "titulo": "Tópico 0",
+   "chunks": [
+    "Sampler backend portas transpilação qubit amplitude qiskit gate transpile o que é. Que estado qiskit transpilação gate o sampler backend no amplitude otimização estimator. Que camada circuito backend clássico qubit é medir transpilação qiskit o parâmetro. Registro no matriz operador camada otimização o resultado qiskit job é que."
+   ]
+  },
+  {
+   "document_id": "doc_01",
+   "titulo": "Tópico 1",
+   "chunks": [
+    "Gate hardware são clássico camada amplitude os qubit transpilador porta estágios quais. Estágios quais operador erro transpilador vetor do clássico sampler medir execução são. Do são estimator transpile transpilador otimização portas parâmetro qubit matriz estágios quais. Registro circuito são job ruído estágios observável transpilador do fase otimização os."
+   ]
+  },
+  {
+   "document_id": "doc_02",
+   "titulo": "Tópico 2",
+   "chunks": [
+    "Execução do transpile ruído estimator a parâmetro diferença 0 operador otimização backend. Parâmetro transpile 3 otimização os job sampler gate de registro portas qubit."
+   ]
+  },
+  {
+   "document_id": "doc_03",
+   "titulo": "Tópico 3",
+   "chunks": [
+    "Amplitude camada registro qiskit sampler qubit de estimator qual transpile transpile é. Portas gate quântico amplitude camada no padrão resultado do qual transpile estado. Qual resultado 2 de quântico portas simulador amplitude o otimização nível observável. De estimator fase 2 registro camada quântico do no é transpile portas.",
+    "Porta observável no qubit nível medir fase sampler padrão transpile 2 é. Resultado backend é medir ruído padrão hardware otimização registro portas o 2. Erro otimização backend otimização porta de estado estimator vetor qiskit é nível. Otimização ruído resultado matriz medir nível fase 2 parâmetro clássico do de.",
+    "Transpile nível 2 de parâmetro quântico circuito execução é clássico fase erro. Qubit sampler 2 transpile otimização qiskit estimator ruído é quântico operador o."
+   ]
+  },
+  {
+   "document_id": "doc_04",
+   "titulo": "Tópico 4",
+   "chunks": [
+    "Amplitude o hardware para a sampler porta erro resultado portas clássico swap. Estado clássico como camada o matriz porta backend hardware vetor a para."
+   ]
+  },
+  {
+   "document_id": "doc_05",
+   "titulo": "Tópico 5",
+   "chunks": [
+    "Vetor medir qubit sampler usar otimização como observável generate_preset_pass_manager estado. Hardware quântico usar backend generate_preset_pass_manager transpile como parâmetro erro job.",
+    "Amplitude estimator matriz clássico qubit generate_preset_pass_manager usar como otimização execução. Vetor generate_preset_pass_manager porta gate como medir circuito parâmetro estado usar.",
+    "Como generate_preset_pass_manager quântico observável operador otimização fase medição usar estado. Portas quântico resultado medir parâmetro gate generate_preset_pass_manager vetor usar como. Medição porta transpile como usar quântico generate_preset_pass_manager portas gate backend. Medir como qubit gate observável usar ruído generate_preset_pass_manager execução hardware."
+   ]
+  },
+  {
+   "document_id": "doc_06",
+   "titulo": "Tópico 6",
+   "chunks": [
+    "Otimização amplitude vetor contagens registro quântico gate os circuito nas invertidos bits. Observável fase os erro bits clássico ruído contagens hardware invertidos sampler qiskit."
+   ]
+  },
+  {
+   "document_id": "doc_07",
+   "titulo": "Tópico 7",
+   "chunks": [
+    "Observável camada 0 operador o qubit parâmetro à medir qubit mais ruído. Parâmetro simulador no ruído corresponde observável transpile o operador medição resultado ao."
+   ]
+  },
+  {
+   "document_id": "doc_08",
+   "titulo": "Tópico 8",
+   "chunks": [
+    "Resultado porta vetor os qubits erro medir registro operador um medir como. Circuito qubits como sampler circuito um job medir backend estimator porta erro. De fase medir todos portas vetor qubits resultado transpile circuito hardware medição. Um clássico circuito matriz otimização estado registro porta como quântico todos de.",
+    "Amplitude porta os observável fase matriz um como operador qubits qubit todos. Estado backend operador medir de um portas job circuito gate todos hardware. Backend todos job registro qubits fase circuito de erro gate clássico um.",
+    "Erro medição qubits job otimização medir os de um todos estado transpile. Otimização medir medição qubits de fase circuito gate estado erro estimator todos."
+   ]
+  },
+  {
+   "document_id": "doc_09",
+   "titulo": "Tópico 9",
+   "chunks": [
+    "Clássico medir controlar para fazer o job usar porta amplitude registro operador. Ruído estado camada fase uma do no e gate sampler execução circuito. Do operador otimização no controlar para estado o observável erro clássico hardware.",
+    "Medição backend parâmetro camada circuito porta usar meio resultado observável o porta. Medição meio transpile camada porta amplitude o do ruído otimização portas circuito. Registro simulador job circuito outra transpile do uma medição otimização amplitude fazer. Controlar transpile camada backend observável porta o e registro operador parâmetro usar."
+   ]
+  },
+  {
+   "document_id": "doc_10",
+   "titulo": "Tópico 10",
+   "chunks": [
+    "Simulador registrador sampler if_test circuito medição portas porta clássico backend como um. Operador transpile circuito usar com um estimator camada clássico clássico amplitude registrador. Matriz simulador como usar com hardware registrador porta um circuito amplitude fase."
+   ]
+  },
+  {
+   "document_id": "doc_11",
+   "titulo": "Tópico 11",
+   "chunks": [
+    "Fase usar camada registro que portas backend porta devo erro funciona mais. Não backend hardware c_if 2 vetor clássico amplitude estimator que no simulador."
+   ]
+  },
+  {
+   "document_id": "doc_12",
+   "titulo": "Tópico 12",
+   "chunks": [
+    "Simulador importerror camada backend cannot qiskit transpile from portas parâmetro execute hardware. Amplitude sampler vetor medir execute from hardware transpile name import job importerror. Observável importerror import parâmetro quântico name clássico execute camada registro cannot otimização. Execute import fase portas gate cannot registro quântico ruído importerror resultado from.",
+    "Observável backend estimator quântico import from execute ruído cannot qiskit amplitude sampler. Medição portas cannot simulador import porta ruído execução importerror amplitude from qiskit.",
+    "Amplitude import quântico name porta clássico qiskit execute simulador estado portas importerror. Import matriz estimator transpile qiskit name cannot execute quântico job porta ruído. Cannot importerror quântico operador ruído portas name estimator from otimização camada qiskit. Execute cannot qubit sampler ruído transpile import hardware medir importerror portas qiskit."
+   ]
+  },
+  {
+   "document_id": "doc_13",
+   "titulo": "Tópico 13",
+   "chunks": [
+    "Qubit circuito quantumcircuit estimator cnot erro backend camada object estado attribute attributeerror. Qubit quântico circuito no cnot object amplitude attributeerror transpile resultado clássico attribute. Attributeerror erro hardware quantumcircuit operador cnot estado has qubit backend registro attribute. No parâmetro has ruído backend qubit resultado cnot erro quantumcircuit hardware object."
+   ]
+  },
+  {
+   "document_id": "doc_14",
+   "titulo": "Tópico 14",
+   "chunks": [
+    "Observável amplitude hardware get_backend ruído estado substituir 2 sampler circuito qiskit aer. 2 otimização registro vetor gate estimator aer fase matriz como substituir qiskit. Matriz transpile hardware backend vetor aer operador 2 no substituir get_backend estimator."
+   ]
+  },
+  {
+   "document_id": "doc_15",
+   "titulo": "Tópico 15",
+   "chunks": [
+    "Substituto portas backend foi o operador o u3 transpile registro sampler circuito. Clássico quântico sampler removido transpile u3 qc qual matriz camada o gate. Substituto erro foi parâmetro qubit estado sampler qc o é porta job. Matriz porta é método foi camada clássico substituto otimização medição o backend.",
+    "Hardware qual observável foi resultado registro gate o o método medição amplitude. Clássico removido otimização o qual sampler medição fase quântico registro método foi.",
+    "Camada simulador qual quântico removido sampler foi é resultado amplitude fase o. Qubit erro removido quântico resultado o amplitude é o medir método gate."
+   ]
+  },
+  {
+   "document_id": "doc_16",
+   "titulo": "Tópico 16",
+   "chunks": [
+    "Trocar estado funcione estimator circuito algo erro simulador otimização por medição bind_parameters. Trocar medição gate estimator erro ruído funcione operador bind_parameters algo como portas. Que qubit clássico por medição erro bind_parameters funcione amplitude otimização como observável.",
+    "Simulador quântico medir vetor backend funcione trocar bind_parameters algo medição observável por. Como trocar ruído funcione parâmetro portas algo estimator qubit registro que observável. Trocar bind_parameters por funcione transpile erro simulador operador backend ruído qubit algo. Medir por fase otimização simulador transpile algo como camada funcione trocar portas."
+   ]
+  },
+  {
+   "document_id": "doc_17",
+   "titulo": "Tópico 17",
+   "chunks": [
+    "Transpile fase sampler otimização erro com parametrizado porta estado um circuito como. Parameter matriz circuito como clássico medir portas qubit com observável parametrizado amplitude. Portas clássico vetor qubit um medição parameter como hardware parametrizado circuito operador."
+   ]
+  },
+  {
+   "document_id": "doc_18",
+   "titulo": "Tópico 18",
+   "chunks": [
+    "Numéricos camada atribuir de gate execução medir matriz ruído amplitude um aos. Um numéricos atribuir operador ruído observável circuito valores erro transpile estado circuito. Resultado registro atribuir operador quântico um aos otimização matriz numéricos execução valores.",
+    "Como circuito gate camada registro job um numéricos medir circuito valores parâmetro. Valores transpile circuito atribuir matriz job otimização parâmetro de amplitude parâmetros operador. Erro execução medir de numéricos um circuito atribuir qubit parâmetros amplitude otimização."
+   ]
+  },
+  {
+   "document_id": "doc_19",
+   "titulo": "Tópico 19",
+   "chunks": [
+    "Porta carregar quântico backend observável otimização execução camada openqasm programa qiskit como. Como otimização fase no transpile vetor observável programa 2 carregar gate amplitude. Medir carregar qiskit clássico parâmetro resultado openqasm gate como um hardware matriz. Fase openqasm registro qiskit portas hardware vetor estado um sampler no carregar."
+   ]
+  },
+  {
+   "document_id": "doc_20",
+   "titulo": "Tópico 20",
+   "chunks": [
+    "Portas circuito estimator hardware amplitude gate ruído estado execução camada resultado operador.",
+    "Medição hardware circuito resultado porta execução matriz fase vetor clássico backend erro."
+   ]
+  },
+  {
+   "document_id": "doc_21",
+   "titulo": "Tópico 21",
+   "chunks": [
+    "Clássico porta erro registro simulador sampler otimização amplitude estimator hardware gate parâmetro."
+   ]
+  },
+  {
+   "document_id": "doc_22",
+   "titulo": "Tópico 22",
+   "chunks": [
+    "Hardware portas vetor circuito erro amplitude parâmetro backend registro medição sampler gate.",
+    "Observável amplitude job vetor medição transpile otimização estado execução simulador porta matriz."
+   ]
+  },
+  {
+   "document_id": "doc_23",
+   "titulo": "Tópico 23",
+   "chunks": [
+    "Estimator transpile amplitude gate resultado circuito simulador ruído hardware execução estado registro."
+   ]
+  },
+  {
+   "document_id": "doc_24",
+   "titulo": "Tópico 24",
+   "chunks": [
+    "Gate simulador quântico estimator operador amplitude transpile circuito vetor portas porta clássico.",
+    "Matriz amplitude resultado circuito qubit simulador parâmetro transpile estimator job erro ruído."
+   ]
+  },
+  {
+   "document_id": "doc_25",
+   "titulo": "Tópico 25",
+   "chunks": [
+    "Operador parâmetro transpile hardware medir resultado circuito ruído estado quântico otimização simulador.",
+    "Execução hardware backend estimator registro camada vetor fase gate matriz simulador amplitude."
+   ]
+  },
+  {
+   "document_id": "doc_26",
+   "titulo": "Tópico 26",
+   "chunks": [
+    "Estado vetor parâmetro gate hardware operador matriz registro simulador resultado job clássico."
+   ]
+  },
+  {
+   "document_id": "doc_27",
+   "titulo": "Tópico 27",
+   "chunks": [
+    "Clássico qubit quântico transpile otimização execução fase porta backend simulador medição circuito.",
+    "Medir camada quântico circuito matriz backend qubit portas estado ruído medição transpile."
+   ]
+  },
+  {
+   "document_id": "doc_28",
+   "titulo": "Tópico 28",
+   "chunks": [
+    "Clássico matriz operador qubit observável transpile ruído medição estimator backend vetor medir."
+   ]
+  },
+  {
+   "document_id": "doc_29",
+   "titulo": "Tópico 29",
+   "chunks": [
+    "Amplitude quântico qubit medição ruído simulador backend operador resultado sampler gate estimator."
+   ]
+  }
+ ],
+ "busca": {
+  "hibrido|3|O que é transpilação no Qiskit?": [
+   [
+    "doc_00#0",
+    0.032787
+   ],
+   [
+    "doc_19#0",
+    0.032002
+   ],
+   [
+    "doc_12#1",
+    0.03055
+   ]
+  ],
+  "hibrido|10|O que é transpilação no Qiskit?": [
+   [
+    "doc_00#0",
+    0.032787
+   ],
+   [
+    "doc_19#0",
+    0.032002
+   ],
+   [
+    "doc_12#1",
+    0.03055
+   ],
+   [
+    "doc_03#2",
+    0.030536
+   ],
+   [
+    "doc_12#2",
+    0.029462
+   ],
+   [
+    "doc_03#0",
+    0.02901
+   ],
+   [
+    "doc_03#1",
+    0.028778
+   ],
+   [
+    "doc_14#0",
+    0.028665
+   ],
+   [
+    "doc_06#0",
+    0.028595
+   ],
+   [
+    "doc_15#0",
+    0.027052
+   ]
+  ],
+  "vetorial|3|O que é transpilação no Qiskit?": [
+   [
+    "doc_00#0",
+    0.016393
+   ],
+   [
+    "doc_19#0",
+    0.016129
+   ],
+   [
+    "doc_11#0",
+    0.015873
+   ]
+  ],
+  "vetorial|10|O que é transpilação no Qiskit?": [
+   [
+    "doc_00#0",
+    0.016393
+   ],
+   [
+    "doc_19#0",
+    0.016129
+   ],
+   [
+    "doc_11#0",
+    0.015873
+   ],
+   [
+    "doc_04#0",
+    0.015625
+   ],
+   [
+    "doc_15#2",
+    0.015385
+   ],
+   [
+    "doc_03#2",
+    0.015152
+   ],
+   [
+    "doc_12#1",
+    0.014925
+   ],
+   [
+    "doc_15#0",
+    0.014706
+   ],
+   [
+    "doc_03#1",
+    0.014493
+   ],
+   [
+    "doc_09#0",
+    0.014286
+   ]
+  ],
+  "lexical|3|O que é transpilação no Qiskit?": [
+   [
+    "doc_00#0",
+    0.016393
+   ],
+   [
+    "doc_12#2",
+    0.016129
+   ],
+   [
+    "doc_19#0",
+    0.015873
+   ]
+  ],
+  "lexical|10|O que é transpilação no Qiskit?": [
+   [
+    "doc_00#0",
+    0.016393
+   ],
+   [
+    "doc_12#2",
+    0.016129
+   ],
+   [
+    "doc_19#0",
+    0.015873
+   ],
+   [
+    "doc_12#1",
+    0.015625
+   ],
+   [
+    "doc_03#2",
+    0.015385
+   ],
+   [
+    "doc_14#0",
+    0.015152
+   ],
+   [
+    "doc_03#0",
+    0.014925
+   ],
+   [
+    "doc_06#0",
+    0.014706
+   ],
+   [
+    "doc_12#0",
+    0.014493
+   ],
+   [
+    "doc_03#1",
+    0.014286
+   ]
+  ],
+  "hibrido|3|Quais são os estágios do transpilador?": [
+   [
+    "doc_01#0",
+    0.032787
+   ],
+   [
+    "doc_16#0",
+    0.016129
+   ],
+   [
+    "doc_29#0",
+    0.015873
+   ]
+  ],
+  "hibrido|10|Quais são os estágios do transpilador?": [
+   [
+    "doc_01#0",
+    0.032787
+   ],
+   [
+    "doc_16#0",
+    0.016129
+   ],
+   [
+    "doc_29#0",
+    0.015873
+   ],
+   [
+    "doc_06#0",
+    0.015625
+   ],
+   [
+    "doc_18#0",
+    0.015385
+   ],
+   [
+    "doc_12#1",
+    0.015152
+   ],
+   [
+    "doc_15#1",
+    0.014925
+   ],
+   [
+    "doc_22#1",
+    0.014706
+   ],
+   [
+    "doc_23#0",
+    0.014493
+   ],
+   [
+    "doc_25#1",
+    0.014286
+   ]
+  ],
+  "vetorial|3|Quais são os estágios do transpilador?": [
+   [
+    "doc_01#0",
+    0.016393
+   ],
+   [
+    "doc_16#0",
+    0.016129
+   ],
+   [
+    "doc_29#0",
+    0.015873
+   ]
+  ],
+  "vetorial|10|Quais são os estágios do transpilador?": [
+   [
+    "doc_01#0",
+    0.016393
+   ],
+   [
+    "doc_16#0",
+    0.016129
+   ],
+   [
+    "doc_29#0",
+    0.015873
+   ],
+   [
+    "doc_06#0",
+    0.015625
+   ],
+   [
+    "doc_18#0",
+    0.015385
+   ],
+   [
+    "doc_12#1",
+    0.015152
+   ],
+   [
+    "doc_15#1",
+    0.014925
+   ],
+   [
+    "doc_22#1",
+    0.014706
+   ],
+   [
+    "doc_23#0",
+    0.014493
+   ],
+   [
+    "doc_25#1",
+    0.014286
+   ]
+  ],
+  "lexical|3|Quais são os estágios do transpilador?": [
+   [
+    "doc_01#0",
+    0.016393
+   ]
+  ],
+  "lexical|10|Quais são os estágios do transpilador?": [
+   [
+    "doc_01#0",
+    0.016393
+   ]
+  ],
+  "hibrido|3|Qual a diferença entre os níveis de otimização 0, 1, 2 e 3 do transpile?": [
+   [
+    "doc_02#0",
+    0.039344
+   ],
+   [
+    "doc_03#1",
+    0.037798
+   ],
+   [
+    "doc_03#2",
+    0.037798
+   ]
+  ],
+  "hibrido|10|Qual a diferença entre os níveis de otimização 0, 1, 2 e 3 do transpile?": [
+   [
+    "doc_02#0",
+    0.039344
+   ],
+   [
+    "doc_03#1",
+    0.037798
+   ],
+   [
+    "doc_03#2",
+    0.037798
+   ],
+   [
+    "doc_03#0",
+    0.037537
+   ],
+   [
+    "doc_11#0",
+    0.035573
+   ],
+   [
+    "doc_15#0",
+    0.034355
+   ],
+   [
+    "doc_14#0",
+    0.034349
+   ],
+   [
+    "doc_08#2",
+    0.034044
+   ],
+   [
+    "doc_00#0",
+    0.033437
+   ],
+   [
+    "doc_25#0",
+    0.032438
+   ]
+  ],
+  "vetorial|3|Qual a diferença entre os níveis de otimização 0, 1, 2 e 3 do transpile?": [
+   [
+    "doc_02#0",
+    0.019672
+   ],
+   [
+    "doc_03#0",
+    0.019355
+   ],
+   [
+    "doc_03#1",
+    0.019048
+   ]
+  ],
+  "vetorial|10|Qual a diferença entre os níveis de otimização 0, 1, 2 e 3 do transpile?": [
+   [
+    "doc_02#0",
+    0.019672
+   ],
+   [
+    "doc_03#0",
+    0.019355
+   ],
+   [
+    "doc_03#1",
+    0.019048
+   ],
+   [
+    "doc_03#2",
+    0.01875
+   ],
+   [
+    "doc_23#0",
+    0.018462
+   ],
+   [
+    "doc_11#0",
+    0.018182
+   ],
+   [
+    "doc_20#0",
+    0.01791
+   ],
+   [
+    "doc_00#0",
+    0.017647
+   ],
+   [
+    "doc_06#0",
+    0.017391
+   ],
+   [
+    "doc_24#0",
+    0.017143
+   ]
+  ],
+  "lexical|3|Qual a diferença entre os níveis de otimização 0, 1, 2 e 3 do transpile?": [
+   [
+    "doc_02#0",
+    0.019672
+   ],
+   [
+    "doc_15#0",
+    0.019355
+   ],
+   [
+    "doc_03#2",
+    0.019048
+   ]
+  ],
+  "lexical|10|Qual a diferença entre os níveis de otimização 0, 1, 2 e 3 do transpile?": [
+   [
+    "doc_02#0",
+    0.019672
+   ],
+   [
+    "doc_15#0",
+    0.019355
+   ],
+   [
+    "doc_03#2",
+    0.019048
+   ],
+   [
+    "doc_03#1",
+    0.01875
+   ],
+   [
+    "doc_07#0",
+    0.018462
+   ],
+   [
+    "doc_03#0",
+    0.018182
+   ],
+   [
+    "doc_14#0",
+    0.01791
+   ],
+   [
+    "doc_19#0",
+    0.017647
+   ],
+   [
+    "doc_11#0",
+    0.017391
+   ],
+   [
+    "doc_08#2",
+    0.017143
+   ]
+  ],
+  "hibrido|3|Qual é o nível de otimização padrão do transpile no Qiskit 2?": [
+   [
+    "doc_03#2",
+    0.038095
+   ],
+   [
+    "doc_02#0",
+    0.03381
+   ],
+   [
+    "doc_03#1",
+    0.032787
+   ]
+  ],
+  "hibrido|10|Qual é o nível de otimização padrão do transpile no Qiskit 2?": [
+   [
+    "doc_03#2",
+    0.038095
+   ],
+   [
+    "doc_02#0",
+    0.03381
+   ],
+   [
+    "doc_03#1",
+    0.032787
+   ],
+   [
+    "doc_03#0",
+    0.032258
+   ],
+   [
+    "doc_12#2",
+    0.032196
+   ],
+   [
+    "doc_08#2",
+    0.031823
+   ],
+   [
+    "doc_00#0",
+    0.030777
+   ],
+   [
+    "doc_14#0",
+    0.030777
+   ],
+   [
+    "doc_19#0",
+    0.029274
+   ],
+   [
+    "doc_11#0",
+    0.029199
+   ]
+  ],
+  "vetorial|3|Qual é o nível de otimização padrão do transpile no Qiskit 2?": [
+   [
+    "doc_03#2",
+    0.019048
+   ],
+   [
+    "doc_02#0",
+    0.017143
+   ],
+   [
+    "doc_03#1",
+    0.016393
+   ]
+  ],
+  "vetorial|10|Qual é o nível de otimização padrão do transpile no Qiskit 2?": [
+   [
+    "doc_03#2",
+    0.019048
+   ],
+   [
+    "doc_02#0",
+    0.017143
+   ],
+   [
+    "doc_03#1",
+    0.016393
+   ],
+   [
+    "doc_03#0",
+    0.016129
+   ],
+   [
+    "doc_00#0",
+    0.015625
+   ],
+   [
+    "doc_15#0",
+    0.015385
+   ],
+   [
+    "doc_08#2",
+    0.015385
+   ],
+   [
+    "doc_14#0",
+    0.015152
+   ],
+   [
+    "doc_09#1",
+    0.014925
+   ],
+   [
+    "doc_11#0",
+    0.014706
+   ]
+  ],
+  "lexical|3|Qual é o nível de otimização padrão do transpile no Qiskit 2?": [
+   [
+    "doc_03#2",
+    0.019048
+   ],
+   [
+    "doc_12#2",
+    0.01791
+   ],
+   [
+    "doc_02#0",
+    0.016667
+   ]
+  ],
+  "lexical|10|Qual é o nível de otimização padrão do transpile no Qiskit 2?": [
+   [
+    "doc_03#2",
+    0.019048
+   ],
+   [
+    "doc_12#2",
+    0.01791
+   ],
+   [
+    "doc_02#0",
+    0.016667
+   ],
+   [
+    "doc_08#2",
+    0.016438
+   ],
+   [
+    "doc_03#1",
+    0.016393
+   ],
+   [
+    "doc_03#0",
+    0.016129
+   ],
+   [
+    "doc_14#0",
+    0.015625
+   ],
+   [
+    "doc_19#0",
+    0.015385
+   ],
+   [
+    "doc_00#0",
+    0.015152
+   ],
+   [
+    "doc_12#1",
+    0.014706
+   ]
+  ],
+  "hibrido|3|Como o roteamento insere portas SWAP para respeitar a conectividade do hardware?": [
+   [
+    "doc_04#0",
+    0.032787
+   ],
+   [
+    "doc_11#0",
+    0.031281
+   ],
+   [
+    "doc_08#1",
+    0.031025
+   ]
+  ],
+  "hibrido|10|Como o roteamento insere portas SWAP para respeitar a conectividade do hardware?": [
+   [
+    "doc_04#0",
+    0.032787
+   ],
+   [
+    "doc_11#0",
+    0.031281
+   ],
+   [
+    "doc_08#1",
+    0.031025
+   ],
+   [
+    "doc_22#0",
+    0.030018
+   ],
+   [
+    "doc_00#0",
+    0.029958
+   ],
+   [
+    "doc_12#0",
+    0.028898
+   ],
+   [
+    "doc_05#2",
+    0.028571
+   ],
+   [
+    "doc_02#0",
+    0.028382
+   ],
+   [
+    "doc_19#0",
+    0.027912
+   ],
+   [
+    "doc_17#0",
+    0.027397
+   ]
+  ],
+  "vetorial|3|Como o roteamento insere portas SWAP para respeitar a conectividade do hardware?": [
+   [
+    "doc_04#0",
+    0.016393
+   ],
+   [
+    "doc_11#0",
+    0.016129
+   ],
+   [
+    "doc_00#0",
+    0.015873
+   ]
+  ],
+  "vetorial|10|Como o roteamento insere portas SWAP para respeitar a conectividade do hardware?": [
+   [
+    "doc_04#0",
+    0.016393
+   ],
+   [
+    "doc_11#0",
+    0.016129
+   ],
+   [
+    "doc_00#0",
+    0.015873
+   ],
+   [
+    "doc_09#0",
+    0.015625
+   ],
+   [
+    "doc_12#1",
+    0.015385
+   ],
+   [
+    "doc_08#1",
+    0.015152
+   ],
+   [
+    "doc_15#1",
+    0.014925
+   ],
+   [
+    "doc_09#1",
+    0.014706
+   ],
+   [
+    "doc_02#0",
+    0.014493
+   ],
+   [
+    "doc_05#2",
+    0.014286
+   ]
+  ],
+  "lexical|3|Como o roteamento insere portas SWAP para respeitar a conectividade do hardware?": [
+   [
+    "doc_04#0",
+    0.016393
+   ],
+   [
+    "doc_22#0",
+    0.016129
+   ],
+   [
+    "doc_08#1",
+    0.015873
+   ]
+  ],
+  "lexical|10|Como o roteamento insere portas SWAP para respeitar a conectividade do hardware?": [
+   [
+    "doc_04#0",
+    0.016393
+   ],
+   [
+    "doc_22#0",
+    0.016129
+   ],
+   [
+    "doc_08#1",
+    0.015873
+   ],
+   [
+    "doc_20#0",
+    0.015625
+   ],
+   [
+    "doc_12#0",
+    0.015385
+   ],
+   [
+    "doc_11#0",
+    0.015152
+   ],
+   [
+    "doc_19#0",
+    0.014925
+   ],
+   [
+    "doc_25#1",
+    0.014706
+   ],
+   [
+    "doc_14#0",
+    0.014493
+   ],
+   [
+    "doc_05#2",
+    0.014286
+   ]
+  ],
+  "hibrido|3|Como usar generate_preset_pass_manager?": [
+   [
+    "doc_05#2",
+    0.040984
+   ],
+   [
+    "doc_05#0",
+    0.040323
+   ],
+   [
+    "doc_05#1",
+    0.039683
+   ]
+  ],
+  "hibrido|10|Como usar generate_preset_pass_manager?": [
+   [
+    "doc_05#2",
+    0.040984
+   ],
+   [
+    "doc_05#0",
+    0.040323
+   ],
+   [
+    "doc_05#1",
+    0.039683
+   ],
+   [
+    "doc_10#0",
+    0.03101
+   ],
+   [
+    "doc_09#1",
+    0.02967
+   ],
+   [
+    "doc_11#0",
+    0.02885
+   ],
+   [
+    "doc_09#0",
+    0.028259
+   ],
+   [
+    "doc_14#0",
+    0.015625
+   ],
+   [
+    "doc_17#0",
+    0.015152
+   ],
+   [
+    "doc_19#0",
+    0.014925
+   ]
+  ],
+  "vetorial|3|Como usar generate_preset_pass_manager?": [
+   [
+    "doc_05#2",
+    0.020492
+   ],
+   [
+    "doc_05#0",
+    0.020161
+   ],
+   [
+    "doc_05#1",
+    0.019841
+   ]
+  ],
+  "vetorial|10|Como usar generate_preset_pass_manager?": [
+   [
+    "doc_05#2",
+    0.020492
+   ],
+   [
+    "doc_05#0",
+    0.020161
+   ],
+   [
+    "doc_05#1",
+    0.019841
+   ],
+   [
+    "doc_14#0",
+    0.015625
+   ],
+   [
+    "doc_10#0",
+    0.015385
+   ],
+   [
+    "doc_17#0",
+    0.015152
+   ],
+   [
+    "doc_19#0",
+    0.014925
+   ],
+   [
+    "doc_08#0",
+    0.014706
+   ],
+   [
+    "doc_00#0",
+    0.014493
+   ],
+   [
+    "doc_09#1",
+    0.014286
+   ]
+  ],
+  "lexical|3|Como usar generate_preset_pass_manager?": [
+   [
+    "doc_05#2",
+    0.020492
+   ],
+   [
+    "doc_05#0",
+    0.020161
+   ],
+   [
+    "doc_05#1",
+    0.019841
+   ]
+  ],
+  "lexical|10|Como usar generate_preset_pass_manager?": [
+   [
+    "doc_05#2",
+    0.020492
+   ],
+   [
+    "doc_05#0",
+    0.020161
+   ],
+   [
+    "doc_05#1",
+    0.019841
+   ],
+   [
+    "doc_10#0",
+    0.015625
+   ],
+   [
+    "doc_09#1",
+    0.015385
+   ],
+   [
+    "doc_11#0",
+    0.015152
+   ],
+   [
+    "doc_09#0",
+    0.014925
+   ]
+  ],
+  "hibrido|3|Por que o Qiskit mostra os bits invertidos nas contagens?": [
+   [
+    "doc_06#0",
+    0.032787
+   ],
+   [
+    "doc_00#0",
+    0.032258
+   ],
+   [
+    "doc_12#1",
+    0.03125
+   ]
+  ],
+  "hibrido|10|Por que o Qiskit mostra os bits invertidos nas contagens?": [
+   [
+    "doc_06#0",
+    0.032787
+   ],
+   [
+    "doc_00#0",
+    0.032258
+   ],
+   [
+    "doc_12#1",
+    0.03125
+   ],
+   [
+    "doc_19#0",
+    0.03031
+   ],
+   [
+    "doc_12#2",
+    0.02886
+   ],
+   [
+    "doc_03#0",
+    0.027864
+   ],
+   [
+    "doc_03#2",
+    0.027746
+   ],
+   [
+    "doc_12#0",
+    0.027619
+   ],
+   [
+    "doc_14#0",
+    0.026263
+   ],
+   [
+    "doc_03#1",
+    0.024201
+   ]
+  ],
+  "vetorial|3|Por que o Qiskit mostra os bits invertidos nas contagens?": [
+   [
+    "doc_06#0",
+    0.016393
+   ],
+   [
+    "doc_00#0",
+    0.016129
+   ],
+   [
+    "doc_11#0",
+    0.015873
+   ]
+  ],
+  "vetorial|10|Por que o Qiskit mostra os bits invertidos nas contagens?": [
+   [
+    "doc_06#0",
+    0.016393
+   ],
+   [
+    "doc_00#0",
+    0.016129
+   ],
+   [
+    "doc_11#0",
+    0.015873
+   ],
+   [
+    "doc_12#1",
+    0.015625
+   ],
+   [
+    "doc_04#0",
+    0.015385
+   ],
+   [
+    "doc_15#2",
+    0.015152
+   ],
+   [
+    "doc_19#0",
+    0.014925
+   ],
+   [
+    "doc_07#0",
+    0.014706
+   ],
+   [
+    "doc_15#1",
+    0.014493
+   ],
+   [
+    "doc_16#1",
+    0.014286
+   ]
+  ],
+  "lexical|3|Por que o Qiskit mostra os bits invertidos nas contagens?": [
+   [
+    "doc_06#0",
+    0.016393
+   ],
+   [
+    "doc_00#0",
+    0.016129
+   ],
+   [
+    "doc_12#2",
+    0.015873
+   ]
+  ],
+  "lexical|10|Por que o Qiskit mostra os bits invertidos nas contagens?": [
+   [
+    "doc_06#0",
+    0.016393
+   ],
+   [
+    "doc_00#0",
+    0.016129
+   ],
+   [
+    "doc_12#2",
+    0.015873
+   ],
+   [
+    "doc_12#1",
+    0.015625
+   ],
+   [
+    "doc_19#0",
+    0.015385
+   ],
+   [
+    "doc_14#0",
+    0.015152
+   ],
+   [
+    "doc_03#2",
+    0.014925
+   ],
+   [
+    "doc_03#0",
+    0.014706
+   ],
+   [
+    "doc_03#1",
+    0.014493
+   ],
+   [
+    "doc_12#0",
+    0.014286
+   ]
+  ],
+  "hibrido|3|O qubit 0 corresponde ao bit mais à direita no resultado?": [
+   [
+    "doc_07#0",
+    0.039344
+   ],
+   [
+    "doc_13#0",
+    0.036372
+   ],
+   [
+    "doc_00#0",
+    0.035651
+   ]
+  ],
+  "hibrido|10|O qubit 0 corresponde ao bit mais à direita no resultado?": [
+   [
+    "doc_07#0",
+    0.039344
+   ],
+   [
+    "doc_13#0",
+    0.036372
+   ],
+   [
+    "doc_00#0",
+    0.035651
+   ],
+   [
+    "doc_29#0",
+    0.034058
+   ],
+   [
+    "doc_02#0",
+    0.033989
+   ],
+   [
+    "doc_17#0",
+    0.03291
+   ],
+   [
+    "doc_03#0",
+    0.032527
+   ],
+   [
+    "doc_08#0",
+    0.031679
+   ],
+   [
+    "doc_28#0",
+    0.031601
+   ],
+   [
+    "doc_15#2",
+    0.031281
+   ]
+  ],
+  "vetorial|3|O qubit 0 corresponde ao bit mais à direita no resultado?": [
+   [
+    "doc_07#0",
+    0.019672
+   ],
+   [
+    "doc_00#0",
+    0.01875
+   ],
+   [
+    "doc_13#0",
+    0.018462
+   ]
+  ],
+  "vetorial|10|O qubit 0 corresponde ao bit mais à direita no resultado?": [
+   [
+    "doc_07#0",
+    0.019672
+   ],
+   [
+    "doc_00#0",
+    0.01875
+   ],
+   [
+    "doc_13#0",
+    0.018462
+   ],
+   [
+    "doc_17#0",
+    0.01791
+   ],
+   [
+    "doc_15#0",
+    0.017391
+   ],
+   [
+    "doc_28#0",
+    0.017143
+   ],
+   [
+    "doc_09#0",
+    0.016901
+   ],
+   [
+    "doc_29#0",
+    0.016667
+   ],
+   [
+    "doc_06#0",
+    0.016438
+   ],
+   [
+    "doc_15#2",
+    0.016129
+   ]
+  ],
+  "lexical|3|O qubit 0 corresponde ao bit mais à direita no resultado?": [
+   [
+    "doc_07#0",
+    0.019672
+   ],
+   [
+    "doc_02#0",
+    0.019355
+   ],
+   [
+    "doc_08#0",
+    0.019048
+   ]
+  ],
+  "lexical|10|O qubit 0 corresponde ao bit mais à direita no resultado?": [
+   [
+    "doc_07#0",
+    0.019672
+   ],
+   [
+    "doc_02#0",
+    0.019355
+   ],
+   [
+    "doc_08#0",
+    0.019048
+   ],
+   [
+    "doc_13#0",
+    0.01791
+   ],
+   [
+    "doc_29#0",
+    0.017391
+   ],
+   [
+    "doc_03#0",
+    0.017143
+   ],
+   [
+    "doc_00#0",
+    0.016901
+   ],
+   [
+    "doc_20#0",
+    0.016438
+   ],
+   [
+    "doc_23#0",
+    0.016
+   ],
+   [
+    "doc_25#0",
+    0.015789
+   ]
+  ],
+  "hibrido|3|Como medir todos os qubits de um circuito?": [
+   [
+    "doc_08#0",
+    0.032266
+   ],
+   [
+    "doc_08#2",
+    0.032266
+   ],
+   [
+    "doc_08#1",
+    0.032258
+   ]
+  ],
+  "hibrido|10|Como medir todos os qubits de um circuito?": [
+   [
+    "doc_08#0",
+    0.032266
+   ],
+   [
+    "doc_08#2",
+    0.032266
+   ],
+   [
+    "doc_08#1",
+    0.032258
+   ],
+   [
+    "doc_18#1",
+    0.03101
+   ],
+   [
+    "doc_17#0",
+    0.029851
+   ],
+   [
+    "doc_00#0",
+    0.029199
+   ],
+   [
+    "doc_05#1",
+    0.029083
+   ],
+   [
+    "doc_27#1",
+    0.028139
+   ],
+   [
+    "doc_10#0",
+    0.027056
+   ],
+   [
+    "doc_03#1",
+    0.027032
+   ]
+  ],
+  "vetorial|3|Como medir todos os qubits de um circuito?": [
+   [
+    "doc_08#0",
+    0.016393
+   ],
+   [
+    "doc_08#1",
+    0.016129
+   ],
+   [
+    "doc_08#2",
+    0.015873
+   ]
+  ],
+  "vetorial|10|Como medir todos os qubits de um circuito?": [
+   [
+    "doc_08#0",
+    0.016393
+   ],
+   [
+    "doc_08#1",
+    0.016129
+   ],
+   [
+    "doc_08#2",
+    0.015873
+   ],
+   [
+    "doc_18#1",
+    0.015625
+   ],
+   [
+    "doc_05#1",
+    0.015385
+   ],
+   [
+    "doc_10#0",
+    0.015152
+   ],
+   [
+    "doc_17#0",
+    0.014925
+   ],
+   [
+    "doc_00#0",
+    0.014706
+   ],
+   [
+    "doc_25#1",
+    0.014493
+   ],
+   [
+    "doc_27#0",
+    0.014286
+   ]
+  ],
+  "lexical|3|Como medir todos os qubits de um circuito?": [
+   [
+    "doc_08#2",
+    0.016393
+   ],
+   [
+    "doc_08#1",
+    0.016129
+   ],
+   [
+    "doc_08#0",
+    0.015873
+   ]
+  ],
+  "lexical|10|Como medir todos os qubits de um circuito?": [
+   [
+    "doc_08#2",
+    0.016393
+   ],
+   [
+    "doc_08#1",
+    0.016129
+   ],
+   [
+    "doc_08#0",
+    0.015873
+   ],
+   [
+    "doc_13#0",
+    0.015625
+   ],
+   [
+    "doc_18#1",
+    0.015385
+   ],
+   [
+    "doc_27#1",
+    0.015152
+   ],
+   [
+    "doc_17#0",
+    0.014925
+   ],
+   [
+    "doc_25#0",
+    0.014706
+   ],
+   [
+    "doc_00#0",
+    0.014493
+   ],
+   [
+    "doc_01#0",
+    0.014286
+   ]
+  ],
+  "hibrido|3|Como fazer uma medição no meio do circuito e usar o resultado para controlar outra porta?": [
+   [
+    "doc_09#0",
+    0.032522
+   ],
+   [
+    "doc_09#1",
+    0.032522
+   ],
+   [
+    "doc_10#0",
+    0.031258
+   ]
+  ],
+  "hibrido|10|Como fazer uma medição no meio do circuito e usar o resultado para controlar outra porta?": [
+   [
+    "doc_09#0",
+    0.032522
+   ],
+   [
+    "doc_09#1",
+    0.032522
+   ],
+   [
+    "doc_10#0",
+    0.031258
+   ],
+   [
+    "doc_20#1",
+    0.030303
+   ],
+   [
+    "doc_08#0",
+    0.029631
+   ],
+   [
+    "doc_17#0",
+    0.029572
+   ],
+   [
+    "doc_05#1",
+    0.029418
+   ],
+   [
+    "doc_05#2",
+    0.029324
+   ],
+   [
+    "doc_11#0",
+    0.028992
+   ],
+   [
+    "doc_27#0",
+    0.028382
+   ]
+  ],
+  "vetorial|3|Como fazer uma medição no meio do circuito e usar o resultado para controlar outra porta?": [
+   [
+    "doc_09#0",
+    0.016393
+   ],
+   [
+    "doc_09#1",
+    0.016129
+   ],
+   [
+    "doc_17#0",
+    0.015873
+   ]
+  ],
+  "vetorial|10|Como fazer uma medição no meio do circuito e usar o resultado para controlar outra porta?": [
+   [
+    "doc_09#0",
+    0.016393
+   ],
+   [
+    "doc_09#1",
+    0.016129
+   ],
+   [
+    "doc_17#0",
+    0.015873
+   ],
+   [
+    "doc_04#0",
+    0.015625
+   ],
+   [
+    "doc_10#0",
+    0.015385
+   ],
+   [
+    "doc_20#1",
+    0.015152
+   ],
+   [
+    "doc_08#0",
+    0.014925
+   ],
+   [
+    "doc_11#0",
+    0.014706
+   ],
+   [
+    "doc_05#1",
+    0.014493
+   ],
+   [
+    "doc_00#0",
+    0.014286
+   ]
+  ],
+  "lexical|3|Como fazer uma medição no meio do circuito e usar o resultado para controlar outra porta?": [
+   [
+    "doc_09#1",
+    0.016393
+   ],
+   [
+    "doc_09#0",
+    0.016129
+   ],
+   [
+    "doc_10#0",
+    0.015873
+   ]
+  ],
+  "lexical|10|Como fazer uma medição no meio do circuito e usar o resultado para controlar outra porta?": [
+   [
+    "doc_09#1",
+    0.016393
+   ],
+   [
+    "doc_09#0",
+    0.016129
+   ],
+   [
+    "doc_10#0",
+    0.015873
+   ],
+   [
+    "doc_05#2",
+    0.015625
+   ],
+   [
+    "doc_13#0",
+    0.015385
+   ],
+   [
+    "doc_20#1",
+    0.015152
+   ],
+   [
+    "doc_05#1",
+    0.014925
+   ],
+   [
+    "doc_08#0",
+    0.014706
+   ],
+   [
+    "doc_27#0",
+    0.014493
+   ],
+   [
+    "doc_11#0",
+    0.014286
+   ]
+  ],
+  "hibrido|3|Como usar if_test com um registrador clássico?": [
+   [
+    "doc_10#0",
+    0.040984
+   ],
+   [
+    "doc_05#1",
+    0.032002
+   ],
+   [
+    "doc_05#2",
+    0.031258
+   ]
+  ],
+  "hibrido|10|Como usar if_test com um registrador clássico?": [
+   [
+    "doc_10#0",
+    0.040984
+   ],
+   [
+    "doc_05#1",
+    0.032002
+   ],
+   [
+    "doc_05#2",
+    0.031258
+   ],
+   [
+    "doc_04#0",
+    0.030331
+   ],
+   [
+    "doc_05#0",
+    0.030303
+   ],
+   [
+    "doc_17#0",
+    0.029877
+   ],
+   [
+    "doc_20#1",
+    0.029211
+   ],
+   [
+    "doc_09#1",
+    0.02901
+   ],
+   [
+    "doc_09#0",
+    0.028958
+   ],
+   [
+    "doc_11#0",
+    0.02895
+   ]
+  ],
+  "vetorial|3|Como usar if_test com um registrador clássico?": [
+   [
+    "doc_10#0",
+    0.020492
+   ],
+   [
+    "doc_05#1",
+    0.016129
+   ],
+   [
+    "doc_05#2",
+    0.015873
+   ]
+  ],
+  "vetorial|10|Como usar if_test com um registrador clássico?": [
+   [
+    "doc_10#0",
+    0.020492
+   ],
+   [
+    "doc_05#1",
+    0.016129
+   ],
+   [
+    "doc_05#2",
+    0.015873
+   ],
+   [
+    "doc_04#0",
+    0.015625
+   ],
+   [
+    "doc_17#0",
+    0.015385
+   ],
+   [
+    "doc_05#0",
+    0.015152
+   ],
+   [
+    "doc_20#1",
+    0.014925
+   ],
+   [
+    "doc_08#0",
+    0.014706
+   ],
+   [
+    "doc_22#1",
+    0.014493
+   ],
+   [
+    "doc_18#0",
+    0.014286
+   ]
+  ],
+  "lexical|3|Como usar if_test com um registrador clássico?": [
+   [
+    "doc_10#0",
+    0.020492
+   ],
+   [
+    "doc_11#0",
+    0.016129
+   ],
+   [
+    "doc_05#1",
+    0.015873
+   ]
+  ],
+  "lexical|10|Como usar if_test com um registrador clássico?": [
+   [
+    "doc_10#0",
+    0.020492
+   ],
+   [
+    "doc_11#0",
+    0.016129
+   ],
+   [
+    "doc_05#1",
+    0.015873
+   ],
+   [
+    "doc_09#0",
+    0.015625
+   ],
+   [
+    "doc_05#2",
+    0.015385
+   ],
+   [
+    "doc_05#0",
+    0.015152
+   ],
+   [
+    "doc_09#1",
+    0.014925
+   ],
+   [
+    "doc_04#0",
+    0.014706
+   ],
+   [
+    "doc_17#0",
+    0.014493
+   ],
+   [
+    "doc_20#1",
+    0.014286
+   ]
+  ],
+  "hibrido|3|c_if não funciona mais no Qiskit 2, o que devo usar?": [
+   [
+    "doc_11#0",
+    0.040984
+   ],
+   [
+    "doc_03#2",
+    0.035949
+   ],
+   [
+    "doc_05#2",
+    0.033181
+   ]
+  ],
+  "hibrido|10|c_if não funciona mais no Qiskit 2, o que devo usar?": [
+   [
+    "doc_11#0",
+    0.040984
+   ],
+   [
+    "doc_03#2",
+    0.035949
+   ],
+   [
+    "doc_05#2",
+    0.033181
+   ],
+   [
+    "doc_12#2",
+    0.032667
+   ],
+   [
+    "doc_00#0",
+    0.030835
+   ],
+   [
+    "doc_12#1",
+    0.029324
+   ],
+   [
+    "doc_03#0",
+    0.02904
+   ],
+   [
+    "doc_09#0",
+    0.028485
+   ],
+   [
+    "doc_19#0",
+    0.028439
+   ],
+   [
+    "doc_03#1",
+    0.028372
+   ]
+  ],
+  "vetorial|3|c_if não funciona mais no Qiskit 2, o que devo usar?": [
+   [
+    "doc_11#0",
+    0.020492
+   ],
+   [
+    "doc_15#2",
+    0.019048
+   ],
+   [
+    "doc_03#2",
+    0.016901
+   ]
+  ],
+  "vetorial|10|c_if não funciona mais no Qiskit 2, o que devo usar?": [
+   [
+    "doc_11#0",
+    0.020492
+   ],
+   [
+    "doc_15#2",
+    0.019048
+   ],
+   [
+    "doc_03#2",
+    0.016901
+   ],
+   [
+    "doc_00#0",
+    0.016129
+   ],
+   [
+    "doc_12#2",
+    0.016
+   ],
+   [
+    "doc_05#2",
+    0.015789
+   ],
+   [
+    "doc_12#1",
+    0.015625
+   ],
+   [
+    "doc_15#1",
+    0.015385
+   ],
+   [
+    "doc_09#0",
+    0.015152
+   ],
+   [
+    "doc_15#0",
+    0.014925
+   ]
+  ],
+  "lexical|3|c_if não funciona mais no Qiskit 2, o que devo usar?": [
+   [
+    "doc_11#0",
+    0.020492
+   ],
+   [
+    "doc_03#2",
+    0.019048
+   ],
+   [
+    "doc_05#2",
+    0.017391
+   ]
+  ],
+  "lexical|10|c_if não funciona mais no Qiskit 2, o que devo usar?": [
+   [
+    "doc_11#0",
+    0.020492
+   ],
+   [
+    "doc_03#2",
+    0.019048
+   ],
+   [
+    "doc_05#2",
+    0.017391
+   ],
+   [
+    "doc_12#2",
+    0.016667
+   ],
+   [
+    "doc_10#0",
+    0.016129
+   ],
+   [
+    "doc_14#0",
+    0.015625
+   ],
+   [
+    "doc_03#1",
+    0.015385
+   ],
+   [
+    "doc_03#0",
+    0.015152
+   ],
+   [
+    "doc_19#0",
+    0.014925
+   ],
+   [
+    "doc_00#0",
+    0.014706
+   ]
+  ],
+  "hibrido|3|ImportError: cannot import name 'execute' from 'qiskit'": [
+   [
+    "doc_12#0",
+    0.032522
+   ],
+   [
+    "doc_12#2",
+    0.032266
+   ],
+   [
+    "doc_12#1",
+    0.032002
+   ]
+  ],
+  "hibrido|10|ImportError: cannot import name 'execute' from 'qiskit'": [
+   [
+    "doc_12#0",
+    0.032522
+   ],
+   [
+    "doc_12#2",
+    0.032266
+   ],
+   [
+    "doc_12#1",
+    0.032002
+   ],
+   [
+    "doc_00#0",
+    0.03125
+   ],
+   [
+    "doc_19#0",
+    0.029877
+   ],
+   [
+    "doc_14#0",
+    0.027497
+   ],
+   [
+    "doc_06#0",
+    0.026471
+   ],
+   [
+    "doc_03#2",
+    0.025026
+   ],
+   [
+    "doc_03#0",
+    0.024697
+   ],
+   [
+    "doc_03#1",
+    0.023632
+   ]
+  ],
+  "vetorial|3|ImportError: cannot import name 'execute' from 'qiskit'": [
+   [
+    "doc_12#0",
+    0.016393
+   ],
+   [
+    "doc_12#1",
+    0.016129
+   ],
+   [
+    "doc_12#2",
+    0.015873
+   ]
+  ],
+  "vetorial|10|ImportError: cannot import name 'execute' from 'qiskit'": [
+   [
+    "doc_12#0",
+    0.016393
+   ],
+   [
+    "doc_12#1",
+    0.016129
+   ],
+   [
+    "doc_12#2",
+    0.015873
+   ],
+   [
+    "doc_00#0",
+    0.015625
+   ],
+   [
+    "doc_15#1",
+    0.015385
+   ],
+   [
+    "doc_16#0",
+    0.015152
+   ],
+   [
+    "doc_09#1",
+    0.014925
+   ],
+   [
+    "doc_18#1",
+    0.014706
+   ],
+   [
+    "doc_19#0",
+    0.014493
+   ],
+   [
+    "doc_15#2",
+    0.014286
+   ]
+  ],
+  "lexical|3|ImportError: cannot import name 'execute' from 'qiskit'": [
+   [
+    "doc_12#2",
+    0.016393
+   ],
+   [
+    "doc_12#0",
+    0.016129
+   ],
+   [
+    "doc_12#1",
+    0.015873
+   ]
+  ],
+  "lexical|10|ImportError: cannot import name 'execute' from 'qiskit'": [
+   [
+    "doc_12#2",
+    0.016393
+   ],
+   [
+    "doc_12#0",
+    0.016129
+   ],
+   [
+    "doc_12#1",
+    0.015873
+   ],
+   [
+    "doc_00#0",
+    0.015625
+   ],
+   [
+    "doc_19#0",
+    0.015385
+   ],
+   [
+    "doc_14#0",
+    0.015152
+   ],
+   [
+    "doc_03#2",
+    0.014925
+   ],
+   [
+    "doc_06#0",
+    0.014706
+   ],
+   [
+    "doc_03#0",
+    0.014493
+   ],
+   [
+    "doc_03#1",
+    0.014286
+   ]
+  ],
+  "hibrido|3|AttributeError: 'QuantumCircuit' object has no attribute 'cnot'": [
+   [
+    "doc_13#0",
+    0.032787
+   ],
+   [
+    "doc_19#0",
+    0.016129
+   ],
+   [
+    "doc_20#1",
+    0.015873
+   ]
+  ],
+  "hibrido|10|AttributeError: 'QuantumCircuit' object has no attribute 'cnot'": [
+   [
+    "doc_13#0",
+    0.032787
+   ],
+   [
+    "doc_19#0",
+    0.016129
+   ],
+   [
+    "doc_20#1",
+    0.015873
+   ],
+   [
+    "doc_09#0",
+    0.015625
+   ],
+   [
+    "doc_05#2",
+    0.015385
+   ],
+   [
+    "doc_27#1",
+    0.015152
+   ],
+   [
+    "doc_20#0",
+    0.014925
+   ],
+   [
+    "doc_07#0",
+    0.014706
+   ],
+   [
+    "doc_04#0",
+    0.014493
+   ],
+   [
+    "doc_05#1",
+    0.014286
+   ]
+  ],
+  "vetorial|3|AttributeError: 'QuantumCircuit' object has no attribute 'cnot'": [
+   [
+    "doc_13#0",
+    0.016393
+   ],
+   [
+    "doc_19#0",
+    0.016129
+   ],
+   [
+    "doc_20#1",
+    0.015873
+   ]
+  ],
+  "vetorial|10|AttributeError: 'QuantumCircuit' object has no attribute 'cnot'": [
+   [
+    "doc_13#0",
+    0.016393
+   ],
+   [
+    "doc_19#0",
+    0.016129
+   ],
+   [
+    "doc_20#1",
+    0.015873
+   ],
+   [
+    "doc_09#0",
+    0.015625
+   ],
+   [
+    "doc_05#2",
+    0.015385
+   ],
+   [
+    "doc_27#1",
+    0.015152
+   ],
+   [
+    "doc_20#0",
+    0.014925
+   ],
+   [
+    "doc_07#0",
+    0.014706
+   ],
+   [
+    "doc_04#0",
+    0.014493
+   ],
+   [
+    "doc_05#1",
+    0.014286
+   ]
+  ],
+  "lexical|3|AttributeError: 'QuantumCircuit' object has no attribute 'cnot'": [
+   [
+    "doc_13#0",
+    0.016393
+   ]
+  ],
+  "lexical|10|AttributeError: 'QuantumCircuit' object has no attribute 'cnot'": [
+   [
+    "doc_13#0",
+    0.016393
+   ]
+  ],
+  "hibrido|3|Como substituir Aer.get_backend no Qiskit 2?": [
+   [
+    "doc_03#2",
+    0.036958
+   ],
+   [
+    "doc_12#2",
+    0.034293
+   ],
+   [
+    "doc_14#0",
+    0.032787
+   ]
+  ],
+  "hibrido|10|Como substituir Aer.get_backend no Qiskit 2?": [
+   [
+    "doc_03#2",
+    0.036958
+   ],
+   [
+    "doc_12#2",
+    0.034293
+   ],
+   [
+    "doc_14#0",
+    0.032787
+   ],
+   [
+    "doc_05#2",
+    0.032233
+   ],
+   [
+    "doc_19#0",
+    0.031754
+   ],
+   [
+    "doc_00#0",
+    0.031025
+   ],
+   [
+    "doc_03#1",
+    0.030835
+   ],
+   [
+    "doc_03#0",
+    0.029877
+   ],
+   [
+    "doc_11#0",
+    0.028814
+   ],
+   [
+    "doc_12#1",
+    0.028405
+   ]
+  ],
+  "vetorial|3|Como substituir Aer.get_backend no Qiskit 2?": [
+   [
+    "doc_05#2",
+    0.01875
+   ],
+   [
+    "doc_03#2",
+    0.01791
+   ],
+   [
+    "doc_12#2",
+    0.016901
+   ]
+  ],
+  "vetorial|10|Como substituir Aer.get_backend no Qiskit 2?": [
+   [
+    "doc_05#2",
+    0.01875
+   ],
+   [
+    "doc_03#2",
+    0.01791
+   ],
+   [
+    "doc_12#2",
+    0.016901
+   ],
+   [
+    "doc_14#0",
+    0.016393
+   ],
+   [
+    "doc_19#0",
+    0.016129
+   ],
+   [
+    "doc_00#0",
+    0.015873
+   ],
+   [
+    "doc_05#0",
+    0.015385
+   ],
+   [
+    "doc_05#1",
+    0.015152
+   ],
+   [
+    "doc_03#1",
+    0.014706
+   ],
+   [
+    "doc_03#0",
+    0.014493
+   ]
+  ],
+  "lexical|3|Como substituir Aer.get_backend no Qiskit 2?": [
+   [
+    "doc_03#2",
+    0.019048
+   ],
+   [
+    "doc_12#2",
+    0.017391
+   ],
+   [
+    "doc_14#0",
+    0.016393
+   ]
+  ],
+  "lexical|10|Como substituir Aer.get_backend no Qiskit 2?": [
+   [
+    "doc_03#2",
+    0.019048
+   ],
+   [
+    "doc_12#2",
+    0.017391
+   ],
+   [
+    "doc_14#0",
+    0.016393
+   ],
+   [
+    "doc_03#1",
+    0.016129
+   ],
+   [
+    "doc_19#0",
+    0.015625
+   ],
+   [
+    "doc_03#0",
+    0.015385
+   ],
+   [
+    "doc_00#0",
+    0.015152
+   ],
+   [
+    "doc_11#0",
+    0.014925
+   ],
+   [
+    "doc_12#1",
+    0.014706
+   ],
+   [
+    "doc_06#0",
+    0.014286
+   ]
+  ],
+  "hibrido|3|O método qc.u3 foi removido, qual é o substituto?": [
+   [
+    "doc_15#0",
+    0.032787
+   ],
+   [
+    "doc_15#1",
+    0.032258
+   ],
+   [
+    "doc_15#2",
+    0.031746
+   ]
+  ],
+  "hibrido|10|O método qc.u3 foi removido, qual é o substituto?": [
+   [
+    "doc_15#0",
+    0.032787
+   ],
+   [
+    "doc_15#1",
+    0.032258
+   ],
+   [
+    "doc_15#2",
+    0.031746
+   ],
+   [
+    "doc_02#0",
+    0.026861
+   ],
+   [
+    "doc_03#2",
+    0.01875
+   ],
+   [
+    "doc_03#1",
+    0.018462
+   ],
+   [
+    "doc_03#0",
+    0.01791
+   ],
+   [
+    "doc_11#0",
+    0.015152
+   ],
+   [
+    "doc_00#0",
+    0.014706
+   ],
+   [
+    "doc_09#1",
+    0.014493
+   ]
+  ],
+  "vetorial|3|O método qc.u3 foi removido, qual é o substituto?": [
+   [
+    "doc_03#2",
+    0.01875
+   ],
+   [
+    "doc_03#1",
+    0.018462
+   ],
+   [
+    "doc_03#0",
+    0.01791
+   ]
+  ],
+  "vetorial|10|O método qc.u3 foi removido, qual é o substituto?": [
+   [
+    "doc_03#2",
+    0.01875
+   ],
+   [
+    "doc_03#1",
+    0.018462
+   ],
+   [
+    "doc_03#0",
+    0.01791
+   ],
+   [
+    "doc_15#0",
+    0.016393
+   ],
+   [
+    "doc_15#1",
+    0.016129
+   ],
+   [
+    "doc_15#2",
+    0.015873
+   ],
+   [
+    "doc_11#0",
+    0.015152
+   ],
+   [
+    "doc_00#0",
+    0.014706
+   ],
+   [
+    "doc_09#1",
+    0.014493
+   ],
+   [
+    "doc_18#0",
+    0.014286
+   ]
+  ],
+  "lexical|3|O método qc.u3 foi removido, qual é o substituto?": [
+   [
+    "doc_15#0",
+    0.016393
+   ],
+   [
+    "doc_15#1",
+    0.016129
+   ],
+   [
+    "doc_15#2",
+    0.015873
+   ]
+  ],
+  "lexical|10|O método qc.u3 foi removido, qual é o substituto?": [
+   [
+    "doc_15#0",
+    0.016393
+   ],
+   [
+    "doc_15#1",
+    0.016129
+   ],
+   [
+    "doc_15#2",
+    0.015873
+   ],
+   [
+    "doc_02#0",
+    0.015625
+   ]
+  ],
+  "hibrido|3|Como trocar bind_parameters por algo que funcione?": [
+   [
+    "doc_16#1",
+    0.040653
+   ],
+   [
+    "doc_16#0",
+    0.040653
+   ],
+   [
+    "doc_00#0",
+    0.015873
+   ]
+  ],
+  "hibrido|10|Como trocar bind_parameters por algo que funcione?": [
+   [
+    "doc_16#1",
+    0.040653
+   ],
+   [
+    "doc_16#0",
+    0.040653
+   ],
+   [
+    "doc_00#0",
+    0.015873
+   ],
+   [
+    "doc_09#1",
+    0.015625
+   ],
+   [
+    "doc_15#1",
+    0.015385
+   ],
+   [
+    "doc_27#1",
+    0.015152
+   ],
+   [
+    "doc_18#0",
+    0.014925
+   ],
+   [
+    "doc_18#1",
+    0.014706
+   ],
+   [
+    "doc_15#0",
+    0.014493
+   ],
+   [
+    "doc_12#0",
+    0.014286
+   ]
+  ],
+  "vetorial|3|Como trocar bind_parameters por algo que funcione?": [
+   [
+    "doc_16#1",
+    0.020492
+   ],
+   [
+    "doc_16#0",
+    0.020161
+   ],
+   [
+    "doc_00#0",
+    0.015873
+   ]
+  ],
+  "vetorial|10|Como trocar bind_parameters por algo que funcione?": [
+   [
+    "doc_16#1",
+    0.020492
+   ],
+   [
+    "doc_16#0",
+    0.020161
+   ],
+   [
+    "doc_00#0",
+    0.015873
+   ],
+   [
+    "doc_09#1",
+    0.015625
+   ],
+   [
+    "doc_15#1",
+    0.015385
+   ],
+   [
+    "doc_27#1",
+    0.015152
+   ],
+   [
+    "doc_18#0",
+    0.014925
+   ],
+   [
+    "doc_18#1",
+    0.014706
+   ],
+   [
+    "doc_15#0",
+    0.014493
+   ],
+   [
+    "doc_12#0",
+    0.014286
+   ]
+  ],
+  "lexical|3|Como trocar bind_parameters por algo que funcione?": [
+   [
+    "doc_16#0",
+    0.020492
+   ],
+   [
+    "doc_16#1",
+    0.020161
+   ]
+  ],
+  "lexical|10|Como trocar bind_parameters por algo que funcione?": [
+   [
+    "doc_16#0",
+    0.020492
+   ],
+   [
+    "doc_16#1",
+    0.020161
+   ]
+  ],
+  "hibrido|3|Como criar um circuito parametrizado com Parameter?": [
+   [
+    "doc_17#0",
+    0.032787
+   ],
+   [
+    "doc_08#0",
+    0.031754
+   ],
+   [
+    "doc_10#0",
+    0.031258
+   ]
+  ],
+  "hibrido|10|Como criar um circuito parametrizado com Parameter?": [
+   [
+    "doc_17#0",
+    0.032787
+   ],
+   [
+    "doc_08#0",
+    0.031754
+   ],
+   [
+    "doc_10#0",
+    0.031258
+   ],
+   [
+    "doc_13#0",
+    0.030018
+   ],
+   [
+    "doc_20#1",
+    0.029911
+   ],
+   [
+    "doc_09#1",
+    0.029644
+   ],
+   [
+    "doc_18#1",
+    0.029387
+   ],
+   [
+    "doc_25#0",
+    0.028259
+   ],
+   [
+    "doc_24#1",
+    0.028219
+   ],
+   [
+    "doc_08#1",
+    0.027912
+   ]
+  ],
+  "vetorial|3|Como criar um circuito parametrizado com Parameter?": [
+   [
+    "doc_17#0",
+    0.016393
+   ],
+   [
+    "doc_08#0",
+    0.016129
+   ],
+   [
+    "doc_10#0",
+    0.015873
+   ]
+  ],
+  "vetorial|10|Como criar um circuito parametrizado com Parameter?": [
+   [
+    "doc_17#0",
+    0.016393
+   ],
+   [
+    "doc_08#0",
+    0.016129
+   ],
+   [
+    "doc_10#0",
+    0.015873
+   ],
+   [
+    "doc_20#1",
+    0.015625
+   ],
+   [
+    "doc_05#0",
+    0.015385
+   ],
+   [
+    "doc_05#1",
+    0.015152
+   ],
+   [
+    "doc_25#0",
+    0.014925
+   ],
+   [
+    "doc_24#1",
+    0.014706
+   ],
+   [
+    "doc_09#1",
+    0.014493
+   ],
+   [
+    "doc_04#0",
+    0.014286
+   ]
+  ],
+  "lexical|3|Como criar um circuito parametrizado com Parameter?": [
+   [
+    "doc_17#0",
+    0.016393
+   ],
+   [
+    "doc_13#0",
+    0.016129
+   ],
+   [
+    "doc_18#1",
+    0.015873
+   ]
+  ],
+  "lexical|10|Como criar um circuito parametrizado com Parameter?": [
+   [
+    "doc_17#0",
+    0.016393
+   ],
+   [
+    "doc_13#0",
+    0.016129
+   ],
+   [
+    "doc_18#1",
+    0.015873
+   ],
+   [
+    "doc_08#0",
+    0.015625
+   ],
+   [
+    "doc_10#0",
+    0.015385
+   ],
+   [
+    "doc_09#1",
+    0.015152
+   ],
+   [
+    "doc_08#1",
+    0.014925
+   ],
+   [
+    "doc_18#0",
+    0.014706
+   ],
+   [
+    "doc_20#0",
+    0.014493
+   ],
+   [
+    "doc_20#1",
+    0.014286
+   ]
+  ],
+  "hibrido|3|Como atribuir valores numéricos aos parâmetros de um circuito?": [
+   [
+    "doc_18#1",
+    0.032787
+   ],
+   [
+    "doc_18#0",
+    0.032258
+   ],
+   [
+    "doc_08#0",
+    0.030798
+   ]
+  ],
+  "hibrido|10|Como atribuir valores numéricos aos parâmetros de um circuito?": [
+   [
+    "doc_18#1",
+    0.032787
+   ],
+   [
+    "doc_18#0",
+    0.032258
+   ],
+   [
+    "doc_08#0",
+    0.030798
+   ],
+   [
+    "doc_16#0",
+    0.030331
+   ],
+   [
+    "doc_08#1",
+    0.029211
+   ],
+   [
+    "doc_10#0",
+    0.029199
+   ],
+   [
+    "doc_17#0",
+    0.02886
+   ],
+   [
+    "doc_09#1",
+    0.028382
+   ],
+   [
+    "doc_27#0",
+    0.027972
+   ],
+   [
+    "doc_08#2",
+    0.027971
+   ]
+  ],
+  "vetorial|3|Como atribuir valores numéricos aos parâmetros de um circuito?": [
+   [
+    "doc_18#1",
+    0.016393
+   ],
+   [
+    "doc_18#0",
+    0.016129
+   ],
+   [
+    "doc_08#0",
+    0.015873
+   ]
+  ],
+  "vetorial|10|Como atribuir valores numéricos aos parâmetros de um circuito?": [
+   [
+    "doc_18#1",
+    0.016393
+   ],
+   [
+    "doc_18#0",
+    0.016129
+   ],
+   [
+    "doc_08#0",
+    0.015873
+   ],
+   [
+    "doc_08#2",
+    0.015625
+   ],
+   [
+    "doc_05#1",
+    0.015385
+   ],
+   [
+    "doc_27#0",
+    0.015152
+   ],
+   [
+    "doc_08#1",
+    0.014925
+   ],
+   [
+    "doc_16#0",
+    0.014706
+   ],
+   [
+    "doc_10#0",
+    0.014493
+   ],
+   [
+    "doc_24#0",
+    0.014286
+   ]
+  ],
+  "lexical|3|Como atribuir valores numéricos aos parâmetros de um circuito?": [
+   [
+    "doc_18#1",
+    0.016393
+   ],
+   [
+    "doc_18#0",
+    0.016129
+   ],
+   [
+    "doc_17#0",
+    0.015873
+   ]
+  ],
+  "lexical|10|Como atribuir valores numéricos aos parâmetros de um circuito?": [
+   [
+    "doc_18#1",
+    0.016393
+   ],
+   [
+    "doc_18#0",
+    0.016129
+   ],
+   [
+    "doc_17#0",
+    0.015873
+   ],
+   [
+    "doc_16#0",
+    0.015625
+   ],
+   [
+    "doc_13#0",
+    0.015385
+   ],
+   [
+    "doc_16#1",
+    0.015152
+   ],
+   [
+    "doc_08#0",
+    0.014925
+   ],
+   [
+    "doc_10#0",
+    0.014706
+   ],
+   [
+    "doc_09#1",
+    0.014493
+   ],
+   [
+    "doc_08#1",
+    0.014286
+   ]
+  ],
+  "hibrido|3|Como carregar um programa OpenQASM 2 no Qiskit?": [
+   [
+    "doc_03#2",
+    0.037537
+   ],
+   [
+    "doc_12#2",
+    0.0337
+   ],
+   [
+    "doc_19#0",
+    0.032787
+   ]
+  ],
+  "hibrido|10|Como carregar um programa OpenQASM 2 no Qiskit?": [
+   [
+    "doc_03#2",
+    0.037537
+   ],
+   [
+    "doc_12#2",
+    0.0337
+   ],
+   [
+    "doc_19#0",
+    0.032787
+   ],
+   [
+    "doc_14#0",
+    0.031746
+   ],
+   [
+    "doc_00#0",
+    0.031281
+   ],
+   [
+    "doc_03#0",
+    0.03101
+   ],
+   [
+    "doc_03#1",
+    0.029911
+   ],
+   [
+    "doc_11#0",
+    0.028577
+   ],
+   [
+    "doc_12#1",
+    0.028405
+   ],
+   [
+    "doc_06#0",
+    0.027106
+   ]
+  ],
+  "vetorial|3|Como carregar um programa OpenQASM 2 no Qiskit?": [
+   [
+    "doc_03#2",
+    0.018182
+   ],
+   [
+    "doc_05#2",
+    0.01791
+   ],
+   [
+    "doc_19#0",
+    0.016393
+   ]
+  ],
+  "vetorial|10|Como carregar um programa OpenQASM 2 no Qiskit?": [
+   [
+    "doc_03#2",
+    0.018182
+   ],
+   [
+    "doc_05#2",
+    0.01791
+   ],
+   [
+    "doc_19#0",
+    0.016393
+   ],
+   [
+    "doc_00#0",
+    0.016129
+   ],
+   [
+    "doc_14#0",
+    0.015873
+   ],
+   [
+    "doc_12#2",
+    0.015789
+   ],
+   [
+    "doc_03#0",
+    0.015625
+   ],
+   [
+    "doc_13#0",
+    0.015385
+   ],
+   [
+    "doc_17#0",
+    0.014706
+   ],
+   [
+    "doc_05#0",
+    0.014493
+   ]
+  ],
+  "lexical|3|Como carregar um programa OpenQASM 2 no Qiskit?": [
+   [
+    "doc_03#2",
+    0.019355
+   ],
+   [
+    "doc_12#2",
+    0.01791
+   ],
+   [
+    "doc_19#0",
+    0.016393
+   ]
+  ],
+  "lexical|10|Como carregar um programa OpenQASM 2 no Qiskit?": [
+   [
+    "doc_03#2",
+    0.019355
+   ],
+   [
+    "doc_12#2",
+    0.01791
+   ],
+   [
+    "doc_19#0",
+    0.016393
+   ],
+   [
+    "doc_14#0",
+    0.015873
+   ],
+   [
+    "doc_03#1",
+    0.015625
+   ],
+   [
+    "doc_03#0",
+    0.015385
+   ],
+   [
+    "doc_00#0",
+    0.015152
+   ],
+   [
+    "doc_12#1",
+    0.014706
+   ],
+   [
+    "doc_11#0",
+    0.014493
+   ],
+   [
+    "doc_06#0",
+    0.014286
+   ]
+  ]
+ },
+ "contexto": {
+  "com_pontuacao|500": {
+   "contexto": "[Fonte 1]\nTítulo: Tópico 0\nSeção: Seção 0\nURL: https://exemplo.test/doc_00\nConteúdo:\nSampler backend portas transpilação qubit amplitude qiskit gate transpile o que é. Que estado qiskit transpilação gate o sampler backend no amplitude otimização estimator. Que camada circuito backend clássico qubit é medir transpilação qiskit o parâmetro. Registro no matriz operador camada otimização o resultado qiskit job é que.",
+   "referencias": [
+    {
+     "numero": 1,
+     "titulo": "Tópico 0",
+     "secao": "Seção 0",
+     "url": "https://exemplo.test/doc_00",
+     "id_documento": "doc_00"
+    }
+   ]
+  },
+  "com_pontuacao|1500": {
+   "contexto": "[Fonte 1]\nTítulo: Tópico 0\nSeção: Seção 0\nURL: https://exemplo.test/doc_00\nConteúdo:\nSampler backend portas transpilação qubit amplitude qiskit gate transpile o que é. Que estado qiskit transpilação gate o sampler backend no amplitude otimização estimator. Que camada circuito backend clássico qubit é medir transpilação qiskit o parâmetro. Registro no matriz operador camada otimização o resultado qiskit job é que.\n\n[Fonte 2]\nTítulo: Tópico 1\nSeção: Seção 0\nURL: https://exemplo.test/doc_01\nConteúdo:\nGate hardware são clássico camada amplitude os qubit transpilador porta estágios quais. Estágios quais operador erro transpilador vetor do clássico sampler medir execução são. Do são estimator transpile transpilador otimização portas parâmetro qubit matriz estágios quais. Registro circuito são job ruído estágios observável transpilador do fase otimização os.\n\n[Fonte 3]\nTítulo: Tópico 2\nSeção: Seção 0\nURL: https://exemplo.test/doc_02\nConteúdo:\nExecução do transpile ruído estimator a parâmetro diferença 0 operador otimização backend. Parâmetro transpile 3 otimização os job sampler gate de registro portas qubit.\n\n[Fonte 4]\nTítulo: Tópico 3\nSeção: Seção 0\nURL: https://exemplo.test/doc_03\nConteúdo:\nAmplitude camada registro qiskit sampler qubit de estimator qual transpile transpile é. Portas gate quântico amplitude camada no padrão resultado do qual transpile estado. Qual resultado 2 de quântico portas simulador amplitude o otimização nível observável. De estimator fase 2 registro cama",
+   "referencias": [
+    {
+     "numero": 1,
+     "titulo": "Tópico 0",
+     "secao": "Seção 0",
+     "url": "https://exemplo.test/doc_00",
+     "id_documento": "doc_00"
+    },
+    {
+     "numero": 2,
+     "titulo": "Tópico 1",
+     "secao": "Seção 0",
+     "url": "https://exemplo.test/doc_01",
+     "id_documento": "doc_01"
+    },
+    {
+     "numero": 3,
+     "titulo": "Tópico 2",
+     "secao": "Seção 0",
+     "url": "https://exemplo.test/doc_02",
+     "id_documento": "doc_02"
+    },
+    {
+     "numero": 4,
+     "titulo": "Tópico 3",
+     "secao": "Seção 0",
+     "url": "https://exemplo.test/doc_03",
+     "id_documento": "doc_03"
+    }
+   ]
+  },
+  "com_pontuacao|6000": {
+   "contexto": "[Fonte 1]\nTítulo: Tópico 0\nSeção: Seção 0\nURL: https://exemplo.test/doc_00\nConteúdo:\nSampler backend portas transpilação qubit amplitude qiskit gate transpile o que é. Que estado qiskit transpilação gate o sampler backend no amplitude otimização estimator. Que camada circuito backend clássico qubit é medir transpilação qiskit o parâmetro. Registro no matriz operador camada otimização o resultado qiskit job é que.\n\n[Fonte 2]\nTítulo: Tópico 1\nSeção: Seção 0\nURL: https://exemplo.test/doc_01\nConteúdo:\nGate hardware são clássico camada amplitude os qubit transpilador porta estágios quais. Estágios quais operador erro transpilador vetor do clássico sampler medir execução são. Do são estimator transpile transpilador otimização portas parâmetro qubit matriz estágios quais. Registro circuito são job ruído estágios observável transpilador do fase otimização os.\n\n[Fonte 3]\nTítulo: Tópico 2\nSeção: Seção 0\nURL: https://exemplo.test/doc_02\nConteúdo:\nExecução do transpile ruído estimator a parâmetro diferença 0 operador otimização backend. Parâmetro transpile 3 otimização os job sampler gate de registro portas qubit.\n\n[Fonte 4]\nTítulo: Tópico 3\nSeção: Seção 0\nURL: https://exemplo.test/doc_03\nConteúdo:\nAmplitude camada registro qiskit sampler qubit de estimator qual transpile transpile é. Portas gate quântico amplitude camada no padrão resultado do qual transpile estado. Qual resultado 2 de quântico portas simulador amplitude o otimização nível observável. De estimator fase 2 registro camada quântico do no é transpile portas.\n\n[Fonte 5]\nTítulo: Tópico 3\nSeção: Seção 1\nURL: https://exemplo.test/doc_03\nConteúdo:\nPorta observável no qubit nível medir fase sampler padrão transpile 2 é. Resultado backend é medir ruído padrão hardware otimização registro portas o 2. Erro otimização backend otimização porta de estado estimator vetor qiskit é nível. Otimização ruído resultado matriz medir nível fase 2 parâmetro clássico do de.\n\n[Fonte 6]\nTítulo: Tópico 3\nSeção: Seção 2\nURL: https://exemplo.test/doc_03\nConteúdo:\nTranspile nível 2 de parâmetro quântico circuito execução é clássico fase erro. Qubit sampler 2 transpile otimização qiskit estimator ruído é quântico operador o.\n\n[Fonte 7]\nTítulo: Tópico 4\nSeção: Seção 0\nURL: https://exemplo.test/doc_04\nConteúdo:\nAmplitude o hardware para a sampler porta erro resultado portas clássico swap. Estado clássico como camada o matriz porta backend hardware vetor a para.\n\n[Fonte 8]\nTítulo: Tópico 5\nSeção: Seção 0\nURL: https://exemplo.test/doc_05\nConteúdo:\nVetor medir qubit sampler usar otimização como observável generate_preset_pass_manager estado. Hardware quântico usar backend generate_preset_pass_manager transpile como parâmetro erro job.",
+   "referencias": [
+    {
+     "numero": 1,
+     "titulo": "Tópico 0",
+     "secao": "Seção 0",
+     "url": "https://exemplo.test/doc_00",
+     "id_documento": "doc_00"
+    },
+    {
+     "numero": 2,
+     "titulo": "Tópico 1",
+     "secao": "Seção 0",
+     "url": "https://exemplo.test/doc_01",
+     "id_documento": "doc_01"
+    },
+    {
+     "numero": 3,
+     "titulo": "Tópico 2",
+     "secao": "Seção 0",
+     "url": "https://exemplo.test/doc_02",
+     "id_documento": "doc_02"
+    },
+    {
+     "numero": 4,
+     "titulo": "Tópico 3",
+     "secao": "Seção 0",
+     "url": "https://exemplo.test/doc_03",
+     "id_documento": "doc_03"
+    },
+    {
+     "numero": 5,
+     "titulo": "Tópico 3",
+     "secao": "Seção 1",
+     "url": "https://exemplo.test/doc_03",
+     "id_documento": "doc_03"
+    },
+    {
+     "numero": 6,
+     "titulo": "Tópico 3",
+     "secao": "Seção 2",
+     "url": "https://exemplo.test/doc_03",
+     "id_documento": "doc_03"
+    },
+    {
+     "numero": 7,
+     "titulo": "Tópico 4",
+     "secao": "Seção 0",
+     "url": "https://exemplo.test/doc_04",
+     "id_documento": "doc_04"
+    },
+    {
+     "numero": 8,
+     "titulo": "Tópico 5",
+     "secao": "Seção 0",
+     "url": "https://exemplo.test/doc_05",
+     "id_documento": "doc_05"
+    }
+   ]
+  },
+  "sem_pontuacao|500": {
+   "contexto": "[Fonte 1]\nTítulo: Tópico 5\nSeção: Seção 1\nURL: https://exemplo.test/doc_05\nConteúdo:\nAmplitude estimator matriz clássico qubit generate_preset_pass_manager usar como otimização execução. Vetor generate_preset_pass_manager porta gate como medir circuito parâmetro estado usar.\n\n[Fonte 2]\nTítulo: Tópico 5\nSeção: Seção 2\nURL: https://exemplo.test/doc_05\nConteúdo:\nComo generate_preset_pass_manager quântico observável operador otimização fase medição usar estado. Portas quântico resultado medir parâ",
+   "referencias": [
+    {
+     "numero": 1,
+     "titulo": "Tópico 5",
+     "secao": "Seção 1",
+     "url": "https://exemplo.test/doc_05",
+     "id_documento": "doc_05"
+    },
+    {
+     "numero": 2,
+     "titulo": "Tópico 5",
+     "secao": "Seção 2",
+     "url": "https://exemplo.test/doc_05",
+     "id_documento": "doc_05"
+    }
+   ]
+  },
+  "sem_pontuacao|1500": {
+   "contexto": "[Fonte 1]\nTítulo: Tópico 5\nSeção: Seção 1\nURL: https://exemplo.test/doc_05\nConteúdo:\nAmplitude estimator matriz clássico qubit generate_preset_pass_manager usar como otimização execução. Vetor generate_preset_pass_manager porta gate como medir circuito parâmetro estado usar.\n\n[Fonte 2]\nTítulo: Tópico 5\nSeção: Seção 2\nURL: https://exemplo.test/doc_05\nConteúdo:\nComo generate_preset_pass_manager quântico observável operador otimização fase medição usar estado. Portas quântico resultado medir parâmetro gate generate_preset_pass_manager vetor usar como. Medição porta transpile como usar quântico generate_preset_pass_manager portas gate backend. Medir como qubit gate observável usar ruído generate_preset_pass_manager execução hardware.\n\n[Fonte 3]\nTítulo: Tópico 6\nSeção: Seção 0\nURL: https://exemplo.test/doc_06\nConteúdo:\nOtimização amplitude vetor contagens registro quântico gate os circuito nas invertidos bits. Observável fase os erro bits clássico ruído contagens hardware invertidos sampler qiskit.\n\n[Fonte 4]\nTítulo: Tópico 7\nSeção: Seção 0\nURL: https://exemplo.test/doc_07\nConteúdo:\nObservável camada 0 operador o qubit parâmetro à medir qubit mais ruído. Parâmetro simulador no ruído corresponde observável transpile o operador medição resultado ao.\n\n[Fonte 5]\nTítulo: Tópico 8\nSeção: Seção 0\nURL: https://exemplo.test/doc_08\nConteúdo:\nResultado porta vetor os qubits erro medir registro operador um medir como. Circuito qubits como sampler circuito um job medir backend estimator port",
+   "referencias": [
+    {
+     "numero": 1,
+     "titulo": "Tópico 5",
+     "secao": "Seção 1",
+     "url": "https://exemplo.test/doc_05",
+     "id_documento": "doc_05"
+    },
+    {
+     "numero": 2,
+     "titulo": "Tópico 5",
+     "secao": "Seção 2",
+     "url": "https://exemplo.test/doc_05",
+     "id_documento": "doc_05"
+    },
+    {
+     "numero": 3,
+     "titulo": "Tópico 6",
+     "secao": "Seção 0",
+     "url": "https://exemplo.test/doc_06",
+     "id_documento": "doc_06"
+    },
+    {
+     "numero": 4,
+     "titulo": "Tópico 7",
+     "secao": "Seção 0",
+     "url": "https://exemplo.test/doc_07",
+     "id_documento": "doc_07"
+    },
+    {
+     "numero": 5,
+     "titulo": "Tópico 8",
+     "secao": "Seção 0",
+     "url": "https://exemplo.test/doc_08",
+     "id_documento": "doc_08"
+    }
+   ]
+  },
+  "sem_pontuacao|6000": {
+   "contexto": "[Fonte 1]\nTítulo: Tópico 5\nSeção: Seção 1\nURL: https://exemplo.test/doc_05\nConteúdo:\nAmplitude estimator matriz clássico qubit generate_preset_pass_manager usar como otimização execução. Vetor generate_preset_pass_manager porta gate como medir circuito parâmetro estado usar.\n\n[Fonte 2]\nTítulo: Tópico 5\nSeção: Seção 2\nURL: https://exemplo.test/doc_05\nConteúdo:\nComo generate_preset_pass_manager quântico observável operador otimização fase medição usar estado. Portas quântico resultado medir parâmetro gate generate_preset_pass_manager vetor usar como. Medição porta transpile como usar quântico generate_preset_pass_manager portas gate backend. Medir como qubit gate observável usar ruído generate_preset_pass_manager execução hardware.\n\n[Fonte 3]\nTítulo: Tópico 6\nSeção: Seção 0\nURL: https://exemplo.test/doc_06\nConteúdo:\nOtimização amplitude vetor contagens registro quântico gate os circuito nas invertidos bits. Observável fase os erro bits clássico ruído contagens hardware invertidos sampler qiskit.\n\n[Fonte 4]\nTítulo: Tópico 7\nSeção: Seção 0\nURL: https://exemplo.test/doc_07\nConteúdo:\nObservável camada 0 operador o qubit parâmetro à medir qubit mais ruído. Parâmetro simulador no ruído corresponde observável transpile o operador medição resultado ao.\n\n[Fonte 5]\nTítulo: Tópico 8\nSeção: Seção 0\nURL: https://exemplo.test/doc_08\nConteúdo:\nResultado porta vetor os qubits erro medir registro operador um medir como. Circuito qubits como sampler circuito um job medir backend estimator porta erro. De fase medir todos portas vetor qubits resultado transpile circuito hardware medição. Um clássico circuito matriz otimização estado registro porta como quântico todos de.\n\n[Fonte 6]\nTítulo: Tópico 8\nSeção: Seção 1\nURL: https://exemplo.test/doc_08\nConteúdo:\nAmplitude porta os observável fase matriz um como operador qubits qubit todos. Estado backend operador medir de um portas job circuito gate todos hardware. Backend todos job registro qubits fase circuito de erro gate clássico um.",
+   "referencias": [
+    {
+     "numero": 1,
+     "titulo": "Tópico 5",
+     "secao": "Seção 1",
+     "url": "https://exemplo.test/doc_05",
+     "id_documento": "doc_05"
+    },
+    {
+     "numero": 2,
+     "titulo": "Tópico 5",
+     "secao": "Seção 2",
+     "url": "https://exemplo.test/doc_05",
+     "id_documento": "doc_05"
+    },
+    {
+     "numero": 3,
+     "titulo": "Tópico 6",
+     "secao": "Seção 0",
+     "url": "https://exemplo.test/doc_06",
+     "id_documento": "doc_06"
+    },
+    {
+     "numero": 4,
+     "titulo": "Tópico 7",
+     "secao": "Seção 0",
+     "url": "https://exemplo.test/doc_07",
+     "id_documento": "doc_07"
+    },
+    {
+     "numero": 5,
+     "titulo": "Tópico 8",
+     "secao": "Seção 0",
+     "url": "https://exemplo.test/doc_08",
+     "id_documento": "doc_08"
+    },
+    {
+     "numero": 6,
+     "titulo": "Tópico 8",
+     "secao": "Seção 1",
+     "url": "https://exemplo.test/doc_08",
+     "id_documento": "doc_08"
+    }
+   ]
+  },
+  "um_documento|500": {
+   "contexto": "[Fonte 1]\nTítulo: Tópico 12\nSeção: Seção 1\nURL: https://exemplo.test/doc_12\nConteúdo:\nObservável backend estimator quântico import from execute ruído cannot qiskit amplitude sampler. Medição portas cannot simulador import porta ruído execução importerror amplitude from qiskit.",
+   "referencias": [
+    {
+     "numero": 1,
+     "titulo": "Tópico 12",
+     "secao": "Seção 1",
+     "url": "https://exemplo.test/doc_12",
+     "id_documento": "doc_12"
+    }
+   ]
+  },
+  "um_documento|1500": {
+   "contexto": "[Fonte 1]\nTítulo: Tópico 12\nSeção: Seção 1\nURL: https://exemplo.test/doc_12\nConteúdo:\nObservável backend estimator quântico import from execute ruído cannot qiskit amplitude sampler. Medição portas cannot simulador import porta ruído execução importerror amplitude from qiskit.",
+   "referencias": [
+    {
+     "numero": 1,
+     "titulo": "Tópico 12",
+     "secao": "Seção 1",
+     "url": "https://exemplo.test/doc_12",
+     "id_documento": "doc_12"
+    }
+   ]
+  },
+  "um_documento|6000": {
+   "contexto": "[Fonte 1]\nTítulo: Tópico 12\nSeção: Seção 1\nURL: https://exemplo.test/doc_12\nConteúdo:\nObservável backend estimator quântico import from execute ruído cannot qiskit amplitude sampler. Medição portas cannot simulador import porta ruído execução importerror amplitude from qiskit.",
+   "referencias": [
+    {
+     "numero": 1,
+     "titulo": "Tópico 12",
+     "secao": "Seção 1",
+     "url": "https://exemplo.test/doc_12",
+     "id_documento": "doc_12"
+    }
+   ]
+  },
+  "textos_longos|500": {
+   "contexto": "[Fonte 1]\nTítulo: Tópico 0\nSeção: Seção 0\nURL: https://exemplo.test/doc_00\nConteúdo:\nSampler backend portas transpilação qubit amplitude qiskit gate transpile o que é. Que estado qiskit transpilação gate o sampler backend no amplitude otimização estimator. Que camada circuito backend clássico qubit é medir transpilação qiskit o parâmetro. Registro no matriz operador camada otimização o resultado qiskit job é que. Sampler backend portas transpilação qubit amplitude qiskit gate transpile o que é",
+   "referencias": [
+    {
+     "numero": 1,
+     "titulo": "Tópico 0",
+     "secao": "Seção 0",
+     "url": "https://exemplo.test/doc_00",
+     "id_documento": "doc_00"
+    }
+   ]
+  },
+  "textos_longos|1500": {
+   "contexto": "[Fonte 1]\nTítulo: Tópico 0\nSeção: Seção 0\nURL: https://exemplo.test/doc_00\nConteúdo:\nSampler backend portas transpilação qubit amplitude qiskit gate transpile o que é. Que estado qiskit transpilação gate o sampler backend no amplitude otimização estimator. Que camada circuito backend clássico qubit é medir transpilação qiskit o parâmetro. Registro no matriz operador camada otimização o resultado qiskit job é que. Sampler backend portas transpilação qubit amplitude qiskit gate transpile o que é. Que estado qiskit transpilação gate o sampler backend no amplitude otimização estimator. Que camada circuito backend clássico qubit é medir transpilação qiskit o parâmetro. Registro no matriz operador camada otimização o resultado qiskit job é que. Sampler backend portas transpilação qubit amplitude qiskit gate transpile o que é. Que estado qiskit transpilação gate o sampler backend no amplitude otimização estimator. Que camada circuito backend clássico qubit é medir transpilação qiskit o parâmetro. Registro no matriz operador camada otimização o resultado qiskit job é que. Sampler backend portas transpilação qubit amplitude qiskit gate transpile o que é. Que estado qiskit transpilação gate o sampler backend no amplitude otimização estimator. Que camada circuito backend clássico qubit é medir transpilação qiskit o parâmetro. Registro no matriz operador camada otimização o resultado qiskit job é que. Sampler backend portas transpilação qubit amplitude qiskit gate transpile o que é. Qu",
+   "referencias": [
+    {
+     "numero": 1,
+     "titulo": "Tópico 0",
+     "secao": "Seção 0",
+     "url": "https://exemplo.test/doc_00",
+     "id_documento": "doc_00"
+    }
+   ]
+  },
+  "textos_longos|6000": {
+   "contexto": "[Fonte 1]\nTítulo: Tópico 0\nSeção: Seção 0\nURL: https://exemplo.test/doc_00\nConteúdo:\nSampler backend portas transpilação qubit amplitude qiskit gate transpile o que é. Que estado qiskit transpilação gate o sampler backend no amplitude otimização estimator. Que camada circuito backend clássico qubit é medir transpilação qiskit o parâmetro. Registro no matriz operador camada otimização o resultado qiskit job é que. Sampler backend portas transpilação qubit amplitude qiskit gate transpile o que é. Que estado qiskit transpilação gate o sampler backend no amplitude otimização estimator. Que camada circuito backend clássico qubit é medir transpilação qiskit o parâmetro. Registro no matriz operador camada otimização o resultado qiskit job é que. Sampler backend portas transpilação qubit amplitude qiskit gate transpile o que é. Que estado qiskit transpilação gate o sampler backend no amplitude otimização estimator. Que camada circuito backend clássico qubit é medir transpilação qiskit o parâmetro. Registro no matriz operador camada otimização o resultado qiskit job é que. Sampler backend portas transpilação qubit amplitude qiskit gate transpile o que é. Que estado qiskit transpilação gate o sampler backend no amplitude otimização estimator. Que camada circuito backend clássico qubit é medir transpilação qiskit o parâmetro. Registro no matriz operador camada otimização o resultado qiskit job é que. Sampler backend portas transpilação qubit amplitude qiskit gate transpile o que é. Que estado qiskit transpilação gate o sampler backend no amplitude otimização estimator. Que camada circuito backend clássico qubit é medir transpilação qiskit o parâmetro. Registro no matriz operador camada otimização o resultado qiskit job é que. Sampler backend portas transpilação qubit amplitude qiskit gate transpile o que é. Que estado qiskit transpilação gate o sampler backend no amplitude otimização estimator. Que camada circuito backend clássico qubit é medir transpilação qiskit o parâmetro. Registro no matriz operador camada otimização o resultado qiskit job é que. Sampler backend portas transpilação qubit amplitude qiskit gate transpile o que é. Que estado qiskit transpilação gate o sampler backend no amplitude otimização estimator. Que camada circuito backend clássico qubit é medir transpilação qiskit o parâmetro. Registro no matriz operador camada otimização o resultado qiskit job é que. Sampler backend portas transpilação qubit amplitude qiskit gate transpile o que é. Que estado qiskit transpilação gate o sampler backend no amplitude otimização estimator. Que camada circuito backend clássico qubit é medir transpilação qiskit o parâmetro. Registro no matriz operador camada otimização o resultado qiskit job é que. Sampler backend portas transpilação qubit amplitude qiskit gate transpile o que é. Que estado qiskit transpilação gate o sampler backend no amplitude otimização estimator. Que camada circuito backend clássico qubit é medir transpilação qiskit o parâmetro. Registro no matriz operador camada otimização o resultado qiskit job é que. Sampler backend portas transpilação qubit amplitude qiskit gate transpile o que é. Que estado qiskit transpilação gate o sampler backend no amplitude otimização estimator. Que camada circuito backend clássico qubit é medir transpilação qiskit o parâmetro. Registro no matriz operador camada otimização o resultado qiskit job é que. Sampler backend portas transpilação qubit amplitude qiskit gate transpile o que é. Que estado qiskit transpilação gate o sampler backend no amplitude otimização estimator. Que camada circuito backend clássico qubit é medir transpilação qiskit o parâmetro. Registro no matriz operador camada otimização o resultado qiskit job é que. Sampler backend portas transpilação qubit amplitude qiskit gate transpile o que é. Que estado qiskit transpilação gate o sampler backend no amplitude otimização estimator. Que camada circuito backend clássico qubit é medir transpilação qiskit o parâmetro. Registro no matriz operador camada otimização o resultado qiskit job é que.\n\n[Fonte 2]\nTítulo: Tópico 1\nSeção: Seção 0\nURL: https://exemplo.test/doc_01\nConteúdo:\nGate hardware são clássico camada amplitude os qubit transpilador porta estágios quais. Estágios quais operador erro transpilador vetor do clássico sampler medir execução são. Do são estimator transpile transpilador otimização portas parâmetro qubit matriz estágios quais. Registro circuito são job ruído estágios observável transpilador do fase otimização os. Gate hardware são clássico camada amplitude os qubit transpilador porta estágios quais. Estágios quais operador erro transpilador vetor do clássico sampler medir execução são. Do são estimator transpile transpilador otimização portas parâmetro qubit matriz estágios quais. Registro circuito são job ruído estágios observável transpilador do fase otimização os. Gate hardware são clássico camada amplitude os qubit transpilador porta estágios quais. Estágios quais operador erro transpilador vetor do clássico sampler medir execução são. Do são estimator transpile transpilador otimização portas parâmetro qubit matriz estágios quais. Registro circuito são job ruído estágios observável transpilador do fase otimização os. Gate hardware são clássico camada amplitude os qubit transpilador porta estágios quais. Estágios quais operador erro transpilador vetor do clássico sampler medir execução são. Do são estimator transpile transpilador otimização portas parâmetro qubit matriz estágios quais. Registro circuito são job ruído estágios observável transpilador do fase otimização os. Gate hardware são clássico camada amplitude os qubit transpilador porta estágios quais. Estágios quais operador erro transpilador vetor do clássico sampler medir execução são. Do são estimator transpile transpilador otimização portas parâmetro qubit matriz estágios quais. Registro circuito são job ruído estágios observável transpilador do fase otimização os. Gate hardware são clássico camada ampl",
+   "referencias": [
+    {
+     "numero": 1,
+     "titulo": "Tópico 0",
+     "secao": "Seção 0",
+     "url": "https://exemplo.test/doc_00",
+     "id_documento": "doc_00"
+    },
+    {
+     "numero": 2,
+     "titulo": "Tópico 1",
+     "secao": "Seção 0",
+     "url": "https://exemplo.test/doc_01",
+     "id_documento": "doc_01"
+    }
+   ]
+  }
+ }
+}

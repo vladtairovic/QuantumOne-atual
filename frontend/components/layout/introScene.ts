@@ -1,6 +1,11 @@
 import * as THREE from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 
+import { EffectComposer } from "three/addons/postprocessing/EffectComposer.js";
+import { RenderPass } from "three/addons/postprocessing/RenderPass.js";
+import { UnrealBloomPass } from "three/addons/postprocessing/UnrealBloomPass.js";
+import { OutputPass } from "three/addons/postprocessing/OutputPass.js";
+
 const URL_MODEL = "/intro/quantumone-q1.glb";
 const ARRIVAL = 4.05;
 const END = 5;
@@ -44,81 +49,35 @@ function studioLighting() {
   return texture;
 }
 
-function linework(points: number[], color: number) {
-  const geometry = new THREE.BufferGeometry();
-  geometry.setAttribute("position", new THREE.Float32BufferAttribute(points, 3));
-  return new THREE.LineSegments(geometry, new THREE.LineBasicMaterial({ color }));
-}
-
-function buildChamber(scene: THREE.Scene) {
-  const architecture = new THREE.Group();
-  scene.add(architecture);
-  const floorY = -0.85;
-  const floor = new THREE.Mesh(
-    new THREE.PlaneGeometry(42, 45),
-    new THREE.MeshStandardMaterial({ color: 0x131320, metalness: 0.46, roughness: 0.55, envMapIntensity: 0.15 }),
-  );
-  floor.rotation.x = -Math.PI / 2;
-  floor.position.set(0, floorY - 0.006, -9);
-  architecture.add(floor);
-
-  const traces: number[] = [], edges: number[] = [], inlays: number[] = [];
-  for (let i = -15; i <= 15; i++) {
-    const x = i * 0.37, offset = (Math.abs(i) % 4) * 0.19;
-    const elbow = -2.2 - offset * 3;
-    traces.push(x, floorY, 5, x, floorY, elbow,
-      x, floorY, elbow, x + offset, floorY, elbow - offset,
-      x + offset, floorY, elbow - offset, x + offset, floorY, -17);
-    if (i % 3 === 0) inlays.push(x, floorY + 0.002, elbow + 0.52, x, floorY + 0.002, elbow + 1.08);
-  }
-  // Paired, open-sided arches recede towards a single vanishing point.
-  for (let j = 0; j < 9; j++) {
-    const z = 0.45 - j * 1.92;
-    for (const side of [-1, 1]) {
-      const x = side * 3.45;
-      const path = [[x, floorY], [x, 0.85], [x - side * 0.92, 1.78], [side * 0.65, 1.78]];
-      for (let i = 1; i < path.length; i++) {
-        edges.push(...path[i - 1], z, ...path[i], z);
-        edges.push(...path[i - 1], z - 0.065, ...path[i], z - 0.065);
-      }
-      inlays.push(x - side * 0.09, 0.94, z, x - side * 0.56, 1.41, z);
-    }
-  }
-  architecture.add(linework(traces, 0x39324d), linework(edges, 0x383449), linework(inlays, 0x9169bc));
-
-  const ribs = new THREE.InstancedMesh(
-    new THREE.BoxGeometry(1, 1, 1),
-    new THREE.MeshStandardMaterial({ color: 0x252530, metalness: 0.76, roughness: 0.4, envMapIntensity: 0.22 }),
-    edges.length / 12,
-  );
-  const beam = new THREE.Object3D();
-  for (let i = 0; i < edges.length; i += 12) {
-    const start = new THREE.Vector3().fromArray(edges, i), end = new THREE.Vector3().fromArray(edges, i + 3);
-    beam.position.copy(start).lerp(end, 0.5);
-    beam.quaternion.setFromUnitVectors(new THREE.Vector3(0, 0, 1), new THREE.Vector3().subVectors(end, start).normalize());
-    beam.scale.set(0.045, 0.045, start.distanceTo(end));
-    beam.updateMatrix();
-    ribs.setMatrixAt(i / 12, beam.matrix);
-  }
-  architecture.add(ribs);
-
-  const spindle = new THREE.Mesh(
-    new THREE.LatheGeometry([[0, 0], [0.82, 0], [0.87, 0.027], [0.87, 0.052], [0.82, 0.078], [0, 0.078]]
-      .map(([r, y]) => new THREE.Vector2(r, y)), 96),
-    new THREE.MeshStandardMaterial({ color: 0x23212d, metalness: 0.63, roughness: 0.44, envMapIntensity: 0.32 }),
-  );
-  spindle.position.y = floorY;
-  architecture.add(spindle);
-
-  const positions = [];
-  for (let i = 0; i < 330; i++) {
-    positions.push((noise(i + 0.1) - 0.5) * 12, (noise(i + 1.8) - 0.34) * 4.5, noise(i + 5.8) * -10);
-  }
-  const dustGeometry = new THREE.BufferGeometry();
-  dustGeometry.setAttribute("position", new THREE.Float32BufferAttribute(positions, 3));
-  const dust = new THREE.Points(dustGeometry, new THREE.PointsMaterial({ size: 0.009, color: 0xaa9fc4 }));
-  architecture.add(dust);
-  return dust;
+// A field at optical infinity. Only the wave crests catch light.
+function quantumField() {
+  const time = { value: 0 }, aspect = { value: 1 };
+  const field = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), new THREE.ShaderMaterial({
+    uniforms: { time, aspect }, depthWrite: false, depthTest: false,
+    vertexShader: `varying vec2 screen;
+      void main() { screen = position.xy; gl_Position = vec4(position.xy, 0.999, 1.0); }`,
+    fragmentShader: `uniform float time, aspect;
+      varying vec2 screen;
+      void main() {
+        vec2 p = vec2(screen.x * aspect, screen.y);
+        vec3 light = vec3(0.003, 0.004, 0.013);
+        light += vec3(0.019, 0.011, 0.045) * exp(-0.85 * dot(p,p));
+        for (int i = 0; i < 5; ++i) {
+          float layer = float(i);
+          float wave = -0.48 + 0.13 * sin(p.x * 1.8 + time * 0.17 + layer * 0.24)
+              + layer * 0.029 + 0.04 * cos(p.x * 3.0 - time * 0.13);
+          float d = abs(p.y - wave);
+          float width = max(fwidth(p.y), 0.001);
+          light += vec3(0.024, 0.027, 0.068) * exp(-d / width) + vec3(0.001, 0.002, 0.004) * exp(-d * 29.0);
+        }
+        gl_FragColor = vec4(light, 1.);
+        #include <tonemapping_fragment>
+        #include <colorspace_fragment>
+      }`,
+  }));
+  field.frustumCulled = false;
+  field.renderOrder = -100;
+  return { field, time, aspect };
 }
 
 function assemblyGeometry(original: THREE.BufferGeometry) {
@@ -162,7 +121,9 @@ function makeSymbol(original: THREE.Mesh<THREE.BufferGeometry, THREE.MeshStandar
       #include <begin_vertex>
       settled = smoothstep(assemblyShard.w, assemblyShard.w + 0.44, uAssembly);
       float remaining = 1.0 - settled;
-      transformed += remaining * assemblyShard.xyz;
+      float orbit = remaining * (1.4 + assemblyShard.y);
+      vec2 drift = mat2(cos(orbit), -sin(orbit), sin(orbit), cos(orbit)) * assemblyShard.xy;
+      transformed += remaining * vec3(drift, assemblyShard.z);
       transformed.y += sin(settled * 3.14159) * assemblyShard.x * 0.16;
       surfacePoint = position;
     `);
@@ -177,7 +138,12 @@ function makeSymbol(original: THREE.Mesh<THREE.BufferGeometry, THREE.MeshStandar
       roughnessFactor += 0.037 * sin(grain) / (1.0 + fwidth(grain));
     `).replace("#include <emissivemap_fragment>", `
       #include <emissivemap_fragment>
-      totalEmissiveRadiance += vec3(0.30, 0.10, 0.65) * sin(settled * 3.14159);
+      float cell = 0.5 + 0.5 * sin(surfacePoint.x * 23.0 + 2.0 * sin(surfacePoint.y * 17.0));
+      float deposition = settled * 1.36 - cell * 0.32;
+      if (deposition < 0.065) discard;
+      float front = 1.0 - smoothstep(0.065, 0.31, deposition);
+      totalEmissiveRadiance += front * vec3(1.6, 2.1, 3.8)
+          + vec3(0.34, 0.085, 0.85) * sin(settled * 3.14159);
     `).replace("#include <opaque_fragment>", `
       // Local reflection of the moving foreground strip box. Parallax across
       // a flat face is stronger here than in the infinitely distant HDR rig.
@@ -271,6 +237,14 @@ export async function createIntroScene(canvas: HTMLCanvasElement, signal: AbortS
   }
 
   const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true, powerPreference: "high-performance" });
+  const gl = renderer.getContext();
+  const debugInfo = gl.getExtension("WEBGL_debug_renderer_info");
+  const softwareGpu = debugInfo && /swiftshader|llvmpipe|software/i.test(String(gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL)));
+  if (softwareGpu) {
+    original.geometry.dispose(); original.material.dispose();
+    renderer.dispose(); renderer.forceContextLoss();
+    throw new Error("Usar projeção vetorial em renderização por software.");
+  }
   renderer.autoClear = false;
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
   renderer.toneMappingExposure = 1.08;
@@ -279,7 +253,8 @@ export async function createIntroScene(canvas: HTMLCanvasElement, signal: AbortS
   const camera = new THREE.PerspectiveCamera(29, 1, 0.07, 38);
   const environment = studioLighting();
   scene.environment = environment;
-  const dust = buildChamber(scene);
+  const field = quantumField();
+  scene.add(field.field);
   const rim = new THREE.DirectionalLight(0xc2a2ff, 3.1);
   rim.position.set(-2, 2.2, -1);
   const key = new THREE.DirectionalLight(0xfff4ef, 2.35);
@@ -305,25 +280,36 @@ export async function createIntroScene(canvas: HTMLCanvasElement, signal: AbortS
   // Interior of the solid right stroke, measured from the supplied mesh.
   // Scaling about the empty hole of the Q would leave an island at its center.
   const cutAnchor = new THREE.Vector2(0.336, 0.133);
+  const target = new THREE.WebGLRenderTarget(1, 1, {
+    type: THREE.HalfFloatType, samples: Math.min(2, renderer.capabilities.maxSamples),
+  });
+  const composer = new EffectComposer(renderer, target);
+  const base = new RenderPass(scene, camera);
+  const bloom = new UnrealBloomPass(new THREE.Vector2(1, 1), 0.40, 0.36, 0.95);
+  const output = new OutputPass();
+  composer.addPass(base); composer.addPass(bloom); composer.addPass(output);
+  function resize(w: number, h: number, ratio: number) {
+    renderer.setDrawingBufferSize(w, h, ratio);
+    composer.setSize(Math.round(w * ratio), Math.round(h * ratio));
+    const glowRatio = Math.min(ratio, Math.sqrt(480000 / (w * h)));
+    bloom.setSize(Math.round(w * glowRatio), Math.round(h * glowRatio));
+  }
   let width = 0, height = 0;
-  let pixelRatio = 1, lastTime = 0, slowFrames = 0;
+  let lastTime = 0;
+  let useBloom = true;
   let disposed = false;
 
   function render(seconds: number) {
     if (disposed) return;
     const w = Math.max(canvas.clientWidth, 1), h = Math.max(canvas.clientHeight, 1);
     const frameInterval = seconds - lastTime;
+    if (frameInterval > 0.15 && lastTime > 0) useBloom = false;
     lastTime = seconds;
-    slowFrames = frameInterval > 1 / 25 && frameInterval < 1 ? slowFrames + 1 : 0;
     if (w !== width || h !== height) {
       width = w; height = h;
-      pixelRatio = Math.min(window.devicePixelRatio || 1, 1.65, Math.sqrt(1900000 / (w * h)));
-      renderer.setDrawingBufferSize(w, h, pixelRatio);
+      const pixelRatio = Math.max(1, Math.min(window.devicePixelRatio || 1, 2, Math.sqrt(8300000 / (w * h))));
+      resize(w, h, pixelRatio);
       camera.aspect = w / h; camera.updateProjectionMatrix();
-    } else if (slowFrames >= 3 && pixelRatio > 0.5) {
-      pixelRatio = Math.max(0.5, pixelRatio * 0.72);
-      renderer.setDrawingBufferSize(w, h, pixelRatio);
-      slowFrames = 0;
     }
     if (seconds >= END) {
       renderer.setClearColor(0, 0); renderer.clear(); return;
@@ -352,10 +338,11 @@ export async function createIntroScene(canvas: HTMLCanvasElement, signal: AbortS
     scene.environmentRotation.y = -0.91 + 0.88 * progress(t, 0.4, 2) + 0.77 * progress(t, 2.80, ARRIVAL);
     scene.environmentRotation.z = -0.18;
     key.position.set(-2.0 + 4.2 * progress(t, 2.50, ARRIVAL), 2.1, 3.5);
-    dust.rotation.y = 0.035 * travel;
+    field.time.value = t; field.aspect.value = camera.aspect;
     renderer.setClearColor(0x0b0a15, 1);
     renderer.clear();
-    renderer.render(scene, camera);
+    if (useBloom) composer.render();
+    else renderer.render(scene, camera);
     if (t > ARRIVAL) {
       const opening = (t - ARRIVAL) / (END - ARRIVAL);
       const viewHeight = 2 * camera.position.z * Math.tan(THREE.MathUtils.degToRad(camera.fov / 2));
@@ -383,6 +370,7 @@ export async function createIntroScene(canvas: HTMLCanvasElement, signal: AbortS
     geometries.forEach(geometry => geometry.dispose());
     materials.forEach(material => material.dispose());
     original!.material.dispose(); environment.dispose(); code.texture.dispose();
+    bloom.dispose(); output.dispose(); composer.dispose();
     renderer.dispose();
     renderer.forceContextLoss();
   }

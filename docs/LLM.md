@@ -17,14 +17,26 @@ A integração com o Gemini foi removida em 23/11/2026 (código, dependência `g
 ## Como a fila funciona (`rag/cliente_llm.py`)
 
 - **Um modelo de cada vez.** O primeiro recebe a requisição; se não terminar em
-  `LLM_TIMEOUT_SECONDS` (padrão **30 s**, qualquer que seja o tamanho do prompt), a conexão é fechada
-  (a requisição é cancelada) e só então o segundo é chamado, com mais 30 s, e assim por diante. Nunca há
+  `LLM_TIMEOUT_SECONDS` (padrão **45 s**, qualquer que seja o tamanho do prompt), a conexão é fechada
+  (a requisição é cancelada) e só então o segundo é chamado, com mais 45 s, e assim por diante. Nunca há
   dois modelos esperando juntos, nem entre tarefas: a busca na base e na internet, que corre em paralelo
   às correções, não usa LLM.
 - **Sem teto total** (`LLM_TEMPO_TOTAL_SECONDS=0`): a fila percorre os 7 modelos se preciso
-  (pior caso ≈ 7 × 30 s). O teto da análise inteira é `QONE_ANALISE_TIMEOUT_SECONDS` (900 s); passada a
-  metade dele, os circuitos restantes ficam só com a correção automática.
-- **Streaming** (`LLM_STREAMING=1`): a resposta chega em pedaços. O prazo de 30 s vale para a resposta
+  (pior caso ≈ 7 × 45 s por rodada). O teto da análise inteira é `QONE_ANALISE_TIMEOUT_SECONDS` (1800 s);
+  passada a metade dele, os circuitos restantes ficam só com a correção automática.
+- **Nunca desiste por uma falha** (desde 28/11/2026): se a fila inteira falhar, ela é percorrida de novo, com
+  pausas de 5, 10, 20 e depois 30 s entre as rodadas (`LLM_INSISTIR_SEGUNDOS`, 1800 s), e a interface mostra
+  "nenhum modelo respondeu na rodada N; tentando de novo em X s". Só não insiste quando todos os modelos falham
+  por erro permanente (chave inválida ou modelo não liberado), porque nova rodada não mudaria nada. A resposta
+  avisa quantas rodadas foram necessárias. Se o tempo total acabar, a resposta é montada localmente (base,
+  internet e Qiskit), com aviso, em vez de um erro. Vale para a resposta da análise e para as propostas da CLI.
+- **A análise também é refeita:** um erro inesperado ou o estouro do tempo na análise (`/analise`) não viram
+  erro para o usuário: a análise é refeita automaticamente (aviso ao vivo "refazendo automaticamente
+  (tentativa N)"), enquanto restarem pelo menos 2 minutos. Só quando o tempo total acaba a rota devolve uma
+  resposta explicando o que houve, nunca um erro HTTP. O worker do Qiskit repete falhas passageiras (ocupado,
+  processo que caiu, tempo esgotado uma vez), e o frontend tenta de novo sozinho se a conexão cair ou o
+  servidor responder 5xx, por até 30 minutos, mostrando o aviso no cartão ao vivo.
+- **Streaming** (`LLM_STREAMING=1`): a resposta chega em pedaços. O prazo de 45 s vale para a resposta
   inteira; se o modelo estourar no meio, o texto parcial é descartado e o próximo modelo começa do zero
   (o texto de um modelo nunca aparece misturado ao do seguinte).
 - **Progresso ao vivo:** antes de cada tentativa, a fila avisa qual modelo está sendo consultado
@@ -55,10 +67,22 @@ A integração com o Gemini foi removida em 23/11/2026 (código, dependência `g
 
 `NVIDIA_MODELS` (nomes separados por vírgula) troca a ordem ou a lista.
 
-### Fila rápida (planejamento)
+### Planejamento e reescrita de consulta
 
-Lightning → Bolt → Laguna → Super. O planejamento só precisa de um JSON curto, então começa pelos
-modelos mais rápidos. `NVIDIA_MODELS_RAPIDOS` troca a lista.
+O planejamento da busca (`/analise`) e a reescrita de consulta (`RAG_CONSULTA`, em `/query`) usam a **fila
+rápida**: Lightning → Bolt → Laguna → Super (a interface mostra "Planejando a busca: consultando … (1/4)"). Essas
+tarefas só geram um JSON curto com frases de busca, e as medições mostraram que trocar a forma de gerar essas
+frases quase não muda a qualidade da busca; um modelo rápido faz isso em cerca de 1 s. A resposta e as correções
+de código continuam na fila principal de 7 modelos. `NVIDIA_MODELS_RAPIDOS` troca a lista. (Em 28/11/2026 a fila de
+7 modelos chegou a ser usada no planejamento; voltou à fila rápida a pedido do dono, sem perda esperada.)
+
+### Respostas: nível do usuário e fontes
+
+A resposta adapta profundidade e linguagem ao nível de quem pergunta: o frontend envia o perfil local
+(`usuario`: experiência, estilo, papel) e, sem perfil (CLI, API), a LLM infere o nível pela própria pergunta.
+O texto da resposta **não** traz marcadores `[Fonte N]`/`[Web N]` nem trechos copiados: as fontes aparecem ao lado
+da resposta, na lista "Fontes consultadas" (campo `sources`). Os trechos continuam numerados no contexto enviado à
+LLM, e o que ela ainda escrever de marcador é removido do texto final.
 
 ### Medições de 23/11/2026 (stack Docker, chave gratuita)
 

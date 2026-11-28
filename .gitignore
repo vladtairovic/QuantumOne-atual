@@ -44,3 +44,10 @@ frontend/.next/
 
 # pasta "~" criada por ferramentas que não expandem o til
 /~/
+
+# Ferramentas locais de desenvolvimento e assistentes (não fazem parte do projeto)
+.claude/
+.codex/
+.vscode/
+graphify-out/
+CLAUDE.md

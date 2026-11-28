@@ -5,7 +5,7 @@ import os
 import time
 
 from contratos import Documento, Fonte, ResultadoBusca
-from rag import busca_chromadb, documentos
+from rag import busca_chromadb, documentos, reranker
 from rag.banco import obter_cliente, obter_colecao, ColecaoIncompativel
 from rag.configuracao import MODELO_LOCK, obter_modelo
 
@@ -35,6 +35,8 @@ class ServicosIntegrados:
         # busca do usuário pagaria a carga (~14 s medidos após um rebuild).
         with MODELO_LOCK:
             obter_modelo().encode(["Inicialização da busca documental."], show_progress_bar=False)
+        # Reranker (se ligado): carrega e aquece agora, pelo mesmo motivo; nunca impede a API de subir.
+        reranker.pre_carregar()
         prazo = time.monotonic() + float(os.getenv("CHROMA_STARTUP_TIMEOUT", "120"))
         while True:
             try:

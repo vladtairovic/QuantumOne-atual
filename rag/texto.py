@@ -71,3 +71,18 @@ def frases(texto: str) -> list[str]:
                 if len(frase) >= 25:
                     saida.append(frase)
     return saida
+
+
+# Marcadores de fonte que a LLM às vezes escreve no texto: [Fonte 1], [Web 2], [Fonte 1, Fonte 3], [Fonte 1][Web 2].
+_MARCADOR_FONTE = re.compile(r"[ \t]*\[(?:Fonte|Web)[ \t]*\d+(?:[ \t]*[,;][ \t]*(?:(?:Fonte|Web)[ \t]*)?\d+)*\]",
+                             re.IGNORECASE)
+
+
+def remover_marcadores_de_fonte(texto: str) -> str:
+    """Tira do texto da resposta os marcadores [Fonte N]/[Web N]: a interface já lista as fontes consultadas."""
+    if not texto:
+        return texto
+    limpo = _MARCADOR_FONTE.sub("", texto)
+    limpo = re.sub(r"[ \t]+([.,;:!?)])", r"\1", limpo)  # espaço que sobrou antes da pontuação
+    limpo = re.sub(r"\([ \t]*\)", "", limpo)             # parênteses que ficaram vazios
+    return re.sub(r"[ \t]+\n", "\n", limpo)

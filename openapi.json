@@ -2540,6 +2540,17 @@
             "title": "Pesquisa Web",
             "description": "Mantido por compatibilidade: a pesquisa na internet é sempre usada como complemento.",
             "default": true
+          },
+          "usuario": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/PerfilUsuario"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Perfil local (experiência, estilo, papel). Sem ele, o nível é inferido pela pergunta."
           }
         },
         "additionalProperties": false,
@@ -3061,6 +3072,59 @@
         ],
         "title": "Nota"
       },
+      "PerfilUsuario": {
+        "properties": {
+          "experiencia": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "iniciante",
+                  "intermediario",
+                  "avancado"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Experiencia"
+          },
+          "estilo": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "direta",
+                  "didatica",
+                  "detalhada"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Estilo"
+          },
+          "papel": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 40
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Papel",
+            "description": "Ex.: estudante, pesquisador, desenvolvedor."
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "PerfilUsuario",
+        "description": "Perfil local do usuário (personalização da primeira abertura): orienta o nível da resposta."
+      },
       "ProblemaDiagnostico": {
         "properties": {
           "codigo": {
@@ -3318,6 +3382,19 @@
               }
             ]
           },
+          "verificacao": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Verificacao",
+            "description": "Camada de verificação (RAG_VERIFICACAO=1): fidelidade e frases sem apoio nas fontes. Só informa; na análise a resposta não é descartada."
+          },
           "pesquisa_web": {
             "anyOf": [
               {
@@ -3548,6 +3625,45 @@
                 "type": "null"
               }
             ]
+          },
+          "trace": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/TracoRAG"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Diagnóstico da recuperação; ausente em respostas antigas."
+          },
+          "variantes_consulta": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Variantes Consulta",
+            "description": "Presente só com RAG_CONSULTA=1."
+          },
+          "verificacao": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Verificacao",
+            "description": "Presente só com RAG_VERIFICACAO=1: fidelidade e frases sem suporte."
           },
           "warnings": {
             "items": {
@@ -4107,6 +4223,61 @@
           "segundos"
         ],
         "title": "TentativaLLM"
+      },
+      "TracoRAG": {
+        "properties": {
+          "etapas": {
+            "additionalProperties": {
+              "type": "number"
+            },
+            "type": "object",
+            "title": "Etapas",
+            "description": "Segundos gastos em cada etapa da recuperação."
+          },
+          "consultas": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Consultas",
+            "description": "Consultas realmente usadas na busca (só a original se a camada de consulta estiver desligada)."
+          },
+          "candidatos": {
+            "type": "integer",
+            "title": "Candidatos",
+            "description": "Quantidade de seções recuperadas."
+          },
+          "camadas": {
+            "additionalProperties": {
+              "type": "boolean"
+            },
+            "type": "object",
+            "title": "Camadas",
+            "description": "Camadas opcionais do RAG (RAG_*) ligadas nesta resposta."
+          },
+          "modelo_embeddings": {
+            "type": "string",
+            "title": "Modelo Embeddings"
+          },
+          "fallbacks": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Fallbacks",
+            "description": "Camadas ligadas que caíram no comportamento anterior, com o motivo."
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "etapas",
+          "consultas",
+          "candidatos",
+          "camadas",
+          "modelo_embeddings"
+        ],
+        "title": "TracoRAG"
       }
     }
   }

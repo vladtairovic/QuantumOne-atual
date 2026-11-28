@@ -1,55 +1,2501 @@
 [
-  {"id": "t01", "tema": "transpilacao", "pergunta": "O que é transpilação no Qiskit?", "relevantes": ["ibm_intro_transpilacao", "ibm_etapas_transpilacao", "qone_otimizacao_circuitos"]},
-  {"id": "t02", "tema": "transpilacao", "pergunta": "Quais são os estágios do transpilador?", "relevantes": ["ibm_etapas_transpilacao", "qone_otimizacao_circuitos"]},
-  {"id": "t03", "tema": "transpilacao", "pergunta": "Qual a diferença entre os níveis de otimização 0, 1, 2 e 3 do transpile?", "relevantes": ["ibm_niveis_otimizacao", "ibm_transpilation_defaults"]},
-  {"id": "t04", "tema": "transpilacao", "pergunta": "Qual é o nível de otimização padrão do transpile no Qiskit 2?", "relevantes": ["ibm_transpilation_defaults", "ibm_niveis_otimizacao", "qone_otimizacao_circuitos"]},
-  {"id": "t05", "tema": "roteamento", "pergunta": "Como o roteamento insere portas SWAP para respeitar a conectividade do hardware?", "relevantes": ["ibm_etapas_transpilacao", "qone_otimizacao_circuitos", "qone_portas_identidades"]},
-  {"id": "t06", "tema": "transpilacao", "pergunta": "Como usar generate_preset_pass_manager?", "relevantes": ["ibm_transpilation_defaults", "ibm_intro_transpilacao", "ibm_etapas_transpilacao", "ibm_niveis_otimizacao", "qone_otimizacao_circuitos"]},
-  {"id": "b01", "tema": "ordem_de_bits", "pergunta": "Por que o Qiskit mostra os bits invertidos nas contagens?", "relevantes": ["ibm_bit_ordering", "qone_ordem_bits_medicao", "qone_erros_depuracao"]},
-  {"id": "b02", "tema": "ordem_de_bits", "pergunta": "O qubit 0 corresponde ao bit mais à direita no resultado?", "relevantes": ["ibm_bit_ordering", "qone_ordem_bits_medicao"]},
-  {"id": "m01", "tema": "medicao", "pergunta": "Como medir todos os qubits de um circuito?", "relevantes": ["ibm_measure_qubits", "ibm_api_qiskit_circuit_QuantumCircuit", "qone_ordem_bits_medicao", "qone_erros_depuracao"]},
-  {"id": "m02", "tema": "controle_classico", "pergunta": "Como fazer uma medição no meio do circuito e usar o resultado para controlar outra porta?", "relevantes": ["ibm_classical_feedforward_and_control_flow", "qone_ordem_bits_medicao", "qone_migracao_qiskit2"]},
-  {"id": "m03", "tema": "controle_classico", "pergunta": "Como usar if_test com um registrador clássico?", "relevantes": ["ibm_classical_feedforward_and_control_flow", "qone_migracao_qiskit2", "ibm_api_qiskit_circuit_QuantumCircuit", "ibm_api_circuit"]},
-  {"id": "m04", "tema": "migracao", "pergunta": "c_if não funciona mais no Qiskit 2, o que devo usar?", "relevantes": ["qone_migracao_qiskit2", "ibm_classical_feedforward_and_control_flow"]},
-  {"id": "g01", "tema": "migracao", "pergunta": "ImportError: cannot import name 'execute' from 'qiskit'", "relevantes": ["qone_migracao_qiskit2", "qone_erros_depuracao"]},
-  {"id": "g02", "tema": "migracao", "pergunta": "AttributeError: 'QuantumCircuit' object has no attribute 'cnot'", "relevantes": ["qone_migracao_qiskit2", "qone_erros_depuracao"]},
-  {"id": "g03", "tema": "migracao", "pergunta": "Como substituir Aer.get_backend no Qiskit 2?", "relevantes": ["qone_migracao_qiskit2", "qone_erros_depuracao"]},
-  {"id": "g04", "tema": "migracao", "pergunta": "O método qc.u3 foi removido, qual é o substituto?", "relevantes": ["qone_migracao_qiskit2", "qone_portas_identidades"]},
-  {"id": "g05", "tema": "migracao", "pergunta": "Como trocar bind_parameters por algo que funcione?", "relevantes": ["qone_migracao_qiskit2", "ibm_api_qiskit_circuit_Parameter", "ibm_api_qiskit_circuit_QuantumCircuit"]},
-  {"id": "p01", "tema": "circuitos_parametrizados", "pergunta": "Como criar um circuito parametrizado com Parameter?", "relevantes": ["ibm_api_qiskit_circuit_Parameter", "ibm_construct_circuits", "ibm_api_circuit"]},
-  {"id": "p02", "tema": "circuitos_parametrizados", "pergunta": "Como atribuir valores numéricos aos parâmetros de um circuito?", "relevantes": ["ibm_api_qiskit_circuit_Parameter", "ibm_api_qiskit_circuit_QuantumCircuit", "qone_migracao_qiskit2", "qone_erros_depuracao"]},
-  {"id": "q01", "tema": "openqasm", "pergunta": "Como carregar um programa OpenQASM 2 no Qiskit?", "relevantes": ["ibm_api_qasm2", "qone_openqasm_2_3"]},
-  {"id": "q02", "tema": "openqasm", "pergunta": "Como exportar um circuito para OpenQASM 3?", "relevantes": ["ibm_api_qasm3", "qone_openqasm_2_3"]},
-  {"id": "q03", "tema": "openqasm", "pergunta": "Quais são as diferenças entre OpenQASM 2 e OpenQASM 3?", "relevantes": ["qone_openqasm_2_3", "ibm_api_qasm3", "ibm_api_qasm2"]},
-  {"id": "q04", "tema": "openqasm", "pergunta": "Meu QASM dá erro de índice fora do registrador, como corrigir?", "relevantes": ["qone_openqasm_2_3", "qone_erros_depuracao"]},
-  {"id": "s01", "tema": "primitivas", "pergunta": "Como usar o StatevectorSampler para obter contagens?", "relevantes": ["ibm_simulate_with_qiskit_sdk_primitives", "ibm_api_primitives", "qone_migracao_qiskit2"]},
-  {"id": "s02", "tema": "primitivas", "pergunta": "Como calcular o valor esperado de um observável com o Estimator?", "relevantes": ["ibm_simulate_with_qiskit_sdk_primitives", "ibm_api_primitives", "qone_algoritmos", "qone_fundamentos_matematicos"]},
-  {"id": "s03", "tema": "primitivas", "pergunta": "O que é um PUB nas primitivas V2?", "relevantes": ["ibm_api_primitives", "ibm_simulate_with_qiskit_sdk_primitives", "qone_migracao_qiskit2"]},
-  {"id": "s04", "tema": "simulacao", "pergunta": "Quanta memória é necessária para simular 30 qubits com statevector?", "relevantes": ["qone_simulacao_limites"]},
-  {"id": "s05", "tema": "simulacao", "pergunta": "Quando usar simulação estabilizadora de circuitos de Clifford?", "relevantes": ["qone_simulacao_limites", "qone_equivalencia"]},
-  {"id": "s06", "tema": "simulacao", "pergunta": "O que é o método matrix product state de simulação?", "relevantes": ["qone_simulacao_limites"]},
-  {"id": "i01", "tema": "quantum_info", "pergunta": "Como obter o vetor de estado de um circuito?", "relevantes": ["ibm_api_qiskit_quantum_info_Statevector", "ibm_api_quantum_info", "qone_migracao_qiskit2", "ibm_simulate_with_qiskit_sdk_primitives"]},
-  {"id": "i02", "tema": "equivalencia", "pergunta": "Como verificar se dois circuitos são equivalentes?", "relevantes": ["qone_equivalencia", "ibm_api_qiskit_quantum_info_Operator", "qone_otimizacao_circuitos"]},
-  {"id": "i03", "tema": "equivalencia", "pergunta": "Qual a diferença entre Operator.equiv e o operador de igualdade?", "relevantes": ["qone_equivalencia", "ibm_api_qiskit_quantum_info_Operator"]},
-  {"id": "i04", "tema": "quantum_info", "pergunta": "Como obter a matriz unitária de um circuito?", "relevantes": ["ibm_api_qiskit_quantum_info_Operator", "ibm_api_quantum_info", "qone_fundamentos_matematicos"]},
-  {"id": "c01", "tema": "circuitos", "pergunta": "Quais portas estão disponíveis na biblioteca de circuitos?", "relevantes": ["ibm_api_circuit_library", "ibm_circuit_library"]},
-  {"id": "c02", "tema": "visualizacao", "pergunta": "Como desenhar um circuito quântico?", "relevantes": ["ibm_visualize_circuits", "ibm_api_qiskit_circuit_QuantumCircuit"]},
-  {"id": "c03", "tema": "circuitos", "pergunta": "Como construir um circuito com registradores quânticos e clássicos?", "relevantes": ["ibm_construct_circuits", "ibm_api_circuit", "ibm_api_qiskit_circuit_QuantumCircuit"]},
-  {"id": "c04", "tema": "circuitos", "pergunta": "Como compor dois circuitos em um só?", "relevantes": ["ibm_api_qiskit_circuit_QuantumCircuit", "ibm_construct_circuits", "ibm_api_circuit"]},
-  {"id": "a01", "tema": "algoritmos", "pergunta": "Como preparar um estado GHZ?", "relevantes": ["qone_algoritmos", "qone_fundamentos_matematicos"]},
-  {"id": "a02", "tema": "algoritmos", "pergunta": "Como funciona o algoritmo de Grover?", "relevantes": ["qone_algoritmos"]},
-  {"id": "a03", "tema": "algoritmos", "pergunta": "Como implementar a transformada de Fourier quântica no Qiskit 2?", "relevantes": ["qone_algoritmos", "ibm_api_circuit_library", "ibm_circuit_library"]},
-  {"id": "a04", "tema": "algoritmos", "pergunta": "O que é o VQE e como ele usa um otimizador clássico?", "relevantes": ["qone_algoritmos"]},
-  {"id": "f01", "tema": "fundamentos", "pergunta": "O que é emaranhamento quântico?", "relevantes": ["qone_fundamentos_matematicos", "qone_algoritmos"]},
-  {"id": "f02", "tema": "fundamentos", "pergunta": "Por que a fase global não altera as medições?", "relevantes": ["qone_fundamentos_matematicos", "qone_equivalencia"]},
-  {"id": "f03", "tema": "otimizacao", "pergunta": "Quais identidades de portas permitem cancelar operações?", "relevantes": ["qone_portas_identidades", "qone_otimizacao_circuitos"]},
-  {"id": "f04", "tema": "otimizacao", "pergunta": "Quantas portas CX tem uma Toffoli decomposta?", "relevantes": ["qone_portas_identidades"]},
-  {"id": "e01", "tema": "correcao_de_erros", "pergunta": "Qual a diferença entre correção e mitigação de erros?", "relevantes": ["qone_correcao_mitigacao"]},
-  {"id": "e02", "tema": "correcao_de_erros", "pergunta": "Como funciona o código de repetição de bit-flip?", "relevantes": ["qone_correcao_mitigacao"]},
-  {"id": "u01", "tema": "fora_do_dominio", "pergunta": "Qual a melhor receita de lasanha de berinjela?"},
-  {"id": "u02", "tema": "fora_do_dominio", "pergunta": "Quem ganhou a copa do mundo de futebol de 2002?"},
-  {"id": "u03", "tema": "fora_do_dominio", "pergunta": "Como configurar a senha do roteador wifi?"},
-  {"id": "u04", "tema": "fora_do_dominio", "pergunta": "Qual o preço atual da ação da Petrobras?"},
-  {"id": "u05", "tema": "fora_do_dominio", "pergunta": "Como trocar o óleo do motor do carro?"},
-  {"id": "u06", "tema": "fora_do_dominio", "pergunta": "Me recomende um filme de terror dos anos 80"}
+  {
+    "id": "t01",
+    "tema": "transpilacao",
+    "idioma": "pt",
+    "split": "dev",
+    "pergunta": "O que é transpilação no Qiskit?",
+    "relevantes": [
+      "ibm_intro_transpilacao",
+      "ibm_etapas_transpilacao",
+      "qone_otimizacao_circuitos"
+    ]
+  },
+  {
+    "id": "t02",
+    "tema": "transpilacao",
+    "idioma": "pt",
+    "split": "dev",
+    "pergunta": "Quais são os estágios do transpilador?",
+    "relevantes": [
+      "ibm_etapas_transpilacao",
+      "qone_otimizacao_circuitos"
+    ]
+  },
+  {
+    "id": "t03",
+    "tema": "transpilacao",
+    "idioma": "pt",
+    "split": "dev",
+    "pergunta": "Qual a diferença entre os níveis de otimização 0, 1, 2 e 3 do transpile?",
+    "relevantes": [
+      "ibm_niveis_otimizacao",
+      "ibm_transpilation_defaults"
+    ]
+  },
+  {
+    "id": "t04",
+    "tema": "transpilacao",
+    "idioma": "pt",
+    "split": "reservado",
+    "pergunta": "Qual é o nível de otimização padrão do transpile no Qiskit 2?",
+    "relevantes": [
+      "ibm_transpilation_defaults",
+      "ibm_niveis_otimizacao",
+      "qone_otimizacao_circuitos"
+    ]
+  },
+  {
+    "id": "t05",
+    "tema": "roteamento",
+    "idioma": "pt",
+    "split": "dev",
+    "pergunta": "Como o roteamento insere portas SWAP para respeitar a conectividade do hardware?",
+    "relevantes": [
+      "ibm_etapas_transpilacao",
+      "qone_otimizacao_circuitos",
+      "qone_portas_identidades"
+    ]
+  },
+  {
+    "id": "t06",
+    "tema": "transpilacao",
+    "idioma": "pt",
+    "split": "dev",
+    "pergunta": "Como usar generate_preset_pass_manager?",
+    "relevantes": [
+      "ibm_transpilation_defaults",
+      "ibm_intro_transpilacao",
+      "ibm_etapas_transpilacao",
+      "ibm_niveis_otimizacao",
+      "qone_otimizacao_circuitos"
+    ]
+  },
+  {
+    "id": "b01",
+    "tema": "ordem_de_bits",
+    "idioma": "pt",
+    "split": "reservado",
+    "pergunta": "Por que o Qiskit mostra os bits invertidos nas contagens?",
+    "relevantes": [
+      "ibm_bit_ordering",
+      "qone_ordem_bits_medicao",
+      "qone_erros_depuracao"
+    ]
+  },
+  {
+    "id": "b02",
+    "tema": "ordem_de_bits",
+    "idioma": "pt",
+    "split": "reservado",
+    "pergunta": "O qubit 0 corresponde ao bit mais à direita no resultado?",
+    "relevantes": [
+      "ibm_bit_ordering",
+      "qone_ordem_bits_medicao"
+    ]
+  },
+  {
+    "id": "m01",
+    "tema": "medicao",
+    "idioma": "pt",
+    "split": "reservado",
+    "pergunta": "Como medir todos os qubits de um circuito?",
+    "relevantes": [
+      "ibm_measure_qubits",
+      "ibm_api_qiskit_circuit_QuantumCircuit",
+      "qone_ordem_bits_medicao",
+      "qone_erros_depuracao"
+    ]
+  },
+  {
+    "id": "m02",
+    "tema": "controle_classico",
+    "idioma": "pt",
+    "split": "reservado",
+    "pergunta": "Como fazer uma medição no meio do circuito e usar o resultado para controlar outra porta?",
+    "relevantes": [
+      "ibm_classical_feedforward_and_control_flow",
+      "qone_ordem_bits_medicao",
+      "qone_migracao_qiskit2"
+    ]
+  },
+  {
+    "id": "m03",
+    "tema": "controle_classico",
+    "idioma": "pt",
+    "split": "dev",
+    "pergunta": "Como usar if_test com um registrador clássico?",
+    "relevantes": [
+      "ibm_classical_feedforward_and_control_flow",
+      "qone_migracao_qiskit2",
+      "ibm_api_qiskit_circuit_QuantumCircuit",
+      "ibm_api_circuit"
+    ]
+  },
+  {
+    "id": "m04",
+    "tema": "migracao",
+    "idioma": "pt",
+    "split": "dev",
+    "pergunta": "c_if não funciona mais no Qiskit 2, o que devo usar?",
+    "relevantes": [
+      "qone_migracao_qiskit2",
+      "ibm_classical_feedforward_and_control_flow"
+    ]
+  },
+  {
+    "id": "g01",
+    "tema": "migracao",
+    "idioma": "pt",
+    "split": "dev",
+    "pergunta": "ImportError: cannot import name 'execute' from 'qiskit'",
+    "relevantes": [
+      "qone_migracao_qiskit2",
+      "qone_erros_depuracao"
+    ]
+  },
+  {
+    "id": "g02",
+    "tema": "migracao",
+    "idioma": "pt",
+    "split": "dev",
+    "pergunta": "AttributeError: 'QuantumCircuit' object has no attribute 'cnot'",
+    "relevantes": [
+      "qone_migracao_qiskit2",
+      "qone_erros_depuracao"
+    ]
+  },
+  {
+    "id": "g03",
+    "tema": "migracao",
+    "idioma": "pt",
+    "split": "dev",
+    "pergunta": "Como substituir Aer.get_backend no Qiskit 2?",
+    "relevantes": [
+      "qone_migracao_qiskit2",
+      "qone_erros_depuracao"
+    ]
+  },
+  {
+    "id": "g04",
+    "tema": "migracao",
+    "idioma": "pt",
+    "split": "reservado",
+    "pergunta": "O método qc.u3 foi removido, qual é o substituto?",
+    "relevantes": [
+      "qone_migracao_qiskit2",
+      "qone_portas_identidades"
+    ]
+  },
+  {
+    "id": "g05",
+    "tema": "migracao",
+    "idioma": "pt",
+    "split": "reservado",
+    "pergunta": "Como trocar bind_parameters por algo que funcione?",
+    "relevantes": [
+      "qone_migracao_qiskit2",
+      "ibm_api_qiskit_circuit_Parameter",
+      "ibm_api_qiskit_circuit_QuantumCircuit"
+    ]
+  },
+  {
+    "id": "p01",
+    "tema": "circuitos_parametrizados",
+    "idioma": "pt",
+    "split": "reservado",
+    "pergunta": "Como criar um circuito parametrizado com Parameter?",
+    "relevantes": [
+      "ibm_api_qiskit_circuit_Parameter",
+      "ibm_construct_circuits",
+      "ibm_api_circuit"
+    ]
+  },
+  {
+    "id": "p02",
+    "tema": "circuitos_parametrizados",
+    "idioma": "pt",
+    "split": "dev",
+    "pergunta": "Como atribuir valores numéricos aos parâmetros de um circuito?",
+    "relevantes": [
+      "ibm_api_qiskit_circuit_Parameter",
+      "ibm_api_qiskit_circuit_QuantumCircuit",
+      "qone_migracao_qiskit2",
+      "qone_erros_depuracao"
+    ]
+  },
+  {
+    "id": "q01",
+    "tema": "openqasm",
+    "idioma": "pt",
+    "split": "dev",
+    "pergunta": "Como carregar um programa OpenQASM 2 no Qiskit?",
+    "relevantes": [
+      "ibm_api_qasm2",
+      "qone_openqasm_2_3"
+    ]
+  },
+  {
+    "id": "q02",
+    "tema": "openqasm",
+    "idioma": "pt",
+    "split": "dev",
+    "pergunta": "Como exportar um circuito para OpenQASM 3?",
+    "relevantes": [
+      "ibm_api_qasm3",
+      "qone_openqasm_2_3"
+    ]
+  },
+  {
+    "id": "q03",
+    "tema": "openqasm",
+    "idioma": "pt",
+    "split": "dev",
+    "pergunta": "Quais são as diferenças entre OpenQASM 2 e OpenQASM 3?",
+    "relevantes": [
+      "qone_openqasm_2_3",
+      "ibm_api_qasm3",
+      "ibm_api_qasm2"
+    ]
+  },
+  {
+    "id": "q04",
+    "tema": "openqasm",
+    "idioma": "pt",
+    "split": "reservado",
+    "pergunta": "Meu QASM dá erro de índice fora do registrador, como corrigir?",
+    "relevantes": [
+      "qone_openqasm_2_3",
+      "qone_erros_depuracao"
+    ]
+  },
+  {
+    "id": "s01",
+    "tema": "primitivas",
+    "idioma": "pt",
+    "split": "reservado",
+    "pergunta": "Como usar o StatevectorSampler para obter contagens?",
+    "relevantes": [
+      "ibm_simulate_with_qiskit_sdk_primitives",
+      "ibm_api_primitives",
+      "qone_migracao_qiskit2"
+    ]
+  },
+  {
+    "id": "s02",
+    "tema": "primitivas",
+    "idioma": "pt",
+    "split": "reservado",
+    "pergunta": "Como calcular o valor esperado de um observável com o Estimator?",
+    "relevantes": [
+      "ibm_simulate_with_qiskit_sdk_primitives",
+      "ibm_api_primitives",
+      "qone_algoritmos",
+      "qone_fundamentos_matematicos"
+    ]
+  },
+  {
+    "id": "s03",
+    "tema": "primitivas",
+    "idioma": "pt",
+    "split": "reservado",
+    "pergunta": "O que é um PUB nas primitivas V2?",
+    "relevantes": [
+      "ibm_api_primitives",
+      "ibm_simulate_with_qiskit_sdk_primitives",
+      "qone_migracao_qiskit2"
+    ]
+  },
+  {
+    "id": "s04",
+    "tema": "simulacao",
+    "idioma": "pt",
+    "split": "reservado",
+    "pergunta": "Quanta memória é necessária para simular 30 qubits com statevector?",
+    "relevantes": [
+      "qone_simulacao_limites"
+    ]
+  },
+  {
+    "id": "s05",
+    "tema": "simulacao",
+    "idioma": "pt",
+    "split": "dev",
+    "pergunta": "Quando usar simulação estabilizadora de circuitos de Clifford?",
+    "relevantes": [
+      "qone_simulacao_limites",
+      "qone_equivalencia"
+    ]
+  },
+  {
+    "id": "s06",
+    "tema": "simulacao",
+    "idioma": "pt",
+    "split": "dev",
+    "pergunta": "O que é o método matrix product state de simulação?",
+    "relevantes": [
+      "qone_simulacao_limites"
+    ]
+  },
+  {
+    "id": "i01",
+    "tema": "quantum_info",
+    "idioma": "pt",
+    "split": "reservado",
+    "pergunta": "Como obter o vetor de estado de um circuito?",
+    "relevantes": [
+      "ibm_api_qiskit_quantum_info_Statevector",
+      "ibm_api_quantum_info",
+      "qone_migracao_qiskit2",
+      "ibm_simulate_with_qiskit_sdk_primitives"
+    ]
+  },
+  {
+    "id": "i02",
+    "tema": "equivalencia",
+    "idioma": "pt",
+    "split": "dev",
+    "pergunta": "Como verificar se dois circuitos são equivalentes?",
+    "relevantes": [
+      "qone_equivalencia",
+      "ibm_api_qiskit_quantum_info_Operator",
+      "qone_otimizacao_circuitos"
+    ]
+  },
+  {
+    "id": "i03",
+    "tema": "equivalencia",
+    "idioma": "pt",
+    "split": "dev",
+    "pergunta": "Qual a diferença entre Operator.equiv e o operador de igualdade?",
+    "relevantes": [
+      "qone_equivalencia",
+      "ibm_api_qiskit_quantum_info_Operator"
+    ]
+  },
+  {
+    "id": "i04",
+    "tema": "quantum_info",
+    "idioma": "pt",
+    "split": "reservado",
+    "pergunta": "Como obter a matriz unitária de um circuito?",
+    "relevantes": [
+      "ibm_api_qiskit_quantum_info_Operator",
+      "ibm_api_quantum_info",
+      "qone_fundamentos_matematicos"
+    ]
+  },
+  {
+    "id": "c01",
+    "tema": "circuitos",
+    "idioma": "pt",
+    "split": "dev",
+    "pergunta": "Quais portas estão disponíveis na biblioteca de circuitos?",
+    "relevantes": [
+      "ibm_api_circuit_library",
+      "ibm_circuit_library"
+    ]
+  },
+  {
+    "id": "c02",
+    "tema": "visualizacao",
+    "idioma": "pt",
+    "split": "dev",
+    "pergunta": "Como desenhar um circuito quântico?",
+    "relevantes": [
+      "ibm_visualize_circuits",
+      "ibm_api_qiskit_circuit_QuantumCircuit"
+    ]
+  },
+  {
+    "id": "c03",
+    "tema": "circuitos",
+    "idioma": "pt",
+    "split": "dev",
+    "pergunta": "Como construir um circuito com registradores quânticos e clássicos?",
+    "relevantes": [
+      "ibm_construct_circuits",
+      "ibm_api_circuit",
+      "ibm_api_qiskit_circuit_QuantumCircuit"
+    ]
+  },
+  {
+    "id": "c04",
+    "tema": "circuitos",
+    "idioma": "pt",
+    "split": "reservado",
+    "pergunta": "Como compor dois circuitos em um só?",
+    "relevantes": [
+      "ibm_api_qiskit_circuit_QuantumCircuit",
+      "ibm_construct_circuits",
+      "ibm_api_circuit"
+    ]
+  },
+  {
+    "id": "a01",
+    "tema": "algoritmos",
+    "idioma": "pt",
+    "split": "reservado",
+    "pergunta": "Como preparar um estado GHZ?",
+    "relevantes": [
+      "qone_algoritmos",
+      "qone_fundamentos_matematicos"
+    ]
+  },
+  {
+    "id": "a02",
+    "tema": "algoritmos",
+    "idioma": "pt",
+    "split": "dev",
+    "pergunta": "Como funciona o algoritmo de Grover?",
+    "relevantes": [
+      "qone_algoritmos"
+    ]
+  },
+  {
+    "id": "a03",
+    "tema": "algoritmos",
+    "idioma": "pt",
+    "split": "dev",
+    "pergunta": "Como implementar a transformada de Fourier quântica no Qiskit 2?",
+    "relevantes": [
+      "qone_algoritmos",
+      "ibm_api_circuit_library",
+      "ibm_circuit_library"
+    ]
+  },
+  {
+    "id": "a04",
+    "tema": "algoritmos",
+    "idioma": "pt",
+    "split": "dev",
+    "pergunta": "O que é o VQE e como ele usa um otimizador clássico?",
+    "relevantes": [
+      "qone_algoritmos"
+    ]
+  },
+  {
+    "id": "f01",
+    "tema": "fundamentos",
+    "idioma": "pt",
+    "split": "dev",
+    "pergunta": "O que é emaranhamento quântico?",
+    "relevantes": [
+      "qone_fundamentos_matematicos",
+      "qone_algoritmos"
+    ]
+  },
+  {
+    "id": "f02",
+    "tema": "fundamentos",
+    "idioma": "pt",
+    "split": "dev",
+    "pergunta": "Por que a fase global não altera as medições?",
+    "relevantes": [
+      "qone_fundamentos_matematicos",
+      "qone_equivalencia"
+    ]
+  },
+  {
+    "id": "f03",
+    "tema": "otimizacao",
+    "idioma": "pt",
+    "split": "dev",
+    "pergunta": "Quais identidades de portas permitem cancelar operações?",
+    "relevantes": [
+      "qone_portas_identidades",
+      "qone_otimizacao_circuitos"
+    ]
+  },
+  {
+    "id": "f04",
+    "tema": "otimizacao",
+    "idioma": "pt",
+    "split": "reservado",
+    "pergunta": "Quantas portas CX tem uma Toffoli decomposta?",
+    "relevantes": [
+      "qone_portas_identidades"
+    ]
+  },
+  {
+    "id": "e01",
+    "tema": "correcao_de_erros",
+    "idioma": "pt",
+    "split": "reservado",
+    "pergunta": "Qual a diferença entre correção e mitigação de erros?",
+    "relevantes": [
+      "qone_correcao_mitigacao"
+    ]
+  },
+  {
+    "id": "e02",
+    "tema": "correcao_de_erros",
+    "idioma": "pt",
+    "split": "dev",
+    "pergunta": "Como funciona o código de repetição de bit-flip?",
+    "relevantes": [
+      "qone_correcao_mitigacao"
+    ]
+  },
+  {
+    "id": "u01",
+    "tema": "fora_do_dominio",
+    "idioma": "pt",
+    "split": "reservado",
+    "pergunta": "Qual a melhor receita de lasanha de berinjela?"
+  },
+  {
+    "id": "u02",
+    "tema": "fora_do_dominio",
+    "idioma": "pt",
+    "split": "reservado",
+    "pergunta": "Quem ganhou a copa do mundo de futebol de 2002?"
+  },
+  {
+    "id": "u03",
+    "tema": "fora_do_dominio",
+    "idioma": "pt",
+    "split": "dev",
+    "pergunta": "Como configurar a senha do roteador wifi?"
+  },
+  {
+    "id": "u04",
+    "tema": "fora_do_dominio",
+    "idioma": "pt",
+    "split": "dev",
+    "pergunta": "Qual o preço atual da ação da Petrobras?"
+  },
+  {
+    "id": "u05",
+    "tema": "fora_do_dominio",
+    "idioma": "pt",
+    "split": "dev",
+    "pergunta": "Como trocar o óleo do motor do carro?"
+  },
+  {
+    "id": "u06",
+    "tema": "fora_do_dominio",
+    "idioma": "pt",
+    "split": "dev",
+    "pergunta": "Me recomende um filme de terror dos anos 80"
+  },
+  {
+    "id": "n001",
+    "tema": "transpilacao",
+    "idioma": "en",
+    "split": "dev",
+    "pergunta": "What is transpilation and why is it needed for quantum hardware?",
+    "relevantes": [
+      "ibm_intro_transpilacao"
+    ]
+  },
+  {
+    "id": "n002",
+    "tema": "transpilacao",
+    "idioma": "en",
+    "split": "dev",
+    "pergunta": "What are the stages of the Qiskit transpiler pipeline?",
+    "relevantes": [
+      "ibm_etapas_transpilacao",
+      "ibm_intro_transpilacao",
+      "qone_otimizacao_circuitos"
+    ]
+  },
+  {
+    "id": "n003",
+    "tema": "transpilacao",
+    "idioma": "pt",
+    "split": "dev",
+    "pergunta": "O que faz o estágio de layout do transpilador?",
+    "relevantes": [
+      "ibm_etapas_transpilacao"
+    ]
+  },
+  {
+    "id": "n004",
+    "tema": "transpilacao",
+    "idioma": "pt",
+    "split": "dev",
+    "pergunta": "O que o estágio de tradução faz com as portas do circuito?",
+    "relevantes": [
+      "ibm_etapas_transpilacao"
+    ]
+  },
+  {
+    "id": "n005",
+    "tema": "transpilacao",
+    "idioma": "en",
+    "split": "dev",
+    "pergunta": "Which optimization level does transpile use by default?",
+    "relevantes": [
+      "ibm_niveis_otimizacao",
+      "ibm_transpilation_defaults",
+      "qone_otimizacao_circuitos"
+    ]
+  },
+  {
+    "id": "n006",
+    "tema": "transpilacao",
+    "idioma": "pt",
+    "split": "reservado",
+    "pergunta": "scheduling_method",
+    "relevantes": [
+      "ibm_etapas_transpilacao",
+      "ibm_transpilation_defaults"
+    ]
+  },
+  {
+    "id": "n007",
+    "tema": "transpilacao",
+    "idioma": "pt",
+    "split": "dev",
+    "pergunta": "initial_layout",
+    "relevantes": [
+      "ibm_transpilation_defaults"
+    ]
+  },
+  {
+    "id": "n008",
+    "tema": "transpilacao",
+    "idioma": "pt",
+    "split": "reservado",
+    "pergunta": "seed_transpiler",
+    "relevantes": [
+      "qone_otimizacao_circuitos",
+      "ibm_transpilation_defaults"
+    ]
+  },
+  {
+    "id": "n009",
+    "tema": "transpilacao",
+    "idioma": "pt",
+    "split": "dev",
+    "tipo": "comparativa",
+    "pergunta": "Qual a diferença entre transpile e generate_preset_pass_manager?",
+    "relevantes": [
+      "ibm_intro_transpilacao",
+      "ibm_transpilation_defaults"
+    ]
+  },
+  {
+    "id": "n010",
+    "tema": "transpilacao",
+    "idioma": "en",
+    "split": "dev",
+    "pergunta": "How do I measure hardware efficiency after transpiling a circuit?",
+    "relevantes": [
+      "ibm_niveis_otimizacao"
+    ]
+  },
+  {
+    "id": "n011",
+    "tema": "transpilacao",
+    "idioma": "pt",
+    "split": "reservado",
+    "pergunta": "Por que transpilar de novo com outra semente muda o número de portas?",
+    "relevantes": [
+      "qone_otimizacao_circuitos"
+    ]
+  },
+  {
+    "id": "n012",
+    "tema": "transpilacao",
+    "idioma": "pt",
+    "split": "reservado",
+    "pergunta": "Transpilação",
+    "relevantes": [
+      "ibm_intro_transpilacao",
+      "ibm_etapas_transpilacao",
+      "qone_otimizacao_circuitos"
+    ]
+  },
+  {
+    "id": "n013",
+    "tema": "transpilacao",
+    "idioma": "en",
+    "split": "reservado",
+    "pergunta": "What is the instruction set architecture constraint in transpilation?",
+    "relevantes": [
+      "ibm_intro_transpilacao"
+    ]
+  },
+  {
+    "id": "n014",
+    "tema": "transpilacao",
+    "idioma": "pt",
+    "split": "dev",
+    "pergunta": "Reduzir a profundidade do circuito aumenta o número de portas?",
+    "relevantes": [
+      "qone_otimizacao_circuitos"
+    ]
+  },
+  {
+    "id": "n015",
+    "tema": "transpilacao",
+    "idioma": "pt",
+    "split": "reservado",
+    "pergunta": "Quais parâmetros descrevem o QPU alvo no generate_preset_pass_manager, como coupling_map e basis_gates?",
+    "relevantes": [
+      "ibm_transpilation_defaults"
+    ]
+  },
+  {
+    "id": "n016",
+    "tema": "transpilacao",
+    "idioma": "en",
+    "split": "dev",
+    "tipo": "comparativa",
+    "pergunta": "Compare optimization levels 1 and 3 in terms of two-qubit gate count",
+    "relevantes": [
+      "ibm_niveis_otimizacao",
+      "ibm_transpilation_defaults"
+    ]
+  },
+  {
+    "id": "n017",
+    "tema": "roteamento",
+    "idioma": "en",
+    "split": "dev",
+    "pergunta": "How many CX gates does a SWAP cost?",
+    "relevantes": [
+      "qone_portas_identidades",
+      "qone_otimizacao_circuitos"
+    ]
+  },
+  {
+    "id": "n018",
+    "tema": "roteamento",
+    "idioma": "en",
+    "split": "reservado",
+    "pergunta": "What are SabreLayout and VF2Layout used for?",
+    "relevantes": [
+      "qone_otimizacao_circuitos",
+      "ibm_etapas_transpilacao"
+    ]
+  },
+  {
+    "id": "n019",
+    "tema": "roteamento",
+    "idioma": "pt",
+    "split": "dev",
+    "pergunta": "Que topologias de hardware são comuns, como heavy-hex?",
+    "relevantes": [
+      "qone_otimizacao_circuitos"
+    ]
+  },
+  {
+    "id": "n020",
+    "tema": "roteamento",
+    "idioma": "pt",
+    "split": "reservado",
+    "pergunta": "Para que serve o layout inicial na escolha dos qubits físicos?",
+    "relevantes": [
+      "ibm_etapas_transpilacao",
+      "qone_otimizacao_circuitos"
+    ]
+  },
+  {
+    "id": "n021",
+    "tema": "otimizacao",
+    "idioma": "pt",
+    "split": "reservado",
+    "pergunta": "Por que portas Z, S ou T imediatamente antes da medição podem ser removidas?",
+    "relevantes": [
+      "qone_otimizacao_circuitos"
+    ]
+  },
+  {
+    "id": "n022",
+    "tema": "otimizacao",
+    "idioma": "en",
+    "split": "dev",
+    "pergunta": "How many CX gates are needed for an arbitrary two-qubit unitary?",
+    "relevantes": [
+      "qone_portas_identidades",
+      "qone_otimizacao_circuitos"
+    ]
+  },
+  {
+    "id": "n023",
+    "tema": "otimizacao",
+    "idioma": "pt",
+    "split": "dev",
+    "pergunta": "RemoveDiagonalGatesBeforeMeasure",
+    "relevantes": [
+      "qone_otimizacao_circuitos"
+    ]
+  },
+  {
+    "id": "n024",
+    "tema": "otimizacao",
+    "idioma": "pt",
+    "split": "reservado",
+    "pergunta": "ConsolidateBlocks e UnitarySynthesis",
+    "relevantes": [
+      "qone_otimizacao_circuitos",
+      "qone_portas_identidades"
+    ]
+  },
+  {
+    "id": "n025",
+    "tema": "otimizacao",
+    "idioma": "en",
+    "split": "dev",
+    "pergunta": "Which gate identity turns CX into CZ?",
+    "relevantes": [
+      "qone_portas_identidades"
+    ]
+  },
+  {
+    "id": "n026",
+    "tema": "otimizacao",
+    "idioma": "pt",
+    "split": "reservado",
+    "pergunta": "Qual a métrica de custo mais importante em hardware real?",
+    "relevantes": [
+      "qone_portas_identidades",
+      "qone_otimizacao_circuitos"
+    ]
+  },
+  {
+    "id": "n027",
+    "tema": "otimizacao",
+    "idioma": "pt",
+    "split": "dev",
+    "pergunta": "Como garantir que uma otimização não alterou a semântica do circuito?",
+    "relevantes": [
+      "qone_otimizacao_circuitos",
+      "qone_equivalencia"
+    ]
+  },
+  {
+    "id": "n028",
+    "tema": "otimizacao",
+    "idioma": "pt",
+    "split": "dev",
+    "tipo": "comparativa",
+    "pergunta": "SWAP versus CX: quantos CX tem um SWAP e quando ele é inserido?",
+    "relevantes": [
+      "qone_portas_identidades",
+      "qone_otimizacao_circuitos"
+    ]
+  },
+  {
+    "id": "n029",
+    "tema": "otimizacao",
+    "idioma": "en",
+    "split": "dev",
+    "tipo": "comparativa",
+    "pergunta": "What is the difference between RZ and the phase gate P?",
+    "relevantes": [
+      "qone_portas_identidades",
+      "qone_equivalencia"
+    ]
+  },
+  {
+    "id": "n030",
+    "tema": "otimizacao",
+    "idioma": "pt",
+    "split": "dev",
+    "pergunta": "Quais portas diagonais comutam entre si?",
+    "relevantes": [
+      "qone_portas_identidades",
+      "qone_otimizacao_circuitos"
+    ]
+  },
+  {
+    "id": "n031",
+    "tema": "ordem_de_bits",
+    "idioma": "en",
+    "split": "dev",
+    "pergunta": "Why are my Qiskit measurement counts reversed?",
+    "relevantes": [
+      "ibm_bit_ordering",
+      "qone_ordem_bits_medicao",
+      "qone_erros_depuracao"
+    ]
+  },
+  {
+    "id": "n032",
+    "tema": "ordem_de_bits",
+    "idioma": "en",
+    "split": "dev",
+    "pergunta": "Which qubit is the least significant bit in Qiskit?",
+    "relevantes": [
+      "ibm_bit_ordering",
+      "qone_ordem_bits_medicao"
+    ]
+  },
+  {
+    "id": "n033",
+    "tema": "ordem_de_bits",
+    "idioma": "pt",
+    "split": "reservado",
+    "pergunta": "Em qual lado da string de contagens fica o bit clássico 0?",
+    "relevantes": [
+      "qone_ordem_bits_medicao",
+      "ibm_bit_ordering"
+    ]
+  },
+  {
+    "id": "n034",
+    "tema": "ordem_de_bits",
+    "idioma": "pt",
+    "split": "dev",
+    "pergunta": "Como desenhar o circuito com o qubit 0 embaixo usando reverse_bits?",
+    "relevantes": [
+      "ibm_bit_ordering",
+      "ibm_visualize_circuits"
+    ]
+  },
+  {
+    "id": "n035",
+    "tema": "ordem_de_bits",
+    "idioma": "pt",
+    "split": "dev",
+    "pergunta": "Qual é a convenção (controle, alvo) das portas controladas no Qiskit?",
+    "relevantes": [
+      "ibm_bit_ordering"
+    ]
+  },
+  {
+    "id": "n036",
+    "tema": "ordem_de_bits",
+    "idioma": "en",
+    "split": "dev",
+    "pergunta": "How are statevector amplitudes indexed in Qiskit?",
+    "relevantes": [
+      "ibm_bit_ordering"
+    ]
+  },
+  {
+    "id": "n037",
+    "tema": "ordem_de_bits",
+    "idioma": "pt",
+    "split": "reservado",
+    "pergunta": "BitArray little endian",
+    "relevantes": [
+      "ibm_bit_ordering",
+      "ibm_api_primitives"
+    ]
+  },
+  {
+    "id": "n038",
+    "tema": "ordem_de_bits",
+    "idioma": "pt",
+    "split": "dev",
+    "tipo": "comparativa",
+    "pergunta": "Little-endian ou big-endian: qual a diferença nas strings de contagens?",
+    "relevantes": [
+      "ibm_bit_ordering",
+      "qone_ordem_bits_medicao"
+    ]
+  },
+  {
+    "id": "n039",
+    "tema": "medicao",
+    "idioma": "en",
+    "split": "dev",
+    "pergunta": "What does measure_all do?",
+    "relevantes": [
+      "ibm_measure_qubits",
+      "qone_ordem_bits_medicao"
+    ]
+  },
+  {
+    "id": "n040",
+    "tema": "medicao",
+    "idioma": "pt",
+    "split": "dev",
+    "tipo": "comparativa",
+    "pergunta": "Qual a diferença entre measure_all e measure_active?",
+    "relevantes": [
+      "ibm_measure_qubits"
+    ]
+  },
+  {
+    "id": "n041",
+    "tema": "medicao",
+    "idioma": "en",
+    "split": "reservado",
+    "pergunta": "How do I measure a qubit into a specific classical bit with QuantumCircuit.measure?",
+    "relevantes": [
+      "ibm_measure_qubits"
+    ]
+  },
+  {
+    "id": "n042",
+    "tema": "medicao",
+    "idioma": "pt",
+    "split": "dev",
+    "pergunta": "Como medir na base X ou na base Y?",
+    "relevantes": [
+      "qone_ordem_bits_medicao"
+    ]
+  },
+  {
+    "id": "n043",
+    "tema": "medicao",
+    "idioma": "pt",
+    "split": "dev",
+    "pergunta": "O Sampler devolve contagens vazias, o que falta no circuito?",
+    "relevantes": [
+      "qone_erros_depuracao",
+      "ibm_construct_circuits"
+    ]
+  },
+  {
+    "id": "n044",
+    "tema": "medicao",
+    "idioma": "pt",
+    "split": "dev",
+    "pergunta": "measure_active",
+    "relevantes": [
+      "ibm_measure_qubits"
+    ]
+  },
+  {
+    "id": "n045",
+    "tema": "medicao",
+    "idioma": "en",
+    "split": "reservado",
+    "pergunta": "What does reset do and why is it not unitary?",
+    "relevantes": [
+      "qone_ordem_bits_medicao"
+    ]
+  },
+  {
+    "id": "n046",
+    "tema": "medicao",
+    "idioma": "pt",
+    "split": "reservado",
+    "pergunta": "Como anexar a classe Measure com append?",
+    "relevantes": [
+      "ibm_measure_qubits"
+    ]
+  },
+  {
+    "id": "n047",
+    "tema": "medicao",
+    "idioma": "pt",
+    "split": "dev",
+    "pergunta": "Como as contagens separam vários registradores clássicos?",
+    "relevantes": [
+      "qone_ordem_bits_medicao"
+    ]
+  },
+  {
+    "id": "n048",
+    "tema": "medicao",
+    "idioma": "en",
+    "split": "dev",
+    "pergunta": "Why does a circuit with mid-circuit measurement have no unitary matrix?",
+    "relevantes": [
+      "qone_ordem_bits_medicao",
+      "qone_fundamentos_matematicos",
+      "qone_equivalencia"
+    ]
+  },
+  {
+    "id": "n049",
+    "tema": "medicao",
+    "idioma": "pt",
+    "split": "dev",
+    "pergunta": "Medi em um bit clássico que não existe, qual é o erro?",
+    "relevantes": [
+      "qone_erros_depuracao"
+    ]
+  },
+  {
+    "id": "n050",
+    "tema": "medicao",
+    "idioma": "en",
+    "split": "reservado",
+    "pergunta": "measure",
+    "relevantes": [
+      "ibm_measure_qubits",
+      "qone_ordem_bits_medicao"
+    ]
+  },
+  {
+    "id": "n051",
+    "tema": "controle_classico",
+    "idioma": "en",
+    "split": "reservado",
+    "pergunta": "How do I use an if statement on a classical bit in a dynamic circuit?",
+    "relevantes": [
+      "ibm_classical_feedforward_and_control_flow"
+    ]
+  },
+  {
+    "id": "n052",
+    "tema": "controle_classico",
+    "idioma": "pt",
+    "split": "reservado",
+    "pergunta": "Como usar switch em circuitos dinâmicos?",
+    "relevantes": [
+      "ibm_classical_feedforward_and_control_flow"
+    ]
+  },
+  {
+    "id": "n053",
+    "tema": "controle_classico",
+    "idioma": "en",
+    "split": "dev",
+    "pergunta": "How do I write a while loop in a Qiskit circuit?",
+    "relevantes": [
+      "ibm_classical_feedforward_and_control_flow"
+    ]
+  },
+  {
+    "id": "n054",
+    "tema": "controle_classico",
+    "idioma": "pt",
+    "split": "dev",
+    "pergunta": "O que faz a instrução store e as expressões clássicas?",
+    "relevantes": [
+      "ibm_classical_feedforward_and_control_flow"
+    ]
+  },
+  {
+    "id": "n055",
+    "tema": "controle_classico",
+    "idioma": "pt",
+    "split": "dev",
+    "tipo": "comparativa",
+    "pergunta": "if_test versus c_if: o que mudou?",
+    "relevantes": [
+      "qone_migracao_qiskit2",
+      "ibm_classical_feedforward_and_control_flow"
+    ]
+  },
+  {
+    "id": "n056",
+    "tema": "controle_classico",
+    "idioma": "pt",
+    "split": "dev",
+    "pergunta": "for_loop em circuito quântico",
+    "relevantes": [
+      "ibm_classical_feedforward_and_control_flow"
+    ]
+  },
+  {
+    "id": "n057",
+    "tema": "migracao",
+    "idioma": "en",
+    "split": "dev",
+    "pergunta": "How do I replace execute() from old Qiskit 0.x code in Qiskit 2?",
+    "relevantes": [
+      "qone_migracao_qiskit2",
+      "qone_erros_depuracao"
+    ]
+  },
+  {
+    "id": "n058",
+    "tema": "migracao",
+    "idioma": "en",
+    "split": "dev",
+    "pergunta": "Which modules were removed in Qiskit 2, such as pulse and opflow?",
+    "relevantes": [
+      "qone_migracao_qiskit2"
+    ]
+  },
+  {
+    "id": "n059",
+    "tema": "migracao",
+    "idioma": "pt",
+    "split": "reservado",
+    "pergunta": "qiskit.opflow não existe mais, o que usar no lugar?",
+    "relevantes": [
+      "qone_migracao_qiskit2"
+    ]
+  },
+  {
+    "id": "n060",
+    "tema": "migracao",
+    "idioma": "pt",
+    "split": "dev",
+    "pergunta": "Como trocar IBMQ por qiskit_ibm_runtime?",
+    "relevantes": [
+      "qone_migracao_qiskit2"
+    ]
+  },
+  {
+    "id": "n061",
+    "tema": "migracao",
+    "idioma": "pt",
+    "split": "dev",
+    "pergunta": "qc.toffoli e qc.fredkin",
+    "relevantes": [
+      "qone_migracao_qiskit2"
+    ]
+  },
+  {
+    "id": "n062",
+    "tema": "migracao",
+    "idioma": "pt",
+    "split": "dev",
+    "pergunta": "Como substituir qc.qasm() no Qiskit 2?",
+    "relevantes": [
+      "qone_migracao_qiskit2",
+      "ibm_api_qasm2"
+    ]
+  },
+  {
+    "id": "n063",
+    "tema": "migracao",
+    "idioma": "en",
+    "split": "reservado",
+    "pergunta": "What replaces the u1, u2 and u3 circuit methods?",
+    "relevantes": [
+      "qone_migracao_qiskit2",
+      "qone_portas_identidades"
+    ]
+  },
+  {
+    "id": "n064",
+    "tema": "migracao",
+    "idioma": "pt",
+    "split": "reservado",
+    "pergunta": "BasicAer foi removido, como simular sem instalar o Aer?",
+    "relevantes": [
+      "qone_migracao_qiskit2"
+    ]
+  },
+  {
+    "id": "n065",
+    "tema": "migracao",
+    "idioma": "pt",
+    "split": "dev",
+    "pergunta": "ModuleNotFoundError: No module named 'qiskit_aer'",
+    "relevantes": [
+      "qone_erros_depuracao",
+      "qone_migracao_qiskit2"
+    ]
+  },
+  {
+    "id": "n066",
+    "tema": "migracao",
+    "idioma": "pt",
+    "split": "dev",
+    "pergunta": "No module named 'qiskit.providers.aer'",
+    "relevantes": [
+      "qone_erros_depuracao"
+    ]
+  },
+  {
+    "id": "n067",
+    "tema": "migracao",
+    "idioma": "pt",
+    "split": "reservado",
+    "pergunta": "QuantumInstance",
+    "relevantes": [
+      "qone_migracao_qiskit2"
+    ]
+  },
+  {
+    "id": "n068",
+    "tema": "migracao",
+    "idioma": "en",
+    "split": "dev",
+    "pergunta": "Is qiskit.algorithms still part of Qiskit?",
+    "relevantes": [
+      "qone_migracao_qiskit2"
+    ]
+  },
+  {
+    "id": "n069",
+    "tema": "migracao",
+    "idioma": "pt",
+    "split": "reservado",
+    "pergunta": "Como obter o statevector sem usar o statevector_simulator?",
+    "relevantes": [
+      "qone_migracao_qiskit2",
+      "ibm_api_qiskit_quantum_info_Statevector"
+    ]
+  },
+  {
+    "id": "n070",
+    "tema": "migracao",
+    "idioma": "pt",
+    "split": "dev",
+    "tipo": "comparativa",
+    "pergunta": "Qual a diferença entre qc.cu3 e qc.cu no Qiskit 2?",
+    "relevantes": [
+      "qone_migracao_qiskit2"
+    ]
+  },
+  {
+    "id": "n071",
+    "tema": "migracao",
+    "idioma": "en",
+    "split": "dev",
+    "pergunta": "What is the replacement for qiskit.assemble and Qobj execution?",
+    "relevantes": [
+      "qone_migracao_qiskit2"
+    ]
+  },
+  {
+    "id": "n072",
+    "tema": "migracao",
+    "idioma": "pt",
+    "split": "reservado",
+    "pergunta": "Como saber se um código de tutorial foi escrito para o Qiskit 0.x?",
+    "relevantes": [
+      "qone_migracao_qiskit2",
+      "qone_erros_depuracao"
+    ]
+  },
+  {
+    "id": "n073",
+    "tema": "depuracao",
+    "idioma": "pt",
+    "split": "dev",
+    "pergunta": "CircuitError: Index 2 out of range for size 2",
+    "relevantes": [
+      "qone_erros_depuracao"
+    ]
+  },
+  {
+    "id": "n074",
+    "tema": "depuracao",
+    "idioma": "en",
+    "split": "dev",
+    "pergunta": "duplicate qubit arguments error when calling cx(0, 0)",
+    "relevantes": [
+      "qone_erros_depuracao"
+    ]
+  },
+  {
+    "id": "n075",
+    "tema": "depuracao",
+    "idioma": "pt",
+    "split": "dev",
+    "pergunta": "Parâmetros não atribuídos ao simular, o que significa unbound parameters?",
+    "relevantes": [
+      "qone_erros_depuracao",
+      "ibm_api_qiskit_circuit_Parameter"
+    ]
+  },
+  {
+    "id": "n076",
+    "tema": "depuracao",
+    "idioma": "en",
+    "split": "reservado",
+    "pergunta": "How should I debug a Qiskit traceback step by step?",
+    "relevantes": [
+      "qone_erros_depuracao"
+    ]
+  },
+  {
+    "id": "n077",
+    "tema": "depuracao",
+    "idioma": "pt",
+    "split": "reservado",
+    "pergunta": "NameError QuantumCircuit is not defined",
+    "relevantes": [
+      "qone_erros_depuracao"
+    ]
+  },
+  {
+    "id": "n078",
+    "tema": "depuracao",
+    "idioma": "pt",
+    "split": "dev",
+    "pergunta": "Como reduzir o caso para encontrar a porta que causa o erro?",
+    "relevantes": [
+      "qone_erros_depuracao"
+    ]
+  },
+  {
+    "id": "n079",
+    "tema": "openqasm",
+    "idioma": "en",
+    "split": "reservado",
+    "pergunta": "How do I load an OpenQASM 2 string with qasm2.loads?",
+    "relevantes": [
+      "ibm_api_qasm2"
+    ]
+  },
+  {
+    "id": "n080",
+    "tema": "openqasm",
+    "idioma": "pt",
+    "split": "dev",
+    "pergunta": "Quais são os erros comuns de sintaxe em OpenQASM 2?",
+    "relevantes": [
+      "qone_openqasm_2_3"
+    ]
+  },
+  {
+    "id": "n081",
+    "tema": "openqasm",
+    "idioma": "pt",
+    "split": "dev",
+    "pergunta": "qelib1.inc",
+    "relevantes": [
+      "qone_openqasm_2_3",
+      "ibm_api_qasm2"
+    ]
+  },
+  {
+    "id": "n082",
+    "tema": "openqasm",
+    "idioma": "pt",
+    "split": "dev",
+    "pergunta": "stdgates.inc OpenQASM 3",
+    "relevantes": [
+      "qone_openqasm_2_3",
+      "ibm_api_qasm3"
+    ]
+  },
+  {
+    "id": "n083",
+    "tema": "openqasm",
+    "idioma": "en",
+    "split": "reservado",
+    "pergunta": "How is measurement written in OpenQASM 3?",
+    "relevantes": [
+      "qone_openqasm_2_3"
+    ]
+  },
+  {
+    "id": "n084",
+    "tema": "openqasm",
+    "idioma": "pt",
+    "split": "dev",
+    "pergunta": "O que são portas opaque no OpenQASM 2?",
+    "relevantes": [
+      "qone_openqasm_2_3"
+    ]
+  },
+  {
+    "id": "n085",
+    "tema": "openqasm",
+    "idioma": "pt",
+    "split": "reservado",
+    "pergunta": "qasm3.loads precisa de qual pacote opcional?",
+    "relevantes": [
+      "qone_openqasm_2_3",
+      "ibm_api_qasm3"
+    ]
+  },
+  {
+    "id": "n086",
+    "tema": "openqasm",
+    "idioma": "en",
+    "split": "dev",
+    "pergunta": "What is qasm3.Exporter and which options does it have?",
+    "relevantes": [
+      "ibm_api_qasm3"
+    ]
+  },
+  {
+    "id": "n087",
+    "tema": "openqasm",
+    "idioma": "pt",
+    "split": "dev",
+    "pergunta": "O que são CustomInstruction em qasm2.load?",
+    "relevantes": [
+      "ibm_api_qasm2"
+    ]
+  },
+  {
+    "id": "n088",
+    "tema": "openqasm",
+    "idioma": "pt",
+    "split": "dev",
+    "tipo": "comparativa",
+    "pergunta": "Qual a diferença entre qasm2.load e qasm2.loads?",
+    "relevantes": [
+      "ibm_api_qasm2"
+    ]
+  },
+  {
+    "id": "n089",
+    "tema": "openqasm",
+    "idioma": "pt",
+    "split": "reservado",
+    "pergunta": "Modificadores ctrl @ e inv @ do OpenQASM 3",
+    "relevantes": [
+      "qone_openqasm_2_3"
+    ]
+  },
+  {
+    "id": "n090",
+    "tema": "openqasm",
+    "idioma": "en",
+    "split": "dev",
+    "pergunta": "What is the syntax to declare a gate in OpenQASM 2?",
+    "relevantes": [
+      "qone_openqasm_2_3"
+    ]
+  },
+  {
+    "id": "n091",
+    "tema": "openqasm",
+    "idioma": "pt",
+    "split": "reservado",
+    "pergunta": "QASM2ParseError",
+    "relevantes": [
+      "ibm_api_qasm2",
+      "qone_openqasm_2_3"
+    ]
+  },
+  {
+    "id": "n092",
+    "tema": "primitivas",
+    "idioma": "en",
+    "split": "dev",
+    "pergunta": "How do I run StatevectorEstimator with an observable?",
+    "relevantes": [
+      "ibm_simulate_with_qiskit_sdk_primitives",
+      "ibm_api_primitives"
+    ]
+  },
+  {
+    "id": "n093",
+    "tema": "primitivas",
+    "idioma": "pt",
+    "split": "dev",
+    "pergunta": "Como adicionar ruído de amostragem (shot noise) às primitivas de referência?",
+    "relevantes": [
+      "ibm_simulate_with_qiskit_sdk_primitives"
+    ]
+  },
+  {
+    "id": "n094",
+    "tema": "primitivas",
+    "idioma": "pt",
+    "split": "dev",
+    "tipo": "comparativa",
+    "pergunta": "Qual a diferença entre Sampler e Estimator?",
+    "relevantes": [
+      "ibm_api_primitives",
+      "ibm_simulate_with_qiskit_sdk_primitives"
+    ]
+  },
+  {
+    "id": "n095",
+    "tema": "primitivas",
+    "idioma": "en",
+    "split": "dev",
+    "pergunta": "How do I get counts from a SamplerV2 PubResult?",
+    "relevantes": [
+      "ibm_simulate_with_qiskit_sdk_primitives",
+      "ibm_api_primitives",
+      "qone_migracao_qiskit2"
+    ]
+  },
+  {
+    "id": "n096",
+    "tema": "primitivas",
+    "idioma": "pt",
+    "split": "dev",
+    "pergunta": "default_precision do Estimator",
+    "relevantes": [
+      "ibm_api_primitives"
+    ]
+  },
+  {
+    "id": "n097",
+    "tema": "primitivas",
+    "idioma": "pt",
+    "split": "dev",
+    "pergunta": "EstimatorPub",
+    "relevantes": [
+      "ibm_api_primitives"
+    ]
+  },
+  {
+    "id": "n098",
+    "tema": "simulacao",
+    "idioma": "en",
+    "split": "reservado",
+    "pergunta": "How much memory does a 28-qubit statevector need?",
+    "relevantes": [
+      "qone_simulacao_limites"
+    ]
+  },
+  {
+    "id": "n099",
+    "tema": "simulacao",
+    "idioma": "pt",
+    "split": "dev",
+    "tipo": "comparativa",
+    "pergunta": "Quando usar MPS em vez de statevector?",
+    "relevantes": [
+      "qone_simulacao_limites"
+    ]
+  },
+  {
+    "id": "n100",
+    "tema": "simulacao",
+    "idioma": "en",
+    "split": "dev",
+    "pergunta": "Gottesman-Knill theorem",
+    "relevantes": [
+      "qone_simulacao_limites"
+    ]
+  },
+  {
+    "id": "n101",
+    "tema": "simulacao",
+    "idioma": "pt",
+    "split": "dev",
+    "pergunta": "Qual a incerteza estatística de uma probabilidade estimada com N shots?",
+    "relevantes": [
+      "qone_simulacao_limites"
+    ]
+  },
+  {
+    "id": "n102",
+    "tema": "simulacao",
+    "idioma": "pt",
+    "split": "reservado",
+    "pergunta": "Como escolher o método de simulação conforme o tipo de circuito?",
+    "relevantes": [
+      "qone_simulacao_limites"
+    ]
+  },
+  {
+    "id": "n103",
+    "tema": "simulacao",
+    "idioma": "pt",
+    "split": "dev",
+    "pergunta": "Por que não dá para comparar circuitos de 25 qubits com Operator?",
+    "relevantes": [
+      "qone_simulacao_limites",
+      "qone_equivalencia"
+    ]
+  },
+  {
+    "id": "n104",
+    "tema": "quantum_info",
+    "idioma": "en",
+    "split": "dev",
+    "pergunta": "How do I compute the partial trace of a density matrix?",
+    "relevantes": [
+      "ibm_api_quantum_info"
+    ]
+  },
+  {
+    "id": "n105",
+    "tema": "quantum_info",
+    "idioma": "pt",
+    "split": "dev",
+    "pergunta": "Como calcular a fidelidade entre dois estados quânticos?",
+    "relevantes": [
+      "ibm_api_quantum_info"
+    ]
+  },
+  {
+    "id": "n106",
+    "tema": "quantum_info",
+    "idioma": "en",
+    "split": "dev",
+    "pergunta": "What is the DensityMatrix class?",
+    "relevantes": [
+      "ibm_api_quantum_info"
+    ]
+  },
+  {
+    "id": "n107",
+    "tema": "quantum_info",
+    "idioma": "pt",
+    "split": "dev",
+    "pergunta": "Como gerar um estado aleatório ou uma unitária aleatória?",
+    "relevantes": [
+      "ibm_api_quantum_info"
+    ]
+  },
+  {
+    "id": "n108",
+    "tema": "quantum_info",
+    "idioma": "en",
+    "split": "dev",
+    "pergunta": "How do I create a Statevector from a label?",
+    "relevantes": [
+      "ibm_api_qiskit_quantum_info_Statevector"
+    ]
+  },
+  {
+    "id": "n109",
+    "tema": "quantum_info",
+    "idioma": "pt",
+    "split": "reservado",
+    "pergunta": "Como obter as probabilidades de medição de um Statevector?",
+    "relevantes": [
+      "ibm_api_qiskit_quantum_info_Statevector"
+    ]
+  },
+  {
+    "id": "n110",
+    "tema": "quantum_info",
+    "idioma": "pt",
+    "split": "reservado",
+    "pergunta": "Statevector.evolve",
+    "relevantes": [
+      "ibm_api_qiskit_quantum_info_Statevector"
+    ]
+  },
+  {
+    "id": "n111",
+    "tema": "quantum_info",
+    "idioma": "en",
+    "split": "reservado",
+    "pergunta": "How do I sample measurement counts from a Statevector?",
+    "relevantes": [
+      "ibm_api_qiskit_quantum_info_Statevector"
+    ]
+  },
+  {
+    "id": "n112",
+    "tema": "quantum_info",
+    "idioma": "pt",
+    "split": "reservado",
+    "pergunta": "Como calcular o valor esperado de um observável com Statevector.expectation_value?",
+    "relevantes": [
+      "ibm_api_qiskit_quantum_info_Statevector",
+      "qone_fundamentos_matematicos"
+    ]
+  },
+  {
+    "id": "n113",
+    "tema": "quantum_info",
+    "idioma": "en",
+    "split": "dev",
+    "pergunta": "How can I compose two Operators?",
+    "relevantes": [
+      "ibm_api_qiskit_quantum_info_Operator"
+    ]
+  },
+  {
+    "id": "n114",
+    "tema": "quantum_info",
+    "idioma": "pt",
+    "split": "dev",
+    "pergunta": "Como saber se um Operator é unitário?",
+    "relevantes": [
+      "ibm_api_qiskit_quantum_info_Operator"
+    ]
+  },
+  {
+    "id": "n115",
+    "tema": "quantum_info",
+    "idioma": "en",
+    "split": "dev",
+    "pergunta": "Operator.from_circuit",
+    "relevantes": [
+      "ibm_api_qiskit_quantum_info_Operator"
+    ]
+  },
+  {
+    "id": "n116",
+    "tema": "quantum_info",
+    "idioma": "pt",
+    "split": "dev",
+    "pergunta": "Como obter o adjunto de um Operator?",
+    "relevantes": [
+      "ibm_api_qiskit_quantum_info_Operator"
+    ]
+  },
+  {
+    "id": "n117",
+    "tema": "quantum_info",
+    "idioma": "pt",
+    "split": "dev",
+    "tipo": "comparativa",
+    "pergunta": "Qual a diferença entre compose e dot em Operator?",
+    "relevantes": [
+      "ibm_api_qiskit_quantum_info_Operator"
+    ]
+  },
+  {
+    "id": "n118",
+    "tema": "quantum_info",
+    "idioma": "en",
+    "split": "dev",
+    "pergunta": "How do I compute the entropy of a quantum state?",
+    "relevantes": [
+      "ibm_api_quantum_info"
+    ]
+  },
+  {
+    "id": "n119",
+    "tema": "quantum_info",
+    "idioma": "pt",
+    "split": "reservado",
+    "pergunta": "Como representar um Pauli e uma lista de Paulis com PauliList?",
+    "relevantes": [
+      "ibm_api_quantum_info"
+    ]
+  },
+  {
+    "id": "n120",
+    "tema": "quantum_info",
+    "idioma": "en",
+    "split": "dev",
+    "pergunta": "What is concurrence of a two-qubit state?",
+    "relevantes": [
+      "ibm_api_quantum_info"
+    ]
+  },
+  {
+    "id": "n121",
+    "tema": "quantum_info",
+    "idioma": "pt",
+    "split": "reservado",
+    "pergunta": "Como converter um Operator em uma instrução de circuito?",
+    "relevantes": [
+      "ibm_api_qiskit_quantum_info_Operator"
+    ]
+  },
+  {
+    "id": "n122",
+    "tema": "quantum_info",
+    "idioma": "pt",
+    "split": "dev",
+    "tipo": "comparativa",
+    "pergunta": "Qual a diferença entre Statevector e DensityMatrix?",
+    "relevantes": [
+      "ibm_api_quantum_info",
+      "ibm_api_qiskit_quantum_info_Statevector"
+    ]
+  },
+  {
+    "id": "n123",
+    "tema": "quantum_info",
+    "idioma": "en",
+    "split": "dev",
+    "pergunta": "What is the Choi representation of a quantum channel?",
+    "relevantes": [
+      "ibm_api_quantum_info"
+    ]
+  },
+  {
+    "id": "n124",
+    "tema": "fundamentos",
+    "idioma": "en",
+    "split": "dev",
+    "pergunta": "What is the Born rule?",
+    "relevantes": [
+      "qone_fundamentos_matematicos"
+    ]
+  },
+  {
+    "id": "n125",
+    "tema": "fundamentos",
+    "idioma": "pt",
+    "split": "dev",
+    "pergunta": "O que são os estados |+> e |->?",
+    "relevantes": [
+      "qone_fundamentos_matematicos"
+    ]
+  },
+  {
+    "id": "n126",
+    "tema": "fundamentos",
+    "idioma": "en",
+    "split": "reservado",
+    "pergunta": "Why does an n-qubit state vector have 2^n amplitudes?",
+    "relevantes": [
+      "qone_fundamentos_matematicos",
+      "qone_simulacao_limites"
+    ]
+  },
+  {
+    "id": "n127",
+    "tema": "fundamentos",
+    "idioma": "pt",
+    "split": "reservado",
+    "pergunta": "O que é uma matriz unitária e por que ela preserva a norma?",
+    "relevantes": [
+      "qone_fundamentos_matematicos"
+    ]
+  },
+  {
+    "id": "n128",
+    "tema": "fundamentos",
+    "idioma": "pt",
+    "split": "dev",
+    "pergunta": "Como representar um observável hermitiano com SparsePauliOp?",
+    "relevantes": [
+      "qone_fundamentos_matematicos"
+    ]
+  },
+  {
+    "id": "n129",
+    "tema": "fundamentos",
+    "idioma": "pt",
+    "split": "reservado",
+    "tipo": "comparativa",
+    "pergunta": "Qual a diferença entre fase global e fase relativa?",
+    "relevantes": [
+      "qone_fundamentos_matematicos"
+    ]
+  },
+  {
+    "id": "n130",
+    "tema": "fundamentos",
+    "idioma": "en",
+    "split": "reservado",
+    "pergunta": "Is the order of gates reversed in the matrix product of a circuit?",
+    "relevantes": [
+      "qone_fundamentos_matematicos"
+    ]
+  },
+  {
+    "id": "n131",
+    "tema": "fundamentos",
+    "idioma": "pt",
+    "split": "dev",
+    "pergunta": "Estado de Bell",
+    "relevantes": [
+      "qone_algoritmos",
+      "qone_fundamentos_matematicos"
+    ]
+  },
+  {
+    "id": "n132",
+    "tema": "equivalencia",
+    "idioma": "en",
+    "split": "reservado",
+    "pergunta": "What does Operator.equiv check?",
+    "relevantes": [
+      "qone_equivalencia",
+      "ibm_api_qiskit_quantum_info_Operator"
+    ]
+  },
+  {
+    "id": "n133",
+    "tema": "equivalencia",
+    "idioma": "pt",
+    "split": "dev",
+    "pergunta": "Como comparar circuitos de Clifford muito grandes?",
+    "relevantes": [
+      "qone_equivalencia",
+      "qone_simulacao_limites"
+    ]
+  },
+  {
+    "id": "n134",
+    "tema": "equivalencia",
+    "idioma": "pt",
+    "split": "dev",
+    "pergunta": "Que vereditos um relatório de verificação de equivalência pode dar?",
+    "relevantes": [
+      "qone_equivalencia"
+    ]
+  },
+  {
+    "id": "n135",
+    "tema": "equivalencia",
+    "idioma": "en",
+    "split": "reservado",
+    "pergunta": "Why does a transpiled circuit look different after routing?",
+    "relevantes": [
+      "qone_equivalencia",
+      "qone_otimizacao_circuitos"
+    ]
+  },
+  {
+    "id": "n136",
+    "tema": "equivalencia",
+    "idioma": "pt",
+    "split": "reservado",
+    "pergunta": "Como verificar equivalência de circuitos que têm medições finais?",
+    "relevantes": [
+      "qone_equivalencia"
+    ]
+  },
+  {
+    "id": "n137",
+    "tema": "equivalencia",
+    "idioma": "pt",
+    "split": "dev",
+    "tipo": "comparativa",
+    "pergunta": "Equivalência amostral e prova formal, qual a diferença?",
+    "relevantes": [
+      "qone_equivalencia"
+    ]
+  },
+  {
+    "id": "n138",
+    "tema": "algoritmos",
+    "idioma": "en",
+    "split": "reservado",
+    "pergunta": "How does Bernstein-Vazirani find the secret string?",
+    "relevantes": [
+      "qone_algoritmos"
+    ]
+  },
+  {
+    "id": "n139",
+    "tema": "algoritmos",
+    "idioma": "pt",
+    "split": "dev",
+    "pergunta": "Como o Deutsch-Jozsa distingue função constante de balanceada?",
+    "relevantes": [
+      "qone_algoritmos"
+    ]
+  },
+  {
+    "id": "n140",
+    "tema": "algoritmos",
+    "idioma": "en",
+    "split": "dev",
+    "pergunta": "How many Grover iterations are needed for N items?",
+    "relevantes": [
+      "qone_algoritmos"
+    ]
+  },
+  {
+    "id": "n141",
+    "tema": "algoritmos",
+    "idioma": "pt",
+    "split": "dev",
+    "pergunta": "QFTGate",
+    "relevantes": [
+      "qone_algoritmos",
+      "ibm_api_circuit_library"
+    ]
+  },
+  {
+    "id": "n142",
+    "tema": "algoritmos",
+    "idioma": "en",
+    "split": "reservado",
+    "pergunta": "What is quantum phase estimation?",
+    "relevantes": [
+      "qone_algoritmos"
+    ]
+  },
+  {
+    "id": "n143",
+    "tema": "algoritmos",
+    "idioma": "pt",
+    "split": "reservado",
+    "pergunta": "O que é o QAOA e para que problemas ele serve?",
+    "relevantes": [
+      "qone_algoritmos"
+    ]
+  },
+  {
+    "id": "n144",
+    "tema": "algoritmos",
+    "idioma": "en",
+    "split": "dev",
+    "pergunta": "How do I prepare a GHZ state on n qubits?",
+    "relevantes": [
+      "qone_algoritmos"
+    ]
+  },
+  {
+    "id": "n145",
+    "tema": "algoritmos",
+    "idioma": "pt",
+    "split": "reservado",
+    "tipo": "comparativa",
+    "pergunta": "VQE e QAOA: quais as semelhanças e diferenças?",
+    "relevantes": [
+      "qone_algoritmos"
+    ]
+  },
+  {
+    "id": "n146",
+    "tema": "algoritmos",
+    "idioma": "pt",
+    "split": "dev",
+    "tipo": "comparativa",
+    "pergunta": "Qual a diferença entre a QFT e a estimativa de fase?",
+    "relevantes": [
+      "qone_algoritmos"
+    ]
+  },
+  {
+    "id": "n147",
+    "tema": "algoritmos",
+    "idioma": "pt",
+    "split": "dev",
+    "pergunta": "Quantos qubits de contagem a QPE precisa para ter mais precisão?",
+    "relevantes": [
+      "qone_algoritmos"
+    ]
+  },
+  {
+    "id": "n148",
+    "tema": "correcao_de_erros",
+    "idioma": "en",
+    "split": "reservado",
+    "pergunta": "What kind of errors does the bit-flip repetition code protect against?",
+    "relevantes": [
+      "qone_correcao_mitigacao"
+    ]
+  },
+  {
+    "id": "n149",
+    "tema": "correcao_de_erros",
+    "idioma": "pt",
+    "split": "reservado",
+    "pergunta": "O que é o surface code?",
+    "relevantes": [
+      "qone_correcao_mitigacao"
+    ]
+  },
+  {
+    "id": "n150",
+    "tema": "correcao_de_erros",
+    "idioma": "pt",
+    "split": "dev",
+    "pergunta": "Quais são os modelos de ruído mais comuns?",
+    "relevantes": [
+      "qone_correcao_mitigacao"
+    ]
+  },
+  {
+    "id": "n151",
+    "tema": "correcao_de_erros",
+    "idioma": "en",
+    "split": "dev",
+    "pergunta": "What is dynamical decoupling?",
+    "relevantes": [
+      "qone_correcao_mitigacao"
+    ]
+  },
+  {
+    "id": "n152",
+    "tema": "correcao_de_erros",
+    "idioma": "pt",
+    "split": "dev",
+    "pergunta": "Para que serve o twirling de Pauli?",
+    "relevantes": [
+      "qone_correcao_mitigacao"
+    ]
+  },
+  {
+    "id": "n153",
+    "tema": "correcao_de_erros",
+    "idioma": "pt",
+    "split": "dev",
+    "pergunta": "A mitigação de erros corrige o estado quântico?",
+    "relevantes": [
+      "qone_correcao_mitigacao"
+    ]
+  },
+  {
+    "id": "n154",
+    "tema": "correcao_de_erros",
+    "idioma": "pt",
+    "split": "dev",
+    "tipo": "comparativa",
+    "pergunta": "Código de Shor versus código de repetição de bit-flip",
+    "relevantes": [
+      "qone_correcao_mitigacao"
+    ]
+  },
+  {
+    "id": "n155",
+    "tema": "circuitos",
+    "idioma": "en",
+    "split": "dev",
+    "pergunta": "What does circuit depth mean?",
+    "relevantes": [
+      "ibm_construct_circuits"
+    ]
+  },
+  {
+    "id": "n156",
+    "tema": "circuitos",
+    "idioma": "pt",
+    "split": "reservado",
+    "pergunta": "Como usar o método append para adicionar instruções ao circuito?",
+    "relevantes": [
+      "ibm_construct_circuits"
+    ]
+  },
+  {
+    "id": "n157",
+    "tema": "circuitos",
+    "idioma": "en",
+    "split": "dev",
+    "pergunta": "What are n-local circuits?",
+    "relevantes": [
+      "ibm_circuit_library",
+      "ibm_api_circuit_library"
+    ]
+  },
+  {
+    "id": "n158",
+    "tema": "circuitos",
+    "idioma": "pt",
+    "split": "reservado",
+    "pergunta": "Que circuitos de codificação de dados existem na biblioteca de circuitos?",
+    "relevantes": [
+      "ibm_circuit_library"
+    ]
+  },
+  {
+    "id": "n159",
+    "tema": "circuitos",
+    "idioma": "pt",
+    "split": "dev",
+    "pergunta": "Circuitos de evolução temporal",
+    "relevantes": [
+      "ibm_circuit_library"
+    ]
+  },
+  {
+    "id": "n160",
+    "tema": "circuitos",
+    "idioma": "en",
+    "split": "dev",
+    "pergunta": "Which arithmetic circuits are in the circuit library?",
+    "relevantes": [
+      "ibm_circuit_library"
+    ]
+  },
+  {
+    "id": "n161",
+    "tema": "circuitos",
+    "idioma": "en",
+    "split": "dev",
+    "pergunta": "How do I invert a circuit?",
+    "relevantes": [
+      "ibm_api_qiskit_circuit_QuantumCircuit"
+    ]
+  },
+  {
+    "id": "n162",
+    "tema": "circuitos",
+    "idioma": "pt",
+    "split": "dev",
+    "pergunta": "Como contar portas por tipo com count_ops?",
+    "relevantes": [
+      "ibm_api_qiskit_circuit_QuantumCircuit"
+    ]
+  },
+  {
+    "id": "n163",
+    "tema": "circuitos",
+    "idioma": "en",
+    "split": "dev",
+    "pergunta": "How do I add a barrier to a circuit?",
+    "relevantes": [
+      "ibm_api_qiskit_circuit_QuantumCircuit"
+    ]
+  },
+  {
+    "id": "n164",
+    "tema": "circuitos",
+    "idioma": "pt",
+    "split": "reservado",
+    "tipo": "comparativa",
+    "pergunta": "Qual a diferença entre depth e size de um circuito?",
+    "relevantes": [
+      "ibm_api_qiskit_circuit_QuantumCircuit",
+      "ibm_construct_circuits"
+    ]
+  },
+  {
+    "id": "n165",
+    "tema": "circuitos",
+    "idioma": "pt",
+    "split": "reservado",
+    "pergunta": "Como inicializar qubits em um estado com initialize?",
+    "relevantes": [
+      "ibm_api_qiskit_circuit_QuantumCircuit"
+    ]
+  },
+  {
+    "id": "n166",
+    "tema": "visualizacao",
+    "idioma": "en",
+    "split": "reservado",
+    "pergunta": "How do I draw a circuit with matplotlib?",
+    "relevantes": [
+      "ibm_visualize_circuits"
+    ]
+  },
+  {
+    "id": "n167",
+    "tema": "visualizacao",
+    "idioma": "pt",
+    "split": "reservado",
+    "pergunta": "Como salvar o diagrama do circuito como imagem?",
+    "relevantes": [
+      "ibm_visualize_circuits"
+    ]
+  },
+  {
+    "id": "n168",
+    "tema": "visualizacao",
+    "idioma": "pt",
+    "split": "dev",
+    "pergunta": "Argumento fold do draw",
+    "relevantes": [
+      "ibm_visualize_circuits"
+    ]
+  },
+  {
+    "id": "n169",
+    "tema": "visualizacao",
+    "idioma": "pt",
+    "split": "dev",
+    "tipo": "comparativa",
+    "pergunta": "Diferença entre os renderizadores text, mpl e latex",
+    "relevantes": [
+      "ibm_visualize_circuits"
+    ]
+  },
+  {
+    "id": "n170",
+    "tema": "circuitos_parametrizados",
+    "idioma": "en",
+    "split": "reservado",
+    "pergunta": "How do I rename a circuit parameter?",
+    "relevantes": [
+      "ibm_construct_circuits"
+    ]
+  },
+  {
+    "id": "n171",
+    "tema": "circuitos_parametrizados",
+    "idioma": "pt",
+    "split": "reservado",
+    "pergunta": "Como obter a lista de parâmetros livres de um circuito?",
+    "relevantes": [
+      "ibm_api_qiskit_circuit_QuantumCircuit",
+      "ibm_api_qiskit_circuit_Parameter"
+    ]
+  },
+  {
+    "id": "n172",
+    "tema": "circuitos_parametrizados",
+    "idioma": "en",
+    "split": "dev",
+    "pergunta": "What happens if parameters stay unbound when I simulate a circuit?",
+    "relevantes": [
+      "qone_erros_depuracao",
+      "ibm_api_qiskit_circuit_Parameter"
+    ]
+  },
+  {
+    "id": "n173",
+    "tema": "circuitos_parametrizados",
+    "idioma": "pt",
+    "split": "dev",
+    "pergunta": "Como passar valores de parâmetros na PUB do Sampler?",
+    "relevantes": [
+      "ibm_api_primitives",
+      "qone_migracao_qiskit2",
+      "qone_erros_depuracao"
+    ]
+  },
+  {
+    "id": "n174",
+    "tema": "circuitos_parametrizados",
+    "idioma": "pt",
+    "split": "dev",
+    "pergunta": "ParameterExpression",
+    "relevantes": [
+      "ibm_api_qiskit_circuit_Parameter"
+    ]
+  },
+  {
+    "id": "n175",
+    "tema": "circuitos_parametrizados",
+    "idioma": "pt",
+    "split": "dev",
+    "tipo": "comparativa",
+    "pergunta": "Qual a diferença entre assign_parameters e bind_parameters?",
+    "relevantes": [
+      "qone_migracao_qiskit2",
+      "ibm_api_qiskit_circuit_Parameter"
+    ]
+  },
+  {
+    "id": "n176",
+    "tema": "fora_do_dominio",
+    "idioma": "en",
+    "split": "dev",
+    "pergunta": "Explain how Kubernetes schedules pods onto nodes."
+  },
+  {
+    "id": "n177",
+    "tema": "fora_do_dominio",
+    "idioma": "en",
+    "split": "dev",
+    "pergunta": "Who won the 2010 FIFA World Cup?"
+  },
+  {
+    "id": "n178",
+    "tema": "fora_do_dominio",
+    "idioma": "en",
+    "split": "reservado",
+    "pergunta": "What is the weather forecast for Lisbon tomorrow?"
+  },
+  {
+    "id": "n179",
+    "tema": "fora_do_dominio",
+    "idioma": "pt",
+    "split": "reservado",
+    "pergunta": "Como declarar o imposto de renda de pessoa física?"
+  },
+  {
+    "id": "n180",
+    "tema": "fora_do_dominio",
+    "idioma": "en",
+    "split": "dev",
+    "pergunta": "Write a short poem about autumn."
+  },
+  {
+    "id": "n181",
+    "tema": "fora_do_dominio",
+    "idioma": "pt",
+    "split": "dev",
+    "pergunta": "Qual é a capital da Austrália?"
+  },
+  {
+    "id": "n182",
+    "tema": "fora_do_dominio",
+    "idioma": "en",
+    "split": "dev",
+    "pergunta": "How do I train a convolutional neural network on CIFAR-10?"
+  },
+  {
+    "id": "n183",
+    "tema": "fora_do_dominio",
+    "idioma": "pt",
+    "split": "reservado",
+    "pergunta": "Quanto tempo leva para assar um frango inteiro?"
+  },
+  {
+    "id": "n184",
+    "tema": "fora_do_dominio",
+    "idioma": "en",
+    "split": "reservado",
+    "pergunta": "Translate good morning into Japanese."
+  },
+  {
+    "id": "n185",
+    "tema": "fora_do_dominio",
+    "idioma": "pt",
+    "split": "dev",
+    "pergunta": "Como funciona o protocolo BGP de roteamento da internet?"
+  },
+  {
+    "id": "n186",
+    "tema": "fora_do_dominio",
+    "idioma": "en",
+    "split": "dev",
+    "pergunta": "What are the best sightseeing spots in Rome?"
+  },
+  {
+    "id": "n187",
+    "tema": "fora_do_dominio",
+    "idioma": "pt",
+    "split": "dev",
+    "pergunta": "Me indique um bom livro de ficção científica dos anos 90"
+  }
 ]

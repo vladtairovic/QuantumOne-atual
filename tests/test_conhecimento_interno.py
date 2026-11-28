@@ -90,7 +90,7 @@ def test_indexacao_do_conhecimento_interno_e_incremental(monkeypatch):
     from rag import configuracao, indexar_documentos
     monkeypatch.setattr(configuracao, "obter_modelo", lambda: modelo)
     monkeypatch.setattr(configuracao, "limite_tokens", lambda: 110)
-    monkeypatch.setattr(indexar_documentos, "criar_embeddings", lambda: lambda textos: [[1.0, 0.0] for _ in textos])
+    monkeypatch.setattr(indexar_documentos, "criar_embeddings", lambda tipo="consulta": lambda textos: [[1.0, 0.0] for _ in textos])
     primeiro = conhecimento_interno.indexar(colecao)
     assert primeiro == {"indexados": len(DOCUMENTOS), "inalterados": 0}
     metas = [m for _, m, _ in colecao.registros.values()]

@@ -2,11 +2,11 @@
 
 Regras da fila (pedido do projeto):
 - Um modelo de cada vez, na ordem da fila. Cada um tem até ``LLM_TIMEOUT_SECONDS``
-  (padrão 30 s, qualquer que seja o tamanho do prompt). Ao estourar, a requisição é
-  cancelada e só então o próximo modelo é chamado, com mais 30 s próprios. Não há teto
+  (padrão 45 s, qualquer que seja o tamanho do prompt). Ao estourar, a requisição é
+  cancelada e só então o próximo modelo é chamado, com mais 45 s próprios. Não há teto
   total (``LLM_TEMPO_TOTAL_SECONDS=0``).
 - Streaming (``LLM_STREAMING=1``): o texto chega em pedaços e ``ao_parcial`` recebe o que o
-  modelo já escreveu, para a interface mostrar a resposta sendo redigida. O prazo de 30 s
+  modelo já escreveu, para a interface mostrar a resposta sendo redigida. O prazo de 45 s
   vale para a resposta inteira.
 - Sem limite artificial de tokens: ``LLM_MAX_TOKENS`` padrão 16384 (aceito pelos 7 modelos).
 - Quem estoura o tempo NÃO é pausado: a próxima pergunta tenta de novo o melhor modelo.
@@ -41,7 +41,8 @@ MODELOS_PADRAO = (
     "nvidia/nemotron-3.5-bolt-e4b",
     "nvidia/ising-calibration-1.5-31b",
 )
-# Fila rápida para tarefas auxiliares curtas (planejar buscas): os mais rápidos primeiro.
+# Fila rápida para tarefas auxiliares curtas (planejar buscas e reescrever a consulta): os mais rápidos primeiro.
+# Só geram consultas de busca em JSON; a resposta e as correções continuam na fila principal de 7 modelos.
 MODELOS_RAPIDOS = (
     "nvidia/nemotron-3.5-lightning-30b-a3b",
     "nvidia/nemotron-3.5-bolt-e4b",
@@ -59,9 +60,10 @@ _INTERVALO_PARCIAL = 0.25  # segundos entre avisos de texto parcial
 class FilaEsgotada(RuntimeError):
     """Nenhum modelo da fila respondeu; ``tentativas`` explica cada falha."""
 
-    def __init__(self, tentativas):
+    def __init__(self, tentativas, rodadas=1):
         super().__init__("Nenhum modelo da fila respondeu.")
         self.tentativas = tentativas
+        self.rodadas = rodadas
 
 
 def configurada() -> bool:
@@ -156,17 +158,25 @@ def _chamar(cliente, url, chave, corpo, ao_parcial=None):
 
 
 def conversar(mensagens, modelos=None, tarefa="Resposta", ao_progresso=None, transporte=None, temperatura=0.2,
-              max_tokens=None, ao_parcial=None) -> dict:
+              max_tokens=None, ao_parcial=None, prazo_por_modelo=None, orcamento_total=None) -> dict:
     """Percorre a fila, um modelo por vez. Devolve {texto, modelo, tentativas}; lança FilaEsgotada.
 
-    ``ao_parcial(modelo, texto)`` recebe o texto já escrito pelo modelo em uso (streaming)."""
+    ``ao_parcial(modelo, texto)`` recebe o texto já escrito pelo modelo em uso (streaming).
+    ``prazo_por_modelo`` e ``orcamento_total`` (segundos) são opcionais: ``None`` mantém o
+    comportamento guiado pelas variáveis de ambiente; um valor limita o prazo de cada modelo
+    (``min(LLM_TIMEOUT_SECONDS, prazo_por_modelo)``) e substitui o teto total de ``LLM_TEMPO_TOTAL_SECONDS``."""
     chave = os.getenv("NVIDIA_API_KEY", "").strip()
     if not chave:
         raise RuntimeError("NVIDIA_API_KEY não configurada.")
     modelos = list(modelos or fila())
     base = os.getenv("NVIDIA_BASE_URL", "https://integrate.api.nvidia.com/v1").rstrip("/")
-    limite = float(os.getenv("LLM_TIMEOUT_SECONDS", "30"))
-    orcamento_total = float(os.getenv("LLM_TEMPO_TOTAL_SECONDS", "0"))  # 0 = sem teto
+    limite = float(os.getenv("LLM_TIMEOUT_SECONDS", "45"))
+    if prazo_por_modelo is not None:
+        limite = min(limite, prazo_por_modelo)
+    # sobra mínima para ainda tentar um modelo: 1 s com o teto do ambiente (inalterado), 50 ms com teto explícito
+    sobra_minima = 1 if orcamento_total is None else 0.05
+    if orcamento_total is None:
+        orcamento_total = float(os.getenv("LLM_TEMPO_TOTAL_SECONDS", "0"))  # 0 = sem teto
     max_tokens = max_tokens or int(os.getenv("LLM_MAX_TOKENS", "16384"))
     tentativas = []
     inicio_total = time.monotonic()
@@ -177,7 +187,7 @@ def conversar(mensagens, modelos=None, tarefa="Resposta", ao_progresso=None, tra
         prazo = limite
         if orcamento_total > 0:
             restante = orcamento_total - (time.monotonic() - inicio_total)
-            if restante <= 1:
+            if restante <= sobra_minima:
                 tentativas.append({"modelo": modelo, "resultado": "sem_tempo", "segundos": 0.0})
                 continue
             prazo = min(limite, restante)
@@ -231,6 +241,63 @@ def gerar_resposta(pergunta: str, contexto: str, transporte=None, ao_progresso=N
     mensagens = [
         {"role": "system", "content": INSTRUCOES.strip()},
         {"role": "user", "content": f"<documentacao>\n{contexto}\n</documentacao>\n\n<pergunta>\n{pergunta}\n</pergunta>\n\n"
-                                    "Responda à pergunta usando a documentação e cite [Fonte N]."},
+                                    "Responda à pergunta usando a documentação."},
     ]
     return conversar(mensagens, tarefa="Resposta", ao_progresso=ao_progresso, transporte=transporte)
+
+
+# ---------------------------------------------------------------- insistência: nova rodada até conseguir
+
+_ERROS_PERMANENTES = ("http_401", "http_403", "http_404")
+_PAUSAS_ENTRE_RODADAS = (5, 10, 20, 30)  # segundos; a partir da 4ª rodada, sempre 30
+
+
+def _rodada_sem_saida(tentativas):
+    """True quando nenhuma nova rodada pode dar certo: todos os modelos falharam por erro permanente
+    (chave inválida, modelo não liberado) ou estão pausados por um desses erros."""
+    agora = time.monotonic()
+    for t in tentativas:
+        if t["resultado"] in _ERROS_PERMANENTES:
+            continue
+        if t["resultado"] == "pausado":
+            with _LOCK:
+                ate = _PAUSADOS.get(t["modelo"], 0)
+            if ate - agora > 120:  # pausa longa = erro permanente; a de 429 (60 s) passa logo
+                continue
+        return False
+    return bool(tentativas)
+
+
+def conversar_insistente(mensagens, modelos=None, tarefa="Resposta", ao_progresso=None, transporte=None,
+                         temperatura=0.2, max_tokens=None, ao_parcial=None, prazo_final=None, ao_aviso=None,
+                         espera=time.sleep) -> dict:
+    """Como ``conversar``, mas não desiste quando a fila inteira falha: espera um pouco e percorre a fila de
+    novo (5, 10, 20 e depois 30 s entre rodadas), avisando por ``ao_aviso``, até um modelo responder.
+
+    Para só em dois casos, lançando ``FilaEsgotada`` com todas as tentativas: o ``prazo_final``
+    (``time.monotonic()``; padrão ``LLM_INSISTIR_SEGUNDOS``, 1800 s) acabaria antes da próxima rodada,
+    ou todos os modelos falharam por erro permanente (nova rodada não mudaria nada).
+    Cada rodada segue as regras da fila: um modelo de cada vez, cada um com o seu prazo."""
+    if prazo_final is None:
+        prazo_final = time.monotonic() + float(os.getenv("LLM_INSISTIR_SEGUNDOS", "1800"))
+    rodada, todas = 1, []
+    while True:
+        restante = prazo_final - time.monotonic()
+        try:
+            gerado = conversar(mensagens, modelos, tarefa, ao_progresso, transporte, temperatura, max_tokens,
+                               ao_parcial=ao_parcial, orcamento_total=max(1.0, restante))
+        except FilaEsgotada as erro:
+            todas += erro.tentativas
+            pausa = _PAUSAS_ENTRE_RODADAS[min(rodada - 1, len(_PAUSAS_ENTRE_RODADAS) - 1)]
+            if _rodada_sem_saida(erro.tentativas) or time.monotonic() + pausa + 5 >= prazo_final:
+                raise FilaEsgotada(todas, rodadas=rodada) from erro
+            log.warning("Fila de LLMs sem resposta na rodada %d; nova rodada em %d s.", rodada, pausa)
+            if ao_aviso:
+                ao_aviso(f"{tarefa}: nenhum modelo respondeu na rodada {rodada}; "
+                         f"tentando de novo em {pausa} s (rodada {rodada + 1})")
+            espera(pausa)
+            rodada += 1
+            continue
+        gerado["tentativas"] = todas + gerado["tentativas"]
+        gerado["rodadas"] = rodada
+        return gerado

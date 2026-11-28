@@ -90,10 +90,10 @@ def test_fila_padrao_tem_sete_modelos_em_ordem(monkeypatch):
         "poolside/laguna-xs-2.1", "nvidia/nemotron-3.5-bolt-e4b", "nvidia/ising-calibration-1.5-31b"]
 
 
-def test_limite_padrao_e_30_segundos(monkeypatch):
+def test_limite_padrao_e_45_segundos(monkeypatch):
     monkeypatch.delenv("LLM_TIMEOUT_SECONDS")
     import inspect
-    assert 'getenv("LLM_TIMEOUT_SECONDS", "30")' in inspect.getsource(cliente_llm.conversar)
+    assert 'getenv("LLM_TIMEOUT_SECONDS", "45")' in inspect.getsource(cliente_llm.conversar)
 
 
 def test_query_usa_a_fila_e_informa_o_modelo(contexto, monkeypatch):
@@ -188,3 +188,79 @@ def test_progresso_guarda_parcial_so_do_modelo_em_uso():
     assert estado["etapa"].endswith("(2/7)") and estado["historico"][-1]["texto"] == "Internet: 3 resultado(s)"
     r.concluir()
     assert progresso.obter(pid)["parcial"] is None
+
+
+# ---- prazo_por_modelo / orcamento_total opcionais ------------------------------------------
+
+def _lento(atraso):
+    def responder(request):
+        time.sleep(atraso)
+        return httpx.Response(200, json={"choices": [{"message": {"content": "tarde"}}]})
+    return httpx.MockTransport(responder)
+
+
+def test_orcamento_total_explicito_encerra_cedo_com_fila_esgotada(monkeypatch):
+    monkeypatch.setenv("LLM_TIMEOUT_SECONDS", "30")
+    inicio = time.monotonic()
+    with pytest.raises(cliente_llm.FilaEsgotada) as erro:
+        cliente_llm.conversar([{"role": "user", "content": "oi"}], modelos=FILA, transporte=_lento(1.5),
+                              orcamento_total=0.5, prazo_por_modelo=0.5)
+    assert time.monotonic() - inicio < 1.2
+    assert erro.value.tentativas[0]["resultado"].startswith("tempo_esgotado")
+    assert [t["resultado"] for t in erro.value.tentativas[1:]] == ["sem_tempo", "sem_tempo"]
+
+
+def test_prazo_por_modelo_nunca_ultrapassa_o_limite_do_ambiente(monkeypatch):
+    monkeypatch.setenv("LLM_TIMEOUT_SECONDS", "0.3")
+    with pytest.raises(cliente_llm.FilaEsgotada) as erro:
+        cliente_llm.conversar([{"role": "user", "content": "oi"}], modelos=["forte"], transporte=_lento(1.0),
+                              prazo_por_modelo=20)
+    assert erro.value.tentativas[0]["resultado"] == "tempo_esgotado_0.3s"
+
+
+def test_sem_parametros_novos_o_teto_total_continua_vindo_do_ambiente(monkeypatch):
+    monkeypatch.setenv("LLM_TEMPO_TOTAL_SECONDS", "0.5")  # <= 1 s de sobra: nenhum modelo é tentado (comportamento antigo)
+    with pytest.raises(cliente_llm.FilaEsgotada) as erro:
+        cliente_llm.conversar([{"role": "user", "content": "oi"}], modelos=["forte"],
+                              transporte=transporte({"forte": ("ok", "x")}, []))
+    assert erro.value.tentativas[0]["resultado"] == "sem_tempo"
+
+
+# ---- insistência: a fila é percorrida de novo até um modelo responder -------------------------
+
+def test_fila_insiste_em_nova_rodada_ate_responder():
+    chamadas, avisos, esperas = [], [], []
+    rodada = {"n": 0}
+
+    def responder(request):
+        corpo = json.loads(request.content)
+        chamadas.append(corpo["model"])
+        if corpo["model"] == FILA[0]:
+            rodada["n"] += 1
+        if rodada["n"] < 3:  # as duas primeiras rodadas falham inteiras
+            return httpx.Response(503, json={"detail": "instável"})
+        return httpx.Response(200, json={"choices": [{"message": {"content": "enfim"}}]})
+
+    r = cliente_llm.conversar_insistente([{"role": "user", "content": "x"}], transporte=httpx.MockTransport(responder),
+                                         ao_aviso=avisos.append, espera=esperas.append)
+    assert r["texto"] == "enfim" and r["rodadas"] == 3 and r["modelo"] == FILA[0]
+    assert esperas == [5, 10]  # pausas crescentes entre as rodadas
+    assert "rodada 2" in avisos[0] and "rodada 3" in avisos[1]
+    assert len(r["tentativas"]) == 2 * len(FILA) + 1  # todas as tentativas ficam registradas
+
+
+def test_fila_nao_insiste_quando_o_erro_e_permanente():
+    esperas = []
+    t = httpx.MockTransport(lambda request: httpx.Response(401, json={"detail": "chave inválida"}))
+    with pytest.raises(cliente_llm.FilaEsgotada) as erro:
+        cliente_llm.conversar_insistente([{"role": "user", "content": "x"}], transporte=t, espera=esperas.append)
+    assert esperas == [] and erro.value.rodadas == 1  # chave inválida: nova rodada não resolveria
+
+
+def test_fila_para_de_insistir_no_prazo_final():
+    esperas = []
+    t = httpx.MockTransport(lambda request: httpx.Response(503, json={"detail": "fora"}))
+    with pytest.raises(cliente_llm.FilaEsgotada) as erro:
+        cliente_llm.conversar_insistente([{"role": "user", "content": "x"}], transporte=t, espera=esperas.append,
+                                         prazo_final=time.monotonic() + 3)
+    assert esperas == [] and erro.value.rodadas == 1  # a próxima pausa já passaria do prazo

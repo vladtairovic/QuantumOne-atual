@@ -7,7 +7,7 @@ services:
       args:
         OPTIMIZATION_TIMEOUT_SECONDS: ${OPTIMIZATION_TIMEOUT_SECONDS:-60}
         API_TIMEOUT_SECONDS: ${API_TIMEOUT_SECONDS:-60}
-        ANALISE_TIMEOUT_SECONDS: ${QONE_ANALISE_TIMEOUT_SECONDS:-900}
+        ANALISE_TIMEOUT_SECONDS: ${QONE_ANALISE_TIMEOUT_SECONDS:-1800}
     restart: unless-stopped
     ports:
       - "127.0.0.1:${FRONTEND_PORT:-3000}:3000"
@@ -44,8 +44,8 @@ services:
       context: .
       target: runtime
     restart: unless-stopped
-    mem_limit: ${API_MEMORY_LIMIT:-2g}
-    cpus: ${API_CPU_LIMIT:-2}
+    mem_limit: ${API_MEMORY_LIMIT:-4g}
+    cpus: ${API_CPU_LIMIT:-4}
     pids_limit: 128
     security_opt: [no-new-privileges:true]
     cap_drop: [ALL]
@@ -79,18 +79,20 @@ services:
       # Fila de LLMs (NVIDIA NIM, API compatível com OpenAI). Sem chave, a resposta é extrativa local.
       NVIDIA_API_KEY: ${NVIDIA_API_KEY:-}
       NVIDIA_MODELS: ${NVIDIA_MODELS:-}
-      LLM_TIMEOUT_SECONDS: ${LLM_TIMEOUT_SECONDS:-30}
+      NVIDIA_MODELS_RAPIDOS: ${NVIDIA_MODELS_RAPIDOS:-}
+      LLM_TIMEOUT_SECONDS: ${LLM_TIMEOUT_SECONDS:-45}
+      # Se a fila inteira falhar, ela é percorrida de novo (5, 10, 20, 30 s entre rodadas) até alguém responder.
+      LLM_INSISTIR_SEGUNDOS: ${LLM_INSISTIR_SEGUNDOS:-1800}
       # 1 = resposta em streaming: a interface mostra o texto sendo escrito pelo modelo em uso.
       LLM_STREAMING: ${LLM_STREAMING:-1}
       # 0 = sem teto: cada modelo da fila tem seus próprios 30 s, um de cada vez.
       LLM_TEMPO_TOTAL_SECONDS: ${LLM_TEMPO_TOTAL_SECONDS:-0}
       LLM_MAX_TOKENS: ${LLM_MAX_TOKENS:-16384}
       LLM_RACIOCINIO: ${LLM_RACIOCINIO:-0}
-      NVIDIA_MODELS_RAPIDOS: ${NVIDIA_MODELS_RAPIDOS:-}
       # Pesquisa na internet (APIs públicas sem chave) como complemento da base local.
       QONE_PESQUISA_WEB: ${QONE_PESQUISA_WEB:-1}
       QONE_WEB_CONTATO: ${QONE_WEB_CONTATO:-}
-      QONE_ANALISE_TIMEOUT_SECONDS: ${QONE_ANALISE_TIMEOUT_SECONDS:-900}
+      QONE_ANALISE_TIMEOUT_SECONDS: ${QONE_ANALISE_TIMEOUT_SECONDS:-1800}
       QONE_MAX_CIRCUITOS: ${QONE_MAX_CIRCUITOS:-8}
       GROWUP_MAX_CONTEXT_CHARS: ${GROWUP_MAX_CONTEXT_CHARS:-8000}
       MAX_CIRCUIT_LINES: ${MAX_CIRCUIT_LINES:-2500}
@@ -106,6 +108,21 @@ services:
       MAX_EQUIVALENCE_QUBITS: ${MAX_EQUIVALENCE_QUBITS:-8}
       MAX_EQUIVALENCE_OPERATIONS: ${MAX_EQUIVALENCE_OPERATIONS:-1000}
       RAG_MAX_DISTANCE: ${RAG_MAX_DISTANCE:-}
+      # Camadas do RAG (docs/RAG.md). Reranker cross-encoder LIGADO por padrão na implantação.
+      RAG_RERANKER: ${RAG_RERANKER:-1}
+      RAG_RERANKER_MODEL: ${RAG_RERANKER_MODEL:-cross-encoder/mmarco-mMiniLMv2-L12-H384-v1}
+      RAG_RERANKER_TOPO: ${RAG_RERANKER_TOPO:-30}
+      RAG_RERANKER_PESO: ${RAG_RERANKER_PESO:-0.7}
+      # Camadas ligadas na implantação (decisões do dono, 28/11/2026), exceto o MMR, que piorou a busca nas
+      # medições (docs/RAG.md, "Camadas combinadas"). A reescrita usa a fila rápida; a verificação descarta em
+      # /query e só informa em /analise.
+      RAG_CONSULTA: ${RAG_CONSULTA:-1}
+      RAG_MMR: ${RAG_MMR:-0}
+      RAG_ORCAMENTO: ${RAG_ORCAMENTO:-1}
+      RAG_VERIFICACAO: ${RAG_VERIFICACAO:-1}
+      RAG_CONSULTA_TIMEOUT: ${RAG_CONSULTA_TIMEOUT:-4}
+      # Threads do torch (o Dockerfile fixa 2); acompanha o limite de CPUs.
+      OMP_NUM_THREADS: ${OMP_NUM_THREADS:-4}
       AVALIACOES_PATH: /app/data/avaliacoes.jsonl
     ports:
       - "127.0.0.1:${API_PORT:-8000}:8000"

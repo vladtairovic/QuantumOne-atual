@@ -9,7 +9,7 @@ corrige circuitos com o Qiskit e revisa alterações antes de gravá-las no disc
 
 | Antes (beta 0.2.2) | Agora (0.3.0, neste projeto) |
 |---|---|
-| Chat por `/conversations` com Gemini e busca web desativada | Chat pela análise unificada (`POST /analise`): base local primeiro, pesquisa na internet como complemento, fila de LLMs NVIDIA (um modelo de cada vez, 30 s cada) e motor Qiskit |
+| Chat por `/conversations` com Gemini e busca web desativada | Chat pela análise unificada (`POST /analise`): base local primeiro, pesquisa na internet como complemento, fila de LLMs NVIDIA (um modelo de cada vez, 45 s cada) e motor Qiskit |
 | Indicador “Pensando...” | Texto ao vivo com a etapa e o modelo consultado (“Redigindo a resposta: consultando nvidia/nemotron-3-ultra-550b-a55b (1/7)”), lido de `GET /analise/progresso/{id}` |
 | `/propor` pedia JSON à rota `/query` (falhava sem evidência na base) | `/propor` usa `POST /assistente/proposta`, feita para propostas estruturadas; a versão proposta dos circuitos é conferida pelo Qiskit antes de `/aplicar` |
 | `/qiskit` no perfil padrão | `/qiskit` no perfil `avancado` (o mais forte que segue exigindo verificação de equivalência, igual à interface), com CX equivalentes, verificação e simulação recomendada |

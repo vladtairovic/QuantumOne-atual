@@ -24,7 +24,7 @@ def llm_simulada(monkeypatch, tmp_path):
     chamadas = []
 
     def conversar(mensagens, modelos=None, tarefa="Resposta", ao_progresso=None, transporte=None, temperatura=0.2,
-                  max_tokens=None, ao_parcial=None):
+                  max_tokens=None, ao_parcial=None, **_):
         chamadas.append({"tarefa": tarefa, "prompt": mensagens[-1]["content"]})
         if ao_progresso:
             ao_progresso("nvidia/modelo-teste", 1, 7, tarefa)
@@ -127,9 +127,11 @@ def test_falha_da_fila_vira_resposta_local_com_resultados_do_qiskit(contexto, mo
         raise cliente_llm.FilaEsgotada([{"modelo": "m", "resultado": "tempo_esgotado_15s", "segundos": 15.0}])
     monkeypatch.setattr(cliente_llm, "conversar", falhar)
     monkeypatch.setattr(pesquisa_web, "pesquisar", lambda c, **k: ([], {"consultas": c, "fontes": {}, "falhas": {}}))
+    monkeypatch.setattr(orquestrador, "TEMPO_ANALISE", 36)  # prazo curto: insiste até o fim do prazo e cai no local
     client, _ = contexto
     d = client.post("/analise", json={"mensagem": "Otimize este circuito", "codigo": QASM_CORRIGIDO}).json()
     assert d["answer_mode"] == "local" and "Resultados do Qiskit" in d["resposta"]
+    assert any("rodada(s) da fila" in a for a in d["warnings"])
     assert d["circuitos"][0]["valido_original"] is True and d["circuitos"][0]["otimizacao"]
 
 
@@ -274,7 +276,7 @@ def test_proposta_da_cli_usa_a_fila_e_devolve_json(contexto, monkeypatch):
     recebido = {}
 
     def conversar(mensagens, modelos=None, tarefa="Resposta", ao_progresso=None, transporte=None, temperatura=0.2,
-                  max_tokens=None, ao_parcial=None):
+                  max_tokens=None, ao_parcial=None, **_):
         recebido.update(sistema=mensagens[0]["content"], dados=json.loads(mensagens[1]["content"]), tarefa=tarefa)
         if ao_progresso:
             ao_progresso("nvidia/modelo-teste", 1, 7, tarefa)
@@ -318,3 +320,116 @@ def test_otimizar_python_de_projeto_extrai_so_a_construcao(contexto):
     d = r.json()
     assert d["original"]["qubits"] == 2 and d["equivalente"] is True
     assert any("ignorad" in w.lower() for w in d["warnings"])
+
+
+def test_perfil_local_orienta_o_nivel_da_resposta(contexto, llm_simulada):
+    from rag.prompts import INSTRUCOES, INSTRUCOES_ANALISE
+    client, _ = contexto
+    _documento(client)
+    corpo = {"mensagem": "O que é uma porta CNOT e para que serve a medição de qubits?", "pesquisa_web": False}
+    r = client.post("/analise", json={**corpo, "usuario": {"experiencia": "iniciante", "estilo": "didatica",
+                                                           "papel": "estudante"}})
+    assert r.status_code == 200, r.text
+    final = llm_simulada[-1]["prompt"]
+    assert "<perfil_do_usuario>" in final and "iniciante" in final and "didática" in final and "estudante" in final
+    llm_simulada.clear()
+    assert client.post("/analise", json=corpo).status_code == 200
+    assert "<perfil_do_usuario>" not in llm_simulada[-1]["prompt"]  # sem perfil: nível inferido pela pergunta
+    assert client.post("/analise", json={**corpo, "usuario": {"experiencia": "guru"}}).status_code == 422
+    for instrucoes in (INSTRUCOES_ANALISE, INSTRUCOES):
+        assert "Leigo ou iniciante" in instrucoes and "Experiente ou avançado" in instrucoes
+        assert "300 a 700" not in instrucoes and "Nunca entregue uma resposta rasa" in instrucoes
+
+
+def test_verificacao_na_analise_so_informa(contexto, llm_simulada, monkeypatch):
+    from rag import verificacao
+    client, _ = contexto
+    _documento(client)
+    corpo = {"mensagem": "Como medir qubits com CNOT no Qiskit?", "pesquisa_web": False}
+    monkeypatch.setenv("RAG_VERIFICACAO", "0")
+    assert client.post("/analise", json=corpo).json()["verificacao"] is None
+    monkeypatch.setenv("RAG_VERIFICACAO", "1")
+    monkeypatch.setattr(verificacao, "verificar_resposta", lambda resposta, fontes: {
+        "fidelidade": 0.25, "texto": resposta,
+        "frases": [{"suportada": False}, {"suportada": False}, {"suportada": False}, {"suportada": True}]})
+    d = client.post("/analise", json=corpo).json()
+    assert d["verificacao"] == {"fidelidade": 0.25, "frases_avaliadas": 4, "frases_sem_suporte": 3}
+    assert d["answer_mode"] == "llm" and d["resposta"].startswith("Resposta final")  # não descartou
+    assert any(e["texto"].startswith("Verificação: 25%") for e in d["etapas"])
+
+
+def test_resposta_da_llm_sai_sem_marcadores_de_fonte(contexto, llm_simulada):
+    from rag.prompts import INSTRUCOES, INSTRUCOES_ANALISE
+    from rag.texto import remover_marcadores_de_fonte
+    client, _ = contexto
+    _documento(client)
+    d = client.post("/analise", json={"mensagem": "Como medir qubits com CNOT no Qiskit?", "pesquisa_web": False}).json()
+    # a LLM simulada escreve "[Fonte 1] e [Web 1]"; quem lê recebe o texto limpo, e as fontes seguem em sources
+    assert "[Fonte" not in d["resposta"] and "[Web" not in d["resposta"] and d["sources"]
+    assert "[Fonte 1]" in llm_simulada[-1]["prompt"]  # os trechos continuam numerados no contexto da LLM
+    for instrucoes in (INSTRUCOES_ANALISE, INSTRUCOES):
+        assert "Não escreva marcadores de fonte" in instrucoes and "Cite" not in instrucoes
+    assert remover_marcadores_de_fonte("Use cx [Fonte 2][Web 1] e qc[0] [Fonte 1, Fonte 3].") == "Use cx e qc[0]."
+
+
+def test_analise_que_falha_e_refeita_em_vez_de_dar_erro(contexto, llm_simulada, monkeypatch):
+    import main
+    client, _ = contexto
+    _documento(client)
+    original, chamadas = orquestrador.analisar, {"n": 0}
+
+    async def instavel(entrada, request_id):
+        chamadas["n"] += 1
+        if chamadas["n"] == 1:
+            raise RuntimeError("falha inesperada")
+        return await original(entrada, request_id)
+
+    monkeypatch.setattr(orquestrador, "analisar", instavel)
+    monkeypatch.setattr(main, "_pausa_antes_de_refazer", original_sleep)
+    r = client.post("/analise", json={"mensagem": "Como medir qubits com CNOT no Qiskit?", "pesquisa_web": False})
+    assert r.status_code == 200 and chamadas["n"] == 2
+    d = r.json()
+    assert d["answer_mode"] == "llm" and d["warnings"][0].startswith("A análise falhou 1 vez(es) (RuntimeError)")
+
+
+async def original_sleep(segundos):
+    return None
+
+
+def test_analise_sem_tempo_responde_sem_erro(contexto, monkeypatch):
+    import main
+    client, _ = contexto
+
+    async def sempre_falha(entrada, request_id):
+        raise RuntimeError("quebrou")
+
+    monkeypatch.setattr(orquestrador, "analisar", sempre_falha)
+    monkeypatch.setattr(main, "TEMPO_ANALISE", 100)  # menos que a margem para refazer
+    r = client.post("/analise", json={"mensagem": "Como medir qubits?"})
+    assert r.status_code == 200  # nunca um erro para o usuário
+    d = r.json()
+    assert d["answer_mode"] == "none" and "envie de novo" in d["resposta"] and "RuntimeError" in d["warnings"][0]
+
+
+def test_worker_ocupado_tenta_de_novo(monkeypatch):
+    import asyncio
+    from quantum import api
+    from quantum.errors import CircuitError
+    chamadas = {"n": 0}
+
+    async def execute_worker(payload):
+        chamadas["n"] += 1
+        if chamadas["n"] < 3:
+            raise CircuitError("OPTIMIZER_BUSY", "ocupado", status=429)
+        return {"ok": True}
+
+    monkeypatch.setattr(api, "execute_worker", execute_worker)
+    monkeypatch.setattr(orquestrador, "_pausa_do_worker", original_sleep)
+    assert asyncio.run(orquestrador._worker({"acao": "x"}, "teste")) == {"ok": True} and chamadas["n"] == 3
+
+    async def invalido(payload):
+        raise CircuitError("INVALID_CIRCUIT", "circuito inválido", status=422)
+
+    monkeypatch.setattr(api, "execute_worker", invalido)
+    with pytest.raises(CircuitError):  # erro do próprio código: não adianta repetir
+        asyncio.run(orquestrador._worker({"acao": "x"}, "teste"))

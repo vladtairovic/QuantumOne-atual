@@ -3,6 +3,7 @@ import json
 from collections import defaultdict
 from pathlib import Path
 from threading import RLock
+from . import configuracao
 from .configuracao import MODELO_EMBEDDINGS, MODELO_LOCK, criar_embeddings, obter_modelo, limite_tokens
 from .banco import obter_colecao
 
@@ -30,7 +31,7 @@ def validar_lote(chunks, modelo):
             raise ValueError("ID incompatível com o documento.")
         if meta.get("modelo_embeddings") != modelo:
             raise ValueError("Modelo diferente da configuração. Prepare os chunks novamente.")
-        if not 0 < meta.get("tokens", 0) <= 110:
+        if not 0 < meta.get("tokens", 0) <= configuracao.limite_tokens():
             raise ValueError("Contagem de tokens inválida.")
         grupos[meta["document_id"]].append(chunk)
     return grupos
@@ -41,7 +42,7 @@ def atualizar_documento(colecao, document_id, chunks):
     if any(c["metadados"]["document_id"] != document_id for c in chunks):
         raise ValueError("Lote mistura documentos.")
     # Calcula todos os vetores antes de começar a alterar os registros.
-    vetores = criar_embeddings()([c["texto"] for c in chunks])
+    vetores = criar_embeddings("passagem")([c["texto"] for c in chunks])
     with ESCRITA_LOCK:
         return _gravar_documento(colecao, document_id, chunks, vetores)
 

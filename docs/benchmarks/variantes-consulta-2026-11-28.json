@@ -1,0 +1,1219 @@
+{
+ "t01": [
+  "O que é transpilação no Qiskit?",
+  "What is transpilation in Qiskit?",
+  "How does the Qiskit transpiler optimize quantum circuits?",
+  "What are the main stages of the Qiskit transpilation pipeline?"
+ ],
+ "t02": [
+  "Quais são os estágios do transpilador?",
+  "What are the stages of the Qiskit transpiler?",
+  "What is the purpose of each stage in the Qiskit transpiler pipeline?"
+ ],
+ "t03": [
+  "Qual a diferença entre os níveis de otimização 0, 1, 2 e 3 do transpile?",
+  "What are the differences between optimization levels 0, 1, 2, and 3 in the Qiskit transpile function?"
+ ],
+ "t04": [
+  "Qual é o nível de otimização padrão do transpile no Qiskit 2?",
+  "What is the default optimization level of the transpile function in Qiskit 2?"
+ ],
+ "t05": [
+  "Como o roteamento insere portas SWAP para respeitar a conectividade do hardware?",
+  "How does SWAP insertion respect hardware connectivity in routing?",
+  "What is the algorithm for SWAP gate insertion in quantum circuit routing?"
+ ],
+ "t06": [
+  "Como usar generate_preset_pass_manager?",
+  "How to use generate_preset_pass_manager in Qiskit",
+  "How to configure a pass manager using generate_preset_pass_manager"
+ ],
+ "b01": [
+  "Por que o Qiskit mostra os bits invertidos nas contagens?",
+  "Why does Qiskit show inverted bits in measurement counts?",
+  "How to reverse the bit order in Qiskit measurement results?"
+ ],
+ "b02": [
+  "O qubit 0 corresponde ao bit mais à direita no resultado?",
+  "How does qubit 0 map to the least significant bit in a measurement result in Qiskit?",
+  "What is the endianness convention for measurement outcomes in Qiskit?"
+ ],
+ "m01": [
+  "Como medir todos os qubits de um circuito?",
+  "How to measure all qubits in a Qiskit circuit?",
+  "How to add measurement operations to all qubits in a Qiskit circuit?"
+ ],
+ "m02": [
+  "Como fazer uma medição no meio do circuito e usar o resultado para controlar outra porta?",
+  "How to perform mid-circuit measurement in Qiskit and use the result to control a conditional gate?",
+  "How to implement conditional operations based on mid-circuit measurement outcomes in Qiskit?",
+  "How to use measurement results to dynamically apply gates in a quantum circuit using Qiskit?"
+ ],
+ "m03": [
+  "Como usar if_test com um registrador clássico?",
+  "How to use if_test with a classical register in Qiskit",
+  "How to use if_test with a ClassicalRegister in Qiskit"
+ ],
+ "m04": [
+  "c_if não funciona mais no Qiskit 2, o que devo usar?",
+  "How to replace c_if in Qiskit 2 for classical bit manipulation",
+  "What is the alternative to c_if method in Qiskit 2 quantum circuits"
+ ],
+ "g01": [
+  "ImportError: cannot import name 'execute' from 'qiskit'",
+  "How to fix ImportError: cannot import name 'execute' from qiskit in Python",
+  "Why is the execute function removed from the qiskit.execute module"
+ ],
+ "g02": [
+  "AttributeError: 'QuantumCircuit' object has no attribute 'cnot'",
+  "How to use the CNOT gate in Qiskit QuantumCircuit",
+  "Qiskit QuantumCircuit CNOT method attribute error"
+ ],
+ "g03": [
+  "Como substituir Aer.get_backend no Qiskit 2?",
+  "How to replace Aer.get_backend in Qiskit 2",
+  "How to use AerSimulator in Qiskit 2"
+ ],
+ "g04": [
+  "O método qc.u3 foi removido, qual é o substituto?",
+  "What is the replacement for the qc.u3 method in Qiskit?",
+  "How to replace deprecated u3 gate in Qiskit with current standard gates?"
+ ],
+ "g05": [
+  "Como trocar bind_parameters por algo que funcione?",
+  "How to replace bind_parameters with a working alternative in Qiskit?",
+  "How to bind parameters to a QuantumCircuit in Qiskit?"
+ ],
+ "p01": [
+  "Como criar um circuito parametrizado com Parameter?",
+  "How to create a parameterized circuit with Parameter in Qiskit",
+  "How to define and use Parameter objects in Qiskit circuits"
+ ],
+ "p02": [
+  "Como atribuir valores numéricos aos parâmetros de um circuito?",
+  "How to assign numeric values to parameters in a Qiskit circuit?",
+  "How to bind parameters to a QuantumCircuit in Qiskit?"
+ ],
+ "q01": [
+  "Como carregar um programa OpenQASM 2 no Qiskit?",
+  "How to load an OpenQASM 2 program in Qiskit?"
+ ],
+ "q02": [
+  "Como exportar um circuito para OpenQASM 3?",
+  "How to export a circuit to OpenQASM 3 in Qiskit",
+  "Qiskit export circuit OpenQASM 3 format"
+ ],
+ "q03": [
+  "Quais são as diferenças entre OpenQASM 2 e OpenQASM 3?",
+  "What are the differences between OpenQASM 2 and OpenQASM 3 in Qiskit?",
+  "How does OpenQASM 3 syntax differ from OpenQASM 2 in Qiskit's documentation?"
+ ],
+ "q04": [
+  "Meu QASM dá erro de índice fora do registrador, como corrigir?",
+  "How to fix QASM index out of register error in Qiskit?",
+  "How to debug QASM register size mismatch in Qiskit?"
+ ],
+ "s01": [
+  "Como usar o StatevectorSampler para obter contagens?",
+  "How to use StatevectorSampler to obtain counts in Qiskit?",
+  "What is the difference between StatevectorSampler and Sampler in Qiskit?",
+  "How to execute a circuit with StatevectorSampler and retrieve measurement counts?"
+ ],
+ "s02": [
+  "Como calcular o valor esperado de um observável com o Estimator?",
+  "How to calculate the expectation value of an observable using the Estimator in Qiskit?",
+  "How to use the Estimator class to compute expectation values for quantum circuits?",
+  "What is the procedure to compute the expectation value of a Pauli observable with Qiskit's Estimator?"
+ ],
+ "s03": [
+  "O que é um PUB nas primitivas V2?",
+  "What is a PUB in Qiskit primitives V2?",
+  "How does the PUB class work in Qiskit runtime V2?"
+ ],
+ "s04": [
+  "Quanta memória é necessária para simular 30 qubits com statevector?",
+  "What is the memory requirement for simulating 30 qubits using statevector in Qiskit?",
+  "How much RAM is needed to run a statevector simulator for a 30-qubit circuit in Qiskit?"
+ ],
+ "s05": [
+  "Quando usar simulação estabilizadora de circuitos de Clifford?",
+  "When to use stabilizer simulation for Clifford circuits in Qiskit",
+  "How to perform stabilizer simulation in Qiskit for Clifford circuits"
+ ],
+ "s06": [
+  "O que é o método matrix product state de simulação?",
+  "What is the matrix product state simulation method in Qiskit?",
+  "How does the matrix product state method work in the context of quantum simulation?",
+  "What are the applications of matrix product state simulation in Qiskit?"
+ ],
+ "i01": [
+  "Como obter o vetor de estado de um circuito?",
+  "How to obtain the state vector of a circuit in Qiskit",
+  "How to get the statevector from a QuantumCircuit object"
+ ],
+ "i02": [
+  "Como verificar se dois circuitos são equivalentes?",
+  "Qiskit circuit equivalence check",
+  "how to verify two quantum circuits are equivalent in Qiskit"
+ ],
+ "i03": [
+  "Qual a diferença entre Operator.equiv e o operador de igualdade?",
+  "Qiskit Operator.equiv vs equality operator",
+  "Qiskit Operator comparison methods"
+ ],
+ "i04": [
+  "Como obter a matriz unitária de um circuito?",
+  "Qiskit get unitary matrix of a circuit",
+  "Qiskit circuit unitary matrix extraction"
+ ],
+ "c01": [
+  "Quais portas estão disponíveis na biblioteca de circuitos?",
+  "available quantum circuit library gates",
+  "Qiskit circuit library gates"
+ ],
+ "c02": [
+  "Como desenhar um circuito quântico?",
+  "How to design a quantum circuit in Qiskit",
+  "Qiskit quantum circuit drawing tutorial"
+ ],
+ "c03": [
+  "Como construir um circuito com registradores quânticos e clássicos?",
+  "Qiskit quantum registers and classical registers circuit construction",
+  "Qiskit circuit with quantum and classical registers",
+  "How to build a circuit with quantum and classical registers in Qiskit"
+ ],
+ "c04": [
+  "Como compor dois circuitos em um só?",
+  "Qiskit circuit composition",
+  "combine two Qiskit circuits",
+  "append circuits in Qiskit"
+ ],
+ "a01": [
+  "Como preparar um estado GHZ?",
+  "How to prepare a GHZ state in Qiskit"
+ ],
+ "a02": [
+  "Como funciona o algoritmo de Grover?",
+  "How does Grover's algorithm work in Qiskit documentation"
+ ],
+ "a03": [
+  "Como implementar a transformada de Fourier quântica no Qiskit 2?",
+  "Qiskit 2 Quantum Fourier Transform implementation",
+  "QFT implementation in Qiskit 2"
+ ],
+ "a04": [
+  "O que é o VQE e como ele usa um otimizador clássico?",
+  "What is VQE in quantum computing?",
+  "How does VQE utilize a classical optimizer?"
+ ],
+ "f01": [
+  "O que é emaranhamento quântico?",
+  "What is quantum entanglement in Qiskit documentation"
+ ],
+ "f02": [
+  "Por que a fase global não altera as medições?",
+  "why global phase does not alter measurements in quantum computing",
+  "global phase invariance in quantum measurement"
+ ],
+ "f03": [
+  "Quais identidades de portas permitem cancelar operações?",
+  "Qiskit gate identities for operation cancellation",
+  "Qiskit gate identities to cancel operations"
+ ],
+ "f04": [
+  "Quantas portas CX tem uma Toffoli decomposta?",
+  "number of CX gates in a decomposed Toffoli gate",
+  "Toffoli decomposition CX count"
+ ],
+ "e01": [
+  "Qual a diferença entre correção e mitigação de erros?",
+  "difference between error correction and error mitigation in quantum computing",
+  "quantum error correction techniques",
+  "quantum error mitigation methods"
+ ],
+ "e02": [
+  "Como funciona o código de repetição de bit-flip?",
+  "bit-flip repetition code mechanism",
+  "Qiskit bit-flip repetition code implementation"
+ ],
+ "u01": [
+  "Qual a melhor receita de lasanha de berinjela?",
+  "best eggplant lasagna recipe"
+ ],
+ "u02": [
+  "Quem ganhou a copa do mundo de futebol de 2002?",
+  "2002 FIFA World Cup winner"
+ ],
+ "u03": [
+  "Como configurar a senha do roteador wifi?",
+  "wifi router password configuration"
+ ],
+ "u04": [
+  "Qual o preço atual da ação da Petrobras?",
+  "Petrobras stock price"
+ ],
+ "u05": [
+  "Como trocar o óleo do motor do carro?",
+  "car engine oil change procedure"
+ ],
+ "u06": [
+  "Me recomende um filme de terror dos anos 80",
+  "recommend 80s horror movie"
+ ],
+ "n001": [
+  "What is transpilation and why is it needed for quantum hardware?",
+  "What is transpilation in quantum computing?",
+  "Why is transpilation needed for quantum hardware?",
+  "Qiskit transpilation process"
+ ],
+ "n002": [
+  "What are the stages of the Qiskit transpiler pipeline?",
+  "Qiskit transpiler pipeline stages",
+  "Qiskit transpiler pipeline stages documentation"
+ ],
+ "n003": [
+  "O que faz o estágio de layout do transpilador?",
+  "What is the function of the transpiler layout stage in quantum computing documentation",
+  "Qiskit transpiler layout stage functionality"
+ ],
+ "n004": [
+  "O que o estágio de tradução faz com as portas do circuito?",
+  "Qiskit circuit translation stage function on gates",
+  "Qiskit circuit gate translation process"
+ ],
+ "n005": [
+  "Which optimization level does transpile use by default?",
+  "Qiskit transpile default optimization level",
+  "Qiskit transpilation optimization settings"
+ ],
+ "n006": [
+  "scheduling_method",
+  "scheduling_method in Qiskit documentation",
+  "Qiskit scheduling algorithms"
+ ],
+ "n007": [
+  "initial_layout",
+  "Qiskit initial_layout"
+ ],
+ "n008": [
+  "seed_transpiler",
+  "seed_transpiler Qiskit documentation",
+  "Qiskit transpiler seed parameter"
+ ],
+ "n009": [
+  "Qual a diferença entre transpile e generate_preset_pass_manager?",
+  "Qiskit transpile function documentation",
+  "Qiskit generate_preset_pass_manager function documentation",
+  "difference between Qiskit transpile and generate_preset_pass_manager"
+ ],
+ "n010": [
+  "How do I measure hardware efficiency after transpiling a circuit?",
+  "Qiskit hardware efficiency measurement after transpilation",
+  "Qiskit circuit transpilation hardware performance metrics"
+ ],
+ "n011": [
+  "Por que transpilar de novo com outra semente muda o número de portas?",
+  "Qiskit transpilation seed effect on qubit count",
+  "Qiskit transpilation re-run different seed qubit count change"
+ ],
+ "n012": [
+  "Transpilação",
+  "Qiskit transpilation process",
+  "Qiskit transpilation optimization techniques"
+ ],
+ "n013": [
+  "What is the instruction set architecture constraint in transpilation?",
+  "instruction set architecture constraint in transpilation",
+  "Qiskit transpilation ISA constraints"
+ ],
+ "n014": [
+  "Reduzir a profundidade do circuito aumenta o número de portas?",
+  "circuit depth vs gate count in quantum circuits",
+  "Qiskit circuit optimization depth gate count"
+ ],
+ "n015": [
+  "Quais parâmetros descrevem o QPU alvo no generate_preset_pass_manager, como coupling_map e basis_gates?",
+  "QPU target parameters in generate_preset_pass_manager",
+  "coupling_map Qiskit",
+  "basis_gates Qiskit"
+ ],
+ "n016": [
+  "Compare optimization levels 1 and 3 in terms of two-qubit gate count",
+  "Qiskit optimization level 1 vs level 3 two-qubit gate count comparison",
+  "Qiskit optimization level 1 two-qubit gate count",
+  "Qiskit optimization level 3 two-qubit gate count"
+ ],
+ "n017": [
+  "How many CX gates does a SWAP cost?",
+  "CX gate count for SWAP operation in Qiskit",
+  "SWAP gate decomposition using CX gates"
+ ],
+ "n018": [
+  "What are SabreLayout and VF2Layout used for?",
+  "SabreLayout purpose in quantum computing documentation",
+  "VF2Layout purpose in quantum computing documentation",
+  "SabreLayout vs VF2Layout quantum computing"
+ ],
+ "n019": [
+  "Que topologias de hardware são comuns, como heavy-hex?",
+  "common quantum hardware topologies",
+  "heavy-hex topology Qiskit"
+ ],
+ "n020": [
+  "Para que serve o layout inicial na escolha dos qubits físicos?",
+  "initial layout purpose physical qubits",
+  "Qiskit physical qubit selection initial layout"
+ ],
+ "n021": [
+  "Por que portas Z, S ou T imediatamente antes da medição podem ser removidas?",
+  "why Z S or T gates immediately before measurement can be removed in quantum computation",
+  "Qiskit measurement gate optimization Z S T"
+ ],
+ "n022": [
+  "How many CX gates are needed for an arbitrary two-qubit unitary?",
+  "How many CX gates are needed for an arbitrary two-qubit unitary operation?",
+  "What is the minimum number of CNOT gates required to implement an arbitrary two-qubit unitary in Qiskit?",
+  "How does the CX gate count relate to the decomposition of a 2-qubit unitary in the Qiskit library?"
+ ],
+ "n023": [
+  "RemoveDiagonalGatesBeforeMeasure",
+  "How to remove diagonal gates before measurement in Qiskit",
+  "Qiskit RemoveDiagonalGatesBeforeMeasure function usage"
+ ],
+ "n024": [
+  "ConsolidateBlocks e UnitarySynthesis",
+  "ConsolidateBlocks in Qiskit",
+  "UnitarySynthesis in Qiskit"
+ ],
+ "n025": [
+  "Which gate identity turns CX into CZ?",
+  "How to transform a CX gate into a CZ gate using a gate identity?",
+  "What is the gate identity that converts CX to CZ in Qiskit?",
+  "Explain the transformation from CX to CZ using a standard quantum gate identity."
+ ],
+ "n026": [
+  "Qual a métrica de custo mais importante em hardware real?",
+  "What is the most important cost metric for real quantum hardware?",
+  "How does gate fidelity impact the overall cost of quantum circuits in hardware?",
+  "What are the key performance metrics for evaluating quantum hardware cost?"
+ ],
+ "n027": [
+  "Como garantir que uma otimização não alterou a semântica do circuito?",
+  "How to verify that an optimization pass preserves the semantic equivalence of a quantum circuit in Qiskit?",
+  "What methods exist in Qiskit to check circuit equivalence after applying optimization passes?",
+  "How to validate that a quantum circuit optimization maintains the original circuit's behavior and measurement outcomes?"
+ ],
+ "n028": [
+  "SWAP versus CX: quantos CX tem um SWAP e quando ele é inserido?",
+  "How many CX gates are decomposed from a single SWAP gate in Qiskit?",
+  "Under what conditions or optimization passes is a SWAP gate decomposed into CX gates in Qiskit?"
+ ],
+ "n029": [
+  "What is the difference between RZ and the phase gate P?",
+  "What is the difference between the RZ gate and the Phase gate P in Qiskit?",
+  "How do the rotation angles of RZ and the Phase gate P differ in their effect on the qubit state?",
+  "What is the mathematical relationship between the RZ gate and the Phase gate P in quantum computing?"
+ ],
+ "n030": [
+  "Quais portas diagonais comutam entre si?",
+  "Which diagonal gates commute with each other in Qiskit?",
+  "Commutation relations of diagonal quantum gates in Qiskit documentation"
+ ],
+ "n031": [
+  "Why are my Qiskit measurement counts reversed?",
+  "How to fix reversed bit order in Qiskit measurement results"
+ ],
+ "n032": [
+  "Which qubit is the least significant bit in Qiskit?",
+  "What is the role of the least significant bit in Qiskit qubit ordering?"
+ ],
+ "n033": [
+  "Em qual lado da string de contagens fica o bit clássico 0?",
+  "In Qiskit, when measuring a quantum circuit, which side of the bit string (left or right) corresponds to classical bit 0?"
+ ],
+ "n034": [
+  "Como desenhar o circuito com o qubit 0 embaixo usando reverse_bits?",
+  "How to use reverse_bits to draw a circuit with qubit 0 at the bottom in Qiskit?",
+  "How to visualize a Qiskit circuit with qubit 0 positioned at the bottom using reverse_bits?"
+ ],
+ "n035": [
+  "Qual é a convenção (controle, alvo) das portas controladas no Qiskit?",
+  "What is the control-target convention for controlled gates in Qiskit?"
+ ],
+ "n036": [
+  "How are statevector amplitudes indexed in Qiskit?",
+  "What is the indexing convention for statevector amplitudes in Qiskit?"
+ ],
+ "n037": [
+  "BitArray little endian",
+  "How to handle little-endian bit ordering in Qiskit BitArray?",
+  "Qiskit BitArray endianness conversion and bit shifting operations"
+ ],
+ "n038": [
+  "Little-endian ou big-endian: qual a diferença nas strings de contagens?",
+  "What is the difference between little-endian and big-endian bit ordering in Qiskit measurement result strings?",
+  "How does endianness affect the interpretation of counts from a quantum circuit execution in Qiskit?"
+ ],
+ "n039": [
+  "What does measure_all do?",
+  "What is the function of measure_all in Qiskit?",
+  "How does measure_all differ from measure in Qiskit?",
+  "What is the syntax and parameters of measure_all in Qiskit?"
+ ],
+ "n040": [
+  "Qual a diferença entre measure_all e measure_active?",
+  "What is the difference between measure_all and measure_active in Qiskit?",
+  "How does measure_all differ from measure_active in the Qiskit Terra module?"
+ ],
+ "n041": [
+  "How do I measure a qubit into a specific classical bit with QuantumCircuit.measure?",
+  "How to measure a qubit into a specific classical bit using QuantumCircuit.measure in Qiskit",
+  "Qiskit QuantumCircuit.measure method specifying classical bit parameter"
+ ],
+ "n042": [
+  "Como medir na base X ou na base Y?",
+  "How to measure in the X basis or Y basis in Qiskit?",
+  "How to apply a Hadamard gate before measurement to measure in the X basis?",
+  "How to apply a S gate and Hadamard gate before measurement to measure in the Y basis?"
+ ],
+ "n043": [
+  "O Sampler devolve contagens vazias, o que falta no circuito?",
+  "What parameters are missing from a Qiskit Sampler circuit to return counts?",
+  "What circuit configuration is required for Qiskit Sampler to return measurement counts?"
+ ],
+ "n044": [
+  "measure_active",
+  "How to measure active qubits in Qiskit?",
+  "Qiskit measure_active function usage"
+ ],
+ "n045": [
+  "What does reset do and why is it not unitary?",
+  "What does the reset operation do in Qiskit and why is it not a unitary operation?"
+ ],
+ "n046": [
+  "Como anexar a classe Measure com append?",
+  "How to append the Measure class in Qiskit?",
+  "How to use the append method to add a Measure operation to a QuantumCircuit?"
+ ],
+ "n047": [
+  "Como as contagens separam vários registradores clássicos?",
+  "How do counts separate multiple classical registers in Qiskit?",
+  "How to retrieve counts from multiple classical registers in Qiskit?",
+  "How does the counts result structure work with multiple classical registers in Qiskit?"
+ ],
+ "n048": [
+  "Why does a circuit with mid-circuit measurement have no unitary matrix?",
+  "Why does a quantum circuit with mid-circuit measurement have no unitary matrix representation?",
+  "How does mid-circuit measurement affect the unitary evolution of a Qiskit circuit?"
+ ],
+ "n049": [
+  "Medi em um bit clássico que não existe, qual é o erro?",
+  "What is the error when measuring a qubit in a superposition state into a classical bit that does not exist?",
+  "How does measurement error occur when the target classical bit is undefined or missing in Qiskit?",
+  "What happens when measuring a quantum state into a non-existent classical bit register in Qiskit?"
+ ],
+ "n050": [
+  "measure",
+  "How to use the measure function in Qiskit to collapse a quantum state to a classical bit?",
+  "What are the parameters and return values of the QuantumCircuit.measure method in Qiskit?"
+ ],
+ "n051": [
+  "How do I use an if statement on a classical bit in a dynamic circuit?",
+  "How to implement conditional operations based on classical bit measurements in Qiskit dynamic circuits",
+  "Qiskit dynamic circuit if statement classical bit measurement result",
+  "How to use if-else logic on classical bits in Qiskit pulse or circuit execution"
+ ],
+ "n052": [
+  "Como usar switch em circuitos dinâmicos?",
+  "Qiskit dynamic circuits switch implementation",
+  "Qiskit conditional logic in quantum circuits",
+  "Qiskit dynamic circuit control flow"
+ ],
+ "n053": [
+  "How do I write a while loop in a Qiskit circuit?",
+  "Qiskit while loop implementation",
+  "Qiskit circuit control flow",
+  "implementing iterative operations in Qiskit"
+ ],
+ "n054": [
+  "O que faz a instrução store e as expressões clássicas?",
+  "Qiskit instruction store function",
+  "Qiskit classical register expressions"
+ ],
+ "n055": [
+  "if_test versus c_if: o que mudou?",
+  "Qiskit if_test vs c_if changes",
+  "Qiskit if_test implementation details",
+  "Qiskit c_if implementation details"
+ ],
+ "n056": [
+  "for_loop em circuito quântico",
+  "Qiskit for_loop quantum circuit implementation",
+  "Qiskit quantum circuit iteration"
+ ],
+ "n057": [
+  "How do I replace execute() from old Qiskit 0.x code in Qiskit 2?",
+  "Qiskit 2 execute() replacement",
+  "migrate Qiskit 0.x to Qiskit 2 execution",
+  "Qiskit execution model changes"
+ ],
+ "n058": [
+  "Which modules were removed in Qiskit 2, such as pulse and opflow?",
+  "Qiskit 2 removed modules",
+  "Qiskit 2 pulse module removal",
+  "Qiskit 2 opflow module removal"
+ ],
+ "n059": [
+  "qiskit.opflow não existe mais, o que usar no lugar?",
+  "Qiskit replacement for qiskit.opflow",
+  "Qiskit quantum circuit optimization alternatives"
+ ],
+ "n060": [
+  "Como trocar IBMQ por qiskit_ibm_runtime?",
+  "Migrate from IBMQ to qiskit_ibm_runtime",
+  "qiskit_ibm_runtime vs IBMQ",
+  "qiskit_ibm_runtime setup"
+ ],
+ "n061": [
+  "qc.toffoli e qc.fredkin",
+  "Qiskit qc.toffoli implementation",
+  "Qiskit qc.fredkin implementation"
+ ],
+ "n062": [
+  "Como substituir qc.qasm() no Qiskit 2?",
+  "Qiskit 2 replacement for qc.qasm()",
+  "Qiskit 2 quantum circuit execution methods"
+ ],
+ "n063": [
+  "What replaces the u1, u2 and u3 circuit methods?",
+  "Qiskit circuit methods replacement for u1 u2 u3",
+  "Qiskit parameterized quantum circuits alternatives",
+  "Qiskit gate decomposition beyond u1 u2 u3"
+ ],
+ "n064": [
+  "BasicAer foi removido, como simular sem instalar o Aer?",
+  "Qiskit simulation without Aer",
+  "Qiskit simulator alternatives to BasicAer"
+ ],
+ "n065": [
+  "ModuleNotFoundError: No module named 'qiskit_aer'",
+  "how to install qiskit_aer",
+  "qiskit_aer installation guide"
+ ],
+ "n066": [
+  "No module named 'qiskit.providers.aer'",
+  "qiskit.providers.aer module import error",
+  "Qiskit Aer installation guide",
+  "Troubleshooting qiskit.providers.aer not found"
+ ],
+ "n067": [
+  "QuantumInstance",
+  "Qiskit QuantumInstance documentation"
+ ],
+ "n068": [
+  "Is qiskit.algorithms still part of Qiskit?",
+  "qiskit.algorithms module status in Qiskit"
+ ],
+ "n069": [
+  "Como obter o statevector sem usar o statevector_simulator?",
+  "Qiskit get statevector without statevector_simulator",
+  "Qiskit statevector calculation alternative"
+ ],
+ "n070": [
+  "Qual a diferença entre qc.cu3 e qc.cu no Qiskit 2?",
+  "Qiskit 2 qc.cu3 vs qc.cu difference",
+  "Qiskit 2 qc.cu3 documentation",
+  "Qiskit 2 qc.cu documentation"
+ ],
+ "n071": [
+  "What is the replacement for qiskit.assemble and Qobj execution?",
+  "qiskit.assemble replacement",
+  "Qobj execution replacement",
+  "Qiskit modern circuit assembly and Qobj execution"
+ ],
+ "n072": [
+  "Como saber se um código de tutorial foi escrito para o Qiskit 0.x?",
+  "Qiskit 0.x tutorial code identification",
+  "Qiskit version compatibility check"
+ ],
+ "n073": [
+  "CircuitError: Index 2 out of range for size 2",
+  "Qiskit index out of range error handling",
+  "Qiskit array indexing limits"
+ ],
+ "n074": [
+  "duplicate qubit arguments error when calling cx(0, 0)",
+  "Qiskit cx gate duplicate qubit arguments error"
+ ],
+ "n075": [
+  "Parâmetros não atribuídos ao simular, o que significa unbound parameters?",
+  "unbound parameters in quantum simulation",
+  "Qiskit unbound parameters meaning"
+ ],
+ "n076": [
+  "How should I debug a Qiskit traceback step by step?",
+  "Qiskit traceback debugging step by step",
+  "Qiskit debugging guide"
+ ],
+ "n077": [
+  "NameError QuantumCircuit is not defined",
+  "how to import QuantumCircuit in Qiskit"
+ ],
+ "n078": [
+  "Como reduzir o caso para encontrar a porta que causa o erro?",
+  "Qiskit error debugging reduce case for gate identification",
+  "Qiskit gate error localization technique"
+ ],
+ "n079": [
+  "How do I load an OpenQASM 2 string with qasm2.loads?",
+  "qasm2.loads OpenQASM 2 string"
+ ],
+ "n080": [
+  "Quais são os erros comuns de sintaxe em OpenQASM 2?",
+  "common syntax errors in OpenQASM 2",
+  "OpenQASM 2 syntax rules",
+  "OpenQASM 2 error handling"
+ ],
+ "n081": [
+  "qelib1.inc"
+ ],
+ "n082": [
+  "stdgates.inc OpenQASM 3",
+  "stdgates.inc",
+  "OpenQASM 3"
+ ],
+ "n083": [
+  "How is measurement written in OpenQASM 3?",
+  "OpenQASM 3 measurement syntax"
+ ],
+ "n084": [
+  "O que são portas opaque no OpenQASM 2?",
+  "What are opaque gates in OpenQASM 2?"
+ ],
+ "n085": [
+  "qasm3.loads precisa de qual pacote opcional?",
+  "qasm3.loads optional package dependency",
+  "Qiskit qasm3.loads package requirements"
+ ],
+ "n086": [
+  "What is qasm3.Exporter and which options does it have?",
+  "qasm3.Exporter documentation",
+  "qasm3.Exporter options"
+ ],
+ "n087": [
+  "O que são CustomInstruction em qasm2.load?",
+  "CustomInstruction in qasm2.load",
+  "Qiskit qasm2.load CustomInstruction documentation"
+ ],
+ "n088": [
+  "Qual a diferença entre qasm2.load e qasm2.loads?",
+  "qasm2.load vs qasm2.loads in Qiskit",
+  "Qiskit qasm2.load function documentation",
+  "Qiskit qasm2.loads function documentation"
+ ],
+ "n089": [
+  "Modificadores ctrl @ e inv @ do OpenQASM 3",
+  "OpenQASM 3 ctrl @ modifier",
+  "OpenQASM 3 inv @ modifier"
+ ],
+ "n090": [
+  "What is the syntax to declare a gate in OpenQASM 2?",
+  "OpenQASM 2 gate declaration syntax",
+  "Qiskit OpenQASM 2 gate syntax"
+ ],
+ "n091": [
+  "QASM2ParseError",
+  "QASM2ParseError Qiskit documentation",
+  "QASM2ParseError handling in Qiskit"
+ ],
+ "n092": [
+  "How do I run StatevectorEstimator with an observable?",
+  "Qiskit StatevectorEstimator usage with observable",
+  "Qiskit StatevectorEstimator observable input"
+ ],
+ "n093": [
+  "Como adicionar ruído de amostragem (shot noise) às primitivas de referência?",
+  "How to add shot noise to reference primitives in Qiskit"
+ ],
+ "n094": [
+  "Qual a diferença entre Sampler e Estimator?",
+  "Qiskit Sampler vs Estimator difference",
+  "Qiskit Sampler functionality",
+  "Qiskit Estimator functionality"
+ ],
+ "n095": [
+  "How do I get counts from a SamplerV2 PubResult?",
+  "Qiskit SamplerV2 PubResult get counts",
+  "Qiskit SamplerV2 PubResult methods for retrieving counts"
+ ],
+ "n096": [
+  "default_precision do Estimator",
+  "Qiskit Estimator default_precision",
+  "Qiskit Estimator precision setting"
+ ],
+ "n097": [
+  "EstimatorPub",
+  "EstimatorPub Qiskit documentation",
+  "Qiskit EstimatorPub usage"
+ ],
+ "n098": [
+  "How much memory does a 28-qubit statevector need?",
+  "memory requirement for 28-qubit statevector",
+  "statevector memory complexity quantum computing"
+ ],
+ "n099": [
+  "Quando usar MPS em vez de statevector?",
+  "When to use MPS instead of statevector in quantum computing",
+  "MPS vs statevector for quantum state representation"
+ ],
+ "n100": [
+  "Gottesman-Knill theorem",
+  "Gottesman-Knill theorem Qiskit",
+  "gates Clifford simulation Qiskit",
+  "stabilizer formalism Qiskit circuit"
+ ],
+ "n101": [
+  "Qual a incerteza estatística de uma probabilidade estimada com N shots?",
+  "What is the statistical uncertainty of a probability estimated with N shots in Qiskit?",
+  "How to calculate error bars for measurement probabilities in quantum circuits?",
+  "What is the standard deviation of measurement outcomes for N repeated shots in quantum computing?"
+ ],
+ "n102": [
+  "Como escolher o método de simulação conforme o tipo de circuito?",
+  "How to select a simulation method based on circuit type in Qiskit?",
+  "What are the different simulation methods available in Qiskit and their corresponding circuit characteristics?",
+  "How does the choice of simulator (BasicAer vs Aer) depend on circuit properties in Qiskit?"
+ ],
+ "n103": [
+  "Por que não dá para comparar circuitos de 25 qubits com Operator?",
+  "Why does comparison of 25-qubit circuits with Operator fail in Qiskit?",
+  "How to compare quantum circuits with 25 qubits using Operator in Qiskit?"
+ ],
+ "n104": [
+  "How do I compute the partial trace of a density matrix?",
+  "How to compute the partial trace of a density matrix in Qiskit?",
+  "Qiskit partial trace density matrix tutorial",
+  "Qiskit density matrix partial trace example"
+ ],
+ "n105": [
+  "Como calcular a fidelidade entre dois estados quânticos?",
+  "How to calculate the fidelity between two quantum states in Qiskit?",
+  "How to compute state fidelity using Qiskit's quantum information tools?"
+ ],
+ "n106": [
+  "What is the DensityMatrix class?",
+  "What is the DensityMatrix class in Qiskit?",
+  "How to use the DensityMatrix class in Qiskit?",
+  "What are the methods of the DensityMatrix class in Qiskit?"
+ ],
+ "n107": [
+  "Como gerar um estado aleatório ou uma unitária aleatória?",
+  "How to generate a random state in Qiskit?",
+  "How to generate a random unitary in Qiskit?"
+ ],
+ "n108": [
+  "How do I create a Statevector from a label?",
+  "How to create a Statevector from a label in Qiskit",
+  "Qiskit Statevector initialization from label",
+  "Qiskit label to Statevector conversion"
+ ],
+ "n109": [
+  "Como obter as probabilidades de medição de um Statevector?",
+  "How to obtain measurement probabilities from a Statevector in Qiskit?",
+  "How to use the method to get probabilities from a Statevector object in Qiskit?"
+ ],
+ "n110": [
+  "Statevector.evolve",
+  "Qiskit Statevector evolve method",
+  "Qiskit Statevector.evolve quantum circuit evolution"
+ ],
+ "n111": [
+  "How do I sample measurement counts from a Statevector?",
+  "How to sample measurement counts from a Statevector in Qiskit?",
+  "How to use the sample method on a QuantumCircuit to obtain measurement counts from a Statevector?",
+  "How to convert a Statevector to measurement counts in Qiskit?"
+ ],
+ "n112": [
+  "Como calcular o valor esperado de um observável com Statevector.expectation_value?",
+  "How to calculate the expectation value of an observable using Statevector.expectation_value in Qiskit?",
+  "What is the syntax and usage of the expectation_value method on the Statevector class in Qiskit?"
+ ],
+ "n113": [
+  "How can I compose two Operators?",
+  "How to compose two Operators in Qiskit?",
+  "How to combine Operator objects in Qiskit?",
+  "How to apply sequential operations using Qiskit Operators?"
+ ],
+ "n114": [
+  "Como saber se um Operator é unitário?",
+  "How to determine if a Qiskit Operator is unitary?",
+  "How to check if an operator preserves the norm in Qiskit?",
+  "How to verify unitarity of an operator using the Operator class in Qiskit?"
+ ],
+ "n115": [
+  "Operator.from_circuit",
+  "Qiskit Operator.from_circuit method",
+  "QuantumOperator.from_circuit Qiskit"
+ ],
+ "n116": [
+  "Como obter o adjunto de um Operator?",
+  "How to compute the adjoint of a Qiskit Operator?",
+  "How to use the adjoint() method on a Qiskit Operator?",
+  "How to obtain the Hermitian conjugate of a Qiskit Operator?"
+ ],
+ "n117": [
+  "Qual a diferença entre compose e dot em Operator?",
+  "What is the difference between the compose and dot methods for the Operator class in Qiskit?",
+  "How do the compose and dot methods differ in their application to quantum operators in Qiskit?",
+  "What are the functional differences between Operator.compose and Operator.dot in Qiskit?"
+ ],
+ "n118": [
+  "How do I compute the entropy of a quantum state?",
+  "How to compute the von Neumann entropy of a quantum state in Qiskit?",
+  "How to compute the Shannon entropy of a probability distribution from a quantum state in Qiskit?"
+ ],
+ "n119": [
+  "Como representar um Pauli e uma lista de Paulis com PauliList?",
+  "How to represent a single Pauli operator and a list of Paulis using the PauliList class in Qiskit.",
+  "How to initialize a PauliList with specific Pauli strings in Qiskit."
+ ],
+ "n120": [
+  "What is concurrence of a two-qubit state?",
+  "How is concurrence calculated for a two-qubit quantum state in Qiskit?"
+ ],
+ "n121": [
+  "Como converter um Operator em uma instrução de circuito?",
+  "How to convert an Operator to a QuantumCircuit in Qiskit?",
+  "How to convert a SparseLabel to a QuantumCircuit in Qiskit?"
+ ],
+ "n122": [
+  "Qual a diferença entre Statevector e DensityMatrix?",
+  "What is the difference between Statevector and DensityMatrix in Qiskit?",
+  "How to convert between Statevector and DensityMatrix in Qiskit?",
+  "When to use Statevector vs DensityMatrix in Qiskit simulations?"
+ ],
+ "n123": [
+  "What is the Choi representation of a quantum channel?",
+  "What is the Choi representation of a quantum channel in Qiskit?",
+  "How to compute the Choi matrix of a quantum channel using Qiskit?"
+ ],
+ "n124": [
+  "What is the Born rule?",
+  "What is the Born rule in quantum mechanics?",
+  "How is the Born rule implemented in Qiskit?"
+ ],
+ "n125": [
+  "O que são os estados |+> e |->?",
+  "What are the quantum states |+> and |-> in Qiskit?",
+  "How to create and visualize the |+> and |-> states using Qiskit?"
+ ],
+ "n126": [
+  "Why does an n-qubit state vector have 2^n amplitudes?",
+  "Explain the mathematical representation of an n-qubit state in terms of amplitudes",
+  "How does the dimension of a quantum state space grow with the number of qubits"
+ ],
+ "n127": [
+  "O que é uma matriz unitária e por que ela preserva a norma?",
+  "What is a unitary matrix and why does it preserve the norm?"
+ ],
+ "n128": [
+  "Como representar um observável hermitiano com SparsePauliOp?",
+  "How to represent a Hermitian observable with SparsePauliOp in Qiskit?"
+ ],
+ "n129": [
+  "Qual a diferença entre fase global e fase relativa?",
+  "What is the difference between global phase and relative phase in quantum computing?"
+ ],
+ "n130": [
+  "Is the order of gates reversed in the matrix product of a circuit?",
+  "How does the matrix product of a quantum circuit in Qiskit handle the ordering of gate operations, specifically whether the order of gates is reversed in the resulting matrix product?",
+  "What is the convention for matrix multiplication order when computing the overall unitary of a Qiskit quantum circuit?",
+  "In Qiskit, if a circuit has gates applied in sequence, does the matrix product represent the gates in the same order or is the order reversed?"
+ ],
+ "n131": [
+  "Estado de Bell",
+  "Bell state",
+  "Qiskit Bell state implementation"
+ ],
+ "n132": [
+  "What does Operator.equiv check?",
+  "Qiskit Operator.equiv function documentation",
+  "Qiskit Operator equivalence check"
+ ],
+ "n133": [
+  "Como comparar circuitos de Clifford muito grandes?",
+  "Clifford circuit comparison techniques",
+  "large Clifford circuit analysis Qiskit"
+ ],
+ "n134": [
+  "Que vereditos um relatório de verificação de equivalência pode dar?",
+  "equivalence verification report verdicts",
+  "Qiskit equivalence verification outcomes"
+ ],
+ "n135": [
+  "Why does a transpiled circuit look different after routing?",
+  "Qiskit circuit transpilation routing differences",
+  "impact of routing on transpiled quantum circuit"
+ ],
+ "n136": [
+  "Como verificar equivalência de circuitos que têm medições finais?",
+  "Qiskit circuit equivalence with final measurements",
+  "Qiskit verify circuit equivalence with measurement outcomes"
+ ],
+ "n137": [
+  "Equivalência amostral e prova formal, qual a diferença?",
+  "sampling equivalence vs formal proof in quantum computing documentation",
+  "quantum computing sampling equivalence",
+  "quantum computing formal proof"
+ ],
+ "n138": [
+  "How does Bernstein-Vazirani find the secret string?",
+  "Bernstein-Vazirani algorithm secret string finding",
+  "Bernstein-Vazirani algorithm implementation Qiskit"
+ ],
+ "n139": [
+  "Como o Deutsch-Jozsa distingue função constante de balanceada?",
+  "Deutsch-Jozsa algorithm constant vs balanced function distinction",
+  "Deutsch-Jozsa algorithm function classification"
+ ],
+ "n140": [
+  "How many Grover iterations are needed for N items?",
+  "Grover iterations required for N items",
+  "Grover's algorithm complexity N"
+ ],
+ "n141": [
+  "QFTGate",
+  "QFTGate in Qiskit documentation",
+  "Quantum Fourier Transform gate implementation"
+ ],
+ "n142": [
+  "What is quantum phase estimation?",
+  "What is quantum phase estimation in Qiskit?",
+  "Quantum Phase Estimation algorithm implementation"
+ ],
+ "n143": [
+  "O que é o QAOA e para que problemas ele serve?",
+  "What is QAOA in quantum computing?",
+  "Applications of QAOA for optimization problems"
+ ],
+ "n144": [
+  "How do I prepare a GHZ state on n qubits?",
+  "prepare GHZ state on n qubits",
+  "GHZ state preparation Qiskit"
+ ],
+ "n145": [
+  "VQE e QAOA: quais as semelhanças e diferenças?",
+  "VQE vs QAOA similarities and differences in quantum computing",
+  "Variational Quantum Eigensolver (VQE) algorithm overview",
+  "Quantum Approximate Optimization Algorithm (QAOA) algorithm overview"
+ ],
+ "n146": [
+  "Qual a diferença entre a QFT e a estimativa de fase?",
+  "QFT vs phase estimation in quantum computing",
+  "Quantum Fourier Transform (QFT) implementation in Qiskit",
+  "Quantum Phase Estimation (QPE) algorithm in Qiskit"
+ ],
+ "n147": [
+  "Quantos qubits de contagem a QPE precisa para ter mais precisão?",
+  "QPE required counting qubits for precision",
+  "Qiskit QPE precision qubits"
+ ],
+ "n148": [
+  "What kind of errors does the bit-flip repetition code protect against?",
+  "bit-flip repetition code error protection",
+  "bit-flip repetition code error correction"
+ ],
+ "n149": [
+  "O que é o surface code?",
+  "What is the surface code in quantum computing documentation",
+  "surface code definition Qiskit"
+ ],
+ "n150": [
+  "Quais são os modelos de ruído mais comuns?",
+  "common noise models in quantum computing",
+  "Qiskit noise models"
+ ],
+ "n151": [
+  "What is dynamical decoupling?",
+  "What is dynamical decoupling in quantum computing?",
+  "dynamical decoupling Qiskit implementation"
+ ],
+ "n152": [
+  "Para que serve o twirling de Pauli?",
+  "Pauli twirling purpose in quantum computing",
+  "Qiskit Pauli twirling implementation"
+ ],
+ "n153": [
+  "A mitigação de erros corrige o estado quântico?",
+  "quantum error mitigation state correction",
+  "Qiskit error mitigation techniques"
+ ],
+ "n154": [
+  "Código de Shor versus código de repetição de bit-flip",
+  "Shor's algorithm implementation in Qiskit",
+  "Bit-flip code implementation in Qiskit",
+  "Comparison between Shor's algorithm and bit-flip code"
+ ],
+ "n155": [
+  "What does circuit depth mean?",
+  "What does circuit depth mean in quantum computing",
+  "quantum circuit depth definition"
+ ],
+ "n156": [
+  "Como usar o método append para adicionar instruções ao circuito?",
+  "Qiskit append method add instructions to circuit",
+  "Qiskit circuit append instructions"
+ ],
+ "n157": [
+  "What are n-local circuits?",
+  "n-local circuits",
+  "definition of n-local circuits in quantum computing",
+  "Qiskit implementation of n-local circuits"
+ ],
+ "n158": [
+  "Que circuitos de codificação de dados existem na biblioteca de circuitos?",
+  "Qiskit data encoding circuits",
+  "list of data encoding circuits in Qiskit library"
+ ],
+ "n159": [
+  "Circuitos de evolução temporal",
+  "Quantum circuit time evolution",
+  "Qiskit time evolution circuits"
+ ],
+ "n160": [
+  "Which arithmetic circuits are in the circuit library?",
+  "Qiskit circuit library arithmetic circuits",
+  "list of arithmetic circuits in Qiskit library"
+ ],
+ "n161": [
+  "How do I invert a circuit?",
+  "Qiskit circuit inversion method",
+  "how to invert a quantum circuit in Qiskit"
+ ],
+ "n162": [
+  "Como contar portas por tipo com count_ops?",
+  "count_ops port type counting Qiskit",
+  "Qiskit count_ops port type"
+ ],
+ "n163": [
+  "How do I add a barrier to a circuit?",
+  "Qiskit add barrier to circuit",
+  "Qiskit circuit barrier implementation"
+ ],
+ "n164": [
+  "Qual a diferença entre depth e size de um circuito?",
+  "difference between circuit depth and size in quantum computing",
+  "Qiskit circuit depth definition",
+  "Qiskit circuit size definition"
+ ],
+ "n165": [
+  "Como inicializar qubits em um estado com initialize?",
+  "Qiskit initialize qubits state"
+ ],
+ "n166": [
+  "How do I draw a circuit with matplotlib?",
+  "Qiskit circuit drawing with matplotlib",
+  "Qiskit visualization techniques"
+ ],
+ "n167": [
+  "Como salvar o diagrama do circuito como imagem?",
+  "Qiskit save circuit diagram as image",
+  "Qiskit circuit visualization to file",
+  "Qiskit circuit drawing output format"
+ ],
+ "n168": [
+  "Argumento fold do draw",
+  "Qiskit draw fold argument",
+  "Qiskit draw function parameters"
+ ],
+ "n169": [
+  "Diferença entre os renderizadores text, mpl e latex",
+  "Qiskit text renderer vs mpl renderer vs latex renderer",
+  "Qiskit rendering options comparison"
+ ],
+ "n170": [
+  "How do I rename a circuit parameter?",
+  "Qiskit rename circuit parameter",
+  "Qiskit circuit parameter renaming documentation"
+ ],
+ "n171": [
+  "Como obter a lista de parâmetros livres de um circuito?",
+  "Qiskit get list of free parameters from a circuit",
+  "Qiskit circuit parameters"
+ ],
+ "n172": [
+  "What happens if parameters stay unbound when I simulate a circuit?",
+  "Qiskit unbound parameters circuit simulation behavior",
+  "Qiskit circuit simulation with unbound parameters"
+ ],
+ "n173": [
+  "Como passar valores de parâmetros na PUB do Sampler?",
+  "Qiskit Sampler PUB parameter passing",
+  "Qiskit Sampler parameter configuration",
+  "How to pass values to Sampler PUB parameters in Qiskit"
+ ],
+ "n174": [
+  "ParameterExpression",
+  "ParameterExpression in Qiskit documentation",
+  "Qiskit ParameterExpression usage"
+ ],
+ "n175": [
+  "Qual a diferença entre assign_parameters e bind_parameters?",
+  "Qiskit assign_parameters vs bind_parameters difference",
+  "Qiskit assign_parameters function",
+  "Qiskit bind_parameters function"
+ ],
+ "n176": [
+  "Explain how Kubernetes schedules pods onto nodes.",
+  "Kubernetes pod scheduling mechanism",
+  "Kubernetes scheduler workflow",
+  "Kubernetes node assignment logic"
+ ],
+ "n177": [
+  "Who won the 2010 FIFA World Cup?",
+  "2010 FIFA World Cup winner"
+ ],
+ "n178": [
+  "What is the weather forecast for Lisbon tomorrow?",
+  "weather forecast Lisbon tomorrow"
+ ],
+ "n179": [
+  "Como declarar o imposto de renda de pessoa física?",
+  "how to declare individual income tax"
+ ],
+ "n180": [
+  "Write a short poem about autumn.",
+  "autumn poem"
+ ],
+ "n181": [
+  "Qual é a capital da Austrália?",
+  "Australian capital city"
+ ],
+ "n182": [
+  "How do I train a convolutional neural network on CIFAR-10?",
+  "train convolutional neural network on CIFAR-10",
+  "Qiskit CNN training CIFAR-10"
+ ],
+ "n183": [
+  "Quanto tempo leva para assar um frango inteiro?",
+  "How long does it take to roast a whole chicken?",
+  "What is the cooking time for a whole chicken in an oven?",
+  "How many minutes per pound to roast a whole chicken?"
+ ],
+ "n184": [
+  "Translate good morning into Japanese.",
+  "Translate 'good morning' to Japanese"
+ ],
+ "n185": [
+  "Como funciona o protocolo BGP de roteamento da internet?",
+  "What is the Border Gateway Protocol (BGP) and how does it function in internet routing?",
+  "How does BGP path selection and policy control work in inter-domain routing?"
+ ],
+ "n186": [
+  "What are the best sightseeing spots in Rome?"
+ ],
+ "n187": [
+  "Me indique um bom livro de ficção científica dos anos 90",
+  "science fiction books 1990s"
+ ]
+}

@@ -21,6 +21,13 @@ class ArquivoEnviado(Modelo):
     conteudo: str = Field(max_length=MAX_BYTES_ARQUIVO, description="Conteúdo em texto (UTF-8).")
 
 
+class PerfilUsuario(Modelo):
+    """Perfil local do usuário (personalização da primeira abertura): orienta o nível da resposta."""
+    experiencia: Literal["iniciante", "intermediario", "avancado"] | None = None
+    estilo: Literal["direta", "didatica", "detalhada"] | None = None
+    papel: str | None = Field(default=None, max_length=40, description="Ex.: estudante, pesquisador, desenvolvedor.")
+
+
 class EntradaAnalise(Modelo):
     mensagem: str = Field(default="", max_length=30_000, description="Pedido em linguagem natural (opcional).")
     codigo: str | None = Field(default=None, max_length=524_288, description="Código do editor (opcional).")
@@ -35,6 +42,8 @@ class EntradaAnalise(Modelo):
                        description="Máximo de fontes da base local; as fracas são descartadas pela avaliação de evidência.")
     pesquisa_web: bool = Field(default=True, strict=True,
                                description="Mantido por compatibilidade: a pesquisa na internet é sempre usada como complemento.")
+    usuario: PerfilUsuario | None = Field(
+        default=None, description="Perfil local (experiência, estilo, papel). Sem ele, o nível é inferido pela pergunta.")
 
     @model_validator(mode="after")
     def validar(self):
@@ -91,6 +100,8 @@ class RespostaAnalise(Modelo):
     arquivos: list[ArquivoClassificado] = Field(default_factory=list)
     interpretation: Interpretacao | None = None
     evidence: Evidencia | None = None
+    verificacao: dict | None = Field(default=None, description="Camada de verificação (RAG_VERIFICACAO=1): fidelidade e "
+                                     "frases sem apoio nas fontes. Só informa; na análise a resposta não é descartada.")
     pesquisa_web: dict | None = Field(default=None, description="Consultas feitas, fontes consultadas e falhas.")
     warnings: list[str] = Field(default_factory=list)
     etapas: list[EtapaAnalise] = Field(default_factory=list)

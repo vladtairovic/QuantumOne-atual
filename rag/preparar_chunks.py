@@ -3,12 +3,16 @@ import json
 import re
 from pathlib import Path
 
+from .configuracao import estrategia_chunks
+
 PASTA = Path(__file__).resolve().parents[1] / "documentos"
 METADADOS_EXTRAS = ("biblioteca", "temas", "nivel", "tipo_fonte", "licenca", "idioma",
                     "origem_conhecimento", "desatualizado", "motivo_desatualizado")
 
 
-def gerar_chunks(documento, tokenizer, limite, nome_modelo):
+def gerar_chunks(documento, tokenizer, limite, nome_modelo, estrategia=None):
+    # Sem estratégia explícita, deriva do limite: 110 tokens continua "secoes_tokens_v2".
+    estrategia = estrategia or estrategia_chunks(limite)
     if not documento.get("secoes"):
         raise ValueError("O JSON ainda não tem seções. Execute coletar_documentos.py atualizado primeiro.")
 
@@ -37,7 +41,7 @@ def gerar_chunks(documento, tokenizer, limite, nome_modelo):
                 "secao": secao,
                 "tipo_bloco": tipo,
                 "fragmentado": fragmentado,
-                "estrategia_chunks": "secoes_tokens_v2",
+                "estrategia_chunks": estrategia,
                 "versao_alvo_qiskit": documento.get("versao_alvo_qiskit", "não definida"),
                 # Classificação da curadoria (tema, biblioteca, nível, origem, obsolescência).
                 **{k: documento[k] for k in METADADOS_EXTRAS
@@ -103,7 +107,7 @@ def gerar_chunks(documento, tokenizer, limite, nome_modelo):
 
 
 def main():
-    from .configuracao import MODELO_EMBEDDINGS, obter_modelo
+    from .configuracao import MODELO_EMBEDDINGS, limite_tokens, obter_modelo
 
     documentos = json.loads((PASTA / "base_documental.json").read_text(encoding="utf-8"))
     if not documentos:
@@ -112,10 +116,10 @@ def main():
     if len(ids) != len(set(ids)):
         raise ValueError("Documentos duplicados no lote.")
     modelo = obter_modelo()
-    limite = min(110, modelo.max_seq_length)
+    limite = limite_tokens(modelo)
     todos = []
     for documento in documentos:
-        chunks = gerar_chunks(documento, modelo.tokenizer, limite, MODELO_EMBEDDINGS)
+        chunks = gerar_chunks(documento, modelo.tokenizer, limite, MODELO_EMBEDDINGS, estrategia_chunks(limite))
         todos.extend(chunks)
         print(documento["document_id"], ":", len(chunks), "chunks")
     # Validação de todos os documentos termina antes da gravação.

@@ -55,6 +55,14 @@ class InfoLLM(Modelo):
     modelo: str | None = Field(description='Modelo que gerou a resposta; null se nenhum respondeu.')
     tentativas: list[TentativaLLM]
 
+class TracoRAG(Modelo):
+    etapas: dict[str, float] = Field(description='Segundos gastos em cada etapa da recuperação.')
+    consultas: list[str] = Field(description='Consultas realmente usadas na busca (só a original se a camada de consulta estiver desligada).')
+    candidatos: int = Field(description='Quantidade de seções recuperadas.')
+    camadas: dict[str, bool] = Field(description='Camadas opcionais do RAG (RAG_*) ligadas nesta resposta.')
+    modelo_embeddings: str
+    fallbacks: list[str] = Field(default_factory=list, description='Camadas ligadas que caíram no comportamento anterior, com o motivo.')
+
 class ResultadoConsulta(Modelo):
     web_status: Literal['disabled'] = Field(default='disabled', description='A busca web foi removida; sempre disabled.')
     answer_mode: Literal['llm', 'local', 'none'] = Field(default='llm', description=
@@ -62,6 +70,9 @@ class ResultadoConsulta(Modelo):
     interpretation: Interpretacao | None = None
     evidence: Evidencia | None = None
     llm: InfoLLM | None = None
+    trace: TracoRAG | None = Field(default=None, description='Diagnóstico da recuperação; ausente em respostas antigas.')
+    variantes_consulta: list[str] | None = Field(default=None, description='Presente só com RAG_CONSULTA=1.')
+    verificacao: dict | None = Field(default=None, description='Presente só com RAG_VERIFICACAO=1: fidelidade e frases sem suporte.')
     warnings: list[str] = Field(default_factory=list)
     response: str
     sources: list[FonteContexto]

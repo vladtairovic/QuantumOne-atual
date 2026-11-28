@@ -45,27 +45,18 @@ export function createProjectedIntro(canvas: HTMLCanvasElement) {
         return path;
       }
       pen.fillStyle = "#080a15"; pen.fillRect(0, 0, w, h);
-      const horizon = h * .43;
-      pen.strokeStyle = "#26213b"; pen.lineWidth = 1;
-      pen.beginPath();
-      for (let i = -10; i <= 10; i++) {
-        pen.moveTo(w * .5 + i * 9, horizon);
-        pen.lineTo(w * .5 + (i + .12 * bend) * w * .22, h);
-      }
-      for (let i = 0; i < 11; i++) {
-        const yy = horizon + Math.pow((i + t * .18) / 11, 2.4) * (h - horizon);
-        pen.moveTo(0, yy); pen.lineTo(w, yy);
-      }
-      pen.stroke();
-      const symbols = ["01", "{ }", "H", "CX", "π/2", "|0⟩", "RZ"];
+      const symbols = ["01", "{ }", "H", "CX", "RZ"];
       pen.font = "12px monospace";
-      for (let i = 0; i < 65; i++) {
-        const z = ((i * .618 + .027 * t) % 1);
-        const xx = w / 2 + (Math.sin(i * 277.3) * w * .74) * (.24 + z);
-        const yy = horizon + (Math.cos(i * 117.9) * h * .62) * (.24 + z);
-        pen.fillStyle = i % 5 ? "#53476b" : "#9189ad";
-        if (i % 8) pen.fillRect(xx, yy, 1 + 1.1 * z, 1 + 1.1 * z);
-        else pen.fillText(symbols[i % symbols.length], xx, yy);
+      pen.strokeStyle = "#29253e"; pen.lineWidth = 1;
+      for (let layer = 0; layer < 5; layer++) {
+        pen.beginPath();
+        for (let px = 0; px <= w + 8; px += 8) {
+          const u = (2 * px - w) / h;
+          const wave = -.48 + .13 * Math.sin(u * 1.8 + t * .17 + layer * .24)
+            + layer * .029 + .04 * Math.cos(u * 3 - t * .13);
+          pen.lineTo(px, h * (.5 - wave / 2));
+        }
+        pen.stroke();
       }
       const near = co >= 0 ? .073 : -.073;
       const faces = contours.map(ring => ring.map(([px, py]) => project(px, py, near)));

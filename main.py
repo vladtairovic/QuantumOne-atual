@@ -2,6 +2,7 @@
 import asyncio
 import json
 import os
+import time
 import logging
 from contextlib import asynccontextmanager
 from datetime import datetime, timezone
@@ -259,7 +260,8 @@ async def enviar_mensagem(
 from contratos_analise import EntradaAnalise, EntradaProposta, ProgressoAnalise, RespostaAnalise, RespostaProposta
 from rag import progresso as progresso_analise
 
-TEMPO_ANALISE = float(os.getenv('QONE_ANALISE_TIMEOUT_SECONDS', '900'))
+TEMPO_ANALISE = float(os.getenv('QONE_ANALISE_TIMEOUT_SECONDS', '1800'))
+MARGEM_NOVA_TENTATIVA = 120  # segundos mínimos restantes para refazer a análise depois de uma falha
 
 
 @app.post('/analise', response_model=RespostaAnalise)
@@ -269,8 +271,44 @@ async def analisar_envio(entrada: EntradaAnalise, request: Request):
     planeja as buscas, consulta a base local primeiro e a internet como complemento, e redige a resposta.
     Acompanhe a etapa e o modelo em uso por GET /analise/progresso/{progress_id}."""
     import orquestrador
-    resultado = await asyncio.wait_for(orquestrador.analisar(entrada, request.state.request_id), TEMPO_ANALISE)
-    return RespostaAnalise.model_validate(resultado)
+    inicio = time.monotonic()
+    falhas = []
+    while True:
+        restante = TEMPO_ANALISE - (time.monotonic() - inicio)
+        try:
+            resultado = await asyncio.wait_for(orquestrador.analisar(entrada, request.state.request_id), restante)
+            if falhas:  # deu certo depois de refazer: o usuário fica sabendo
+                resultado["warnings"] = [f"A análise falhou {len(falhas)} vez(es) ({'; '.join(falhas)}) e foi refeita "
+                                         "automaticamente."] + resultado.get("warnings", [])
+            return RespostaAnalise.model_validate(resultado)
+        except Exception as erro:  # nunca devolve erro ao usuário: refaz enquanto houver tempo
+            motivo = "tempo esgotado" if isinstance(erro, asyncio.TimeoutError) else type(erro).__name__
+            falhas.append(motivo)
+            logging.getLogger(__name__).warning('Análise falhou (%s); tentativa %d.', motivo, len(falhas), exc_info=True)
+            if TEMPO_ANALISE - (time.monotonic() - inicio) < MARGEM_NOVA_TENTATIVA:
+                return _analise_sem_conclusao(entrada, request, falhas, inicio)
+            if entrada.progress_id:
+                progresso_analise.Rastreador(entrada.progress_id).etapa(
+                    f"A análise falhou ({motivo}); refazendo automaticamente (tentativa {len(falhas) + 1})")
+            await _pausa_antes_de_refazer(min(2 * len(falhas), 10))
+
+
+async def _pausa_antes_de_refazer(segundos):
+    await asyncio.sleep(segundos)
+
+
+def _analise_sem_conclusao(entrada, request, falhas, inicio):
+    """Último recurso, só quando o tempo total acabou: devolve uma resposta (nunca um erro) explicando o que houve."""
+    minutos = round(TEMPO_ANALISE / 60)
+    if entrada.progress_id:
+        progresso_analise.Rastreador(entrada.progress_id).concluir("A análise não terminou a tempo")
+    return RespostaAnalise(
+        request_id=request.state.request_id, progress_id=entrada.progress_id, conversation_id=None,
+        resposta=(f"Não consegui concluir a análise em {minutos} minutos, mesmo refazendo {len(falhas)} vez(es) "
+                  f"({'; '.join(falhas)}). Nada foi perdido do seu pedido: envie de novo e a análise recomeça."),
+        status="insufficient_context", answer_mode="none", sources=[],
+        warnings=[f"A análise falhou {len(falhas)} vez(es) ({'; '.join(falhas)}); o tempo total de {minutos} min acabou."],
+        tempo_total_segundos=round(time.monotonic() - inicio, 2))
 
 
 @app.get('/analise/progresso/{progress_id}', response_model=ProgressoAnalise)

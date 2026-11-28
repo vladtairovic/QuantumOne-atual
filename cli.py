@@ -33,7 +33,7 @@ from qone_store import Registro
 VERSAO = "0.3.0"
 API_URL = os.getenv("QONE_API_URL", "http://localhost:8000")
 # A análise pode percorrer a fila de LLMs inteira (até 30 s por modelo): mesmo teto do backend + folga.
-TEMPO_ANALISE = float(os.getenv("QONE_ANALISE_TIMEOUT_SECONDS", "900")) + 30
+TEMPO_ANALISE = float(os.getenv("QONE_ANALISE_TIMEOUT_SECONDS", "1800")) + 30
 AJUDA = """Projeto: /workspace [pasta], /clonar URL nome, /arquivos, /mapa, /buscar termo, /status
 Contexto: /abrir arquivo, /anexar arquivo, /nova, /history, /retomar ID, /esquecer ID
 Edição: /propor pedido, /criar caminho, /excluir caminho, /mover origem -> destino

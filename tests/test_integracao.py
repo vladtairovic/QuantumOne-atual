@@ -61,7 +61,7 @@ class ColecaoTeste:
 def contexto(monkeypatch, tmp_path):
     colecao = ColecaoTeste()
     modelo = SimpleNamespace(tokenizer=TokenizerTeste(), max_seq_length=128)
-    vetores = lambda: lambda textos: [[1.0, 0.0] for _ in textos]
+    vetores = lambda tipo="consulta": lambda textos: [[1.0, 0.0] for _ in textos]
     monkeypatch.setattr(documentos, "obter_modelo", lambda: modelo)
     monkeypatch.setattr(documentos, "limite_tokens", lambda: 110)
     monkeypatch.setattr(documentos, "obter_colecao", lambda: colecao)

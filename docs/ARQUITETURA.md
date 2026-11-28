@@ -7,7 +7,7 @@ Este documento descreve a arquitetura após a reestruturação de novembro de 20
 - [BASE-DE-CONHECIMENTO.md](BASE-DE-CONHECIMENTO.md): fontes, curadoria e atualização.
 - [MOTOR-QUANTICO.md](MOTOR-QUANTICO.md): diagnóstico, correção, otimização e verificação.
 - [BENCHMARKS.md](BENCHMARKS.md): resultados medidos, problemas resolvidos e limitações.
-- [LLM.md](LLM.md): fila sequencial de LLMs (NVIDIA), 30 s por modelo, streaming, progresso ao vivo e fallback.
+- [LLM.md](LLM.md): fila sequencial de LLMs (NVIDIA), 45 s por modelo, novas rodadas em caso de falha, streaming, progresso ao vivo e fallback.
 
 ## Visão geral
 
@@ -30,7 +30,7 @@ relativo, até 300 arquivos / 3 MB), em qualquer combinação. O `orquestrador.p
    circuito Python (Qiskit), Python comum, notebook (células de código extraídas), documento, dados ou ignorado.
 2. **Diagnóstico** de todos os circuitos (até `QONE_MAX_CIRCUITOS`, padrão 8), vindos do editor, de
    blocos de código da mensagem ou dos arquivos, no worker do Qiskit (sem LLM, ~1 s cada).
-3. **Planejamento** (fila rápida): a LLM gera consultas para a base e para a internet a partir do pedido
+3. **Planejamento** (fila rápida de 4 modelos): a LLM gera consultas para a base e para a internet a partir do pedido
    e dos erros do diagnóstico. Só roda com sinal de domínio (termos quânticos, código ou arquivos).
 4. **Base local e internet em paralelo aos circuitos.** Nenhuma das duas usa LLM, então rodam enquanto
    a fila corrige os circuitos, sem quebrar a regra de um modelo por vez. Base: busca híbrida com as
@@ -43,7 +43,8 @@ relativo, até 300 arquivos / 3 MB), em qualquer combinação. O `orquestrador.p
    Em Python legado, as linhas de execução/simulação (Aer, `execute`, `print`,
    `if __name__ == "__main__":`) são esvaziadas e só a construção do circuito é otimizada; nada é executado.
 6. **Resposta final** (fila principal, em streaming): o prompt junta pedido, histórico, arquivos,
-   resultados do Qiskit, base e internet; a LLM integra as fontes, cita cada uma e evita repetir código.
+   resultados do Qiskit, base e internet; a LLM integra as fontes, adapta o nível ao usuário e evita repetir código.
+   O texto sai sem marcadores [Fonte N]/[Web N]: as fontes aparecem na lista ao lado da resposta.
    Se a fila falhar, resposta local.
 7. A conversa é gravada no histórico (`conversation_id`).
 
@@ -85,7 +86,7 @@ no cliente: o frontend apenas exibe o que a API devolve.
 | `busca_chromadb.py` | busca vetorial + BM25, fusão RRF, reordenação, montagem de seções, verificação de evidência |
 | `resposta_local.py` | resposta extrativa sem LLM (offline), com citações literais |
 | `pipeline.py` | orquestra a consulta; fila de LLMs opcional, fallback local |
-| `cliente_llm.py` | fila NVIDIA sequencial (7 modelos, 30 s cada, um de cada vez, streaming, raciocínio desligado) e fila rápida |
+| `cliente_llm.py` | fila NVIDIA sequencial (7 modelos, 45 s cada, um de cada vez, novas rodadas se todos falharem, streaming, raciocínio desligado) e fila rápida (planejamento e reescrita de consulta) |
 | `progresso.py` | estado ao vivo da análise (etapa, modelo em uso, texto parcial, histórico), em memória, TTL 15 min |
 | `pesquisa_web.py` | pesquisa na internet sem chave: Stack Exchange, arXiv, documentação oficial (e Wikipedia com `QONE_WEB_CONTATO`) |
 | `contexto.py`, `prompts.py` | montagem do contexto (8.000 caracteres) e instruções de análise, correção e planejamento |
@@ -143,11 +144,12 @@ Nenhuma dependência foi adicionada ao frontend.
 | Variável | Padrão | Efeito |
 |---|---|---|
 | `QONE_LLM` | `auto` | `local` nunca chama LLM |
-| `NVIDIA_API_KEY` / `NVIDIA_MODELS` / `NVIDIA_MODELS_RAPIDOS` | vazio | fila NVIDIA, ordem dos modelos, fila do planejamento |
-| `LLM_TIMEOUT_SECONDS` / `LLM_TEMPO_TOTAL_SECONDS` | `30` / `0` | prazo por modelo, qualquer que seja o prompt; teto da fila (0 = sem teto) |
+| `NVIDIA_API_KEY` / `NVIDIA_MODELS` / `NVIDIA_MODELS_RAPIDOS` | vazio | fila NVIDIA, ordem dos modelos, fila do planejamento e da reescrita |
+| `LLM_TIMEOUT_SECONDS` / `LLM_TEMPO_TOTAL_SECONDS` | `45` / `0` | prazo por modelo, qualquer que seja o prompt; teto de uma rodada da fila (0 = sem teto) |
+| `LLM_INSISTIR_SEGUNDOS` | `1800` | por quanto tempo a fila é percorrida de novo quando todos os modelos falham |
 | `LLM_STREAMING` | `1` | resposta em streaming (texto parcial ao vivo); `0` pede a resposta inteira de uma vez |
 | `LLM_MAX_TOKENS` / `LLM_RACIOCINIO` | `16384` / `0` | tokens de saída; `1` religa o raciocínio dos Nemotron |
-| `QONE_ANALISE_TIMEOUT_SECONDS` | `900` | teto da análise unificada (API e proxy do frontend) |
+| `QONE_ANALISE_TIMEOUT_SECONDS` | `1800` | teto da análise unificada (API e proxy do frontend); dentro dele a análise é refeita se falhar |
 | `QONE_MAX_CIRCUITOS` | `8` | circuitos analisados por envio |
 | `QONE_PESQUISA_WEB` | `1` | `0` desliga a pesquisa na internet |
 | `QONE_WEB_CONTATO` / `STACKEXCHANGE_KEY` | vazio | contato no User-Agent (habilita a Wikipedia) / chave gratuita do Stack Exchange (amplia ~300 consultas/dia) |

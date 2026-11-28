@@ -22,9 +22,10 @@ import re
 import time
 from uuid import uuid4
 
-from rag import busca_chromadb, cliente_llm, conversas, pesquisa_web, progresso, resposta_local
+from rag import busca_chromadb, cliente_llm, conversas, pesquisa_web, progresso, recursos, resposta_local, verificacao
 from rag.contexto import MENSAGEM_SEM_CONTEXTO, preparar_contexto
 from rag.interpretacao import interpretar
+from rag.texto import remover_marcadores_de_fonte
 from rag.prompts import INSTRUCOES_ANALISE, INSTRUCOES_CORRECAO, INSTRUCOES_PLANEJAMENTO, INSTRUCOES_PROPOSTA
 
 log = logging.getLogger(__name__)
@@ -36,7 +37,10 @@ PALAVRAS_DOMINIO = re.compile(
 EXT_DOCUMENTO = (".md", ".txt", ".rst")
 EXT_DADOS = (".json", ".csv", ".toml", ".yaml", ".yml", ".cfg", ".ini", ".log")
 MAX_CIRCUITOS = int(os.getenv("QONE_MAX_CIRCUITOS", "8"))
-TEMPO_ANALISE = float(os.getenv("QONE_ANALISE_TIMEOUT_SECONDS", "900"))
+TEMPO_ANALISE = float(os.getenv("QONE_ANALISE_TIMEOUT_SECONDS", "1800"))
+# Falhas passageiras do worker do Qiskit que valem nova tentativa (erros do código enviado não entram).
+ERROS_PASSAGEIROS_DO_WORKER = {"OPTIMIZER_BUSY", "WORKER_RESOURCE_ERROR", "INVALID_WORKER_RESPONSE",
+                               "OPTIMIZATION_TIMEOUT"}
 # Tipos de correção do analisador que não perdem instruções (a LLM não melhoraria o resultado).
 CORRECOES_SEM_PERDA = ("substituicao", "insercao")
 
@@ -117,16 +121,29 @@ def circuitos_da_mensagem(mensagem):
 
 # ---------------------------------------------------------------- Qiskit (worker)
 
+async def _pausa_do_worker(segundos):
+    await asyncio.sleep(segundos)
+
+
 async def _worker(payload, rotulo):
     """Executa o worker isolado do Qiskit com o prazo configurado."""
     from quantum.api import execute_worker
     from quantum.config import get_limits
     from quantum.errors import CircuitError
     limite = get_limits().optimization_timeout_seconds
-    try:
-        return await asyncio.wait_for(execute_worker(payload), limite)
-    except asyncio.TimeoutError as erro:
-        raise CircuitError("OPTIMIZATION_TIMEOUT", f"{rotulo}: excedeu {limite:g} s.", status=504) from erro
+    for tentativa in range(1, 4):
+        try:
+            return await asyncio.wait_for(execute_worker(payload), limite)
+        except asyncio.TimeoutError:
+            erro = CircuitError("OPTIMIZATION_TIMEOUT", f"{rotulo}: excedeu {limite:g} s.", status=504)
+        except CircuitError as falha:
+            erro = falha
+        # Repete só falhas passageiras (ocupado, processo que caiu); tempo esgotado repete uma vez.
+        ultima = tentativa == 3 or (erro.code == "OPTIMIZATION_TIMEOUT" and tentativa >= 2)
+        if erro.code not in ERROS_PASSAGEIROS_DO_WORKER or ultima:
+            raise erro
+        log.warning("%s: %s; nova tentativa %d.", rotulo, erro.code, tentativa + 1)
+        await _pausa_do_worker(tentativa)
 
 
 def _bloco_codigo(texto):
@@ -394,9 +411,32 @@ def _bloco_circuitos(circuitos):
     return "\n".join(linhas)
 
 
+_NIVEIS = {"iniciante": "iniciante (primeiros circuitos)", "intermediario": "intermediário (já usa Qiskit)",
+           "avancado": "avançado (otimização e hardware real)"}
+_ESTILOS = {"direta": "direta (só o essencial)", "didatica": "didática (explicações e analogias)",
+            "detalhada": "detalhada (métricas e justificativas)"}
+
+
+def _perfil_do_usuario(usuario):
+    """Bloco <perfil_do_usuario> a partir do perfil local; vazio quando nada foi informado."""
+    if not usuario:
+        return ""
+    linhas = []
+    if usuario.get("experiencia"):
+        linhas.append("Experiência declarada: " + _NIVEIS.get(usuario["experiencia"], usuario["experiencia"]))
+    if usuario.get("estilo"):
+        linhas.append("Estilo de resposta preferido: " + _ESTILOS.get(usuario["estilo"], usuario["estilo"]))
+    if usuario.get("papel"):
+        linhas.append("Papel: " + str(usuario["papel"])[:40])
+    return ("<perfil_do_usuario>\n" + "\n".join(linhas) + "\n</perfil_do_usuario>") if linhas else ""
+
+
 def montar_prompt(mensagem, interpretacao, classificados, documentos, circuitos, contexto_local, contexto_web,
-                  historico, plano):
+                  historico, plano, usuario=None):
     partes = [f"<pedido_do_usuario>\n{mensagem or '(sem texto; o usuário enviou código ou arquivos)'}\n</pedido_do_usuario>"]
+    perfil = _perfil_do_usuario(usuario)
+    if perfil:
+        partes.append(perfil)
     if historico:
         partes.append("<historico_recente>\n" + historico + "\n</historico_recente>")
     partes.append("<interpretacao>\n" + json.dumps({"intencao": interpretacao["intencao"], "tipo": interpretacao["tipo_entrada"],
@@ -421,6 +461,25 @@ def montar_prompt(mensagem, interpretacao, classificados, documentos, circuitos,
     partes.append("<internet>\n" + (contexto_web or "(pesquisa na internet não executada ou sem resultados)") + "\n</internet>")
     partes.append("Responda ao pedido seguindo as instruções.")
     return "\n\n".join(partes)
+
+
+async def _verificar_resposta(resposta, fontes, rastreador):
+    """Camada de verificação (RAG_VERIFICACAO=1) na análise: confere frase a frase se a resposta tem apoio
+    nas fontes (base local e internet) e só INFORMA o resultado. Aqui ela não descarta a resposta, porque
+    a análise também usa os resultados do Qiskit e explicações didáticas, que não estão nas fontes."""
+    if not recursos.ativo("verificacao") or not fontes or not resposta:
+        return None
+    try:
+        resultado = await asyncio.to_thread(verificacao.verificar_resposta, resposta, fontes)
+    except Exception as erro:  # a verificação nunca derruba a resposta
+        log.warning("Verificação da resposta indisponível: %s", type(erro).__name__)
+        return {"erro": True}
+    frases = resultado["frases"]
+    resumo = {"fidelidade": round(resultado["fidelidade"], 3), "frases_avaliadas": len(frases),
+              "frases_sem_suporte": sum(1 for f in frases if not f["suportada"])}
+    rastreador.registrar(f"Verificação: {resumo['fidelidade']:.0%} das frases com apoio nas fontes "
+                         f"({resumo['frases_avaliadas']} avaliadas)")
+    return resumo
 
 
 def _historico(conversation_id):
@@ -543,30 +602,40 @@ async def analisar(entrada, request_id):
         contexto_web = pesquisa_web.como_contexto(web_itens)
 
         conversation_id, versao, mensagens, historico = _historico(entrada.conversation_id)
+        resumo_verificacao = None
         if not dominio and not candidatos and not documentos:
             resposta, status, answer_mode, info_llm = MENSAGEM_SEM_CONTEXTO + (
                 " O QuantumOne responde sobre computação quântica, Qiskit e OpenQASM."), "insufficient_context", "none", None
         else:
             prompt = montar_prompt(mensagem, interpretacao, classificados, documentos, circuitos, contexto_local,
-                                   contexto_web, historico, plano)
+                                   contexto_web, historico, plano,
+                                   entrada.usuario.model_dump() if entrada.usuario else None)
             if tracebacks:
                 prompt = prompt.replace("Responda ao pedido", "Erros identificados no traceback:\n" + "\n".join(
                     f"- {t['mensagem']} -> {t['correcao']['descricao']}" for t in tracebacks) + "\n\nResponda ao pedido")
             resposta, status, answer_mode, info_llm = None, "ok", "llm", None
             if cliente_llm.configurada() and os.getenv("QONE_LLM", "auto").lower() != "local":
                 try:
+                    # Se a fila inteira falhar, ela é percorrida de novo (com aviso ao vivo) até alguém responder.
                     gerado = await asyncio.to_thread(
-                        cliente_llm.conversar, [{"role": "system", "content": INSTRUCOES_ANALISE},
-                                                {"role": "user", "content": prompt}], None, "Redigindo a resposta",
-                        rastreador.modelo, ao_parcial=rastreador.parcial)
-                    resposta = gerado["texto"]
+                        cliente_llm.conversar_insistente, [{"role": "system", "content": INSTRUCOES_ANALISE},
+                                                           {"role": "user", "content": prompt}], None,
+                        "Redigindo a resposta", rastreador.modelo, ao_parcial=rastreador.parcial,
+                        prazo_final=inicio + TEMPO_ANALISE - 30, ao_aviso=rastreador.etapa)
+                    # As fontes aparecem ao lado da resposta: o texto não carrega marcadores [Fonte N]/[Web N].
+                    resposta = remover_marcadores_de_fonte(gerado["texto"])
                     info_llm = {"provedor": "nvidia", "modelo": gerado["modelo"], "tentativas": gerado["tentativas"]}
                     pulados = [t for t in gerado["tentativas"] if t["resultado"] != "ok"]
-                    if pulados:
+                    if gerado.get("rodadas", 1) > 1:
+                        avisos.append(f"A fila de modelos falhou {gerado['rodadas'] - 1} vez(es); a resposta veio na "
+                                      f"rodada {gerado['rodadas']}, redigida por {gerado['modelo']}.")
+                    elif pulados:
                         avisos.append(f"Resposta redigida por {gerado['modelo']} após {len(pulados)} modelo(s) não responderem a tempo.")
+                    resumo_verificacao = await _verificar_resposta(resposta, fontes, rastreador)
                 except cliente_llm.FilaEsgotada as erro:
                     info_llm = {"provedor": "nvidia", "modelo": None, "tentativas": erro.tentativas}
-                    avisos.append("Nenhum modelo da fila respondeu; a resposta abaixo foi montada localmente.")
+                    avisos.append(f"Nenhum modelo respondeu depois de {erro.rodadas} rodada(s) da fila; a resposta "
+                                  "abaixo foi montada localmente com a base, a internet e o Qiskit.")
             if resposta is None:
                 answer_mode = "local"
                 local = resposta_local.gerar(mensagem, usados) if mensagem and usados else None
@@ -586,7 +655,7 @@ async def analisar(entrada, request_id):
         return {"request_id": request_id, "progress_id": entrada.progress_id, "conversation_id": conversation_id,
                 "resposta": resposta, "status": status, "answer_mode": answer_mode, "llm": info_llm,
                 "sources": fontes, "circuitos": circuitos, "arquivos": classificados, "interpretation": interpretacao,
-                "evidence": evidencia, "pesquisa_web": ({**relatorio_web, "planejamento": modelo_plano} if relatorio_web
+                "evidence": evidencia, "verificacao": resumo_verificacao, "pesquisa_web": ({**relatorio_web, "planejamento": modelo_plano} if relatorio_web
                                                         else ({"planejamento": modelo_plano} if modelo_plano else None)),
                 "warnings": avisos, "etapas": rastreador.historico, "tempo_total_segundos": round(time.monotonic() - inicio, 2)}
     except Exception:
@@ -612,10 +681,11 @@ async def propor_edicao(entrada, request_id):
         dados = {"pedido": entrada.pedido, "arquivos": entrada.arquivos, "resultado_testes": entrada.resultado_testes,
                  "documentacao": documentacao}
         gerado = await asyncio.to_thread(
-            cliente_llm.conversar,
+            cliente_llm.conversar_insistente,
             [{"role": "system", "content": INSTRUCOES_PROPOSTA},
              {"role": "user", "content": json.dumps(dados, ensure_ascii=False)}],
-            None, "Preparando a proposta", rastreador.modelo, temperatura=0.1, ao_parcial=rastreador.parcial)
+            None, "Preparando a proposta", rastreador.modelo, temperatura=0.1, ao_parcial=rastreador.parcial,
+            prazo_final=time.monotonic() + TEMPO_ANALISE - 30, ao_aviso=rastreador.etapa)
         rastreador.concluir("Proposta pronta")
         return {"request_id": request_id, "response": gerado["texto"], "sources": fontes,
                 "llm": {"provedor": "nvidia", "modelo": gerado["modelo"], "tentativas": gerado["tentativas"]}}
